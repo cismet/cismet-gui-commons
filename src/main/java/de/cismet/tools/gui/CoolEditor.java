@@ -22,6 +22,7 @@ import javax.swing.border.EtchedBorder;
  * @author thorsten
  */
 public class CoolEditor extends JPanel implements WrappedComponent{
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(CoolEditor.class);
     private JComponent originalComponent=null;
     /** Creates new form CoolEditor */
     public CoolEditor() {
@@ -30,7 +31,7 @@ public class CoolEditor extends JPanel implements WrappedComponent{
         pcpMain.setPanContent(panEdit);
         pcpMain.setPanInter(panFooter);
         pcpMain.setPanTitle(panTitleAndIcon);
-
+        log.fatal("one");
     }
 
     /** This method is called from within the constructor to

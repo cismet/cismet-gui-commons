@@ -107,17 +107,16 @@ public class DefaultDocument implements Document {
             ii = new ImageIcon(preview);
         } else {
 
-            if (extension.matches("jpg|jpeg|gif|png|bmp|JPG|JPEG|GIF|PNG|BMP")) {
+            if (extension.matches("jpg|jpeg|gif|png|bmp")) {
 
                 try {
                     ii = new ImageIcon(GraphicsUtilities.loadCompatibleImage(new URL(documentURI)));
                 } catch (Exception e) {
-
+                    log.warn(e, e);
                     try {
-
                         ii = new ImageIcon(documentURI); //First test : Local Filename
-
                     } catch (Exception e2) {
+                        log.error(e2, e2);
                     }
                 }
             } else if (extension.matches("pdf|PDF")) {

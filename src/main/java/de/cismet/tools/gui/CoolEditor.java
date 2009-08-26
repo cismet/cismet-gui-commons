@@ -31,7 +31,6 @@ public class CoolEditor extends JPanel implements WrappedComponent{
         pcpMain.setPanContent(panEdit);
         pcpMain.setPanInter(panFooter);
         pcpMain.setPanTitle(panTitleAndIcon);
-        log.fatal("one");
     }
 
     /** This method is called from within the constructor to

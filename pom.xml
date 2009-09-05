@@ -1,47 +1,31 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>de.cismet.maven</groupId>
-        <artifactId>cismetParent</artifactId>
+        <groupId>de.cismet</groupId>
+        <artifactId>cismet-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
     <groupId>de.cismet.commons</groupId>
-    <artifactId>cismetGuiCommons</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>cismet-gui-commons</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>cismetGuiCommons</name>    
-    <!--Platform specific sun tools.jar they are on every sun vm-->
-    <profiles>
-        <profile>
-            <id>default-tools.jar</id>
-            <activation>
-                <property>
-                    <name>java.vendor</name>
-                    <value>Sun Microsystems Inc.</value>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>com.sun</groupId>
-                    <artifactId>tools</artifactId>
-                    <version>1.4.2</version>
-                    <scope>system</scope>
-                    <systemPath>${java.home}/../lib/tools.jar</systemPath>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-    <dependencies>        
+    <packaging>jar</packaging>
+
+    <name>cismet GUI Commons</name>
+    <description>!!! description pending !!!</description>
+
+    <dependencies>
         <dependency>
             <groupId>net.eig.ws.util</groupId>
-            <artifactId>WSSBean</artifactId>
+            <artifactId>wss-bean</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.cismet.commons</groupId>
-            <artifactId>cismetCommons</artifactId>
+            <artifactId>cismet-commons</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -77,6 +61,33 @@
         <!--Swingx transitiv dependency from cismetCommons-->
         <!--Commons transitiv dependency from WSSBean-->
     </dependencies>
+
+    <build>
+        <finalName>cismetGuiCommons</finalName>
+    </build>
+
+    <!-- TODO add profiles for other java.vendors like Apple -->
+    <!--Platform specific sun tools.jar they are on every sun vm-->
+    <profiles>
+        <profile>
+            <id>default-tools.jar</id>
+            <activation>
+                <property>
+                    <name>java.vendor</name>
+                    <value>Sun Microsystems Inc.</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                    <version>1.4.2</version>
+                    <scope>system</scope>
+                    <systemPath>${java.home}/../lib/tools.jar</systemPath>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
 
 

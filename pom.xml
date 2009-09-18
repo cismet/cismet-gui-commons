@@ -19,7 +19,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.eig.ws.util</groupId>
+            <groupId>de.cismet.commons</groupId>
             <artifactId>wss-bean</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

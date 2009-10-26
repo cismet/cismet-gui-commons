@@ -32,5 +32,9 @@ public class Proxy {
 
     public void setPort(int port) {
         this.port = port;
-    }            
+    }
+
+    public String toString() {
+        return "Proxy: " + host + ":" + port;
+    }
 }

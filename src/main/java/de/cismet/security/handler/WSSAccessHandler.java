@@ -34,6 +34,7 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
 //    private String subParent;
     //private UsernamePasswordCredentials credentials;
     private ReentrantLock lock = new ReentrantLock();
+
     public static ACCESS_METHODS[] SUPPORTED_ACCESS_METHODS = new ACCESS_METHODS[]{
         ACCESS_METHODS.GET_REQUEST, ACCESS_METHODS.POST_REQUEST
     };
@@ -92,6 +93,12 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
             accessor = createNewWSSAccessor(url);
         }
 
+        Proxy proxy = getProxy();
+        if (proxy != null) {
+            accessor.setProxy(proxy.getHost(), proxy.getPort());
+        } else {
+            accessor.setProxy(null, -1);
+        }
 
         String accessMethod = null;
         switch (method) {

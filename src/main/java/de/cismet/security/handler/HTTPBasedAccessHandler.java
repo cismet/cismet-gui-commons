@@ -24,14 +24,48 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler{
 
     private Hashtable<URL, GUICredentialsProvider> httpCredentialsForURLS = new Hashtable<URL, GUICredentialsProvider>();
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private Proxy proxy = null;
 
+    /**
+     * Sets the SystemProxy by default.
+     */
+    protected HTTPBasedAccessHandler() {
+        log.debug("HTTPBasedAccessHandler");
+        setProxy(getSystemProxy());
+    }
+
+    /**
+     * Returns a configured HttpClient with (if set) proxy settings.
+     * @return configured HttpClient
+     */
     protected HttpClient getConfiguredHttpClient() {
+        log.debug("getConfiguredHttpClient");
+
         final HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
-        Proxy proxyInUse;
-        if ((proxyInUse = getSystemProxy()) != null) {
+        Proxy proxyInUse;        
+        if ((proxyInUse = getProxy()) != null) { // ist ein Proxy gesetzt?
+            // proxy auf HostConfiguration anwenden
             client.getHostConfiguration().setProxy(proxyInUse.getHost(), proxyInUse.getPort());
         }
         return client;
+    }
+
+    /**
+     * Proxy getter
+     * @return proxy
+     */
+    public Proxy getProxy() {
+        log.debug("getProxy: " + proxy);
+        return proxy;
+    }
+
+    /**
+     * Proxy setter
+     * @param proxy
+     */
+    public void setProxy(Proxy proxy) {
+        log.debug("setProxy: " + proxy);
+        this.proxy = proxy;
     }
 
     protected HttpClient getSecurityEnabledHttpClient(final URL url) {

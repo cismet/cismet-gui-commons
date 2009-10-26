@@ -11,6 +11,7 @@ import de.cismet.security.exceptions.RequestFailedException;
 import de.cismet.security.exceptions.MissingArgumentException;
 import de.cismet.security.AccessHandler.ACCESS_HANDLER_TYPES;
 import de.cismet.security.handler.DefaultHTTPAccessHandler;
+import de.cismet.security.handler.HTTPBasedAccessHandler;
 import java.awt.Component;
 import java.io.InputStream;
 import java.io.Reader;
@@ -46,14 +47,65 @@ public class WebAccessManager implements AccessHandler {
     private Properties serverAliasProps = new Properties();
     private Component topLevelComponent = null;
 
+    /**
+     * Sets the Proxy-Object of the HTTP- and the WSS-AccessHandler.
+     * Does nothing if no HTTP-AccessHandler and no WSS-AccessHandler exists.
+     *
+     * @param proxy
+     */
+    public void setHttpProxy(Proxy proxy) {
+        // HTTP-Handler holen
+        AccessHandler httpHandler = allHandlers.get(AccessHandler.ACCESS_HANDLER_TYPES.HTTP);
+        // pruefen ob vom Typ HTTPBasedAccessHandler
+        if (httpHandler != null && httpHandler instanceof HTTPBasedAccessHandler) {
+            // proxy setzen
+            log.debug("set Proxy in httpHandler");
+            ((HTTPBasedAccessHandler)httpHandler).setProxy(proxy);
+        }
+
+        // WSS-Handler holen
+        AccessHandler wssHandler  = allHandlers.get(AccessHandler.ACCESS_HANDLER_TYPES.WSS);
+        // pruefen ob vom Typ WSSAccessHandler
+        if (wssHandler != null && wssHandler instanceof WSSAccessHandler) {
+            // proxy setzen
+            log.debug("set Proxy in wssHandler");
+            ((WSSAccessHandler)wssHandler).setProxy(proxy);
+        }
+    }
+
+    /**
+     * Returns the Proxy-Object of the HTTP-AccessHandler or (if it not exists)
+     * the Proxy-Object of the WSS-AccessHandler or null if no proxy exists.
+     *
+     * @return HTTP-AccessHandler or null
+     */
+    public Proxy getHttpProxy() {
+        // HTTP-Handler holen
+        AccessHandler httpHandler = allHandlers.get(AccessHandler.ACCESS_HANDLER_TYPES.HTTP);
+        // pruefen ob vom Typ HTTPBasedAccessHandler
+        if (httpHandler != null && httpHandler instanceof HTTPBasedAccessHandler) {
+            // proxy zurueckgeben
+            return ((HTTPBasedAccessHandler)httpHandler).getProxy();
+        } else {
+            // WSS-Handler holen
+            AccessHandler wssHandler  = allHandlers.get(AccessHandler.ACCESS_HANDLER_TYPES.WSS);
+            // pruefen ob vom Typ WSSAccessHandler
+            if (wssHandler != null && wssHandler instanceof WSSAccessHandler) {
+                return ((WSSAccessHandler)wssHandler).getProxy();
+            } else {
+                return null;
+            }
+        }
+    }
+
     private WebAccessManager() {
         initHandlers();
     }
 
     //ToDO make configurable
     private void initHandlers() {
+        log.debug("initHandlers");
         WSSAccessHandler wssHandler = new WSSAccessHandler();
-        log.debug("Creating DefaultHTTPAccessHandler");
         DefaultHTTPAccessHandler httpHandler = new DefaultHTTPAccessHandler();
         //SOAPAccessHandler soapAccessHandler = new SOAPAccessHandler();
         //SanyAccessHandler sanyAccessHandler = new SanyAccessHandler();

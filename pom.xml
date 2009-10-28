@@ -60,6 +60,11 @@
         </dependency>
         <!--Swingx transitiv dependency from cismetCommons-->
         <!--Commons transitiv dependency from WSSBean-->
+        <dependency>
+            <groupId>com.l2fprod.common</groupId>
+            <artifactId>l2fprod-common-buttonbar</artifactId>
+            <version>7.3</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -89,5 +94,6 @@
         </profile>
     </profiles>
 </project>
+
 
 

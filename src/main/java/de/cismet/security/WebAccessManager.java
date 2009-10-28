@@ -73,6 +73,17 @@ public class WebAccessManager implements AccessHandler {
         }
     }
 
+    public void resetWSSCredentials() {
+        // WSS-Handler holen
+        AccessHandler wssHandler  = allHandlers.get(AccessHandler.ACCESS_HANDLER_TYPES.WSS);
+        // pruefen ob vom Typ WSSAccessHandler
+        if (wssHandler != null && wssHandler instanceof WSSAccessHandler) {
+            // proxy setzen
+            log.debug("reset WSS credentials");
+            ((WSSAccessHandler)wssHandler).resetCredentials();
+        }
+    }
+
     /**
      * Returns the Proxy-Object of the HTTP-AccessHandler or (if it not exists)
      * the Proxy-Object of the WSS-AccessHandler or null if no proxy exists.

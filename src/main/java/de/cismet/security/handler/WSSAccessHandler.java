@@ -62,6 +62,10 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
         return false;
     }
 
+    public void resetCredentials() {
+        wssAccessorMapping.clear();
+    }
+
     public ACCESS_HANDLER_TYPES getHandlerType() {
         return ACCESS_HANDLER_TYPE;
     }

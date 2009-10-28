@@ -65,6 +65,11 @@
             <artifactId>l2fprod-common-buttonbar</artifactId>
             <version>7.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.jdesktop</groupId>
+            <artifactId>beansbinding</artifactId>
+            <version>1.2.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -94,6 +99,7 @@
         </profile>
     </profiles>
 </project>
+
 
 
 

@@ -143,8 +143,8 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         } else {
             WebAccessManager.getInstance().setHttpProxy(null);
             log.debug("set proxy in system-property: null");
-            System.setProperty("http.proxyHost", null);
-            System.setProperty("http.proxyPort", null);
+            System.clearProperty("http.proxyHost");
+            System.clearProperty("http.proxyPort");
         }
     }
 

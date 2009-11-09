@@ -5,7 +5,9 @@
  */
 package de.cismet.tools.gui;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
@@ -13,25 +15,30 @@ import java.awt.RenderingHints;
 
 /**
  *
- * @author  nh
+ * @author  stefan
  */
-public class RoundedPanel extends javax.swing.JPanel {
+public class SemiRoundedPanel extends javax.swing.JPanel {
 
-    private int alpha = 60;
-    private Color alphaColor;
     protected int curve = 20;
+    protected int alpha = 0;
 
     /**
      * Creates new form RoundedPanel
      */
-    public RoundedPanel() {
+    public SemiRoundedPanel() {
         super();
-        setOpaque(false);
         initComponents();
+        setOpaque(false);
         this.setBackground(new Color(255, 255, 255));
     }
+    public SemiRoundedPanel(Color color) {
+        super();
+        initComponents();
+        setOpaque(false);
+        this.setBackground(color);
+    }
 
-    public RoundedPanel(LayoutManager layout) {
+    public SemiRoundedPanel(LayoutManager layout) {
         super();
         setOpaque(false);
         initComponents();
@@ -44,9 +51,22 @@ public class RoundedPanel extends javax.swing.JPanel {
         final Graphics2D g2d = (Graphics2D) g;
         final Color old = g2d.getColor();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setColor(alphaColor);
+        g2d.setColor(getBackground());
         g2d.fillRoundRect(0, 0, getWidth(), getHeight(), curve, curve);
+        final Composite save = g2d.getComposite();
+        g2d.setComposite(AlphaComposite.Src);
+        g2d.fillRect(0, getHeight() - curve / 2, getWidth(), curve / 2);
+        g2d.setComposite(save);
         g2d.setColor(old);
+    }
+
+    public int getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(int alpha) {
+        this.alpha = alpha;
+        setBackground(new Color(getBackground().getRed(), getBackground().getGreen(), getBackground().getBlue(), alpha));
     }
 
     /** This method is called from within the constructor to
@@ -59,21 +79,6 @@ public class RoundedPanel extends javax.swing.JPanel {
 
         setLayout(new java.awt.BorderLayout());
     }// </editor-fold>//GEN-END:initComponents
-
-    @Override
-    public void setBackground(Color bg) {
-        super.setBackground(bg);
-        alphaColor = new Color(getBackground().getRed(), getBackground().getGreen(), getBackground().getBlue(), alpha);
-    }
-
-    public int getAlpha() {
-        return alpha;
-    }
-
-    public void setAlpha(int alpha) {
-        this.alpha = alpha;
-        alphaColor = new Color(getBackground().getRed(), getBackground().getGreen(), getBackground().getBlue(), alpha);
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

@@ -70,6 +70,11 @@ public class DefaultBreadCrumbModel implements BreadCrumbModel {
         return data.firstElement();
     }
 
+    @Override
+    public void clear() {
+        data.clear();
+    }
+
 
 
 

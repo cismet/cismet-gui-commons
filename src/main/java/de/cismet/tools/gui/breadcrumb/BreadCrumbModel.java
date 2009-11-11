@@ -23,5 +23,6 @@ public interface BreadCrumbModel {
     public List<BreadCrumb> getAllCrumbs();
     public BreadCrumb getLastCrumb();
     public BreadCrumb getFirstCrumb();
+    public void clear();
 
 }

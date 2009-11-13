@@ -23,7 +23,9 @@ public class LinkStyleBreadCrumbGui extends javax.swing.JPanel {
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private BreadCrumbModel breadCrumbModel = new DefaultBreadCrumbModel();
-    private ImageIcon arrow=new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/arrowRight.png"));
+    private ImageIcon arrow = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/arrowRight.png"));
+    private boolean showFirstCrumbAlone = false;
+
     public LinkStyleBreadCrumbGui(BreadCrumbModel breadCrumbModel) {
         this();
         setBreadCrumbModel(breadCrumbModel);
@@ -74,10 +76,18 @@ public class LinkStyleBreadCrumbGui extends javax.swing.JPanel {
         });
     }
 
-    private void addToGui(BreadCrumb bc) {
+    public boolean isShowFirstCrumbAlone() {
+        return showFirstCrumbAlone;
+    }
 
-        if (breadCrumbModel.getSize()>0 && breadCrumbModel.getFirstCrumb()!=bc){
-            JLabel arrowL=new JLabel(arrow);
+    public void setShowFirstCrumbAlone(boolean showFirstCrumbAlone) {
+        this.showFirstCrumbAlone = showFirstCrumbAlone;
+    }
+    JXHyperlink first = null;
+
+    private void addToGui(BreadCrumb bc) {
+        if (breadCrumbModel.getSize() > 0 && breadCrumbModel.getFirstCrumb() != bc) {
+            JLabel arrowL = new JLabel(arrow);
             LinkStyleBreadCrumbGui.this.add(arrowL);
         }
 
@@ -85,6 +95,14 @@ public class LinkStyleBreadCrumbGui extends javax.swing.JPanel {
         bcLink.setClickedColor(bcLink.getUnclickedColor());
         bcLink.setFocusPainted(false);
         LinkStyleBreadCrumbGui.this.add(bcLink);
+        if (!showFirstCrumbAlone) {
+            if (breadCrumbModel.getSize() == 1) {
+                first = bcLink;
+                first.setVisible(false);
+            } else {
+                first.setVisible(true);
+            }
+        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

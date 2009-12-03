@@ -81,6 +81,7 @@ public class CoolEditor extends JPanel implements WrappedComponent{
         return panTitleAndIcon;
     }
 
+    @Override
     public JComponent getOriginalComponent() {
         return originalComponent;
     }

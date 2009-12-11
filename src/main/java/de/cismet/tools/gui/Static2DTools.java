@@ -136,7 +136,43 @@ public class Static2DTools {
         }
 
         return new ImageIcon(image);
+    }
 
+    public static ImageIcon createOverlayIcon(ImageIcon overlayIcon, int width, int heigth) {
+//        final BufferedImage resultImage = new BufferedImage(width, heigth, BufferedImage.TYPE_INT_ARGB);
+        final Image scaledOverlayImage = overlayIcon.getImage().getScaledInstance((int) (width / 1.5), (int) (heigth / 1.5), Image.SCALE_SMOOTH);
+//            final Image scaledOverlayImage = scaleImage(overlayIcon.getImage(), 0.5);
+//        final Graphics2D g2d = (Graphics2D) resultImage.getGraphics();
+//        g2d.drawImage(scaledOverlayImage, 0, 0, null);
+        return new ImageIcon(scaledOverlayImage);
+    }
+
+    public static Icon mergeIcons(Icon... icons) {
+        if (icons.length == 0) {
+            throw new IllegalArgumentException("Icon[] with length=0 is not allowed.");
+        }
+        if (icons.length == 1) {
+            return icons[0];
+        }
+        int maxWidth = 0;
+        int maxHeight = 0;
+        for (final Icon currentIcon : icons) {
+            if (currentIcon != null) {
+                maxWidth = Math.max(maxWidth, currentIcon.getIconWidth());
+                maxHeight = Math.max(maxHeight, currentIcon.getIconHeight());
+            }
+        }
+        final int midX = maxWidth / 2;
+        final int midY = maxHeight / 2;
+        final BufferedImage image = new BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_ARGB);
+        final Graphics2D graphics2D = image.createGraphics();
+        for (final Icon currentIcon : icons) {
+            if (currentIcon != null) {
+                currentIcon.paintIcon(null, graphics2D, midX - (currentIcon.getIconWidth() / 2), midY - (currentIcon.getIconHeight() / 2));
+            }
+        }
+
+        return new ImageIcon(image);
     }
 
     public static ImageIcon turnIcon(ImageIcon turnIcon, boolean clockwise) {

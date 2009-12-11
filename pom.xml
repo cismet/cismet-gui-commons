@@ -70,6 +70,16 @@
             <artifactId>beansbinding</artifactId>
             <version>1.2.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>de.cismet.todo</groupId>
+            <artifactId>jai_codec</artifactId>
+            <version>unknown</version>
+        </dependency>
+        <dependency>
+            <groupId>de.cismet.todo</groupId>
+            <artifactId>jai_core</artifactId>
+            <version>unknown</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -99,6 +109,11 @@
         </profile>
     </profiles>
 </project>
+
+
+
+
+
 
 
 

@@ -11,12 +11,17 @@
 
 package de.cismet.lookupoptions.gui;
 
+import java.util.ResourceBundle;
+
 /**
  *
  * @author jruiz
  */
 public class HelpDialog extends javax.swing.JDialog {
 
+    private static final ResourceBundle I18N =
+            ResourceBundle.getBundle("de/cismet/CismetCommonsBundle");
+    
     /** Creates new form HelpDialog */
     public HelpDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -42,9 +47,9 @@ public class HelpDialog extends javax.swing.JDialog {
         txtContent = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(org.openide.util.NbBundle.getMessage(HelpDialog.class, "HelpDialog.title")); // NOI18N
+        setTitle(I18N.getString("de.cismet.lookupoptions.gui.HelpDialog.title")); // NOI18N
 
-        btnClose.setText(org.openide.util.NbBundle.getMessage(HelpDialog.class, "HelpDialog.btnClose.text")); // NOI18N
+        btnClose.setText(I18N.getString("de.cismet.lookupoptions.gui.HelpDialog.btnClose.text")); // NOI18N
         btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCloseActionPerformed(evt);
@@ -52,7 +57,7 @@ public class HelpDialog extends javax.swing.JDialog {
         });
 
         txtContent.setBackground(new java.awt.Color(255, 255, 255));
-        txtContent.setContentType(org.openide.util.NbBundle.getMessage(HelpDialog.class, "HelpDialog.txtContent.contentType")); // NOI18N
+        txtContent.setContentType(I18N.getString("de.cismet.lookupoptions.gui.HelpDialog.txtContent.contentType")); // NOI18N
         jScrollPane1.setViewportView(txtContent);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -60,7 +65,7 @@ public class HelpDialog extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(558, Short.MAX_VALUE)
+                .addContainerGap(560, Short.MAX_VALUE)
                 .addComponent(btnClose)
                 .addContainerGap())
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)

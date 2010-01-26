@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.util.Hashtable;
+import java.util.ResourceBundle;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JFrame;
@@ -33,6 +34,9 @@ import javax.swing.event.ChangeListener;
  * @author jruiz
  */
 public class OptionsDialog extends javax.swing.JDialog {
+
+    private static final ResourceBundle I18N =
+            ResourceBundle.getBundle("de/cismet/CismetCommonsBundle");
 
     /** Creates new form OptionsDialog */
     public OptionsDialog(java.awt.Frame parent, boolean modal) {
@@ -167,11 +171,11 @@ public class OptionsDialog extends javax.swing.JDialog {
         btnHelp = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.title")); // NOI18N
+        setTitle(I18N.getString("de.cismet.lookupoptions.gui.OptionsDialog.title")); // NOI18N
 
         panCategory.setLayout(new java.awt.CardLayout());
 
-        btnClose.setText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnClose.text")); // NOI18N
+        btnClose.setText(I18N.getString("de.cismet.lookupoptions.gui.OptionsDialog.btnClose.text")); // NOI18N
         btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCloseActionPerformed(evt);
@@ -182,14 +186,14 @@ public class OptionsDialog extends javax.swing.JDialog {
         panCategories.setMinimumSize(new java.awt.Dimension(10, 90));
         panCategories.setLayout(new java.awt.BorderLayout());
 
-        btnOk.setText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnOk.text")); // NOI18N
+        btnOk.setText(I18N.getString("de.cismet.lookupoptions.gui.OptionsDialog.btnOk.text")); // NOI18N
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOkActionPerformed(evt);
             }
         });
 
-        btnHelp.setText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnHelp.text")); // NOI18N
+        btnHelp.setText(I18N.getString("de.cismet.lookupoptions.gui.OptionsDialog.btnHelp.text")); // NOI18N
         btnHelp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHelpActionPerformed(evt);

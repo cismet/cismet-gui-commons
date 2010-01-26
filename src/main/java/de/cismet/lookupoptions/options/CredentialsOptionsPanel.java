@@ -15,6 +15,7 @@ package de.cismet.lookupoptions.options;
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
 import de.cismet.security.WebAccessManager;
+import java.util.ResourceBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -24,7 +25,10 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = OptionsPanelController.class)
 public class CredentialsOptionsPanel extends AbstractOptionsPanel implements OptionsPanelController {
 
-    private static final String OPTION_NAME = org.openide.util.NbBundle.getMessage(CredentialsOptionsPanel.class, "CredentialsOptionsPanel.OptionController.name");
+    private static final ResourceBundle I18N =
+            ResourceBundle.getBundle("de/cismet/CismetCommonsBundle");
+    private static final String OPTION_NAME = 
+            I18N.getString("de.cismet.lookupoptions.options.CredentialsOptionsPanel.OptionController.name");
 
     /** Creates new form CredentialsOptionsPanel */
     public CredentialsOptionsPanel() {
@@ -44,14 +48,14 @@ public class CredentialsOptionsPanel extends AbstractOptionsPanel implements Opt
         btnReset = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
-        btnReset.setText(org.openide.util.NbBundle.getMessage(CredentialsOptionsPanel.class, "CredentialsOptionsPanel.btnReset.text")); // NOI18N
+        btnReset.setText(I18N.getString("de.cismet.lookupoptions.options.CredentialsOptionsPanel.btnReset.text")); // NOI18N
         btnReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnResetActionPerformed(evt);
             }
         });
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(CredentialsOptionsPanel.class, "CredentialsOptionsPanel.jLabel1.text")); // NOI18N
+        jLabel1.setText(I18N.getString("de.cismet.lookupoptions.options.CredentialsOptionsPanel.jLabel1.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

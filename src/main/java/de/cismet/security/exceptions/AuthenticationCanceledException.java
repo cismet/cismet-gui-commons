@@ -17,7 +17,7 @@ public class AuthenticationCanceledException extends Exception {
     
     /** Creates a new instance of AuthenticationCanceledException */
     public AuthenticationCanceledException() {
-    super(java.util.ResourceBundle.getBundle("de/cismet/cismap/commons/GuiBundle").getString("Exception.AuthenticationCanceledException"));    
+    super("The HTTP authentication was canceled by user");
     }
     
     public AuthenticationCanceledException(String message) {

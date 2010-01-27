@@ -12,6 +12,7 @@ import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.Component;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 import javax.swing.JFrame;
 import org.apache.commons.httpclient.Credentials;
@@ -36,6 +37,9 @@ import org.jdesktop.swingx.auth.LoginService;
  */
 public class GUICredentialsProvider extends LoginService implements CredentialsProvider {
     
+    private static final ResourceBundle I18N =
+            ResourceBundle.getBundle("de/cismet/CismetCommonsBundle");
+
     private DefaultUserNameStore  usernames;
     private Preferences appPrefs=null;
     private UsernamePasswordCredentials creds;
@@ -120,7 +124,7 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
                 }
         }
     }
-    
+  
     private void requestUsernamePassword() throws CredentialsNotAvailableException{
         JXLoginPane login = new JXLoginPane(this,null,usernames);
         
@@ -131,9 +135,9 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
         
         login.setUserName(username);
         title = WebAccessManager.getInstance().getServerAliasProperty(url.toString());
-        if(title != null){
-            login.setMessage(java.util.ResourceBundle.getBundle("de/cismet/cismap/commons/GuiBundle").getString("GUICredentialProvider.HttpAuthentication.Messagetext_1")+
-                    " \""+ title +"\" "
+        if(title != null){//
+            login.setMessage(I18N.getString("de.cismet.security.GUICredentialsProvider.requestUsernamePassword().login.message") 
+                    + " \""+ title +"\" "
                     );
         } else {
             title = url.toString();
@@ -143,8 +147,8 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
                 title=title.substring(0,14)+"...";
             }
             
-            login.setMessage(java.util.ResourceBundle.getBundle("de/cismet/cismap/commons/GuiBundle").getString("GUICredentialProvider.HttpAuthentication.Messagetext_1")+
-                    "\n"+
+            login.setMessage(I18N.getString("de.cismet.security.GUICredentialsProvider.requestUsernamePassword().login.message")
+                    + "\n"+
                     " \""+ title +"\" "
                     );
         }

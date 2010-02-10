@@ -4,6 +4,7 @@ import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Composite;
+import java.awt.EventQueue;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -217,7 +218,7 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
 
             // Weissen oberen Rand zeichnen
             final BufferedImage glossy = new BufferedImage(box.getWidth(), box.getHeight(), IMAGE_TYPE);
-            final Graphics2D glossyGraphics2D = glossy.createGraphics();           
+            final Graphics2D glossyGraphics2D = glossy.createGraphics();
 //            glossyGraphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             glossyGraphics2D.setStroke(STROKE);
 
@@ -263,7 +264,6 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
 
         // Entgueltiges Bild in Panel zeichnen
         g2d.drawImage(cacheImage, 0, 0, null);
-
     }
 
     public JComponent getPanTitle() {

@@ -62,8 +62,8 @@ public class RoundedPanel extends javax.swing.JPanel {
 
     @Override
     public void setBackground(Color bg) {
-        super.setBackground(bg);
-        alphaColor = new Color(getBackground().getRed(), getBackground().getGreen(), getBackground().getBlue(), alpha);
+        alphaColor = new Color(bg.getRed(), bg.getGreen(), bg.getBlue(), alpha);
+        super.setBackground(alphaColor);
     }
 
     public int getAlpha() {

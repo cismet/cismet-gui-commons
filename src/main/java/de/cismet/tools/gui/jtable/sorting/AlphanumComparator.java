@@ -24,32 +24,25 @@ package de.cismet.tools.gui.jtable.sorting;
  *
  */
 import java.util.Comparator;
+//TODO make it generic!
+public final class AlphanumComparator implements Comparator<Comparable<?>> {
 
-public final class AlphanumComparator implements Comparator {
-
-    private static Comparator instance;
+    private static final Comparator INSTANCE = new AlphanumComparator();
 
     private AlphanumComparator() {
     }
 
-    public static Comparator getInstance() {
-        if (AlphanumComparator.instance == null) {
-            synchronized (AlphanumComparator.class) {
-                if (AlphanumComparator.instance == null) {
-                    AlphanumComparator.instance = new AlphanumComparator();
-                }
-            }
-        }
-        return instance;
+    public static final Comparator getInstance() {
+        return INSTANCE;
     }
 
-    private final boolean isDigit(char ch) {
-        return ch >= 48 && ch <= 57;
+    private final boolean isDigit(final char ch) {
+        return ch > 47 && ch < 58;
     }
 
     /** Length of string is passed in for improved efficiency (only need to calculate it once) **/
-    private final String getChunk(String s, int slength, int marker) {
-        StringBuilder chunk = new StringBuilder();
+    private final String getChunk(final String s, final int slength, int marker) {
+        final StringBuilder chunk = new StringBuilder();
         char c = s.charAt(marker);
         chunk.append(c);
         marker++;
@@ -75,31 +68,24 @@ public final class AlphanumComparator implements Comparator {
         return chunk.toString();
     }
 
-    @SuppressWarnings("unchecked")
-    public int compare(Object o1, Object o2) {
+    public int compare(final Comparable o1, final Comparable o2) {
         if (!(o1 instanceof String) || !(o2 instanceof String)) {
-            if (o1 instanceof Comparable && o2 instanceof Comparable) {
-                try {
-                    return ((Comparable) o1).compareTo((Comparable) o2);
-                } catch (Exception e) {
-                    //ignore
-                }
-            }
-            return 0;
+            return o1.compareTo(o2);
         }
-        String s1 = (String) o1;
-        String s2 = (String) o2;
+
+        final String s1 = (String) o1;
+        final String s2 = (String) o2;
 
         int thisMarker = 0;
         int thatMarker = 0;
-        int s1Length = s1.length();
-        int s2Length = s2.length();
+        final int s1Length = s1.length();
+        final int s2Length = s2.length();
 
         while (thisMarker < s1Length && thatMarker < s2Length) {
-            String thisChunk = getChunk(s1, s1Length, thisMarker);
+            final String thisChunk = getChunk(s1, s1Length, thisMarker);
             thisMarker += thisChunk.length();
 
-            String thatChunk = getChunk(s2, s2Length, thatMarker);
+            final String thatChunk = getChunk(s2, s2Length, thatMarker);
             thatMarker += thatChunk.length();
 
             // If both chunks contain numeric characters, sort them numerically
@@ -125,7 +111,6 @@ public final class AlphanumComparator implements Comparator {
                 return result;
             }
         }
-
         return s1Length - s2Length;
     }
 }

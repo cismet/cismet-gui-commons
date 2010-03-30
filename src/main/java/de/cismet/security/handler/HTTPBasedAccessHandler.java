@@ -30,7 +30,8 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler{
      * Sets the SystemProxy by default.
      */
     protected HTTPBasedAccessHandler() {
-        log.debug("HTTPBasedAccessHandler");
+        if(log.isDebugEnabled())
+            log.debug("HTTPBasedAccessHandler"); //NOI18N
         setProxy(getSystemProxy());
     }
 
@@ -39,7 +40,8 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler{
      * @return configured HttpClient
      */
     protected HttpClient getConfiguredHttpClient() {
-        log.debug("getConfiguredHttpClient");
+        if(log.isDebugEnabled())
+            log.debug("getConfiguredHttpClient"); //NOI18N
 
         final HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
         Proxy proxyInUse;        
@@ -55,7 +57,8 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler{
      * @return proxy
      */
     public Proxy getProxy() {
-        log.debug("getProxy: " + proxy);
+        if(log.isDebugEnabled())
+            log.debug("getProxy: " + proxy); //NOI18N
         return proxy;
     }
 
@@ -64,12 +67,14 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler{
      * @param proxy
      */
     public void setProxy(Proxy proxy) {
-        log.debug("setProxy: " + proxy);
+        if(log.isDebugEnabled())
+            log.debug("setProxy: " + proxy); //NOI18N
         this.proxy = proxy;
     }
 
     protected HttpClient getSecurityEnabledHttpClient(final URL url) {
-        log.debug("getSecurityEnabledHttpClient");
+        if(log.isDebugEnabled())
+            log.debug("getSecurityEnabledHttpClient"); //NOI18N
         final HttpClient client = getConfiguredHttpClient();
         client.getParams().setParameter(CredentialsProvider.PROVIDER, getCredentialProvider(url));
         return client;
@@ -77,9 +82,11 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler{
 
     protected CredentialsProvider getCredentialProvider(URL url) {        
         GUICredentialsProvider cp = getHttpCredentialProviderURL(url);
-        log.debug("Retrieving Credential Provider for url: " + url.toString());
+        if(log.isDebugEnabled())
+            log.debug("Retrieving Credential Provider for url: " + url.toString()); //NOI18N
         if (cp != null) {
-            log.debug("Credential Provider available for ... " + url.toString());
+            if(log.isDebugEnabled())
+                log.debug("Credential Provider available for ... " + url.toString()); //NOI18N
         } else {
             cp = createSynchronizedCP(url);
         }
@@ -91,13 +98,16 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler{
     }
 
     public synchronized GUICredentialsProvider createSynchronizedCP(URL url) {
-        log.debug("Credential Provider should be created synchronously");
+        if(log.isDebugEnabled())
+            log.debug("Credential Provider should be created synchronously"); //NOI18N
         GUICredentialsProvider cp = httpCredentialsForURLS.get(url);
         if (cp != null) {
-            log.debug("Credential Provider was already available: " + url.toString());
+            if(log.isDebugEnabled())
+                log.debug("Credential Provider was already available: " + url.toString());  //NOI18N
             return cp;
         } else {
-            log.debug("A new Credential Provider instance was created for: " + url.toString());
+            if(log.isDebugEnabled())
+                log.debug("A new Credential Provider instance was created for: " + url.toString()); //NOI18N
             cp = new GUICredentialsProvider(url,WebAccessManager.getInstance().getTopLevelComponent());
             httpCredentialsForURLS.put(url, cp);
             return cp;
@@ -160,16 +170,18 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler{
 //    }
 
     protected Proxy getSystemProxy() {
-        String proxySet = System.getProperty("proxySet");
-        if (proxySet != null && proxySet.equals("true")) {
-            log.debug("proxyIs Set");
-            log.debug("ProxyHost:" + System.getProperty("http.proxyHost"));
-            log.debug("ProxyPort:" + System.getProperty("http.proxyPort"));
+        String proxySet = System.getProperty("proxySet");  //NOI18N
+        if (proxySet != null && proxySet.equals("true")) {  //NOI18N
+            if(log.isDebugEnabled()) {
+                log.debug("proxyIs Set"); //NOI18N
+                log.debug("ProxyHost:" + System.getProperty("http.proxyHost")); //NOI18N
+                log.debug("ProxyPort:" + System.getProperty("http.proxyPort")); //NOI18N
+            }
             try {
-                Proxy proxy = new Proxy(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort")));
+                Proxy proxy = new Proxy(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort"))); //NOI18N
                 return proxy;
             } catch (Exception e) {
-                log.error("Problem while setting proxy", e);
+                log.error("Problem while setting proxy", e);  //NOI18N
                 return null;
             }
         }

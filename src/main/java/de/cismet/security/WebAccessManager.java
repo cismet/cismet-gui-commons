@@ -59,7 +59,8 @@ public class WebAccessManager implements AccessHandler {
         // pruefen ob vom Typ HTTPBasedAccessHandler
         if (httpHandler != null && httpHandler instanceof HTTPBasedAccessHandler) {
             // proxy setzen
-            log.debug("set Proxy in httpHandler");
+            if(log.isDebugEnabled())
+                log.debug("set Proxy in httpHandler"); //NOI18N
             ((HTTPBasedAccessHandler)httpHandler).setProxy(proxy);
         }
 
@@ -68,7 +69,8 @@ public class WebAccessManager implements AccessHandler {
         // pruefen ob vom Typ WSSAccessHandler
         if (wssHandler != null && wssHandler instanceof WSSAccessHandler) {
             // proxy setzen
-            log.debug("set Proxy in wssHandler");
+            if(log.isDebugEnabled())
+                log.debug("set Proxy in wssHandler"); //NOI18N
             ((WSSAccessHandler)wssHandler).setProxy(proxy);
         }
     }
@@ -79,7 +81,8 @@ public class WebAccessManager implements AccessHandler {
         // pruefen ob vom Typ WSSAccessHandler
         if (wssHandler != null && wssHandler instanceof WSSAccessHandler) {
             // proxy setzen
-            log.debug("reset WSS credentials");
+            if(log.isDebugEnabled())
+                log.debug("reset WSS credentials"); //NOI18N
             ((WSSAccessHandler)wssHandler).resetCredentials();
         }
     }
@@ -115,7 +118,8 @@ public class WebAccessManager implements AccessHandler {
 
     //ToDO make configurable
     private void initHandlers() {
-        log.debug("initHandlers");
+        if(log.isDebugEnabled())
+            log.debug("initHandlers"); //NOI18N
         WSSAccessHandler wssHandler = new WSSAccessHandler();
         DefaultHTTPAccessHandler httpHandler = new DefaultHTTPAccessHandler();
         //SOAPAccessHandler soapAccessHandler = new SOAPAccessHandler();
@@ -207,11 +211,13 @@ public class WebAccessManager implements AccessHandler {
         try {
             AccessHandler handler = handlerMapping.get(url);
             if (handler == null) {
-                log.debug("no handler found  for url --> try to extract base");
+                if(log.isDebugEnabled())
+                    log.debug("no handler found  for url --> try to extract base"); //NOI18N
                 String urlString = url.toString();
                 URL baseURL = null;
                 if (urlString.indexOf('?') != -1) {
-                    log.debug("there are parameter appended to the url try to remove");
+                    if(log.isDebugEnabled())
+                        log.debug("there are parameter appended to the url try to remove"); //NOI18N
                     try {
                         baseURL = new URL(urlString.substring(0, urlString.indexOf('?')));
                         return handlerMapping.get(baseURL);
@@ -240,33 +246,38 @@ public class WebAccessManager implements AccessHandler {
             RequestFailedException,
             NoHandlerForURLException,
             Exception {
-        log.debug("URL: " + url + "... Paramter werden versucht automatisch zu bestimmen und die Methode ist HTTP_GET");
+        if(log.isDebugEnabled())
+            log.debug("URL: " + url + "... trying to retrieve parameters automatically by HTTP_GET"); //NOI18N
         URL serviceURL;
         String requestParameter;
         try {
             final String urlString = url.toString();
             if (urlString.indexOf('?') != -1) {
-                serviceURL = new URL(urlString.substring(0, urlString.indexOf('?')));
-                log.debug("service URL: " + serviceURL);
-                if (urlString.indexOf('?') + 1 < urlString.length()) {
-                    requestParameter = urlString.substring(urlString.indexOf('?') + 1, urlString.length());
-                    if (requestParameter.toLowerCase().contains("service=wss")) {
+                serviceURL = new URL(urlString.substring(0, urlString.indexOf('?')));  //NOI18N
+                if(log.isDebugEnabled())
+                    log.debug("service URL: " + serviceURL); //NOI18N
+                if (urlString.indexOf('?') + 1 < urlString.length()) {  //NOI18N
+                    requestParameter = urlString.substring(urlString.indexOf('?') + 1, urlString.length()); //NOI18N
+                    if (requestParameter.toLowerCase().contains("service=wss")) {  //NOI18N
                         //TODO muss auch wfs fähig sein
-                        log.debug("default WMS abrufen");
-                        requestParameter = "REQUEST=GetCapabilities&service=WMS";
+                        if(log.isDebugEnabled())
+                            log.debug("query default WMS"); //NOI18N
+                        requestParameter = "REQUEST=GetCapabilities&service=WMS";  //NOI18N
                     }
                 } else {
-                    requestParameter = "";
+                    requestParameter = "";  //NOI18N
                 }
-                log.debug("requestParameter: " + requestParameter);
+
+                if(log.isDebugEnabled())
+                    log.debug("requestParameter: " + requestParameter); //NOI18N
             } else {
-                log.warn("Es war nicht möglich die requestparameter zu parsen (kein ?) versuche es ohne");
+                log.warn("Not able to parse requestparameter (no ?) trying without"); //NOI18N
                 serviceURL = url;
-                requestParameter = "";
+                requestParameter = "";  //NOI18N
             }
         } catch (Exception ex) {
             //final String errorMessage = "Exception während dem bestimmen der Request Parameter";
-            final String errorMessage = "Request parameters coud not be parsed: " + ex.getMessage();
+            final String errorMessage = "Request parameters coud not be parsed: " + ex.getMessage();  //NOI18N
             log.error(errorMessage);
             throw new RequestFailedException(errorMessage, ex);
         }
@@ -279,7 +290,8 @@ public class WebAccessManager implements AccessHandler {
             RequestFailedException,
             NoHandlerForURLException,
             Exception {
-        log.debug("Requestparameter: " + requestParameter);
+        if(log.isDebugEnabled())
+            log.debug("Requestparameter: " + requestParameter); //NOI18N
         return doRequest(url, new StringReader(requestParameter), accessMethod);
     }
 
@@ -302,17 +314,21 @@ public class WebAccessManager implements AccessHandler {
         AccessHandler handler;
         if (url == null) {
             //throw new MissingArgumentException("Es wurde keine URL gesetzt für das Request gesetzt");
-            throw new MissingArgumentException("URL parameter is empty");
+            throw new MissingArgumentException("URL parameter is empty");  //NOI18N
         } else if (accessMethod == null) {
-            log.warn("Keine Access Methode vorhanden führe Defaultmethod des Handlers durch");
+            log.warn("No Access Methode available calling Defaultmethod of the Handler");  //NOI18N
         }
-        log.debug("Request URL: " + url.toString());
+
+        if(log.isDebugEnabled())
+            log.debug("Request URL: " + url.toString()); //NOI18N
         try {
             handler = handlerMapping.get(url);
             if (handler != null) {
-                log.debug("Handler für URL " + url + " vorhanden");
+                if(log.isDebugEnabled())
+                    log.debug("Handler for URL " + url + " available"); //NOI18N
                 if (handler.isAccessMethodSupported(accessMethod)) {
-                    log.debug("Handler unterstützt access method");
+                    if(log.isDebugEnabled())
+                        log.debug("Handler supports access method"); //NOI18N
                     return handler.doRequest(url, requestParameter, accessMethod, options);
 //                    try {
 //                        return handler.doRequest(url, requestParameter, accessMethod, options);
@@ -323,13 +339,14 @@ public class WebAccessManager implements AccessHandler {
                 } else {
                     //throw new AccessMethodIsNotSupportedException("Die Accesss Methode: " + accessMethod + " ist vom handler: " +
                     //        handler.getClass() + " nicht unterstützt");
-                    throw new AccessMethodIsNotSupportedException("The access method '" + accessMethod + "' is not supported by handler '" +
-                            handler.getClass() + "'");
+                    throw new AccessMethodIsNotSupportedException("The access method '" + accessMethod + "' is not supported by handler '" +  //NOI18N
+                            handler.getClass() + "'");  //NOI18N
                 }
             } else {
                 //TODO Default handler
                 //throw new NoHandlerForURLException("Es ist kein Handler für die URL vorhanden");
-                log.info("Es ist kein Handler für die URL vorhanden --> benutze DefaultHandler");
+                if(log.isInfoEnabled())
+                    log.info("No URL Handler available --> using DefaultHandler"); //NOI18N
                 if (defaultHandler != null) {
                     return defaultHandler.doRequest(url, requestParameter, accessMethod, options);
 //                    try {
@@ -340,17 +357,18 @@ public class WebAccessManager implements AccessHandler {
 //                    }
                 } else {
                     //throw new NoHandlerForURLException("Es ist kein Defaulthandler vorhanden");
-                    throw new NoHandlerForURLException("No default handler available");
+                    throw new NoHandlerForURLException("No default handler available");  //NOI18N
                 }
             }
         } catch (Exception ex) {
-            log.error("Fehler bei doRequest: ", ex);
+            log.error("Error while doRequest: ", ex);  //NOI18N
 
             throw ex;
         //throw new RequestFailedException("Das Request konnte nicht ausgeführt werden", ex);
         //throw new RequestFailedException("The request cound not be performed: " + ex.getMessage(), ex);
         } finally {
-            log.debug("releasing lock");
+            if(log.isDebugEnabled())
+                log.debug("releasing lock");  //NOI18N
             readLock.unlock();
         }
 
@@ -375,11 +393,11 @@ public class WebAccessManager implements AccessHandler {
 
     //todo
     public ACCESS_HANDLER_TYPES getHandlerType() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet.");  //NOI18N
     }
 
     //todo
     public boolean isAccessMethodSupported(ACCESS_METHODS method) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet.");  //NOI18N
     }
 }

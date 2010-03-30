@@ -36,13 +36,15 @@ public class WSSPasswordDialog extends PasswordDialog {
 
     @Override
     public boolean authenticate(String name, char[] password, String server) throws Exception {
-        log.debug("Authentication with username: " + name);
+        if(log.isDebugEnabled())
+            log.debug("Authentication with username: " + name); //NOI18N
 
         try {
-            final AuthenticationMethod authMethod = new PasswordAuthenticationMethod(name + "," + new String(password));
+            final AuthenticationMethod authMethod = new PasswordAuthenticationMethod(name + "," + new String(password)); //NOI18N
             sInfo = wssac.getSession(authMethod).getSessionID();
             //smPanel.setCredentials(sInfo);
-            log.debug("Authentication successful for WSS " + url.toString() + " New SesionID:" + sInfo);
+            if(log.isDebugEnabled())
+                log.debug("Authentication successful for WSS " + url.toString() + " New SesionID:" + sInfo); //NOI18N
             usernames.removeUserName(name);
             usernames.saveUserNames();
             usernames.addUserName(name);
@@ -51,7 +53,7 @@ public class WSSPasswordDialog extends PasswordDialog {
             setUsernamePassword(new UsernamePasswordCredentials(name, new String(password)));
             return true;
         } catch (AuthenticationFailedException ex) {
-            log.error("Authentication failed for WSS: " + url.toString(), ex);
+            log.error("Authentication failed for WSS: " + url.toString(), ex);  //NOI18N
             return false;
 
         }

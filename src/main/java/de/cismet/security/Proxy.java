@@ -35,6 +35,6 @@ public class Proxy {
     }
 
     public String toString() {
-        return "Proxy: " + host + ":" + port;
+        return "Proxy: " + host + ":" + port;  //NOI18N
     }
 }

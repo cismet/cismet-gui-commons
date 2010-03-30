@@ -128,6 +128,6 @@ public class DisplaceFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Distort/Displace...";
+		return "Distort/Displace...";  //NOI18N
 	}
 }

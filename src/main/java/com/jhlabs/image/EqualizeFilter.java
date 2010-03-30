@@ -71,6 +71,6 @@ public class EqualizeFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Colors/Equalize";
+		return "Colors/Equalize";  //NOI18N
 	}
 }

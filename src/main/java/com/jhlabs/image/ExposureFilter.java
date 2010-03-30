@@ -52,7 +52,7 @@ public class ExposureFilter extends TransferFilter {
 	}
 
 	public String toString() {
-		return "Colors/Exposure...";
+		return "Colors/Exposure...";  //NOI18N
 	}
 
 }

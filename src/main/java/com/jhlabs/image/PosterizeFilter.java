@@ -77,7 +77,7 @@ public class PosterizeFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Colors/Posterize...";
+		return "Colors/Posterize...";  //NOI18N
 	}
 
 }

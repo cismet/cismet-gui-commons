@@ -41,7 +41,7 @@ public class PremultiplyFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Alpha/Premultiply";
+		return "Alpha/Premultiply";  //NOI18N
 	}
 }
 

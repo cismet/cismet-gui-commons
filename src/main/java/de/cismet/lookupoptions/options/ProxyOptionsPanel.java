@@ -9,7 +9,6 @@ import de.cismet.lookupoptions.*;
 import de.cismet.security.Proxy;
 import de.cismet.security.WebAccessManager;
 import de.cismet.tools.configuration.NoWriteError;
-import java.util.ResourceBundle;
 import org.jdom.Element;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -25,13 +24,9 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = OptionsPanelController.class)
 public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPanelController {
 
-    private static final ResourceBundle I18N =
-            ResourceBundle.getBundle("de/cismet/CismetCommonsBundle");
-
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     
-    private static final String OPTION_NAME = 
-            I18N.getString("de.cismet.lookupoptions.options.ProxyOptionsPanel.OPTION_NAME");
+    private static final String OPTION_NAME = org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.OptionController.name");
     private static final String CONFIGURATION = "ProxyOptionsPanel";
     private static final String CONF_TYPE = "ProxyType";
     private static final String CONF_HOST = "ProxyHost";
@@ -121,7 +116,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     @Override
     public String getTooltip() {
-        return I18N.getString("de.cismet.lookupoptions.options.ProxyOptionsPanel.getToolTip().return");
+        return "change Proxy settings (tooltip test)";
     }
 
     /*@Override
@@ -251,7 +246,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         rdoNoProxy = new javax.swing.JRadioButton();
         rdoManualProxy = new javax.swing.JRadioButton();
 
-        labHost.setText(I18N.getString("de.cismet.lookupoptions.options.ProxyOptionsPanel.labHost.text")); // NOI18N
+        labHost.setText(org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.labHost.text")); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rdoManualProxy, org.jdesktop.beansbinding.ELProperty.create("${selected}"), labHost, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
@@ -262,16 +257,16 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rdoManualProxy, org.jdesktop.beansbinding.ELProperty.create("${selected}"), txtPort, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        labPort.setText(I18N.getString("de.cismet.lookupoptions.options.ProxyOptionsPanel.labPort.text")); // NOI18N
+        labPort.setText(org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.labPort.text")); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rdoManualProxy, org.jdesktop.beansbinding.ELProperty.create("${selected}"), labPort, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
         buttonGroup1.add(rdoNoProxy);
-        rdoNoProxy.setText(I18N.getString("de.cismet.lookupoptions.options.ProxyOptionsPanel.rdoNoProxy.text")); // NOI18N
+        rdoNoProxy.setText(org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.rdoNoProxy.text")); // NOI18N
 
         buttonGroup1.add(rdoManualProxy);
-        rdoManualProxy.setText(I18N.getString("de.cismet.lookupoptions.options.ProxyOptionsPanel.rdoManualProxy.text")); // NOI18N
+        rdoManualProxy.setText(org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.rdoManualProxy.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -311,10 +306,10 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        labHost.getAccessibleContext().setAccessibleName(I18N.getString("de.cismet.lookupoptions.options.ProxyOptionsPanel.labHost.accessibleName")); // NOI18N
-        labPort.getAccessibleContext().setAccessibleName(I18N.getString("de.cismet.lookupoptions.options.ProxyOptionsPanel.labPort.accessibleName")); // NOI18N
-        rdoNoProxy.getAccessibleContext().setAccessibleName(I18N.getString("de.cismet.lookupoptions.options.ProxyOptionsPanel.rdoNoProxy.accessibleName")); // NOI18N
-        rdoManualProxy.getAccessibleContext().setAccessibleName(I18N.getString("de.cismet.lookupoptions.options.ProxyOptionsPanel.rdoManualProxy.accessibleName")); // NOI18N
+        labHost.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.labHost.text")); // NOI18N
+        labPort.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.labPort.text")); // NOI18N
+        rdoNoProxy.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.rdoNoProxy.text")); // NOI18N
+        rdoManualProxy.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.rdoManualProxy.text")); // NOI18N
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents

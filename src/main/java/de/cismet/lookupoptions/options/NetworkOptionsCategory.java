@@ -3,7 +3,6 @@ package de.cismet.lookupoptions.options;
 import de.cismet.lookupoptions.AbstractOptionsCategory;
 import de.cismet.lookupoptions.OptionsCategory;
 import java.awt.Image;
-import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.openide.util.ImageUtilities;
@@ -16,12 +15,9 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = OptionsCategory.class)
 public class NetworkOptionsCategory extends AbstractOptionsCategory {
 
-    private static final ResourceBundle I18N =
-            ResourceBundle.getBundle("de/cismet/CismetCommonsBundle");
-
     @Override
     public String getName() {
-        return I18N.getString("de.cismet.lookupoptions.options.NetworkOptionsCategory.getName().return");
+        return org.openide.util.NbBundle.getMessage(NetworkOptionsCategory.class, "NetworkOptionsCategory.name");
     }
 
     @Override

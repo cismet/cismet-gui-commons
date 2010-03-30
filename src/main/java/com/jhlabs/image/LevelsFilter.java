@@ -109,6 +109,6 @@ public class LevelsFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Colors/Levels...";
+		return "Colors/Levels...";  //NOI18N
 	}
 }

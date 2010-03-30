@@ -329,6 +329,6 @@ public class LensBlurFilter extends AbstractBufferedImageOp {
     }
 
 	public String toString() {
-		return "Blur/Lens Blur...";
+		return "Blur/Lens Blur...";  //NOI18N
 	}
 }

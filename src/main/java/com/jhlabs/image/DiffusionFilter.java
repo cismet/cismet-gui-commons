@@ -195,7 +195,7 @@ public class DiffusionFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Colors/Diffusion Dither...";
+		return "Colors/Diffusion Dither...";  //NOI18N
 	}
 
 }

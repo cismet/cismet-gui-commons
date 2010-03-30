@@ -95,7 +95,7 @@ public class DilateFilter extends BinaryFilter {
 	}
 
 	public String toString() {
-		return "Binary/Dilate...";
+		return "Binary/Dilate...";  //NOI18N
 	}
 
 }

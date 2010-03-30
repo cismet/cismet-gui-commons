@@ -71,6 +71,6 @@ public class DiffuseFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Distort/Diffuse...";
+		return "Distort/Diffuse...";  //NOI18N
 	}
 }

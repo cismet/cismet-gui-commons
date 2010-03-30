@@ -57,37 +57,37 @@ public final class MiscComposite implements Composite {
 	private static final int MAX_RULE = SILHOUETTE;
 
 	public static String[] RULE_NAMES = {
-		"Normal",
-		"Add",
-		"Subtract",
-		"Difference",
+		"Normal",                   //NOI18N
+		"Add",                      //NOI18N
+		"Subtract",                 //NOI18N
+		"Difference",               //NOI18N
 
-		"Multiply",
-		"Darken",
-		"Burn",
-		"Color Burn",
+		"Multiply",                 //NOI18N
+		"Darken",                   //NOI18N
+		"Burn",                     //NOI18N
+		"Color Burn",               //NOI18N
 		
-		"Screen",
-		"Lighten",
-		"Dodge",
-		"Color Dodge",
+		"Screen",                   //NOI18N
+		"Lighten",                  //NOI18N
+		"Dodge",                    //NOI18N
+		"Color Dodge",              //NOI18N
 
-		"Hue",
-		"Saturation",
-		"Brightness",
-		"Color",
+		"Hue",                      //NOI18N
+		"Saturation",               //NOI18N
+		"Brightness",               //NOI18N
+		"Color",                    //NOI18N
 		
-		"Overlay",
-		"Soft Light",
-		"Hard Light",
-		"Pin Light",
+		"Overlay",                  //NOI18N
+		"Soft Light",               //NOI18N
+		"Hard Light",               //NOI18N
+		"Pin Light",                //NOI18N
 
-		"Exclusion",
-		"Negation",
-		"Average",
+		"Exclusion",                //NOI18N
+		"Negation",                 //NOI18N
+		"Average",                  //NOI18N
 
-		"Stencil",
-		"Silhouette",
+		"Stencil",                  //NOI18N
+		"Silhouette",               //NOI18N
 	};
 
 	protected float extraAlpha;
@@ -99,9 +99,9 @@ public final class MiscComposite implements Composite {
 
 	private MiscComposite(int rule, float alpha) {
 		if (alpha < 0.0f || alpha > 1.0f)
-			throw new IllegalArgumentException("alpha value out of range");
+			throw new IllegalArgumentException("alpha value out of range"); //NOI18N
 		if (rule < MIN_RULE || rule > MAX_RULE)
-			throw new IllegalArgumentException("unknown composite rule");
+			throw new IllegalArgumentException("unknown composite rule");   //NOI18N
 		this.rule = rule;
 		this.extraAlpha = alpha;
 	}

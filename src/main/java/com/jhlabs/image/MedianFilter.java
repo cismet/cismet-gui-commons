@@ -107,7 +107,7 @@ public class MedianFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Blur/Median";
+		return "Blur/Median";  //NOI18N
 	}
 
 }

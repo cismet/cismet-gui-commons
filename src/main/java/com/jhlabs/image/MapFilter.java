@@ -53,6 +53,6 @@ public class MapFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Distort/Map Coordinates...";
+		return "Distort/Map Coordinates...";  //NOI18N
 	}
 }

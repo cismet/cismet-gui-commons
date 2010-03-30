@@ -54,7 +54,7 @@ public class MinimumFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Blur/Minimum";
+		return "Blur/Minimum";  //NOI18N
 	}
 
 }

@@ -54,7 +54,7 @@ public class MaximumFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Blur/Maximum";
+		return "Blur/Maximum";  //NOI18N
 	}
 
 }

@@ -49,7 +49,7 @@ public class MaskFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Mask";
+		return "Mask";  //NOI18N
 	}
 
 }

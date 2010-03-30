@@ -23,9 +23,6 @@ import org.jdesktop.swingx.auth.LoginService;
  */
 public abstract class PasswordDialog extends LoginService {
 
-    private static final ResourceBundle I18N =
-            ResourceBundle.getBundle("de/cismet/CismetCommonsBundle");
-
     protected DefaultUserNameStore usernames;
     private Preferences appPrefs = null;
     private UsernamePasswordCredentials creds;
@@ -46,7 +43,8 @@ public abstract class PasswordDialog extends LoginService {
     
     public PasswordDialog(URL url) {
         super();
-        log.debug("Creating new PaswordDialog Instance for URL: " + url.toString());
+        if(log.isDebugEnabled())
+            log.debug("Creating new PaswordDialog Instance for URL: " + url.toString());  //NOI18N
         this.url = url;        
     }
 
@@ -68,10 +66,11 @@ public abstract class PasswordDialog extends LoginService {
 
     public UsernamePasswordCredentials getCredentials()
             throws CredentialsNotAvailableException {
-        log.debug("Credentials requested for :" + url.toString() + " alias: " + title);        
+        if(log.isDebugEnabled())
+            log.debug("Credentials requested for :" + url.toString() + " alias: " + title);  //NOI18N
         usernames = new DefaultUserNameStore();
         appPrefs = Preferences.userNodeForPackage(this.getClass());
-        usernames.setPreferences(appPrefs.node("loginURLHash" + Integer.toString(url.toString().hashCode())));
+        usernames.setPreferences(appPrefs.node("loginURLHash" + Integer.toString(url.toString().hashCode())));  //NOI18N
 
         if (creds != null) {            
             return creds;
@@ -90,7 +89,8 @@ public abstract class PasswordDialog extends LoginService {
     }
 
     private void requestUsernamePassword() throws CredentialsNotAvailableException {
-        log.debug("requestUsernamePassword");
+        if(log.isDebugEnabled())
+            log.debug("requestUsernamePassword"); //NOI18N
         JXLoginPane login = new JXLoginPane(this, null, usernames);
 
         String[] names = usernames.getUserNames();
@@ -101,21 +101,22 @@ public abstract class PasswordDialog extends LoginService {
         login.setUserName(username);
         title = WebAccessManager.getInstance().getServerAliasProperty(url.toString());
         if (title != null) {
-            login.setMessage(I18N.getString("de.cismet.security.PasswordDialog.requestUsernamePassword().login.message") +
-                    " \"" + title + "\" ");
+            login.setMessage(org.openide.util.NbBundle.getMessage(PasswordDialog.class, "PasswordDialog.requestUsernamePassword().login.message")  //NOI18N
+                    + " \"" + title + "\" ");  //NOI18N
         } else {
             title = url.toString();
             if (title.startsWith("http://") && title.length() > 21) {
-                title = title.substring(7, 21) + "...";
+                title = title.substring(7, 21) + "...";  //NOI18N
             } else if (title.length() > 14) {
-                title = title.substring(0, 14) + "...";
+                title = title.substring(0, 14) + "...";  //NOI18N
             }
 
-            login.setMessage(I18N.getString("de.cismet.security.PasswordDialog.requestUsernamePassword().login.message") +
-                    "\n" +
-                    " \"" + title + "\" ");
+            login.setMessage(org.openide.util.NbBundle.getMessage(PasswordDialog.class, "PasswordDialog.requestUsernamePassword().login.message")  //NOI18N
+                    + "\n" + " \"" + title + "\" "); //NOI18N
         }
-        log.debug("parentFrame in GUICredentialprovider:" + parent);
+
+        if(log.isDebugEnabled())
+            log.debug("parentFrame in GUICredentialprovider:" + parent);  //NOI18N
         JXLoginPane.JXLoginDialog dialog = new JXLoginPane.JXLoginDialog((JFrame) parent, login);
 
         try {

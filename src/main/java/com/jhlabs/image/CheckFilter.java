@@ -167,7 +167,7 @@ public class CheckFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Texture/Checkerboard...";
+		return "Texture/Checkerboard...";  //NOI18N
 	}
 }
 

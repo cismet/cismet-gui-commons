@@ -193,6 +193,6 @@ public class GaussianFilter extends ConvolveFilter {
 	}
 
 	public String toString() {
-		return "Blur/Gaussian Blur...";
+		return "Blur/Gaussian Blur...";  //NOI18N
 	}
 }

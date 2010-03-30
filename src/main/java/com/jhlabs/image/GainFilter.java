@@ -76,7 +76,7 @@ public class GainFilter extends TransferFilter {
 	}
 
 	public String toString() {
-		return "Colors/Gain...";
+		return "Colors/Gain...";  //NOI18N
 	}
 
 }

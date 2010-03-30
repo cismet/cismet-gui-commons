@@ -97,6 +97,6 @@ public class GlowFilter extends GaussianFilter {
     }
 
 	public String toString() {
-		return "Blur/Glow...";
+		return "Blur/Glow...";  //NOI18N
 	}
 }

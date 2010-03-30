@@ -260,6 +260,6 @@ public class GlintFilter extends AbstractBufferedImageOp {
     }
     
 	public String toString() {
-		return "Effects/Glint...";
+		return "Effects/Glint...";  //NOI18N
 	}
 }

@@ -344,6 +344,6 @@ public class GradientFilter extends AbstractBufferedImageOp {
 	}
 	
 	public String toString() {
-		return "Other/Gradient Fill...";
+		return "Other/Gradient Fill...";  //NOI18N
 	}
 }

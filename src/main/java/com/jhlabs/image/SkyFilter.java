@@ -69,7 +69,7 @@ public class SkyFilter extends PointFilter {
 
 	public SkyFilter() {
 		if ( skyColors == null ) {
-			skyColors = ImageUtils.createImage( Toolkit.getDefaultToolkit().getImage( getClass().getResource("SkyColors.png") ).getSource() );
+			skyColors = ImageUtils.createImage( Toolkit.getDefaultToolkit().getImage( getClass().getResource("SkyColors.png") ).getSource() ); //NOI18N
 		}
 	}
 
@@ -446,7 +446,7 @@ if (y == 100)System.out.println(fg+" "+gf+gradient);
 	}
 	
 	public String toString() {
-		return "Texture/Sky...";
+		return "Texture/Sky...";  //NOI18N
 	}
 	
 }

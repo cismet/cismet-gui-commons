@@ -103,6 +103,6 @@ public class TileImageFilter extends AbstractBufferedImageOp {
     }
 
 	public String toString() {
-		return "Tile";
+		return "Tile";  //NOI18N
 	}
 }

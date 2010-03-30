@@ -157,6 +157,6 @@ public class StampFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Stylize/Stamp...";
+		return "Stylize/Stamp...";  //NOI18N
 	}
 }

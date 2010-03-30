@@ -172,7 +172,7 @@ public class SphereFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Distort/Sphere...";
+		return "Distort/Sphere...";  //NOI18N
 	}
 
 }

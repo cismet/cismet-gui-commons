@@ -270,7 +270,7 @@ public class SmearFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Effects/Smear...";
+		return "Effects/Smear...";  //NOI18N
 	}
 	
 }

@@ -33,7 +33,7 @@ public class InvertFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Colors/Invert";
+		return "Colors/Invert"; //NOI18N
 	}
 }
 

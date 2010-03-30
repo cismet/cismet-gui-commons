@@ -37,7 +37,8 @@ public class OptionsDialog extends javax.swing.JDialog {
     /** Creates new form OptionsDialog */
     public OptionsDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        log.debug("OptionsDialog constructor");
+        if(log.isDebugEnabled())
+            log.debug("OptionsDialog constructor"); //NOI18N
         initComponents();
         initOptionsPanels();
         getRootPane().setDefaultButton(btnOk);
@@ -65,7 +66,8 @@ public class OptionsDialog extends javax.swing.JDialog {
             // Klassen-Name als eindeutiger Bezeichner für die einzelnen Cards im CardLayout
             final String categoryCardName = categoryClass.getCanonicalName();
 
-            log.debug("OptionsCategory: " + categoryName);
+            if(log.isDebugEnabled())
+                log.debug("OptionsCategory: " + categoryName); //NOI18N
 
             // Die OptionsController der entsprechenden Kategorie holen
             OptionsPanelController[] controllers = optionsClient.getControllers(categoryClass);
@@ -120,7 +122,8 @@ public class OptionsDialog extends javax.swing.JDialog {
                         final String controllerTooltip = controller.getTooltip();
                         final JPanel controllerPanel = controller.getPanel();
 
-                        log.debug("OptionsPanelController: " + controllerName);
+                        if(log.isDebugEnabled())
+                            log.debug("OptionsPanelController: " + controllerName); //NOI18N
 
                         // jeweils ein tab (mit title)
                         tbpPanels.addTab(controllerName, null, controllerPanel, controllerTooltip);
@@ -241,7 +244,8 @@ public class OptionsDialog extends javax.swing.JDialog {
         try {
             optionsClient.cancelAll();
         } catch (Throwable t) {
-            log.debug("btnCloseActionPerformed", t);
+            if(log.isDebugEnabled())
+                log.debug("btnCloseActionPerformed", t); //NOI18N
         } finally {
             dispose();
         }
@@ -251,7 +255,8 @@ public class OptionsDialog extends javax.swing.JDialog {
         try {
             optionsClient.applyAll();
         } catch (Throwable t) {
-            log.debug("btnOkActionPerformed", t);
+            if(log.isDebugEnabled())
+                log.debug("btnOkActionPerformed", t); //NOI18N
         } finally {
             dispose();
         }

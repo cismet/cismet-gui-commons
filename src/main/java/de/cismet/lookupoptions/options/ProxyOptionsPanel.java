@@ -26,11 +26,11 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     
-    private static final String OPTION_NAME = org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.OptionController.name");
-    private static final String CONFIGURATION = "ProxyOptionsPanel";
-    private static final String CONF_TYPE = "ProxyType";
-    private static final String CONF_HOST = "ProxyHost";
-    private static final String CONF_PORT = "ProxyPort";
+    private static final String OPTION_NAME = org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.OptionController.name");  //NOI18N
+    private static final String CONFIGURATION = "ProxyOptionsPanel";  //NOI18N
+    private static final String CONF_TYPE = "ProxyType";  //NOI18N
+    private static final String CONF_HOST = "ProxyHost";  //NOI18N
+    private static final String CONF_PORT = "ProxyPort";  //NOI18N
 
     private static enum ProxyTypes { NO, SYSTEM, MANUAL }
     private boolean stillConfigured = false;
@@ -57,7 +57,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             proxyType = ProxyTypes.MANUAL;
             host = proxy.getHost();
             port = proxy.getPort();
-        } else if (System.getProperty("http.proxyHost") != null && System.getProperty("http.proxyPort") != null) {
+        } else if (System.getProperty("http.proxyHost") != null && System.getProperty("http.proxyPort") != null) {  //NOI18N
             proxyType = ProxyTypes.SYSTEM;
         } else {
             proxyType = ProxyTypes.NO;
@@ -71,7 +71,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
                 if (port > 0) {
                     txtPort.setText(Integer.toString(port));
                 } else {
-                    txtPort.setText("");
+                    txtPort.setText("");  //NOI18N
                 }
                 break;
             default:
@@ -116,7 +116,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     @Override
     public String getTooltip() {
-        return "change Proxy settings (tooltip test)";
+        return org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.getTooltip().text");  //NOI18N
     }
 
     /*@Override
@@ -137,25 +137,28 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         if (isActivated) {
             final Proxy newProxy = new Proxy(host, port);
             WebAccessManager.getInstance().setHttpProxy(newProxy);
-            log.debug("set proxy in system-property: " + newProxy);
-            System.setProperty("http.proxyHost", newProxy.getHost());
-            System.setProperty("http.proxyPort", String.valueOf(newProxy.getPort()));
+            if(log.isDebugEnabled())
+                log.debug("set proxy in system-property: " + newProxy);  //NOI18N
+            System.setProperty("http.proxyHost", newProxy.getHost());  //NOI18N
+            System.setProperty("http.proxyPort", String.valueOf(newProxy.getPort()));  //NOI18N
         } else {
             WebAccessManager.getInstance().setHttpProxy(null);
-            log.debug("set proxy in system-property: null");
-            System.clearProperty("http.proxyHost");
-            System.clearProperty("http.proxyPort");
+            if(log.isDebugEnabled())
+                log.debug("set proxy in system-property: null");  //NOI18N
+            System.clearProperty("http.proxyHost");  //NOI18N
+            System.clearProperty("http.proxyPort");  //NOI18N
         }
     }
 
     @Override
     public void configure(Element parent) {
         if (!stillConfigured) {
-            log.debug("Configure ProxyOptionPanels");
+            if(log.isDebugEnabled())
+                log.debug("Configure ProxyOptionPanels"); //NOI18N
             try {
-                String elementProxyType = "";
-                String elementProxyHost = "";
-                String elementProxyPort = "";
+                String elementProxyType = "";  //NOI18N
+                String elementProxyHost = "";  //NOI18N
+                String elementProxyPort = "";  //NOI18N
                 if (parent != null) {
                     final Element conf = parent.getChild(CONFIGURATION);
                     if (conf != null) {
@@ -177,7 +180,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
                     port = 0;
                 }
             } catch (Exception ex) {
-                log.error("Fehler beim Konfigurieren des ProxyOptionPanels", ex);
+                log.error("Error while configuring ProxyOptionPanels", ex); //NOI18N
             }
 
             // hier werden die Werte in der GUI gesetzt
@@ -185,7 +188,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             if (port > 0) {
                 txtPort.setText(Integer.toString(port));
             } else {
-                txtPort.setText("");
+                txtPort.setText(""); //NOI18N
             }
             switch (proxyType) {
                 case MANUAL:
@@ -197,7 +200,8 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
             stillConfigured = true;
         } else {
-            log.debug("skip Configure ProxyOptionPanels - still configured");
+            if(log.isDebugEnabled())
+                log.debug("skip Configure ProxyOptionPanels - still configured"); //NOI18N
         }
 
         // Änderungen anwenden
@@ -206,16 +210,19 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     @Override
     public Element getConfiguration() throws NoWriteError {
-        log.debug("ProxyOptionPanels - getConfiguration");
+        if(log.isDebugEnabled())
+            log.debug("ProxyOptionPanels - getConfiguration"); //NOI18N
         Element conf = new Element(CONFIGURATION);
 
         Element proxyTypeElement = new Element(CONF_TYPE);
         Element proxyHostElement = new Element(CONF_HOST);
         Element proxyPortElement = new Element(CONF_PORT);
 
-        log.debug("    type: " + proxyType.toString());
-        log.debug("    host: " + host);
-        log.debug("    port: " + Integer.toString(port));
+        if(log.isDebugEnabled()) {
+            log.debug("    type: " + proxyType.toString());     //NOI18N
+            log.debug("    host: " + host);                     //NOI18N
+            log.debug("    port: " + Integer.toString(port));   //NOI18N
+        }
 
         proxyTypeElement.addContent(proxyType.toString());
         proxyHostElement.addContent(host);

@@ -16,12 +16,12 @@ public class GeneralOptionsCategory extends AbstractOptionsCategory {
 
     @Override
     public String getName() {
-        return org.openide.util.NbBundle.getMessage(GeneralOptionsCategory.class, "GeneralOptionsCategory.name");
+        return org.openide.util.NbBundle.getMessage(GeneralOptionsCategory.class, "GeneralOptionsCategory.name"); //NOI18N
     }
 
     @Override
     public Icon getIcon() {
-        Image image = ImageUtilities.loadImage("de/cismet/lookupoptions/options/general.png");
+        Image image = ImageUtilities.loadImage("de/cismet/lookupoptions/options/general.png"); //NOI18N
         if (image != null) {
             return new ImageIcon(image);
         } else {

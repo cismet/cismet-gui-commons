@@ -17,12 +17,12 @@ public class DefaultOptionsCategory extends AbstractOptionsCategory {
 
     @Override
     public String getName() {
-        return org.openide.util.NbBundle.getMessage(DefaultOptionsCategory.class, "DefaultOptionsCategory.name");
+        return org.openide.util.NbBundle.getMessage(DefaultOptionsCategory.class, "DefaultOptionsCategory.name");  //NOI18N
     }
 
     @Override
     public Icon getIcon() {
-        Image image = ImageUtilities.loadImage("de/cismet/lookupoptions/options/nocat.png");
+        Image image = ImageUtilities.loadImage("de/cismet/lookupoptions/options/nocat.png"); //NOI18N
         if (image != null) {
             return new ImageIcon(image);
         } else {

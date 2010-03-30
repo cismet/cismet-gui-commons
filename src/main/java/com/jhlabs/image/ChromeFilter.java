@@ -78,7 +78,7 @@ public class ChromeFilter extends LightFilter {
     }
 
 	public String toString() {
-		return "Effects/Chrome...";
+		return "Effects/Chrome...";  //NOI18N
 	}
 }
 

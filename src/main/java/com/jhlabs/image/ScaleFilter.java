@@ -62,7 +62,7 @@ public class ScaleFilter extends AbstractBufferedImageOp {
     }
 
 	public String toString() {
-		return "Distort/Scale";
+		return "Distort/Scale";  //NOI18N
 	}
 
 }

@@ -34,6 +34,6 @@ public class SharpenFilter extends ConvolveFilter {
 	}
 
 	public String toString() {
-		return "Blur/Sharpen";
+		return "Blur/Sharpen";  //NOI18N
 	}
 }

@@ -144,6 +144,6 @@ public class ShineFilter extends AbstractBufferedImageOp {
 	}
 
 	public String toString() {
-		return "Stylize/Shine...";
+		return "Stylize/Shine...";  //NOI18N
 	}
 }

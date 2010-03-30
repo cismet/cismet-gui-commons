@@ -394,7 +394,7 @@ public class ShapeFilter extends WholeImageFilter {
 	}
 	
 	public String toString() {
-		return "Stylize/Shapeburst...";
+		return "Stylize/Shapeburst...";  //NOI18N
 	}
 
 }

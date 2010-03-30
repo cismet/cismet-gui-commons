@@ -115,7 +115,7 @@ public class SkeletonFilter extends BinaryFilter {
 	}
 
 	public String toString() {
-		return "Binary/Skeletonize...";
+		return "Binary/Skeletonize...";  //NOI18N
 	}
 
 }

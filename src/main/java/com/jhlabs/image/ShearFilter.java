@@ -132,7 +132,7 @@ catch (Exception e) {
 	}
 
 	public String toString() {
-		return "Distort/Shear...";
+		return "Distort/Shear...";  //NOI18N
 	}
 
 }

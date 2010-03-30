@@ -295,7 +295,7 @@ public class ShadeFilter extends WholeImageFilter {
 	}
 	
 	public String toString() {
-		return "Stylize/Shade...";
+		return "Stylize/Shade...";  //NOI18N
 	}
 
 }

@@ -34,6 +34,6 @@ public class BumpFilter extends ConvolveFilter {
 	}
 
 	public String toString() {
-		return "Blur/Emboss Edges";
+		return "Blur/Emboss Edges";  //NOI18N
 	}
 }

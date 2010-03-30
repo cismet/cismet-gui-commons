@@ -286,7 +286,7 @@ public class CurlFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Distort/Curl...";
+		return "Distort/Curl...";  //NOI18N
 	}
 
 }

@@ -83,7 +83,7 @@ public class AxisAngle4f {
 	}
 
 	public String toString() {
-		return "["+x+", "+y+", "+z+", "+angle+"]";
+		return "["+x+", "+y+", "+z+", "+angle+"]";  //NOI18N
 	}
 	
 }

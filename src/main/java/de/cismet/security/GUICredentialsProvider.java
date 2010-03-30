@@ -64,7 +64,8 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
     
     public GUICredentialsProvider(URL url) {
         super();
-        log.debug("Creating new Credential Provider Instance for URL: "+url.toString());                       
+        if(log.isDebugEnabled())
+            log.debug("Creating new Credential Provider Instance for URL: "+url.toString()); //NOI18N
         this.url = url;
     }
     
@@ -91,10 +92,11 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
             int port,
             boolean proxy)
             throws CredentialsNotAvailableException {
-        log.debug("Credentials requested for :" + url.toString() + " alias: "+title);
+        if(log.isDebugEnabled())
+            log.debug("Credentials requested for :" + url.toString() + " alias: "+title); //NOI18N
         usernames = new DefaultUserNameStore();
         appPrefs = Preferences.userNodeForPackage(this.getClass());
-        usernames.setPreferences(appPrefs.node("loginURLHash"+Integer.toString(url.toString().hashCode())));
+        usernames.setPreferences(appPrefs.node("loginURLHash"+Integer.toString(url.toString().hashCode()))); //NOI18N
         if (creds != null){
             return creds;
         }
@@ -119,7 +121,7 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
                 
                 return creds;
                 } else {
-                throw new CredentialsNotAvailableException("Unsupported authentication scheme: " +
+                throw new CredentialsNotAvailableException("Unsupported authentication scheme: " +  //NOI18N
                         authscheme.getSchemeName());
                 }
         }
@@ -136,23 +138,23 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
         login.setUserName(username);
         title = WebAccessManager.getInstance().getServerAliasProperty(url.toString());
         if(title != null){//
-            login.setMessage(I18N.getString("de.cismet.security.GUICredentialsProvider.requestUsernamePassword().login.message") 
-                    + " \""+ title +"\" "
+            login.setMessage(org.openide.util.NbBundle.getMessage(GUICredentialsProvider.class, "GUICredentialsProvider.requestUsernamePassword().login.message")  //NOI18N
+                    + " \""+ title +"\" "  //NOI18N
                     );
         } else {
             title = url.toString();
-            if (title.startsWith("http://")&& title.length()>21) {
-                title=title.substring(7,21)+"...";
+            if (title.startsWith("http://")&& title.length()>21) {  //NOI18N
+                title=title.substring(7,21)+"...";                  //NOI18N
             } else if (title.length()>14){
-                title=title.substring(0,14)+"...";
+                title=title.substring(0,14)+"...";                  //NOI18N
             }
             
-            login.setMessage(I18N.getString("de.cismet.security.GUICredentialsProvider.requestUsernamePassword().login.message")
-                    + "\n"+
-                    " \""+ title +"\" "
-                    );
+            login.setMessage(org.openide.util.NbBundle.getMessage(GUICredentialsProvider.class, "GUICredentialsProvider.requestUsernamePassword().login.message")  //NOI18N
+                    + "\n" + " \""+ title +"\" ");  //NOI18N
         }
-        log.debug("parentFrame in GUICredentialprovider:"+parent);
+
+        if(log.isDebugEnabled())
+            log.debug("parentFrame in GUICredentialprovider:" + parent);  //NOI18N
         JXLoginPane.JXLoginDialog dialog = new JXLoginPane.JXLoginDialog((JFrame)parent,login);
         
         try {
@@ -170,9 +172,11 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
     }
     
     public boolean authenticate(String name, char[] password, String server) throws Exception {
-        log.debug("Authentication with username: " +name);
+        if(log.isDebugEnabled())
+            log.debug("Authentication with username: " +name); //NOI18N
         if(testConnection(new UsernamePasswordCredentials(name,new String(password)))){
-            log.debug("Credentials are valid for URL: " + url.toString());            
+            if(log.isDebugEnabled())
+                log.debug("Credentials are valid for URL: " + url.toString());  //NOI18N
             usernames.removeUserName(name);
             usernames.saveUserNames();
             usernames.addUserName(name);
@@ -181,7 +185,8 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
             setUsernamePassword(new UsernamePasswordCredentials(name,new String(password)));
             return true;
         } else {
-            log.debug("Credentials are not valid for URL: " + url.toString());
+            if(log.isDebugEnabled())
+                log.debug("Credentials are not valid for URL: " + url.toString());  //NOI18N
             return false;
         }
     }
@@ -192,15 +197,17 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
     
     public boolean testConnection(UsernamePasswordCredentials creds){
         HttpClient client = new HttpClient();
-        String proxySet = System.getProperty("proxySet");
-        if(proxySet != null && proxySet.equals("true")){
-            log.debug("proxyIs Set");
-            log.debug("ProxyHost:"+System.getProperty("http.proxyHost"));
-            log.debug("ProxyPort:"+System.getProperty("http.proxyPort"));
+        String proxySet = System.getProperty("proxySet");  //NOI18N
+        if(proxySet != null && proxySet.equals("true")){   //NOI18N
+            if(log.isDebugEnabled()) {
+                log.debug("proxyIs Set");  //NOI18N
+                log.debug("ProxyHost:"+System.getProperty("http.proxyHost"));  //NOI18N
+                log.debug("ProxyPort:"+System.getProperty("http.proxyPort"));  //NOI18N
+            }
             try {
-            client.getHostConfiguration().setProxy(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort")));    
+            client.getHostConfiguration().setProxy(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort")));  //NOI18N
             } catch(Exception e){
-                log.error("Problem while setting proxy",e);
+                log.error("Problem while setting proxy",e);  //NOI18N
             }
         }
         GetMethod method = new GetMethod(url.toString());

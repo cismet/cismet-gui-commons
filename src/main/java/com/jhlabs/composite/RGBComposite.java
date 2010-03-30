@@ -29,7 +29,7 @@ public abstract class RGBComposite implements Composite {
 
 	public RGBComposite( float alpha ) {
 		if ( alpha < 0.0f || alpha > 1.0f )
-			throw new IllegalArgumentException("RGBComposite: alpha must be between 0 and 1");
+			throw new IllegalArgumentException("RGBComposite: alpha must be between 0 and 1"); //NOI18N
 		this.extraAlpha = alpha;
 	}
 

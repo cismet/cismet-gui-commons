@@ -125,6 +125,6 @@ public class HalftoneFilter extends AbstractBufferedImageOp {
     }
 
 	public String toString() {
-		return "Stylize/Halftone...";
+		return "Stylize/Halftone...";  //NOI18N
 	}
 }

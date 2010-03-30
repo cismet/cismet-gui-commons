@@ -39,7 +39,7 @@ public class GrayscaleFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Colors/Grayscale";
+		return "Colors/Grayscale";  //NOI18N
 	}
 
 }

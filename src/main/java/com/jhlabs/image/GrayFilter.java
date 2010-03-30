@@ -40,7 +40,7 @@ public class GrayFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Colors/Gray Out";
+		return "Colors/Gray Out";  //NOI18N
 	}
 
 }

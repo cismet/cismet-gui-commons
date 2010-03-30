@@ -46,15 +46,15 @@ public class ImageCombiningFilter {
 			pg1.grabPixels();
 			pg2.grabPixels();
 		} catch (InterruptedException e) {
-			System.err.println("interrupted waiting for pixels!");
+			System.err.println("interrupted waiting for pixels!"); //NOI18N
 			return null;
 		}
 		if ((pg1.status() & ImageObserver.ABORT) != 0) {
-			System.err.println("image fetch aborted or errored");
+			System.err.println("image fetch aborted or errored"); //NOI18N
 			return null;
 		}
 		if ((pg2.status() & ImageObserver.ABORT) != 0) {
-			System.err.println("image fetch aborted or errored");
+			System.err.println("image fetch aborted or errored"); //NOI18N
 			return null;
 		}
 

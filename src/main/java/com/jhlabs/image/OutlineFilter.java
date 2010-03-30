@@ -66,7 +66,7 @@ public class OutlineFilter extends BinaryFilter {
 	}
 
 	public String toString() {
-		return "Binary/Outline...";
+		return "Binary/Outline...";  //NOI18N
 	}
 
 }

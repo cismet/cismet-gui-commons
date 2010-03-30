@@ -68,7 +68,7 @@ public class OpacityFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Colors/Transparency...";
+		return "Colors/Transparency...";  //NOI18N
 	}
 
 }

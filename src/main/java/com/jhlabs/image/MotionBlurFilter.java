@@ -246,7 +246,7 @@ public class MotionBlurFilter extends AbstractBufferedImageOp {
     }
 
 	public String toString() {
-		return "Blur/Motion Blur...";
+		return "Blur/Motion Blur...";  //NOI18N
 	}
 }
 

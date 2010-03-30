@@ -148,6 +148,6 @@ public class NoiseFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Stylize/Add Noise...";
+		return "Stylize/Add Noise...";  //NOI18N
 	}
 }

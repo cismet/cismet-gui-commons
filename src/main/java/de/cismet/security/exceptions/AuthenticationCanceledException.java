@@ -17,7 +17,7 @@ public class AuthenticationCanceledException extends Exception {
     
     /** Creates a new instance of AuthenticationCanceledException */
     public AuthenticationCanceledException() {
-    super("The HTTP authentication was canceled by user");
+    super("The HTTP authentication was canceled by user");  //NOI18N
     }
     
     public AuthenticationCanceledException(String message) {

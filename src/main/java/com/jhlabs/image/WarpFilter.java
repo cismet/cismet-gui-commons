@@ -158,7 +158,7 @@ public class WarpFilter extends WholeImageFilter {
 	}
 	
 	public String toString() {
-		return "Distort/Mesh Warp...";
+		return "Distort/Mesh Warp...";  //NOI18N
 	}
 
 }

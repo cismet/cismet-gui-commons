@@ -159,9 +159,9 @@ int j = 0;
 
 	public void lerp(float t, WarpGrid destination, WarpGrid intermediate) {
 		if (rows != destination.rows || cols != destination.cols)
-			throw new IllegalArgumentException("source and destination are different sizes");
+			throw new IllegalArgumentException("source and destination are different sizes");  //NOI18N
 		if (rows != intermediate.rows || cols != intermediate.cols)
-			throw new IllegalArgumentException("source and intermediate are different sizes");
+			throw new IllegalArgumentException("source and intermediate are different sizes");  //NOI18N
 		int index = 0;
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < cols; col++) {
@@ -180,7 +180,7 @@ try {
 		WarpGrid splines;
 
 		if (sourceGrid.rows != destGrid.rows || sourceGrid.cols != destGrid.cols)
-			throw new IllegalArgumentException("source and destination grids are different sizes");
+			throw new IllegalArgumentException("source and destination grids are different sizes"); //NOI18N
 
 		int size = Math.max(cols, rows);
 		float[] xrow = new float[size];

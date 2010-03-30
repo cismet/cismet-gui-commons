@@ -50,7 +50,7 @@ public class UnpremultiplyFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Alpha/Unpremultiply";
+		return "Alpha/Unpremultiply";  //NOI18N
 	}
 }
 

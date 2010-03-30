@@ -284,6 +284,6 @@ public class VariableBlurFilter extends AbstractBufferedImageOp {
 	}
 	
 	public String toString() {
-		return "Blur/Variable Blur...";
+		return "Blur/Variable Blur...";  //NOI18N
 	}
 }

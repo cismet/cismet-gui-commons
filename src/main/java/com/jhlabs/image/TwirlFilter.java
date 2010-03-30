@@ -160,7 +160,7 @@ public class TwirlFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Distort/Twirl...";
+		return "Distort/Twirl...";  //NOI18N
 	}
 
 }

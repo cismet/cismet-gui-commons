@@ -177,7 +177,7 @@ public class WeaveFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Texture/Weave...";
+		return "Texture/Weave...";  //NOI18N
 	}
 
 }

@@ -75,13 +75,13 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
             boolean imageUpdate = false;
             StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
             for (StackTraceElement st : stackTrace) {
-                if (repaint && st.getClassName().startsWith("javax.swing.")) {
+                if (repaint && st.getClassName().startsWith("javax.swing.")) {  //NOI18N
                     fromSwing = true;
                 }
-                if (repaint && "imageUpdate".equals(st.getMethodName())) {
+                if (repaint && "imageUpdate".equals(st.getMethodName())) {  //NOI18N
                     imageUpdate = true;
                 }
-                if ("repaint".equals(st.getMethodName())) {
+                if ("repaint".equals(st.getMethodName())) {  //NOI18N
                     repaint = true;
                     fromSwing = false;
                 }
@@ -121,7 +121,7 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
 
         };
 
-        log.fatal("EDT violation detected for Component:"+c,customThrowable);
+        log.fatal("EDT violation detected for Component:"+c,customThrowable);  //NOI18N
     }
 
     public static void main(String[] args) throws Exception {
@@ -133,17 +133,20 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
                 test();
             }
         });
-        System.out.println("Valid code passed...");
+        if(log.isDebugEnabled())
+            log.debug("Valid code passed...");  //NOI18N
         repaintTest();
-        System.out.println("Repaint test - correct code");
+        if(log.isDebugEnabled())
+            log.debug("Repaint test - correct code");  //NOI18N
+        
         //Invalide code (stack trace expected)
         test();
     }
 
     static void test() {
-        JFrame frame = new JFrame("Am I on EDT?");
+        JFrame frame = new JFrame("Am I on EDT?");  //NOI18N
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new JButton("JButton"));
+        frame.add(new JButton("JButton"));  //NOI18N
         frame.pack();
         frame.setVisible(true);
         frame.dispose();
@@ -155,9 +158,9 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JEditorPane editor = new JEditorPane();
         frame.setContentPane(editor);
-        editor.setContentType("text/html");
+        editor.setContentType("text/html");  //NOI18N
         //it works with no valid image as well
-        editor.setText("<html><img src=\"file:\\lala.png\"></html>");
+        editor.setText("<html><img src=\"file:\\lala.png\"></html>");  //NOI18N
         frame.setSize(300, 200);
         frame.setVisible(true);
     }

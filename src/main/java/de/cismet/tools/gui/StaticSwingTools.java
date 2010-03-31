@@ -148,17 +148,19 @@ public class StaticSwingTools {
                             String can = file.getCanonicalPath();
                             return can;
                         } catch (IOException ex) {
-                            log.warn("Fehler bei file.getCanonicalPath()", ex);
+                            log.warn("Fehler bei file.getCanonicalPath()", ex);  //NOI18N
                         }
                     }
                 } else if (flavor.equals(DataFlavor.stringFlavor)) {
                     String fileOrURL = (String) t.getTransferData(flavor);
-                    System.out.println("GOT STRING: " + fileOrURL);
+                    if(log.isDebugEnabled())
+                        log.debug("GOT STRING: " + fileOrURL); //NOI18N
+                    
                     try {
                         URL url = new URL(fileOrURL);
                         return url.toString();
                     } catch (MalformedURLException ex) {
-                        log.warn("Keine g\u00FCltige URL", ex);
+                        log.warn("Illegal URL", ex);  //NOI18N
                         return null;
                     }
                     
@@ -167,9 +169,9 @@ public class StaticSwingTools {
                     //mach nix und probiers weiter
                 }
             } catch (IOException ex) {
-                log.warn("IOError getting data: " + ex);
+                log.warn("IOError getting data: " + ex);  //NOI18N
             } catch (UnsupportedFlavorException e) {
-                log.warn("Unsupported Flavor: ", e);
+                log.warn("Unsupported Flavor: ", e);  //NOI18N
             }
         }
         return null;
@@ -181,12 +183,12 @@ public class StaticSwingTools {
 
     public static void jTabbedPaneWithVerticalTextAddTab(JTabbedPane tabPane, String text, Icon icon, JComponent comp) {
         int tabPlacement = tabPane.getTabPlacement();
-        Object textIconGap = UIManager.get("TabbedPane.textIconGap");
-        Insets tabInsets = UIManager.getInsets("TabbedPane.tabInsets");
+        Object textIconGap = UIManager.get("TabbedPane.textIconGap");   //NOI18N
+        Insets tabInsets = UIManager.getInsets("TabbedPane.tabInsets");  //NOI18N
         tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
-        UIManager.put("TabbedPane.textIconGap", new Integer(1));
+        UIManager.put("TabbedPane.textIconGap", new Integer(1));  //NOI18N
         // UIManager.put("TabbedPane.tabInsets", new Insets(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom));
-        UIManager.put("TabbedPane.tabInsets", tabInsets);
+        UIManager.put("TabbedPane.tabInsets", tabInsets);  //NOI18N
         SwingUtilities.updateComponentTreeUI(tabPane);
         switch (tabPlacement) {
             case JTabbedPane.LEFT:
@@ -207,7 +209,8 @@ public class StaticSwingTools {
                         icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT);
                         newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
                     }
-                    log.debug("newIconHeight" + newIcon.getIconHeight());
+                    if(log.isDebugEnabled())
+                        log.debug("newIconHeight" + newIcon.getIconHeight());  //NOI18N
                     tabPane.addTab(null, newIcon, comp);
                 }
                 break;
@@ -215,7 +218,7 @@ public class StaticSwingTools {
                 tabPane.addTab(text, null, comp);
         }
         tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
-        UIManager.put("TabbedPane.tabInsets", tabInsets);
+        UIManager.put("TabbedPane.tabInsets", tabInsets);  //NOI18N
         
     }
     
@@ -247,7 +250,8 @@ public class StaticSwingTools {
                         icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT, textColor);
                         newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
                     }
-                    log.debug("newIconHeight" + newIcon.getIconHeight());
+                    if(log.isDebugEnabled())
+                        log.debug("newIconHeight" + newIcon.getIconHeight());  //NOI18N
                     tabPane.setIconAt(tabPane.indexOfComponent(comp), newIcon);
                 }
                 return;
@@ -261,8 +265,9 @@ public class StaticSwingTools {
         while (keys.hasMoreElements()) {
             Object key = keys.nextElement();
             Object value = UIManager.get(key);
-            if (key.toString().indexOf("abbed") != -1) {
-                log.debug(key + "," + value);
+            if (key.toString().indexOf("abbed") != -1) {  //NOI18N
+                if(log.isDebugEnabled())
+                    log.debug(key + "," + value); //NOI18N
             }
         }
         switch (tabPlacement) {
@@ -320,12 +325,15 @@ public class StaticSwingTools {
             Object o = c;
             do {
                 o = ((Component) o).getParent();
-                log.debug("getParent:" + o);
+                if(log.isDebugEnabled())
+                    log.debug("getParent:" + o);  //NOI18N
             } while (!(o instanceof Frame && ((Component) o).getParent() == null || first));
-            log.debug("getParentFrame returns " + o);
+            if(log.isDebugEnabled())
+                log.debug("getParentFrame returns " + o);  //NOI18N
             return (Frame) o;
         } catch (Exception e) {
-            log.warn("getParentFrame returns null", e);
+            if(log.isDebugEnabled())
+                log.warn("getParentFrame returns null", e);  //NOI18N
             return null;
             
         }

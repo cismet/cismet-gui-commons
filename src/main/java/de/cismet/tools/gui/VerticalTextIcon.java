@@ -56,7 +56,7 @@ import javax.swing.UIManager;
  * 
  */
 public class VerticalTextIcon implements Icon, SwingConstants{
-    private Font font = UIManager.getFont("Label.font");
+    private Font font = UIManager.getFont("Label.font");  //NOI18N
     private FontMetrics fm = Toolkit.getDefaultToolkit().getFontMetrics(font);
     
     private String text;

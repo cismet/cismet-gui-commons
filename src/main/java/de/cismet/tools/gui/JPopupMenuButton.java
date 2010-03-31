@@ -72,8 +72,8 @@ public class JPopupMenuButton  extends JButton implements MouseListener,MouseMot
     private int arrowXOffset=0;
     
     boolean mouseInPopupArea=false;
-    Icon downArrow= new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down.png"));
-    Icon downArrow2= new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down2.png"));
+    Icon downArrow= new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down.png"));  //NOI18N
+    Icon downArrow2= new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down2.png"));  //NOI18N
     Icon userDefinedIcon=null;
     
     /** Creates a new instance of JPopupMenuButton */
@@ -158,7 +158,7 @@ public class JPopupMenuButton  extends JButton implements MouseListener,MouseMot
     public void mouseClicked(java.awt.event.MouseEvent e) {
         if (this.isEnabled()) {
             if ((popupMenu==null||popupMenu.getComponentCount()==0)&&mouseInPopupArea) {
-                actionPerformed(new ActionEvent(this,0,""));
+                actionPerformed(new ActionEvent(this,0,""));  //NOI18N
             }
             else if (mouseInPopupArea||e.isPopupTrigger()) {
                 popupMenu.show(this,0, getHeight());
@@ -172,7 +172,7 @@ public class JPopupMenuButton  extends JButton implements MouseListener,MouseMot
      * Invoked when an action occurs.
      */
     public void actionPerformed(java.awt.event.ActionEvent e) {
-        ActionEvent thisEvent=new ActionEvent(this,0,"ACTION");
+        ActionEvent thisEvent=new ActionEvent(this,0,"ACTION");  //NOI18N
         fireActionPerformed(thisEvent);
    }
 

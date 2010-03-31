@@ -89,7 +89,7 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
     private void initTimer() {
         final long initialDelayMs = 0;
         final boolean isDaemon = true;
-        Timer timer = new Timer("EventDispatchThreadHangMonitor", isDaemon);
+        Timer timer = new Timer("EventDispatchThreadHangMonitor", isDaemon);  //NOI18N
         timer.schedule(new HangChecker(), initialDelayMs, CHECK_INTERVAL_MS);
     }
     
@@ -131,7 +131,7 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
                 }
                 
             };
-            log.fatal("--- event dispatch thread stuck processing event for " +  timeSoFar() + " ms:",customThrowable);
+            log.fatal("--- event dispatch thread stuck processing event for " +  timeSoFar() + " ms:",customThrowable);  //NOI18N
 
         }
         
@@ -139,16 +139,16 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
             // We know that it's not interesting to show any code above where
             // we get involved in event dispatch, so we stop printing the stack
             // trace when we get as far back as our code.
-            String s="";
+            String s="";  //NOI18N
             final String ourEventQueueClassName = EventDispatchThreadHangMonitor.class.getName();
             for (StackTraceElement stackTraceElement : stackTrace) {
                 if (stackTraceElement.getClassName().equals(ourEventQueueClassName)) {
                     break;
                 }
-                s+="    " + stackTraceElement+"\n\n ";
+                s+="    " + stackTraceElement+"\n\n ";  //NOI18N
                 
             }
-            log.fatal("Stacktrace\n\n"+s);
+            log.fatal("Stacktrace\n\n"+s);  //NOI18N
         }
     }
     
@@ -165,8 +165,9 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
      * Sets up hang detection for the event dispatch thread.
      */
     public static void initMonitoring() {
-        
-        log.info("EventDispatchThreadHangMonitor inited");
+
+        if(log.isInfoEnabled())
+            log.info("EventDispatchThreadHangMonitor inited");  //NOI18N
         Toolkit.getDefaultToolkit().getSystemEventQueue().push(INSTANCE);
         
     }
@@ -203,7 +204,7 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
      */
     private synchronized void postDispatchEvent() {
         if (reportedHang) {
-            log.fatal("--- event dispatch thread unstuck after " + timeSoFar() + " ms.");
+            log.fatal("--- event dispatch thread unstuck after " + timeSoFar() + " ms."); //NOI18N
         }
         startedLastEventDispatchAt = NO_CURRENT_EVENT;
     }

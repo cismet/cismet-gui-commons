@@ -93,7 +93,7 @@ public class Example {
         final JCheckBox correctCheck2 = new JCheckBox(org.openide.util.NbBundle.getMessage(Example.class, "Example.correctCheck2.text"));  //NOI18N
         correctCheck2.setSelected(_tfww.isCorrectingCase());
         correctCheck2.setEnabled(!caseCheck2.isSelected());
-        correctCheck2.setToolTipText(org.openide.util.NbBundle.getMessage(Example.class, "xample.correctCheck.tooltip"));  //NOI18N
+        correctCheck2.setToolTipText(org.openide.util.NbBundle.getMessage(Example.class, "Example.correctCheck2.tooltip"));  //NOI18N
 
         caseCheck2.addActionListener(new ActionListener() {
 

@@ -65,7 +65,7 @@ import javax.swing.tree.TreePath;
 public class FileSystemModel2 extends AbstractTreeTableModel {
 
     // Names of the columns.
-    static protected String[]  cNames = {"Name", "Size", "Type", "Modified"};
+    static protected String[]  cNames = {"Name", "Size", "Type", "Modified"};  //NOI18N
 
     // Types of the columns.
     static protected Class[]  cTypes = { TreeTableModel.class,
@@ -204,7 +204,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
 		}
 		return null;
 	    case 2:
-		return fn.isLeaf() ?  "File" : "Directory";
+		return fn.isLeaf() ?  "File" : "Directory";  //NOI18N
 	    case 3:
 		return fn.lastModified();
 	    }
@@ -360,7 +360,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
 		canonicalPath = file.getCanonicalPath();
 	    }
 	    catch (IOException ioe) {
-		canonicalPath = "";
+		canonicalPath = "";  //NOI18N
 	    }
 	    if (parent != null) {
 		isLink = !canonicalPath.startsWith(parent.getCanonicalPath());

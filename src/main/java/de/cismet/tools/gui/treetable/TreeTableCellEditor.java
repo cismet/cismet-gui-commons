@@ -99,10 +99,10 @@ public class TreeTableCellEditor extends DefaultCellEditor {
     public TreeTableCellEditor(JTreeTable treeTable, JTree tree) {
         super(new TreeTableTextField());
         if (treeTable == null) {
-            throw new IllegalArgumentException("null treeTable");
+            throw new IllegalArgumentException("null treeTable");  //NOI18N
         }
         if (tree == null) {
-            throw new IllegalArgumentException("null tree");
+            throw new IllegalArgumentException("null tree");  //NOI18N
         }
 
         this.treeTable = treeTable; // immutable

@@ -104,17 +104,17 @@ public class JavaDocument extends PlainDocument {
 		if (inComment) {
 		    MutableAttributeSet a = (MutableAttributeSet) elem.getAttributes();
 		    a.addAttribute(CommentAttribute, CommentAttribute);
-		    int index = s.indexOf("*/");
+		    int index = s.indexOf("*/");  //NOI18N
 		    if (index >= 0) {
 			// found an end of comment, turn off marks
 			inComment = false;
 		    }
 		} else {
 		    // scan for multiline comment
-		    int index = s.indexOf("/*");
+		    int index = s.indexOf("/*");  //NOI18N
 		    if (index >= 0) {
 			// found a start of comment, see if it spans lines
-			index = s.indexOf("*/", index);
+			index = s.indexOf("*/", index);  //NOI18N
 			if (index < 0) {
 			    // it spans lines
 			    inComment = true;
@@ -152,7 +152,7 @@ public class JavaDocument extends PlainDocument {
 	}
 
         public String toString() {
-	    return "comment";
+	    return "comment";  //NOI18N
 	}
 
     }
@@ -212,7 +212,7 @@ public class JavaDocument extends PlainDocument {
 	    try {
 		loadSegment();
 	    } catch (IOException ioe) {
-		throw new Error("unexpected: " + ioe);
+		throw new Error("unexpected: " + ioe);  //NOI18N
 	    }
 	}
 
@@ -250,7 +250,7 @@ public class JavaDocument extends PlainDocument {
 		pos += n;
 		index = segment.offset;
 	    } catch (BadLocationException e) {
-		throw new IOException("Bad location");
+		throw new IOException("Bad location");  //NOI18N
 	    }
 	}
 	
@@ -267,7 +267,7 @@ public class JavaDocument extends PlainDocument {
 			  Object arg1, Object arg2, Object arg3) {
 	    // should do something useful... 
 	    System.err.println(err);
-	    System.err.println("location: " + where);
+	    System.err.println("location: " + where);  //NOI18N
 	}
     }
 

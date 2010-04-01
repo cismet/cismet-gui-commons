@@ -55,7 +55,7 @@ public class JavaEditorKit extends DefaultEditorKit {
      * the type <code>text/java</code>.
      */
     public String getContentType() {
-	return "text/java";
+	return "text/java";  //NOI18N
     }
 
     /**

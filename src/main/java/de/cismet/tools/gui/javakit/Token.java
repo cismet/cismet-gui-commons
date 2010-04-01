@@ -173,7 +173,7 @@ public class Token implements Serializable {
 	}
 
         public String toString() {
-	    return "token";
+	    return "token";  //NOI18N
 	}
 
     }
@@ -473,7 +473,7 @@ public class Token implements Serializable {
 							      Constants.INLINEMETHOD);
     public static final Token INLINENEWINSTANCE = new Special(Constants.opNames[Constants.INLINENEWINSTANCE],
 							      Constants.INLINENEWINSTANCE);
-    public static final Token UNSCANNED =         new Special("unscanned", MaximumScanValue);
+    public static final Token UNSCANNED =         new Special("unscanned", MaximumScanValue);  //NOI18N
 
     static Token[] operators = {
 	COMMA, ASSIGN, ASGMUL, ASGDIV, ASGREM, ASGADD, ASGSUB, ASGLSHIFT,

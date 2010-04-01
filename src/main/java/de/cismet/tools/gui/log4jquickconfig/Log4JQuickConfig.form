@@ -50,7 +50,7 @@
                     <EmptyBorder bottom="3" left="3" right="3" top="3"/>
                   </Border>
                   <Border PropertyName="inside" info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&lt;Log4JQuickConfig.panWhat.border.insideBorder.title&gt;">
+                    <TitledBorder title="What">
                       <ResourceString PropertyName="titleX" bundle="de/cismet/tools/gui/log4jquickconfig/Bundle.properties" key="Log4JQuickConfig.panWhat.border.insideBorder.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </TitledBorder>
                   </Border>
@@ -171,7 +171,7 @@
                     <EmptyBorder bottom="3" left="3" right="3" top="3"/>
                   </Border>
                   <Border PropertyName="inside" info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="&lt;Log4JQuickConfig.panWhere.border.insideBorder.title&gt;">
+                    <TitledBorder title="Where">
                       <ResourceString PropertyName="titleX" bundle="de/cismet/tools/gui/log4jquickconfig/Bundle.properties" key="Log4JQuickConfig.panWhere.border.insideBorder.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                     </TitledBorder>
                   </Border>
@@ -420,7 +420,7 @@
         <Component class="javax.swing.JButton" name="cmdCancel">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/tools/gui/log4jquickconfig/Bundle.properties" key="Log4JQuickConfig.cmdCancel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/tools/gui/log4jquickconfig/Bundle.properties" key="Log4JQuickConfig.cmdCancel.text_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Events>

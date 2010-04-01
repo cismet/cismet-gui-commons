@@ -313,7 +313,7 @@ public class Log4JQuickConfig extends javax.swing.JFrame {
 
         panButtons.setLayout(new java.awt.GridBagLayout());
 
-        cmdCancel.setText(org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.cmdCancel.text")); // NOI18N
+        cmdCancel.setText(org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.cmdCancel.text_1")); // NOI18N
         cmdCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmdCancelActionPerformed(evt);
@@ -371,13 +371,13 @@ public class Log4JQuickConfig extends javax.swing.JFrame {
         p.put("log4j.appender.cismetConsole.layout", "org.apache.log4j.PatternLayout"); //NOI18N
         p.put("log4j.appender.cismetConsole.layout.ConversionPattern", "%-5p [%t] - %m%n"); //NOI18N
         
-        String level="DEBUG";   //NOI18N
-        String target="";       //NOI18N
+        String level="DEBUG";       //NOI18N
+        String target="";           //NOI18N
         if (chkSockets.isSelected()) {
-            target+="Remote,";  //NOI18N
+            target+="Remote,";      //NOI18N
         }
         if (chkFile.isSelected()) {
-            target+="File,";    //NOI18N
+            target+="File,";        //NOI18N
         }
         if (chkConsole.isSelected()) {
             target+="cismetConsole,";   //NOI18N

@@ -18,13 +18,13 @@ public class DocumentPanelTester extends javax.swing.JFrame {
     public DocumentPanelTester() {
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         initComponents();
-        dopTest.getDocumentListModel().addElement(new DefaultDocument("briefpapier", "/home/hell/test/briefpapier.pdf"));
-        dopTest.getDocumentListModel().addElement(new DefaultDocument("ein png", "/home/hell/test/cubert.png"));
-        dopTest.getDocumentListModel().addElement(new DefaultDocument("hiker (jpg)", "/home/hell/test/hiker.jpg"));
-        dopTest.getDocumentListModel().addElement(new DefaultDocument("ein gif", "/home/hell/test/santa.gif"));
-        dopTest.getDocumentListModel().addElement(new DefaultDocument("google online gif ", "http://www.google.de/intl/de_de/images/logo.gif"));
-        dopTest.getDocumentListModel().addElement(new DefaultDocument("website", "http://www.ebay.de/"));
-        dopTest.getDocumentListModel().addElement(new DefaultDocument("website", "http://demohost/web/shen/utilities/wastewaterrecycling/SST-1.pdf"));
+        dopTest.getDocumentListModel().addElement(new DefaultDocument("briefpapier", "/home/hell/test/briefpapier.pdf"));   //NOI18N
+        dopTest.getDocumentListModel().addElement(new DefaultDocument("ein png", "/home/hell/test/cubert.png"));            //NOI18N
+        dopTest.getDocumentListModel().addElement(new DefaultDocument("hiker (jpg)", "/home/hell/test/hiker.jpg"));         //NOI18N
+        dopTest.getDocumentListModel().addElement(new DefaultDocument("ein gif", "/home/hell/test/santa.gif"));             //NOI18N
+        dopTest.getDocumentListModel().addElement(new DefaultDocument("google online gif ", "http://www.google.de/intl/de_de/images/logo.gif"));    //NOI18N
+        dopTest.getDocumentListModel().addElement(new DefaultDocument("website", "http://www.ebay.de/"));                   //NOI18N
+        dopTest.getDocumentListModel().addElement(new DefaultDocument("website", "http://demohost/web/shen/utilities/wastewaterrecycling/SST-1.pdf"));  //NOI18N
         
         
     }

@@ -23,7 +23,7 @@ public class LinkStyleBreadCrumbGui extends javax.swing.JPanel {
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private BreadCrumbModel breadCrumbModel = new DefaultBreadCrumbModel();
-    private ImageIcon arrow = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/arrowRight.png"));
+    private ImageIcon arrow = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/arrowRight.png"));  //NOI18N
     private boolean showFirstCrumbAlone = false;
 
     public LinkStyleBreadCrumbGui(BreadCrumbModel breadCrumbModel) {

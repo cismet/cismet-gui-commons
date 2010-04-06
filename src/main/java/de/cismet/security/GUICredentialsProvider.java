@@ -12,7 +12,6 @@ import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.Component;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 import javax.swing.JFrame;
 import org.apache.commons.httpclient.Credentials;
@@ -36,10 +35,6 @@ import org.jdesktop.swingx.auth.LoginService;
  * @author Sebastian
  */
 public class GUICredentialsProvider extends LoginService implements CredentialsProvider {
-    
-    private static final ResourceBundle I18N =
-            ResourceBundle.getBundle("de/cismet/CismetCommonsBundle");
-
     private DefaultUserNameStore  usernames;
     private Preferences appPrefs=null;
     private UsernamePasswordCredentials creds;

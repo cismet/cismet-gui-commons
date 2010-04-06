@@ -7,7 +7,6 @@ package de.cismet.security;
 import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.Component;
 import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 import javax.swing.JFrame;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;

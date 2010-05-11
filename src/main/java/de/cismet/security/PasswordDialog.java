@@ -97,7 +97,8 @@ public abstract class PasswordDialog extends LoginService {
         login.setUserName(username);
         title = WebAccessManager.getInstance().getServerAliasProperty(url.toString());
         if (title != null) {
-            login.setMessage(java.util.ResourceBundle.getBundle("de/cismet/cismap/commons/GuiBundle").getString("GUICredentialProvider.HttpAuthentication.Messagetext_1") +
+            String msg=org.openide.util.NbBundle.getMessage(PasswordDialog.class,"GUICredentialProvider.HttpAuthentication.Messagetext_1");
+            login.setMessage(msg+
                     " \"" + title + "\" ");
         } else {
             title = url.toString();
@@ -107,7 +108,8 @@ public abstract class PasswordDialog extends LoginService {
                 title = title.substring(0, 14) + "...";
             }
 
-            login.setMessage(java.util.ResourceBundle.getBundle("de/cismet/cismap/commons/GuiBundle").getString("GUICredentialProvider.HttpAuthentication.Messagetext_1") +
+            String msg=org.openide.util.NbBundle.getMessage(PasswordDialog.class,"GUICredentialProvider.HttpAuthentication.Messagetext_1");
+            login.setMessage(msg+
                     "\n" +
                     " \"" + title + "\" ");
         }

@@ -32,7 +32,7 @@ import javax.swing.JComponent;
  * @version  $Revision$, $Date$
  */
 public interface BasicGuiComponentProvider {
-    public static enum GuiType {TOOLBARCOMPONENT,GUICOMPONENT};
+    public static enum GuiType {TOOLBARCOMPONENT,GUICOMPONENT,DUMMY};
     /**
      * DOCUMENT ME!
      *

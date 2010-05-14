@@ -32,7 +32,7 @@ import javax.swing.JComponent;
  * @version  $Revision$, $Date$
  */
 public interface BasicGuiComponentProvider {
-
+    public static enum GuiType {TOOLBARCOMPONENT,GUICOMPONENT};
     /**
      * DOCUMENT ME!
      *
@@ -67,5 +67,11 @@ public interface BasicGuiComponentProvider {
      * @return  DOCUMENT ME!
      */
     public JComponent getComponent();
+
+    public GuiType getType();
+
+    public Object getPositionHint();
+
+    public void  setLinkObject(Object link);
 
 }

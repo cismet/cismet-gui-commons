@@ -6,7 +6,7 @@
     <parent>
         <groupId>de.cismet.cids</groupId>
         <artifactId>cids-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
 
     <groupId>de.cismet.commons</groupId>
@@ -17,16 +17,22 @@
     <name>cismet GUI Commons</name>
     <description>!!! description pending !!!</description>
 
+    <scm>
+        <connection>scm:svn:svn+ssh://repositories/svn/repositories/central/de/cismet/commons/cismet-gui-commons/trunk</connection>
+        <developerConnection>scm:svn:svn+ssh://repositories/svn/repositories/central/de/cismet/commons/cismet-gui-commons/trunk</developerConnection>
+        <url>http://repositories:8082/central/browse/de/cismet/commons/cismet-gui-commons/trunk</url>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>de.cismet.commons</groupId>
             <artifactId>wss-bean</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>de.cismet.commons</groupId>
             <artifactId>cismet-commons</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.swinglabs</groupId>
@@ -74,7 +80,7 @@
         <dependency>
             <groupId>de.cismet.custom</groupId>
             <artifactId>beansbinding</artifactId>
-            <version>1.2.1-SNAPSHOT</version>
+            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>de.cismet.todo</groupId>

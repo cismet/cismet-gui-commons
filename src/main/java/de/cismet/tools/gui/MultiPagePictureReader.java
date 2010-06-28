@@ -19,6 +19,15 @@ public class MultiPagePictureReader {
     private final ImageDecoder decoder;
     private final int pageCount;
     private final SoftReference<BufferedImage>[] cache;
+    private boolean caching = true;
+
+    public void setCaching(boolean enabled) {
+        this.caching = enabled;
+    }
+
+    public boolean getCaching() {
+        return this.caching;
+    }
 
     private final String getCodecString(File imageFile) {
         final String filename = imageFile.getName().toLowerCase();
@@ -74,7 +83,9 @@ public class MultiPagePictureReader {
                 final RenderedImage renderImage = decoder.decodeAsRenderedImage(page);
                 final RenderedImageAdapter imageAdapter = new RenderedImageAdapter(renderImage);
                 result = imageAdapter.getAsBufferedImage();
-                addToCache(page, result);
+                if (caching) {
+                    addToCache(page, result);
+                }
             }
             return result;
         } else {

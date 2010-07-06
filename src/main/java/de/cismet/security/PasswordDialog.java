@@ -100,18 +100,18 @@ public abstract class PasswordDialog extends LoginService {
         login.setUserName(username);
         title = WebAccessManager.getInstance().getServerAliasProperty(url.toString());
         if (title != null) {
-            login.setMessage(org.openide.util.NbBundle.getMessage(PasswordDialog.class, "PasswordDialog.requestUsernamePassword().login.message")  //NOI18N
-                    + " \"" + title + "\" ");  //NOI18N
+            String msg=org.openide.util.NbBundle.getMessage(PasswordDialog.class,"PasswordDialog.requestUsernamePassword().login.message");
+            login.setMessage(msg+ " \"" + title + "\" ");//NOI18N
         } else {
             title = url.toString();
-            if (title.startsWith("http://") && title.length() > 21) {
+            if (title.startsWith("http://") && title.length() > 21) {//NOI18N
                 title = title.substring(7, 21) + "...";  //NOI18N
             } else if (title.length() > 14) {
                 title = title.substring(0, 14) + "...";  //NOI18N
             }
 
-            login.setMessage(org.openide.util.NbBundle.getMessage(PasswordDialog.class, "PasswordDialog.requestUsernamePassword().login.message")  //NOI18N
-                    + "\n" + " \"" + title + "\" "); //NOI18N
+            String msg=org.openide.util.NbBundle.getMessage(PasswordDialog.class,"PasswordDialog.requestUsernamePassword().login.message");
+            login.setMessage( msg +  "\n" + " \"" + title + "\" ");//NOI18N
         }
 
         if(log.isDebugEnabled())

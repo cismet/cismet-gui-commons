@@ -1,178 +1,186 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.security.handler;
 
-import de.cismet.security.AccessHandler;
+import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.NTCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.auth.CredentialsProvider;
+import org.apache.log4j.Logger;
+
+import java.net.URL;
+
+import java.util.Hashtable;
+
 import de.cismet.security.GUICredentialsProvider;
 import de.cismet.security.Proxy;
 import de.cismet.security.WebAccessManager;
-import java.awt.Component;
-import java.net.URL;
-import java.util.Hashtable;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.CredentialsProvider;
 
 /**
+ * DOCUMENT ME!
  *
- * @author spuhl
+ * @author   spuhl
+ * @version  $Revision$, $Date$
  */
-public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler{
+public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
 
-    private Hashtable<URL, GUICredentialsProvider> httpCredentialsForURLS = new Hashtable<URL, GUICredentialsProvider>();
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    private Proxy proxy = null;
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final transient Logger LOG = Logger.getLogger(HTTPBasedAccessHandler.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final transient Hashtable<URL, GUICredentialsProvider> httpCredentialsForURLS;
+    private transient Proxy proxy;
+
+    //~ Constructors -----------------------------------------------------------
 
     /**
      * Sets the SystemProxy by default.
      */
     protected HTTPBasedAccessHandler() {
-        log.debug("HTTPBasedAccessHandler");
-        setProxy(getSystemProxy());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("HTTPBasedAccessHandler"); // NOI18N
+        }
+        httpCredentialsForURLS = new Hashtable<URL, GUICredentialsProvider>();
+        proxy = Proxy.fromSystem();
     }
+
+    //~ Methods ----------------------------------------------------------------
 
     /**
      * Returns a configured HttpClient with (if set) proxy settings.
-     * @return configured HttpClient
+     *
+     * @return  configured HttpClient
      */
     protected HttpClient getConfiguredHttpClient() {
-        log.debug("getConfiguredHttpClient");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getConfiguredHttpClient"); // NOI18N
+        }
 
         final HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
-        Proxy proxyInUse;        
-        if ((proxyInUse = getProxy()) != null) { // ist ein Proxy gesetzt?
-            // proxy auf HostConfiguration anwenden
-            client.getHostConfiguration().setProxy(proxyInUse.getHost(), proxyInUse.getPort());
+        if (proxy != null) {
+            client.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
+            final AuthScope authscope = new AuthScope(proxy.getHost(), proxy.getPort());
+            final Credentials credentials = new NTCredentials(proxy.getUsername(),
+                    proxy.getPassword(),
+                    "", // NOI18N
+                    proxy.getDomain());
+            client.getState().setProxyCredentials(authscope, credentials);
         }
+
         return client;
     }
 
     /**
-     * Proxy getter
-     * @return proxy
+     * Proxy getter.
+     *
+     * @return  proxy
      */
     public Proxy getProxy() {
-        log.debug("getProxy: " + proxy);
         return proxy;
     }
 
     /**
-     * Proxy setter
-     * @param proxy
+     * Proxy setter.
+     *
+     * @param  proxy  DOCUMENT ME!
      */
-    public void setProxy(Proxy proxy) {
-        log.debug("setProxy: " + proxy);
+    public void setProxy(final Proxy proxy) {
         this.proxy = proxy;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     protected HttpClient getSecurityEnabledHttpClient(final URL url) {
-        log.debug("getSecurityEnabledHttpClient");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getSecurityEnabledHttpClient"); // NOI18N
+        }
         final HttpClient client = getConfiguredHttpClient();
         client.getParams().setParameter(CredentialsProvider.PROVIDER, getCredentialProvider(url));
+
         return client;
     }
 
-    protected CredentialsProvider getCredentialProvider(URL url) {        
-        GUICredentialsProvider cp = getHttpCredentialProviderURL(url);
-        log.debug("Retrieving Credential Provider for url: " + url.toString());
-        if (cp != null) {
-            log.debug("Credential Provider available for ... " + url.toString());
-        } else {
-            cp = createSynchronizedCP(url);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    protected CredentialsProvider getCredentialProvider(final URL url) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Retrieving Credential Provider for url: " + url); // NOI18N
         }
+
+        GUICredentialsProvider cp = getHttpCredentialProviderURL(url);
+        if (cp == null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("no Credential Provider available for url: " + url);
+            }
+            cp = createSynchronizedCP(url);
+        } else {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Credential Provider available for url: " + url);
+            }
+        }
+
         return cp;
     }
-    
-    public GUICredentialsProvider getHttpCredentialProviderURL(URL url) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public GUICredentialsProvider getHttpCredentialProviderURL(final URL url) {
         return httpCredentialsForURLS.get(url);
     }
 
-    public synchronized GUICredentialsProvider createSynchronizedCP(URL url) {
-        log.debug("Credential Provider should be created synchronously");
-        GUICredentialsProvider cp = httpCredentialsForURLS.get(url);
-        if (cp != null) {
-            log.debug("Credential Provider was already available: " + url.toString());
-            return cp;
-        } else {
-            log.debug("A new Credential Provider instance was created for: " + url.toString());
-            cp = new GUICredentialsProvider(url,WebAccessManager.getInstance().getTopLevelComponent());
-            httpCredentialsForURLS.put(url, cp);
-            return cp;
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public synchronized GUICredentialsProvider createSynchronizedCP(final URL url) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Credential Provider should be created synchronously"); // NOI18N
         }
-    }
 
-//    public synchronized GUICredentialsProvider createSynchronizedCP(URL url, Component parent, WMSCapabilities cap) {
-//        log.debug("Credential Provider should be created synchronously");
-//        GUICredentialsProvider cp = httpCredentialsForCapabilities.get(cap);
-//        if (cp != null) {
-//            log.debug("Credential Provider was already available: " + url.toString());
-//            return cp;
-//        } else {
-//            log.debug("A new Credential Provider instance was created for: " + url.toString());
-//            cp = new GUICredentialsProvider(url, parent);
-//            httpCredentialsForURLS.put(url, cp);
-//            cp.setTitle(cap.getCapability().getLayer().getTitle());
-//            return cp;
-//        }
-//    }
-//
-//    public synchronized GUICredentialsProvider createSynchronizedCP(URL url, WMSCapabilities cap) {
-//        log.debug("Credential Provider should be created synchronously");
-//        GUICredentialsProvider cp = httpCredentialsForCapabilities.get(cap);
-//        if (cp != null) {
-//            log.debug("Credential Provider was already available: " + url.toString());
-//            return cp;
-//        } else {
-//            log.debug("A new Credential Provider instance was created for: " + url.toString());
-//            cp = new GUICredentialsProvider(url);
-//            httpCredentialsForURLS.put(url, cp);
-//            cp.setTitle(cap.getCapability().getLayer().getTitle());
-//            return cp;
-//        }
-//    }
-//
-//    public void addHttpCredentialProviderCapabilities(WMSCapabilities caps, GUICredentialsProvider httpCredentialsProvider) {
-//        if (caps != null && httpCredentialsProvider != null) {
-//            httpCredentialsForCapabilities.put(caps, httpCredentialsProvider);
-//        }
-//    }
-//
-//    public GUICredentialsProvider getHttpCredentialProviderCapabilities(WMSCapabilities caps) {
-//        return httpCredentialsForCapabilities.get(caps);
-//    }
-//
-//    public static boolean isServerSecuredByPassword(WMSCapabilities cap) {        
-//        GUICredentialsProvider cp;
-//        cp = broker.getHttpCredentialProviderCapabilities(cap);
-//        if (cp != null) {
-//            UsernamePasswordCredentials creds = cp.getCredentials();
-//            if (creds != null) {
-//                return true;
-//            } else {
-//                return false;
-//            }
-//        } else {
-//            return false;
-//        }
-//    }
-
-    protected Proxy getSystemProxy() {
-        String proxySet = System.getProperty("proxySet");
-        if (proxySet != null && proxySet.equals("true")) {
-            log.debug("proxyIs Set");
-            log.debug("ProxyHost:" + System.getProperty("http.proxyHost"));
-            log.debug("ProxyPort:" + System.getProperty("http.proxyPort"));
-            try {
-                Proxy proxy = new Proxy(System.getProperty("http.proxyHost"), Integer.parseInt(System.getProperty("http.proxyPort")));
-                return proxy;
-            } catch (Exception e) {
-                log.error("Problem while setting proxy", e);
-                return null;
+        GUICredentialsProvider cp = httpCredentialsForURLS.get(url);
+        if (cp == null) {
+            cp = new GUICredentialsProvider(url, WebAccessManager.getInstance().getTopLevelComponent());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("A new Credential Provider instance was created for: " + url.toString()); // NOI18N
+            }
+            httpCredentialsForURLS.put(url, cp);
+        } else {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Credential Provider was already available: " + url.toString());          // NOI18N
             }
         }
-        return null;
+
+        return cp;
     }
 }

@@ -85,7 +85,7 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
         shadowRenderer = new ShadowRenderer(shadowLength, shadowIntensity, shadowColor);
         initImagesAndMore();
         this.addComponentListener(this);
-
+        
     }
 
     protected void initImagesAndMore() {
@@ -252,7 +252,8 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
             resultGraphics2D.drawImage(glossy, 0, 0, null);
             resultGraphics2D.setComposite(originalComposite);
             if (this.icons != null) {
-                resultGraphics2D.drawImage(this.icons.getImage(), box.getWidth() - this.icons.getIconWidth() - offsetRight, offsetTop, null);
+//                resultGraphics2D.drawImage(this.icons.getImage(), box.getWidth() - this.icons.getIconWidth() - offsetRight, offsetTop, null);
+                resultGraphics2D.drawImage(this.icons.getImage(), box.getWidth() - this.icons.getIconWidth() - offsetRight, (panTitle.getHeight() / 2) + 3 - (this.icons.getIconHeight() / 2), null);
             }
             boxGraphics.dispose();
             glossyGraphics2D.dispose();

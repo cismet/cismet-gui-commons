@@ -289,6 +289,11 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     @Override
     public void configure(final Element parent) {
+        Proxy proxy = Proxy.fromPreferences();
+        if (proxy != null) {
+            setProxy(proxy);
+            stillConfigured = true;
+        }
         if (!stillConfigured) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Configure ProxyOptionPanels"); // NOI18N

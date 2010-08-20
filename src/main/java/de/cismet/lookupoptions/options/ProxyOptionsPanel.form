@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
@@ -20,9 +20,13 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jPanel1" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="rdoNoProxy" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -33,7 +37,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="labHost" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtHost" pref="206" max="32767" attributes="0"/>
+                      <Component id="txtHost" pref="217" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="labPort" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -58,6 +62,8 @@
                   <Component id="txtPort" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="labPort" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -134,5 +140,123 @@
         </Property>
       </AccessibilityProperties>
     </Component>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Credentials">
+              <ResourceString PropertyName="titleX" bundle="de/cismet/lookupoptions/options/Bundle.properties" key="ProxyOptionsPanel.jPanel1.border.title" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </TitledBorder>
+          </Border>
+        </Property>
+      </Properties>
+      <BindingProperties>
+        <BindingProperty name="enabled" source="rdoManualProxy" sourcePath="${selected}" target="jPanel1" targetPath="enabled" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblUsername" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblPassword" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblDomain" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="txtDomain" alignment="0" pref="252" max="32767" attributes="0"/>
+                      <Component id="txtUsername" alignment="0" pref="252" max="32767" attributes="0"/>
+                      <Component id="pwdPassword" alignment="1" pref="252" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblUsername" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtUsername" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblPassword" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="pwdPassword" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblDomain" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtDomain" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lblUsername">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="de/cismet/lookupoptions/options/Bundle.properties" key="ProxyOptionsPanel.lblUsername.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="enabled" source="rdoManualProxy" sourcePath="${selected}" target="lblUsername" targetPath="enabled" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblPassword">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="de/cismet/lookupoptions/options/Bundle.properties" key="ProxyOptionsPanel.lblPassword.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="enabled" source="rdoManualProxy" sourcePath="${selected}" target="lblPassword" targetPath="enabled" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblDomain">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="de/cismet/lookupoptions/options/Bundle.properties" key="ProxyOptionsPanel.lblDomain.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="enabled" source="rdoManualProxy" sourcePath="${selected}" target="lblDomain" targetPath="enabled" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtUsername">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="de/cismet/lookupoptions/options/Bundle.properties" key="ProxyOptionsPanel.txtUsername.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="enabled" source="rdoManualProxy" sourcePath="${selected}" target="txtUsername" targetPath="enabled" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtDomain">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="de/cismet/lookupoptions/options/Bundle.properties" key="ProxyOptionsPanel.txtDomain.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="enabled" source="rdoManualProxy" sourcePath="${selected}" target="txtDomain" targetPath="enabled" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="pwdPassword">
+          <Properties>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="de/cismet/lookupoptions/options/Bundle.properties" key="ProxyOptionsPanel.pwdPassword.text" replaceFormat="NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+          </Properties>
+          <BindingProperties>
+            <BindingProperty name="enabled" source="rdoManualProxy" sourcePath="${selected}" target="pwdPassword" targetPath="enabled" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>

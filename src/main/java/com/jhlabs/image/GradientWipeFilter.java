@@ -122,6 +122,6 @@ public class GradientWipeFilter extends AbstractBufferedImageOp {
     }
 
 	public String toString() {
-		return "Transitions/Gradient Wipe...";
+		return "Transitions/Gradient Wipe...";  //NOI18N
 	}
 }

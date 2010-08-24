@@ -22,7 +22,7 @@ public class OptionsClient implements Configurable {
     private static OptionsClient instance = new OptionsClient();
     private Hashtable<Class<? extends OptionsCategory>, OptionsCategory> categoriesTable = new Hashtable<Class<? extends OptionsCategory>, OptionsCategory>();
     private ArrayList<OptionsPanelController> controllerList = new ArrayList<OptionsPanelController>();
-    private static final String CONFIGURATION = "cismetLookupOptions";
+    private static final String CONFIGURATION = "cismetLookupOptions";  //NOI18N
 
     /**
      * Makes a lookup for option categories and controllers.
@@ -146,18 +146,20 @@ public class OptionsClient implements Configurable {
 
     @Override
     public Element getConfiguration() throws NoWriteError {
-        log.debug("OptionsClient.getConfiguration");
+        if(log.isDebugEnabled())
+            log.debug("OptionsClient.getConfiguration");  //NOI18N
         Element root = new Element(CONFIGURATION);
 
         for (Configurable configurable : controllerList) {
-        log.debug(" - OptionsClient.getConfiguration");
+            if(log.isDebugEnabled())
+                log.debug(" - OptionsClient.getConfiguration");  //NOI18N
             try {
                 Element element = configurable.getConfiguration();
                 if (element != null) {
                     root.addContent(element);
                 }
             } catch (Exception t) {
-                log.warn("Fehler beim Schreiben der eines Konfigurationsteils.", t);
+                log.warn("Fehler beim Schreiben der eines Konfigurationsteils.", t); //NOI18N
             }
         }
         return root;

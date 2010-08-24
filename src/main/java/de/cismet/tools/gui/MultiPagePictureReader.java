@@ -14,8 +14,8 @@ import javax.media.jai.RenderedImageAdapter;
 public class MultiPagePictureReader {
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MultiPagePictureReader.class);
-    private static final String CODEC_JPEG = "jpeg";
-    private static final String CODEC_TIFF = "tiff";
+    private static final String CODEC_JPEG = "jpeg";  //NOI18N
+    private static final String CODEC_TIFF = "tiff";  //NOI18N
     private final ImageDecoder decoder;
     private final int pageCount;
     private final SoftReference<BufferedImage>[] cache;
@@ -31,10 +31,10 @@ public class MultiPagePictureReader {
 
     private final String getCodecString(File imageFile) {
         final String filename = imageFile.getName().toLowerCase();
-        final String extension = filename.substring(filename.lastIndexOf(".") + 1);
-        if (extension.matches("(tiff|tif)")) {
+        final String extension = filename.substring(filename.lastIndexOf(".") + 1);  //NOI18N
+        if (extension.matches("(tiff|tif)")) {  //NOI18N
             return CODEC_TIFF;
-        } else if (extension.matches("(jpg|jpeg)")) {
+        } else if (extension.matches("(jpg|jpeg)")) {  //NOI18N
             return CODEC_JPEG;
         }
         return null;
@@ -65,10 +65,10 @@ public class MultiPagePictureReader {
                     cache[i] = new SoftReference<BufferedImage>(null);
                 }
             } else {
-                throw new IOException("Unsupported filetype: " + imageFile.getAbsolutePath() + " is not a tiff or jpeg file!");
+                throw new IOException("Unsupported filetype: " + imageFile.getAbsolutePath() + " is not a tiff or jpeg file!");  //NOI18N
             }
         } else {
-            throw new IOException("Could not open file: " + imageFile);
+            throw new IOException("Could not open file: " + imageFile);  //NOI18N
         }
     }
 
@@ -89,7 +89,7 @@ public class MultiPagePictureReader {
             }
             return result;
         } else {
-            throw new IOException("Could not find page " + page + " in file. Range is [0.." + (pageCount - 1) + "].");
+            throw new IOException("Could not find page " + page + " in file. Range is [0.." + (pageCount - 1) + "].");  //NOI18N
         }
     }
 

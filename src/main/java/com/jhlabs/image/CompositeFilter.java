@@ -102,6 +102,6 @@ public class CompositeFilter extends AbstractBufferedImageOp {
 	}
 
 	public String toString() {
-		return "Composite";
+		return "Composite";  //NOI18N
 	}
 }

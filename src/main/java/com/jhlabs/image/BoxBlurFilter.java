@@ -267,6 +267,6 @@ public class BoxBlurFilter extends AbstractBufferedImageOp {
 	}
 	
 	public String toString() {
-		return "Blur/Box Blur...";
+		return "Blur/Box Blur...";  //NOI18N
 	}
 }

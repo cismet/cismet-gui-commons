@@ -417,6 +417,6 @@ public class ConvolveFilter extends AbstractBufferedImageOp {
 	}
 
 	public String toString() {
-		return "Blur/Convolve...";
+		return "Blur/Convolve...";  //NOI18N
 	}
 }

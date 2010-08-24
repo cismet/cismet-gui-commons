@@ -99,7 +99,7 @@ public class ReduceNoiseFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Blur/Smooth";
+		return "Blur/Smooth";  //NOI18N
 	}
 
 }

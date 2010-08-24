@@ -81,7 +81,7 @@ public class CurvesFilter extends TransferFilter {
             x = nx;
             y = ny;
             for ( int i = 0; i < x.length; i++ )
-                System.out.println( i+": "+x[i]+" "+y[i]);
+                System.out.println( i+": "+x[i]+" "+y[i]); //NOI18N
         }
 
         private void sortKnots() {
@@ -152,7 +152,7 @@ public class CurvesFilter extends TransferFilter {
 	
 	public void setCurves( Curve[] curves ) {
 		if ( curves == null || (curves.length != 1 && curves.length != 3) )
-            throw new IllegalArgumentException( "Curves must be length 1 or 3" );
+            throw new IllegalArgumentException( "Curves must be length 1 or 3" ); //NOI18N
         this.curves = curves;
 		initialized = false;
 	}
@@ -162,7 +162,7 @@ public class CurvesFilter extends TransferFilter {
 	}
 
 	public String toString() {
-		return "Colors/Curves...";
+		return "Colors/Curves..."; //NOI18N
 	}
 
 }

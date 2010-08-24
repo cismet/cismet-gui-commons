@@ -119,6 +119,6 @@ public class UnsharpFilter extends GaussianFilter {
     }
 
 	public String toString() {
-		return "Blur/Unsharp Mask...";
+		return "Blur/Unsharp Mask...";  //NOI18N
 	}
 }

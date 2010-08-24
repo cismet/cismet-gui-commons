@@ -228,6 +228,6 @@ y = tile.y + transition * tile.vy;
     }
     
 	public String toString() {
-		return "Transition/Shatter...";
+		return "Transition/Shatter...";  //NOI18N
 	}
 }

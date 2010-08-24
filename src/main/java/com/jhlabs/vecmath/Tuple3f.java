@@ -163,7 +163,7 @@ public class Tuple3f {
 	}
 	
 	public String toString() {
-		return "["+x+", "+y+", "+z+"]";
+		return "["+x+", "+y+", "+z+"]";  //NOI18N
 	}
 	
 }

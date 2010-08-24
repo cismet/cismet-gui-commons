@@ -70,7 +70,7 @@ public class LookupFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Colors/Lookup...";
+		return "Colors/Lookup..."; //NOI18N
 	}
 
 }

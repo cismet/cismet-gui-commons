@@ -84,6 +84,6 @@ public class ErodeAlphaFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Alpha/Erode...";
+		return "Alpha/Erode..."; //NOI18N
 	}
 }

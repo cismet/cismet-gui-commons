@@ -196,6 +196,6 @@ public class SmartBlurFilter extends AbstractBufferedImageOp {
 	}
 	
 	public String toString() {
-		return "Blur/Smart Blur...";
+		return "Blur/Smart Blur...";  //NOI18N
 	}
 }

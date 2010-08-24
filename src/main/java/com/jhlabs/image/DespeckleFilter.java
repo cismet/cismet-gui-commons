@@ -115,7 +115,7 @@ public class DespeckleFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Blur/Despeckle...";
+		return "Blur/Despeckle...";  //NOI18N
 	}
 
 }

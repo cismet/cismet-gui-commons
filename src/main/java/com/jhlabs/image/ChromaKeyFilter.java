@@ -112,6 +112,6 @@ public class ChromaKeyFilter extends AbstractBufferedImageOp {
     }
 
 	public String toString() {
-		return "Keying/Chroma Key...";
+		return "Keying/Chroma Key...";  //NOI18N
 	}
 }

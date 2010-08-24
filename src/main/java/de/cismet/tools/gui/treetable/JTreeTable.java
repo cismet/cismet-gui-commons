@@ -89,8 +89,8 @@ public class JTreeTable extends JTable {
 	}
 	// Use the tree's default foreground and background colors in the
 	// table. 
-        LookAndFeel.installColorsAndFont(this, "Tree.background",
-                                         "Tree.foreground", "Tree.font");
+        LookAndFeel.installColorsAndFont(this, "Tree.background",           //NOI18N
+                                         "Tree.foreground", "Tree.font");   //NOI18N
     }
 
     /* Workaround for BasicTableUI anomaly. Make sure the UI never tries to 
@@ -149,9 +149,9 @@ public class JTreeTable extends JTable {
 		// null.
 		// dtcr.setBorderSelectionColor(null);
 		dtcr.setTextSelectionColor(UIManager.getColor
-					   ("Table.selectionForeground"));
+					   ("Table.selectionForeground"));      //NOI18N
 		dtcr.setBackgroundSelectionColor(UIManager.getColor
-						("Table.selectionBackground"));
+						("Table.selectionBackground")); //NOI18N
 	    }
 	}
 

@@ -77,10 +77,10 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
         FuseLoader.load();
 
         // Ressourcen hierarchisch rekursiv nach oben einfuegen
-        ResourceInjector.get("purecoolpanel.style").inject(true, getInstance());
+        ResourceInjector.get("purecoolpanel.style").inject(true, getInstance());  //NOI18N
 //
-        gradientColorTop = javax.swing.UIManager.getDefaults().getColor("Button.shadow");
-        gradientColorBottom = javax.swing.UIManager.getDefaults().getColor("Button.background");
+        gradientColorTop = javax.swing.UIManager.getDefaults().getColor("Button.shadow");  //NOI18N
+        gradientColorBottom = javax.swing.UIManager.getDefaults().getColor("Button.background");  //NOI18N
         composite = AlphaComposite.SrcAtop.derive(titleLinesOpacity);
         shadowRenderer = new ShadowRenderer(shadowLength, shadowIntensity, shadowColor);
         initImagesAndMore();

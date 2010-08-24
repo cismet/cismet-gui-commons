@@ -28,7 +28,7 @@ public class SolarizeFilter extends TransferFilter {
 	}
 
 	public String toString() {
-		return "Colors/Solarize";
+		return "Colors/Solarize";  //NOI18N
 	}
 }
 

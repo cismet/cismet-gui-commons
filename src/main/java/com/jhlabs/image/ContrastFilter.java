@@ -76,7 +76,7 @@ public class ContrastFilter extends TransferFilter {
 	}
 
 	public String toString() {
-		return "Colors/Contrast...";
+		return "Colors/Contrast...";  //NOI18N
 	}
 
 }

@@ -65,7 +65,7 @@ public class LifeFilter extends BinaryFilter {
 	}
 
 	public String toString() {
-		return "Binary/Life";
+		return "Binary/Life";  //NOI18N
 	}
 
 }

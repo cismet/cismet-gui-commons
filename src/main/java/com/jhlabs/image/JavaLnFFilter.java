@@ -34,7 +34,7 @@ public class JavaLnFFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Stylize/Java L&F Stipple";
+		return "Stylize/Java L&F Stipple"; //NOI18N
 	}
 
 }

@@ -111,6 +111,6 @@ public class InterpolateFilter extends AbstractBufferedImageOp {
     }
 
 	public String toString() {
-		return "Effects/Interpolate...";
+		return "Effects/Interpolate..."; //NOI18N
 	}
 }

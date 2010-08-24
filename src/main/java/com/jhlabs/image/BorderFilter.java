@@ -169,6 +169,6 @@ public class BorderFilter extends AbstractBufferedImageOp {
 	}
 
 	public String toString() {
-		return "Distort/Border...";
+		return "Distort/Border...";  //NOI18N
 	}
 }

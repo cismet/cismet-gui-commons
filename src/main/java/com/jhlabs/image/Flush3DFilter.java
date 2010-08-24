@@ -54,7 +54,7 @@ public class Flush3DFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Stylize/Flush 3D...";
+		return "Stylize/Flush 3D...";  //NOI18N
 	}
 
 }

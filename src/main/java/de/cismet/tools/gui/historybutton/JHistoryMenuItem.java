@@ -65,7 +65,7 @@ public  class JHistoryMenuItem extends JMenuItem {
                 return object.toString();
             }
             else {
-                return "";
+                return "";  //NOI18N
             }
         }
     }

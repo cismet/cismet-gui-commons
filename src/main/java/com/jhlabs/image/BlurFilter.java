@@ -37,6 +37,6 @@ public class BlurFilter extends ConvolveFilter {
 	}
 
 	public String toString() {
-		return "Blur/Simple Blur";
+		return "Blur/Simple Blur";  //NOI18N
 	}
 }

@@ -126,7 +126,7 @@ public class OilFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Stylize/Oil...";
+		return "Stylize/Oil...";  //NOI18N
 	}
 
 }

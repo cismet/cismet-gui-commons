@@ -21,11 +21,11 @@ import javax.swing.JPanel;
  * @author thorsten
  */
 public class Tester extends javax.swing.JFrame {
-    private final static String ICON="ICON";
-    ImageIcon a=new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/avi.png"));
-    ImageIcon b=new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/cdr.png"));
-    ImageIcon c=new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/pdf.png"));
-    ImageIcon d=new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/image.png"));
+    private final static String ICON="ICON";  //NOI18N
+    ImageIcon a=new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/avi.png"));  //NOI18N
+    ImageIcon b=new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/cdr.png"));  //NOI18N
+    ImageIcon c=new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/pdf.png"));  //NOI18N
+    ImageIcon d=new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/image.png")); //NOI18N
     HashMap<JPanel,ImageIcon> icons=new HashMap<JPanel, ImageIcon>();
     DefaultBreadCrumbModel model=new DefaultBreadCrumbModel();
     /** Creates new form Tester */
@@ -286,7 +286,7 @@ public class Tester extends javax.swing.JFrame {
         panActive.revalidate();
         this.repaint();
 
-        BreadCrumb bc=new BreadCrumb("Panel "+p.getName(),icons.get(p)){
+        BreadCrumb bc=new BreadCrumb(org.openide.util.NbBundle.getMessage(Tester.class, "Tester.setActivePanel(JPanel).bc.name", p.getName()),icons.get(p)) {  //NOI18N
 
             @Override
             public void crumbActionPerformed(ActionEvent e) {

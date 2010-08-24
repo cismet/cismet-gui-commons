@@ -36,16 +36,16 @@ public class JavaKitTest {
 
     public static void main(String[] args) {
 	if (args.length != 1) {
-	    System.err.println("need filename argument");
+	    System.err.println("need filename argument");  //NOI18N
 	    System.exit(1);
 	}
 	try {
 	    JEditorPane editor = new JEditorPane();
 	    JavaEditorKit kit = new JavaEditorKit();
-	    editor.setEditorKitForContentType("text/java", kit);
-	    editor.setContentType("text/java");
+	    editor.setEditorKitForContentType("text/java", kit);  //NOI18N
+	    editor.setContentType("text/java");  //NOI18N
 	    editor.setBackground(Color.white);
-	    editor.setFont(new Font("Courier", 0, 12));
+	    editor.setFont(new Font("Courier", 0, 12));  //NOI18N
 	    editor.setEditable(true);
 
 	    // PENDING(prinz) This should have a customizer and
@@ -70,9 +70,9 @@ public class JavaKitTest {
                 vp.setBackingStoreEnabled(true);
                 vp.add(editor);
 
-	    JFrame f = new JFrame("JavaEditorKit: " + args[0]);
+	    JFrame f = new JFrame(org.openide.util.NbBundle.getMessage(JavaKitTest.class, "JavaKitTest.main(String[]).f.title", args[0]));  //NOI18N
 	    f.getContentPane().setLayout(new BorderLayout());
-	    f.getContentPane().add("Center", scroller);
+	    f.getContentPane().add("Center", scroller);  //NOI18N
 	    f.pack();
 	    f.setSize(600, 600);
 	    f.setVisible(true);

@@ -134,6 +134,6 @@ public class ThresholdFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Stylize/Threshold...";
+		return "Stylize/Threshold...";  //NOI18N
 	}
 }

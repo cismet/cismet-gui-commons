@@ -117,7 +117,7 @@ public class RotateFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Rotate "+(int)(angle * 180 / Math.PI);
+		return "Rotate "+(int)(angle * 180 / Math.PI);  //NOI18N
 	}
 
 }

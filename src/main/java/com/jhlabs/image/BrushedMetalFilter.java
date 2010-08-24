@@ -291,6 +291,6 @@ public class BrushedMetalFilter implements BufferedImageOp {
     }
 
 	public String toString() {
-		return "Texture/Brushed Metal...";
+		return "Texture/Brushed Metal...";  //NOI18N
 	}
 }

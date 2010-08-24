@@ -43,7 +43,7 @@ public final class ActionConstants {
     /** Creates a new instance of ActionConstants */
     private ActionConstants() {
     }
-    public static final String SELECTED_KEY = "actionConstants.selected";
+    public static final String SELECTED_KEY = "actionConstants.selected";  //NOI18N
     
     
 }

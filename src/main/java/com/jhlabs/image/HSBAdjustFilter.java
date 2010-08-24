@@ -83,7 +83,7 @@ public class HSBAdjustFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Colors/Adjust HSB...";
+		return "Colors/Adjust HSB...";  //NOI18N
 	}
 }
 

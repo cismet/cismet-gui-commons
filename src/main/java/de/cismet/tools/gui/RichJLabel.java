@@ -66,13 +66,13 @@ public class RichJLabel extends JLabel {
             int w = fm.charWidth(ch) + tracking;
 
             g.setColor(left_color);
-            g.drawString(""+chars[i],x-left_x,h-left_y);
+            g.drawString(""+chars[i],x-left_x,h-left_y);  //NOI18N
             
             g.setColor(right_color);
-            g.drawString(""+chars[i],x+right_x,h+right_y);
+            g.drawString(""+chars[i],x+right_x,h+right_y);  //NOI18N
 
             g.setColor(getForeground());
-            g.drawString(""+chars[i],x,h);
+            g.drawString(""+chars[i],x,h);  //NOI18N
 
             x+=w;
         }
@@ -80,7 +80,7 @@ public class RichJLabel extends JLabel {
     }
     
     public static void main(String[] args) {
-        RichJLabel label = new RichJLabel("76", 0);
+        RichJLabel label = new RichJLabel("76", 0);  //NOI18N
         
         
         /*
@@ -107,7 +107,7 @@ public class RichJLabel extends JLabel {
         label.setFont(label.getFont().deriveFont(140f));
         */
 
-        JFrame frame = new JFrame("RichJLabel hack");
+        JFrame frame = new JFrame("RichJLabel hack");  //NOI18N
         frame.getContentPane().add(label);
         frame.pack();
         frame.setVisible(true);

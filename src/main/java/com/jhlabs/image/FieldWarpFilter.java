@@ -182,7 +182,7 @@ public class FieldWarpFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Distort/Field Warp...";
+		return "Distort/Field Warp...";  //NOI18N
 	}
 
 }

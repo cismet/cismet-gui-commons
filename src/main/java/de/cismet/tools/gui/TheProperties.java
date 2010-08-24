@@ -58,7 +58,7 @@ public class TheProperties
    }
  
    public static void showPropertyFrame() {
-      final String SPLIT_STRING = "<=>";
+      final String SPLIT_STRING = "<=>";  //NOI18N
  
       List defaults = getUIDefaults(SPLIT_STRING);
       Object[][] data = splitUIDefaults(defaults, SPLIT_STRING);
@@ -100,8 +100,8 @@ public class TheProperties
    public static void showUIDefaultsGUI(Object[][] modelData)
    {
       Object[] colNames = new Object[2];
-      colNames[0] = "Key";
-      colNames[1] = "Value";
+      colNames[0] = "Key";  //NOI18N
+      colNames[1] = "Value";  //NOI18N
  
       DefaultTableModel model = new DefaultTableModel(modelData, colNames)
       {
@@ -112,7 +112,7 @@ public class TheProperties
       };
       JXTable table= new JXTable(model);
       //JTable table = new JTable(model);
-      JFrame frame = new JFrame("UIDefaults");
+      JFrame frame = new JFrame("UIDefaults");  //NOI18N
       frame.getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
       frame.setSize(1050, 950);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

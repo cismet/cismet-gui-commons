@@ -44,18 +44,18 @@ public class DefaultDocument implements Document {
     }
 
     private void init() {
-        int from = documentURI.lastIndexOf(".") + 1;
+        int from = documentURI.lastIndexOf(".") + 1;  //NOI18N
         int to = documentURI.length();
 
         extension = documentURI.substring(from, to).toLowerCase();
-        String path = "/de/cismet/tools/gui/documents/documenttypeicons/" + extension + ".png";
-        URL unknownURL = getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/unknown.png");
-        URL webURL = getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/html.png");
+        String path = "/de/cismet/tools/gui/documents/documenttypeicons/" + extension + ".png";  //NOI18N
+        URL unknownURL = getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/unknown.png"); //NOI18N
+        URL webURL = getClass().getResource("/de/cismet/tools/gui/documents/documenttypeicons/html.png");  //NOI18N
         URL url = getClass().getResource(path);
         log.debug(path);
         if (url != null) {
             defaultIcon = new javax.swing.ImageIcon(url);
-        } else if (documentURI.startsWith("http://")) {
+        } else if (documentURI.startsWith("http://")) {  //NOI18N
             defaultIcon = new javax.swing.ImageIcon(webURL);
         } else {
             defaultIcon = new javax.swing.ImageIcon(unknownURL);
@@ -107,7 +107,7 @@ public class DefaultDocument implements Document {
             ii = new ImageIcon(preview);
         } else {
 
-            if (extension.matches("jpg|jpeg|gif|png|bmp")) {
+            if (extension.matches("jpg|jpeg|gif|png|bmp")) {  //NOI18N
 
                 try {
                     ii = new ImageIcon(GraphicsUtilities.loadCompatibleImage(new URL(documentURI)));
@@ -119,12 +119,12 @@ public class DefaultDocument implements Document {
                         log.error(e2, e2);
                     }
                 }
-            } else if (extension.matches("pdf|PDF")) {
+            } else if (extension.matches("pdf|PDF")) {  //NOI18N
                 try {
                     ByteBuffer buf = null;
                     try {
                         File file = new File(documentURI);
-                        RandomAccessFile raf = new RandomAccessFile(file, "r");
+                        RandomAccessFile raf = new RandomAccessFile(file, "r");  //NOI18N
                         FileChannel channel = raf.getChannel();
                         buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
                     } catch (Exception e) {
@@ -171,7 +171,7 @@ public class DefaultDocument implements Document {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (extension.matches("dxf|DXF")) {
+            } else if (extension.matches("dxf|DXF")) {  //NOI18N
             }
         }
         if (ii != null && ii.getImage() != null && ii.getImage().getWidth(null) > 0) {

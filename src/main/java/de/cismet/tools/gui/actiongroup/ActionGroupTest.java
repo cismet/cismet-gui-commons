@@ -45,9 +45,9 @@ package de.cismet.tools.gui.actiongroup;
          * @param args
          */
         public static void main(String[] args) {
-            Action a = new TestActionA("Test A");
-            Action b = new TestActionB("Test B");
-            Action c = new TestActionC("Test C");
+            Action a = new TestActionA("Test A");  //NOI18N
+            Action b = new TestActionB("Test B");  //NOI18N
+            Action c = new TestActionC("Test C");  //NOI18N
             ActionGroup group = new ActionGroup();
             group.add(a);
             group.add(b);
@@ -55,7 +55,7 @@ package de.cismet.tools.gui.actiongroup;
             
             JFrame frame = new JFrame();
             JMenuBar menubar  = new JMenuBar();
-            JMenu menu = new JMenu("Test");
+            JMenu menu = new JMenu("Test");  //NOI18N
             menu.add(ComponentFactory.getRadioMenuItem(a));
             menu.add(ComponentFactory.getRadioMenuItem(b));
             menu.add(ComponentFactory.getRadioMenuItem(c));
@@ -79,7 +79,7 @@ package de.cismet.tools.gui.actiongroup;
             }
             
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println("Test Action A was just turned on.");
+                System.out.println("Test Action A was just turned on.");  //NOI18N
             }
         }
         
@@ -89,7 +89,7 @@ package de.cismet.tools.gui.actiongroup;
             }
             
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println("Test Action B was just turned on.");
+                System.out.println("Test Action B was just turned on.");  //NOI18N
             }
         }
         private static class TestActionC extends AbstractAction {
@@ -98,7 +98,7 @@ package de.cismet.tools.gui.actiongroup;
             }
             
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println("Test Action C was just turned on.");
+                System.out.println("Test Action C was just turned on.");  //NOI18N
             }
         }
         

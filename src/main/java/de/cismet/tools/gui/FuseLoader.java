@@ -13,13 +13,13 @@ public final class FuseLoader {
 
     private FuseLoader() {
         instance = this;
-        ResourceInjector.addModule("org.jdesktop.fuse.swing.SwingModule");
+        ResourceInjector.addModule("org.jdesktop.fuse.swing.SwingModule");  //NOI18N
         try {
-            ResourceInjector.get("coolpanel.style").load(getClass().getResource("/coolobjectrenderer/style.properties"));
+            ResourceInjector.get("coolpanel.style").load(getClass().getResource("/coolobjectrenderer/style.properties"));  //NOI18N
         } catch (Exception e) {
         }
         try {
-            ResourceInjector.get("purecoolpanel.style").load(getClass().getResource("/de/cismet/tools/gui/purecoolpanelstyle.properties"));
+            ResourceInjector.get("purecoolpanel.style").load(getClass().getResource("/de/cismet/tools/gui/purecoolpanelstyle.properties"));  //NOI18N
         } catch (Exception e) {
         }
     }

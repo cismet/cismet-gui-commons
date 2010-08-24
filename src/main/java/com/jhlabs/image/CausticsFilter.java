@@ -358,7 +358,7 @@ public class CausticsFilter extends WholeImageFilter {
 	}
 	
 	public String toString() {
-		return "Texture/Caustics...";
+		return "Texture/Caustics...";  //NOI18N
 	}
 	
 }

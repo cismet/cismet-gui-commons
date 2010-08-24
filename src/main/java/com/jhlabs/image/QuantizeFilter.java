@@ -174,7 +174,7 @@ public class QuantizeFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Colors/Quantize...";
+		return "Colors/Quantize...";  //NOI18N
 	}
 	
 }

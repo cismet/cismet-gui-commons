@@ -714,14 +714,14 @@ if ( bumpShape != 0 ) {
 		}
 
 		public String toString() {
-			return "Light";
+			return "Light";  //NOI18N
 		}
 
 	}
 
 	public class AmbientLight extends Light {
 		public String toString() {
-			return "Ambient Light";
+			return "Ambient Light";  //NOI18N
 		}
 	}
 
@@ -731,7 +731,7 @@ if ( bumpShape != 0 ) {
 		}
 
 		public String toString() {
-			return "Point Light";
+			return "Point Light"; //NOI18N
 		}
 	}
 
@@ -741,7 +741,7 @@ if ( bumpShape != 0 ) {
 		}
 
 		public String toString() {
-			return "Distant Light";
+			return "Distant Light";  //NOI18N
 		}
 	}
 
@@ -751,7 +751,7 @@ if ( bumpShape != 0 ) {
 		}
 
 		public String toString() {
-			return "Spotlight";
+			return "Spotlight";  //NOI18N
 		}
 	}
 }

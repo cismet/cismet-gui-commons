@@ -56,7 +56,7 @@ public class DocumentPanel extends javax.swing.JPanel {
 
                                 public void run() {
                                     lblPreview.setIcon(null);
-                                    lblPreview.setText("getting Preview ...");
+                                    lblPreview.setText(org.openide.util.NbBundle.getMessage(DocumentPanel.class, "DocumentPanel.lblPreview.text.progress"));  //NOI18N
                                     lblUrl.setText(d.getDocumentURI());
                                 }
                             });
@@ -73,11 +73,11 @@ public class DocumentPanel extends javax.swing.JPanel {
 
                                 public void run() {
                                     if (i != null) {
-                                        lblPreview.setText("");
+                                        lblPreview.setText("");  // NOI18N
                                         lblPreview.setIcon(new ImageIcon(i));
                                     } else {
                                         lblPreview.setIcon(null);
-                                        lblPreview.setText("no Preview");
+                                        lblPreview.setText(org.openide.util.NbBundle.getMessage(DocumentPanel.class, "DocumentPanel.lblPreview.text.default"));  // NOI18N
                                     }
                                     lblUrl.setText(d.getDocumentURI());
                                 }
@@ -114,7 +114,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         });
         scpLstDocuments.setViewportView(lstDocuments);
 
-        panPreview.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0), javax.swing.BorderFactory.createTitledBorder("Preview")));
+        panPreview.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0), javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(DocumentPanel.class, "DocumentPanel.panPreview.border.insideBorder.title")))); // NOI18N
         panPreview.setOpaque(false);
         panPreview.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
@@ -124,7 +124,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         panPreview.setLayout(new java.awt.BorderLayout());
 
         lblPreview.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPreview.setText("no Preview");
+        lblPreview.setText(org.openide.util.NbBundle.getMessage(DocumentPanel.class, "DocumentPanel.lblPreview.text.default")); // NOI18N
         lblPreview.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lblPreview.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -134,7 +134,7 @@ public class DocumentPanel extends javax.swing.JPanel {
         panPreview.add(lblPreview, java.awt.BorderLayout.CENTER);
 
         lblUrl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblUrl.setText(" ");
+        lblUrl.setText(org.openide.util.NbBundle.getMessage(DocumentPanel.class, "DocumentPanel.lblUrl.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -191,13 +191,13 @@ private void lblPreviewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:
         try {
             de.cismet.tools.BrowserLauncher.openURL(gotoUrl);
         } catch (Exception e2) {
-            log.warn("das 1te Mal ging schief.Fehler beim Oeffnen von:" + gotoUrl + "\nLetzter Versuch", e2);
+            log.warn("das 1te Mal ging schief.Fehler beim Oeffnen von:" + gotoUrl + "\nLetzter Versuch", e2);  // NOI18N
             try {
-                gotoUrl = gotoUrl.replaceAll("\\\\", "/");
-                gotoUrl = gotoUrl.replaceAll(" ", "%20");
-                de.cismet.tools.BrowserLauncher.openURL("file:///" + gotoUrl);
+                gotoUrl = gotoUrl.replaceAll("\\\\", "/");  // NOI18N
+                gotoUrl = gotoUrl.replaceAll(" ", "%20");  // NOI18N
+                de.cismet.tools.BrowserLauncher.openURL("file:///" + gotoUrl);  // NOI18N
             } catch (Exception e3) {
-                log.error("Auch das 2te Mal ging schief.Fehler beim Oeffnen von:file://" + gotoUrl, e3);
+                log.error("Auch das 2te Mal ging schief.Fehler beim Oeffnen von:file://" + gotoUrl, e3);  // NOI18N
             }
         }
     }

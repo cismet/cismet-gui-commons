@@ -88,6 +88,6 @@ public class DissolveFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Stylize/Dissolve...";
+		return "Stylize/Dissolve...";  //NOI18N
 	}
 }

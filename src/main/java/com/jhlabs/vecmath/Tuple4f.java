@@ -173,7 +173,7 @@ public class Tuple4f {
 	}
 
 	public String toString() {
-		return "["+x+", "+y+", "+z+", "+w+"]";
+		return "["+x+", "+y+", "+z+", "+w+"]";  //NOI18N
 	}
 	
 }

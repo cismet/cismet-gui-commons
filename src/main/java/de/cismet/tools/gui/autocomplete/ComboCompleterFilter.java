@@ -31,7 +31,7 @@ import javax.swing.text.PlainDocument;
 public class ComboCompleterFilter extends AbstractCompleterFilter {
 
     private final JComboBox combo;
-    private String nullRespresentation = "null";
+    private String nullRespresentation = "null";  //NOI18N
 
     /**
      * @return the nullRespresentation
@@ -44,7 +44,7 @@ public class ComboCompleterFilter extends AbstractCompleterFilter {
      * @param nullRespresentation the nullRespresentation to set
      */
     public void setNullRespresentation(String nullRespresentation) {
-        this.nullRespresentation = nullRespresentation != null ? nullRespresentation : "null";
+        this.nullRespresentation = nullRespresentation != null ? nullRespresentation : "null";  //NOI18N
     }
 
     public ComboCompleterFilter(JComboBox combo) {

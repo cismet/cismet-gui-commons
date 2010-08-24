@@ -190,7 +190,7 @@ public class PinchFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Distort/Pinch...";
+		return "Distort/Pinch...";  //NOI18N
 	}
 
 }

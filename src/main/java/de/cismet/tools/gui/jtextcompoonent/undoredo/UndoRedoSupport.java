@@ -63,20 +63,20 @@ public class UndoRedoSupport {
         final InputMap im = c.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         UndoAction ua = new UndoAction(undo);
         final KeyStroke controlZ = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK);
-        im.put(controlZ, "control z");
-        c.getActionMap().put("control z", ua);
+        im.put(controlZ, "control z");  //NOI18N
+        c.getActionMap().put("control z", ua);  //NOI18N
         final RedoAction ra = new RedoAction(undo);
         final KeyStroke controlY = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK);
-        im.put(controlY, "control y");
-        c.getActionMap().put("control y", ra);
+        im.put(controlY, "control y");  //NOI18N
+        c.getActionMap().put("control y", ra);  //NOI18N
     }
 
     public static final void discardAllEdits(JTextComponent c) {
-        Action aa = c.getActionMap().get("control z");
+        Action aa = c.getActionMap().get("control z");  //NOI18N
         if (aa != null && aa instanceof ManagerAction) {
             ((ManagerAction) aa).discardAllEdits();
         }
-        aa = c.getActionMap().get("control y");
+        aa = c.getActionMap().get("control y");  //NOI18N
         if (aa != null && aa instanceof ManagerAction) {
             ((ManagerAction) aa).discardAllEdits();
         }
@@ -86,7 +86,7 @@ public class UndoRedoSupport {
 
         public ManagerAction(UndoManager undo) {
             if (undo == null) {
-                throw new IllegalArgumentException("UndoManager can not be null for ManagerAction construction!");
+                throw new IllegalArgumentException("UndoManager can not be null for ManagerAction construction!");  //NOI18N
             }
             this.undo = undo;
         }

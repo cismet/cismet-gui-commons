@@ -197,7 +197,7 @@ public class CircleFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Distort/Circle...";
+		return "Distort/Circle...";  //NOI18N
 	}
 
 }

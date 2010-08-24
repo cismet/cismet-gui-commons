@@ -152,6 +152,6 @@ if ( false ) {
     }
     
 	public String toString() {
-		return "Render/Scratches...";
+		return "Render/Scratches...";  //NOI18N
 	}
 }

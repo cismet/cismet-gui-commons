@@ -280,6 +280,6 @@ public class FeedbackFilter extends AbstractBufferedImageOp {
     }
     
 	public String toString() {
-		return "Effects/Feedback...";
+		return "Effects/Feedback...";  //NOI18N
 	}
 }

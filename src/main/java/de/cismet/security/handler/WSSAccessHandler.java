@@ -71,11 +71,13 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
     }
 
     public InputStream doRequest(URL url, Reader requestParameter, ACCESS_METHODS method, HashMap<String, String> options) throws Exception {
-        log.debug("doRequest: " + url);
+        if(log.isDebugEnabled())
+            log.debug("doRequest: " + url); //NOI18N
         WSSAccessorDeegree accessor;
         accessor = wssAccessorMapping.get(url);
         if (accessor == null) {
-            log.debug("kein WSSAccessor für URL: " + url);
+            if(log.isDebugEnabled())
+                log.debug("no WSSAccessor for URL: " + url); //NOI18N
 //            lock.lock();
 //            log.debug("sperre bekommen");
 //            try {
@@ -107,15 +109,18 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
         String accessMethod = null;
         switch (method) {
             case POST_REQUEST:
-                log.debug("wss accessmethod ist post");
+                if(log.isDebugEnabled())
+                    log.debug("wss accessmethod ist post"); //NOI18N
                 accessMethod = WSSAccessorDeegree.DCP_HTTP_POST;
                 break;
             case GET_REQUEST:
-                log.debug("wss accessmethod ist get");
+                if(log.isDebugEnabled())
+                     log.debug("wss accessmethod ist get"); //NOI18N
                 accessMethod = WSSAccessorDeegree.DCP_HTTP_GET;
                 break;
             default:
-                log.debug("Keine Methode spezifiziert default: " + ACCESS_METHODS.POST_REQUEST);
+                if(log.isDebugEnabled())
+                    log.debug("Keine Methode spezifiziert default: " + ACCESS_METHODS.POST_REQUEST); //NOI18N
                 accessMethod = WSSAccessorDeegree.DCP_HTTP_POST;
         }
         final StringBuffer parameter = new StringBuffer();
@@ -124,8 +129,10 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
         while ((currentLine = reader.readLine()) != null) {
             parameter.append(currentLine);
         }
-        log.debug("WSSRequestParameter: " + parameter.toString());
-        log.debug("using facade URL: " + url.toString());
+        if(log.isDebugEnabled()) {
+            log.debug("WSSRequestParameter: " + parameter.toString());  //NOI18N
+            log.debug("using facade URL: " + url.toString());           //NOI18N
+        }
         return new ByteArrayInputStream(accessor.doService(accessMethod, parameter.toString(), url.toString()).asBytes());
 
     }
@@ -133,10 +140,12 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
     private synchronized WSSAccessorDeegree createNewWSSAccessor(
             final URL url)
             throws Exception {
-        log.debug("createNewWSSAccessor");
+        if(log.isDebugEnabled())
+            log.debug("createNewWSSAccessor"); //NOI18N
         final WSSAccessorDeegree testAccessor = wssAccessorMapping.get(url);
         if (testAccessor == null) {
-            log.debug("accessor für URL wird angelegt");
+            if(log.isDebugEnabled())
+                log.debug("accessor für URL wird angelegt"); //NOI18N
             final WSSAccessorDeegree accessor = new WSSAccessorDeegree();
             accessor.setWSS(url.toString());
             authenticate(accessor);
@@ -144,7 +153,8 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
             accessor.setCredentialProvider(getCredentialProvider(url));
             return accessor;
         } else {
-            log.debug("accessor für URL ist schon vorhanden");
+            if(log.isDebugEnabled())
+                log.debug("accessor für URL ist schon vorhanden"); //NOI18N
             return testAccessor;
         }
 
@@ -163,11 +173,13 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
 
     private synchronized void authenticate(WSSAccessorDeegree accessor) throws Exception {
         if (!accessor.isSessionAvailable()) {
-            log.debug("Keine Session Informationen für url: " + accessor.getWSS() + " vorhanden --> Passwordfenster");
+            if(log.isDebugEnabled())
+                log.debug("Keine Session Informationen für url: " + accessor.getWSS() + " vorhanden --> Passwordfenster"); //NOI18N
             WSSPasswordDialog dialog = new WSSPasswordDialog(accessor);
             dialog.getCredentials();
         } else {
-            log.debug("Session infromationen vorhanden --> ist schon authentifiziert");
+            if(log.isDebugEnabled())
+                log.debug("Session infromationen vorhanden --> ist schon authentifiziert"); //NOI18N
         }
     }
 
@@ -184,16 +196,16 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
 
         @Override
         public boolean authenticate(String name, char[] password, String server) throws Exception {
-            log.debug("Authentication with username: " +
-                    name);
+            if(log.isDebugEnabled())
+                log.debug("Authentication with username: " + name); //NOI18N
 
             try {
                 final AuthenticationMethod authMethod = new PasswordAuthenticationMethod(name +
-                        "," + new String(password));
+                        "," + new String(password));  //NOI18N
                 sInfo = wssac.getSession(authMethod).getSessionID();
                 //smPanel.setCredentials(sInfo);
-                log.debug("Authentication successful for WSS " + url.toString() + " New SesionID:" +
-                        sInfo);
+                if(log.isDebugEnabled())
+                    log.debug("Authentication successful for WSS " + url.toString() + " New SesionID:" + sInfo); //NOI18N
                 usernames.removeUserName(
                         name);
                 usernames.saveUserNames();
@@ -203,7 +215,7 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
                 setUsernamePassword(new UsernamePasswordCredentials(name, new String(password)));
                 return true;
             } catch (AuthenticationFailedException ex) {
-                log.error("Authentication failed for WSS: " + url.toString(), ex);
+                log.error("Authentication failed for WSS: " + url.toString(), ex);  //NOI18N
                 return false;
 
             }
@@ -215,48 +227,51 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
         
         URL baseURL = null;
         String requestString = null;        
-        if (request.indexOf('?') != -1) {
-                    baseURL = new URL(request.substring(0, request.indexOf('?')));
-                    requestString=request.substring(request.indexOf('?')+1);
+        if (request.indexOf('?') != -1) {  //NOI18N
+                    baseURL = new URL(request.substring(0, request.indexOf('?')));  //NOI18N
+                    requestString=request.substring(request.indexOf('?')+1);  //NOI18N
                 } else {
                     baseURL = new URL(request);
                 }
-        log.debug("Urlbase: "+baseURL.toString());
-        log.debug("Requestparameter: "+requestString);
+        if(log.isDebugEnabled()) {
+            log.debug("Urlbase: "+baseURL.toString());      //NOI18N
+            log.debug("Requestparameter: "+requestString);  //NOI18N
+        }
         WSSAccessorDeegree accessor;        
         accessor = wssAccessorMapping.get(baseURL);
         if(accessor == null){
-            log.debug("there is no accessor for the given url");
+            if(log.isDebugEnabled())
+                log.debug("there is no accessor for the given url");  //NOI18N
             return null;
         }
         SessionInformation si = accessor.getSession();
-        log.debug("session information" + si.getSessionID());
-        requestString+="&sessionID="+si.getSessionID();
+        if(log.isDebugEnabled())
+            log.debug("session information" + si.getSessionID());           //NOI18N
+        requestString+="&sessionID="+si.getSessionID();                     //NOI18N
         StringBuffer sb = new StringBuffer(2000);
         sb.append(baseURL).append(
-                "?service=WSS&request=DoService&version=1.0.0&");
-        sb.append("AUTHMETHOD=urn:x-gdi-nrw:authnMethod:1.0:session&");
-        sb.append("DCP=http_get&");
-        sb.append("CREDENTIALS=").append(si.getSessionID()).append("&");
-        sb.append("SERVICEREQUEST=").append(
+                "?service=WSS&request=DoService&version=1.0.0&");           //NOI18N
+        sb.append("AUTHMETHOD=urn:x-gdi-nrw:authnMethod:1.0:session&");     //NOI18N
+        sb.append("DCP=http_get&");                                         //NOI18N
+        sb.append("CREDENTIALS=").append(si.getSessionID()).append("&");    //NOI18N
+        sb.append("SERVICEREQUEST=").append(                                //NOI18N
                 URLEncoder.encode(requestString, getSystemCharset()));
         return sb.toString();
     }
     //ToDo outsource in something CharsetUtils
-    private static final String DEFAULT_CHARSET = "UTF-8";
+    private static final String DEFAULT_CHARSET = "UTF-8";                  //NOI18N
 
     public String getSystemCharset() {
         String charset = null;
         try {
-            charset = System.getProperty("CHARSET");
+            charset = System.getProperty("CHARSET");                        //NOI18N
         } catch (Exception exc) {
-            log.error("Error retrieving system property CHARSET",
-                    exc);
+            log.error("Error retrieving system property CHARSET", exc);     //NOI18N
         }
         if (charset == null) {
             charset = DEFAULT_CHARSET;
         }
-        log.error("Using system charset: " + charset);
+        log.error("Using system charset: " + charset);                      //NOI18N
         return charset;
     }
 }

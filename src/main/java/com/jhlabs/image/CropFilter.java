@@ -140,6 +140,6 @@ public class CropFilter extends AbstractBufferedImageOp {
     }
 
 	public String toString() {
-		return "Distort/Crop";
+		return "Distort/Crop"; //NOI18N
 	}
 }

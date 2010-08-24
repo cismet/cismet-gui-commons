@@ -39,12 +39,12 @@ public abstract class ImageUtils {
 		try {
 			pg.grabPixels();
 		} catch (InterruptedException e) {
-			throw new RuntimeException("Image fetch interrupted");
+			throw new RuntimeException("Image fetch interrupted"); //NOI18N
 		}
 		if ((pg.status() & ImageObserver.ABORT) != 0)
-			throw new RuntimeException("Image fetch aborted");
+			throw new RuntimeException("Image fetch aborted"); //NOI18N
 		if ((pg.status() & ImageObserver.ERROR) != 0)
-			throw new RuntimeException("Image fetch error");
+			throw new RuntimeException("Image fetch error"); //NOI18N
 		BufferedImage p = new BufferedImage(pg.getWidth(), pg.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		p.setRGB(0, 0, pg.getWidth(), pg.getHeight(), (int[])pg.getPixels(), 0, pg.getWidth());
 		return p;

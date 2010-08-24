@@ -85,6 +85,6 @@ public class OffsetFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Distort/Offset...";
+		return "Distort/Offset...";  //NOI18N
 	}
 }

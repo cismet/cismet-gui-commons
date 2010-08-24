@@ -33,6 +33,6 @@ public class InvertAlphaFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Alpha/Invert";
+		return "Alpha/Invert"; //NOI18N
 	}
 }

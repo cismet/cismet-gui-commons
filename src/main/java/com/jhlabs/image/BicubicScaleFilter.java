@@ -64,7 +64,7 @@ public class BicubicScaleFilter extends AbstractBufferedImageOp {
     }
 
 	public String toString() {
-		return "Distort/Bicubic Scale";
+		return "Distort/Bicubic Scale"; //NOI18N
 	}
 
 }

@@ -18,7 +18,7 @@ abstract public class AbstractCompleterFilter extends DocumentFilter {
     abstract public Object getCompleterObjectAt(int i);
 
     abstract public JTextField getTextField();
-    private static final String NULL_REPRESENTATION = "null";
+    private static final String NULL_REPRESENTATION = "null";  //NOI18N
 
     @Override
     public void replace(final FilterBypass filterBypass, final int offset, final int length, final String string, final AttributeSet attributeSet) throws BadLocationException {

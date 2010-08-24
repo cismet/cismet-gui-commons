@@ -196,6 +196,6 @@ public class RaysFilter extends MotionBlurOp {
     }
     
 	public String toString() {
-		return "Stylize/Rays...";
+		return "Stylize/Rays...";  //NOI18N
 	}
 }

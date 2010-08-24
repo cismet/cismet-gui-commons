@@ -78,7 +78,7 @@ public class RGBAdjustFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Colors/Adjust RGB...";
+		return "Colors/Adjust RGB...";  //NOI18N
 	}
 }
 

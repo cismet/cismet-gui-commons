@@ -75,7 +75,7 @@ public class SaturationFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Colors/Saturation...";
+		return "Colors/Saturation...";  //NOI18N
 	}
 }
 

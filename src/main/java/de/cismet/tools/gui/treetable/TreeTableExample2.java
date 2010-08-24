@@ -93,7 +93,7 @@ public class TreeTableExample2 {
      * of loading.
      */
     protected JLabel createStatusLabel() {
-	JLabel         retLabel = new JLabel(" ");
+	JLabel         retLabel = new JLabel(" ");  //NOI18N
 
 	retLabel.setHorizontalAlignment(JLabel.RIGHT);
 	retLabel.setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -130,7 +130,7 @@ public class TreeTableExample2 {
      * Creates the JFrame that will contain everything.
      */
     protected JFrame createFrame() {
-	JFrame       retFrame = new JFrame("TreeTable II");
+	JFrame       retFrame = new JFrame(org.openide.util.NbBundle.getMessage(TreeTableExample2.class, "TreeTableExample2.createFrame().retFrame.title"));  //NOI18N
 
 	retFrame.addWindowListener(new WindowAdapter() {
 	    public void windowClosing(WindowEvent we) {
@@ -146,10 +146,10 @@ public class TreeTableExample2 {
      * Creates a menu bar.
      */
     protected JMenuBar createMenuBar() {
-        JMenu            fileMenu = new JMenu("File"); 
+        JMenu            fileMenu = new JMenu(org.openide.util.NbBundle.getMessage(TreeTableExample2.class,"TreeTableExample2.createMenuBar().fileMenu.title")); //NOI18N
 	JMenuItem        menuItem;
 
-	menuItem = new JMenuItem("Open");
+	menuItem = new JMenuItem(org.openide.util.NbBundle.getMessage(TreeTableExample2.class,"TreeTableExample2.createMenuBar().menuItem.text.open"));  //NOI18N
 	menuItem.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent ae) {
 		JFileChooser      fc = new JFileChooser(path);
@@ -168,7 +168,7 @@ public class TreeTableExample2 {
 	fileMenu.add(menuItem);
 	fileMenu.addSeparator();
 	
-	menuItem = new JMenuItem("Reload");
+	menuItem = new JMenuItem(org.openide.util.NbBundle.getMessage(TreeTableExample2.class,"TreeTableExample2.createMenuBar().menuItem.text.reload"));  //NOI18N
 	menuItem.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent ae) {
 		TreePath         path = treeTable.getTree().getSelectionPath();
@@ -181,7 +181,7 @@ public class TreeTableExample2 {
 	});
 	fileMenu.add(menuItem);
 
-	menuItem = new JMenuItem("Stop");
+	menuItem = new JMenuItem(org.openide.util.NbBundle.getMessage(TreeTableExample2.class,"TreeTableExample2.createMenuBar().menuItem.text.stop"));  //NOI18N
 	menuItem.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent ae) {
 		model.stopLoading();
@@ -191,7 +191,7 @@ public class TreeTableExample2 {
 
 	fileMenu.addSeparator();
 
-	menuItem = new JMenuItem("Exit"); 
+	menuItem = new JMenuItem(org.openide.util.NbBundle.getMessage(TreeTableExample2.class,"TreeTableExample2.createMenuBar().menuItem.text.exit"));   //NOI18N
 	menuItem.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent ae) {
 		System.exit(0);
@@ -210,7 +210,7 @@ public class TreeTableExample2 {
 	                                    getInstalledLookAndFeels();
 	ButtonGroup                        lafGroup = new ButtonGroup();
 
-	JMenu          optionsMenu = new JMenu("Options");
+	JMenu          optionsMenu = new JMenu(org.openide.util.NbBundle.getMessage(TreeTableExample2.class,"TreeTableExample2.createMenuBar().optionsMenu.title"));  //NOI18N
 
 	menuBar.add(optionsMenu);
 
@@ -220,7 +220,7 @@ public class TreeTableExample2 {
 	    optionsMenu.add(rb);
 	    rb.setSelected(UIManager.getLookAndFeel().getName().equals
 			   (lafs[i].getName()));
-	    rb.putClientProperty("UIKey", lafs[i]);
+	    rb.putClientProperty("UIKey", lafs[i]);     //NOI18N
 	    rb.addItemListener(new ItemListener() {
 	        public void itemStateChanged(ItemEvent ae) {
 	            JRadioButtonMenuItem rb2 = (JRadioButtonMenuItem)ae.
@@ -228,13 +228,13 @@ public class TreeTableExample2 {
 	            if(rb2.isSelected()) {
 		        UIManager.LookAndFeelInfo       info =
                                       (UIManager.LookAndFeelInfo)
-			               rb2.getClientProperty("UIKey");
+			               rb2.getClientProperty("UIKey");      //NOI18N
 		        try {
 		            UIManager.setLookAndFeel(info.getClassName());
 		            SwingUtilities.updateComponentTreeUI(frame);
 			}
 			catch (Exception e) {
-		             System.err.println("unable to set UI " +
+		             System.err.println("unable to set UI " +       //NOI18N
 						e.getMessage());
 			}
 	            }
@@ -261,8 +261,8 @@ public class TreeTableExample2 {
      */
     protected void updateStatusLabel() {
 	if (reloadPath != null) {
-	    statusLabel.setText("Reloading: " + model.getPath
-				(reloadPath.getLastPathComponent()));
+	    statusLabel.setText(org.openide.util.NbBundle.getMessage(TreeTableExample2.class,"TreeTableExample2.statusLabel.text.reload", model.getPath
+				(reloadPath.getLastPathComponent())));
 	    if ((reloadCounter % 4) < 2) {
 		statusLabel.setForeground(Color.red);
 	    }
@@ -271,8 +271,8 @@ public class TreeTableExample2 {
 	    }
 	}
 	else if (!model.isReloading()) {
-	    statusLabel.setText("Total Size: " + NumberFormat.getInstance().
-				format(model.getTotalSize(model.getRoot())));
+	    statusLabel.setText(org.openide.util.NbBundle.getMessage(TreeTableExample2.class,"TreeTableExample2.statusLabel.text.default", NumberFormat.getInstance().
+				format(model.getTotalSize(model.getRoot()))));
 	    statusLabel.setForeground(Color.black);
 	}
     }
@@ -408,7 +408,7 @@ public class TreeTableExample2 {
 	 * the text of the label.
 	 */
 	public void setValue(Object value) { 
-	    setText((value == null) ? "---" : formatter.format(value)); 
+	    setText((value == null) ? "---" : formatter.format(value)); //NOI18N
 	}
 
 	/**
@@ -465,7 +465,7 @@ public class TreeTableExample2 {
 	    String            path;
 
 	    try {
-		path = System.getProperty("user.home");
+		path = System.getProperty("user.home");  //NOI18N
 		if (path != null) {
 		    new TreeTableExample2(path);
 		}
@@ -474,7 +474,7 @@ public class TreeTableExample2 {
 		path = null;
 	    }
 	    if (path == null) {
-		System.out.println("Could not determine home directory");
+		System.out.println("Could not determine home directory");  //NOI18N
 	    }
 	}
     }

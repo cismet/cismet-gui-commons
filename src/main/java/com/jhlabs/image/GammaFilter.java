@@ -111,7 +111,7 @@ public class GammaFilter extends TransferFilter {
 	}
 
 	public String toString() {
-		return "Colors/Gamma...";
+		return "Colors/Gamma...";  //NOI18N
 	}
 
 }

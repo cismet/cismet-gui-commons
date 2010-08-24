@@ -20,7 +20,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 public class CodeDocument extends DefaultStyledDocument{
-    private String word = "";
+    private String word = "";                                           //NOI18N
     private SimpleAttributeSet bold = new SimpleAttributeSet();
     private SimpleAttributeSet string = new SimpleAttributeSet();
     private SimpleAttributeSet normal = new SimpleAttributeSet();
@@ -95,7 +95,7 @@ public class CodeDocument extends DefaultStyledDocument{
     private void checkForString(){
         int offs = this.currentPos;
         Element element = this.getParagraphElement(offs);
-        String elementText = "";
+        String elementText = "";                                        //NOI18N
         try{
             //this gets our chuck of current text for the element we're on
             elementText = this.getText(element.getStartOffset(),
@@ -103,7 +103,7 @@ public class CodeDocument extends DefaultStyledDocument{
                     element.getStartOffset());
         } catch(Exception ex){
             //whoops!
-            System.out.println("no text");
+            System.out.println("no text");                              //NOI18N
         }
         int strLen = elementText.length();
         if (strLen == 0) {return;}
@@ -122,7 +122,7 @@ public class CodeDocument extends DefaultStyledDocument{
                 
                 
                 char charAt = elementText.charAt(i);
-                if ((charAt == '"')){
+                if ((charAt == '"')){                                   
                     quoteCount ++;
                 }
                 i--;
@@ -140,14 +140,14 @@ public class CodeDocument extends DefaultStyledDocument{
         }
         int offs = this.currentPos;
         Element element = this.getParagraphElement(offs);
-        String elementText = "";
+        String elementText = "";                                        //NOI18N
         try{
             //this gets our chuck of current text for the element we're on
             elementText = this.getText(element.getStartOffset(),
                     element.getEndOffset() - element.getStartOffset());
         } catch(Exception ex){
             //whoops!
-            System.out.println("no text");
+            System.out.println("no text");                              //NOI18N
         }
         int strLen = elementText.length();
         if (strLen == 0) {return;}
@@ -164,8 +164,8 @@ public class CodeDocument extends DefaultStyledDocument{
                 //the while loop walks back until we hit a delimiter
                 i--;
                 char charAt = elementText.charAt(i);
-                if ((charAt == ' ') | (i == 0) | (charAt =='(') | (charAt ==')') |
-                        (charAt == '{') | (charAt == '}')){ //if i == 0 then we're at the begininng
+                if ((charAt == ' ') | (i == 0) | (charAt =='(') | (charAt ==')') |  
+                        (charAt == '{') | (charAt == '}')){  //if i == 0 then we're at the begininng
                     if(i != 0){
                         i++;
                     }
@@ -187,14 +187,14 @@ public class CodeDocument extends DefaultStyledDocument{
     private void checkForNumber(){
         int offs = this.currentPos;
         Element element = this.getParagraphElement(offs);
-        String elementText = "";
+        String elementText = "";                                        //NOI18N
         try{
             //this gets our chuck of current text for the element we're on
             elementText = this.getText(element.getStartOffset(),
                     element.getEndOffset() - element.getStartOffset());
         } catch(Exception ex){
             //whoops!
-            System.out.println("no text");
+            System.out.println("no text");                              //NOI18N
         }
         int strLen = elementText.length();
         if (strLen == 0) {return;}
@@ -211,16 +211,16 @@ public class CodeDocument extends DefaultStyledDocument{
             while (i >0){
                 //the while loop walks back until we hit a delimiter
                 char charAt = elementText.charAt(i);
-                if ((charAt == ' ') | (i == 0) | (charAt =='(') | (charAt ==')') |
+                if ((charAt == ' ') | (i == 0) | (charAt =='(') | (charAt ==')') |  
                         (charAt == '{') | (charAt == '}') /*|*/){ //if i == 0 then we're at the begininng
                     if(i != 0){
                         i++;
                     }
                     mode = NUMBER_MODE;
                     break;
-                } else if (!(charAt >= '0' & charAt <= '9' | charAt=='.'
-                        | charAt=='+' | charAt=='-'
-                        | charAt=='/' | charAt=='*'| charAt=='%' | charAt=='=')){
+                } else if (!(charAt >= '0' & charAt <= '9' | charAt=='.'    
+                        | charAt=='+' | charAt=='-'                         
+                        | charAt=='/' | charAt=='*'| charAt=='%' | charAt=='=')){   
                     mode = TEXT_MODE;
                     break;
                 }
@@ -233,14 +233,14 @@ public class CodeDocument extends DefaultStyledDocument{
     private void checkForComment(){
         int offs = this.currentPos;
         Element element = this.getParagraphElement(offs);
-        String elementText = "";
+        String elementText = "";                                        //NOI18N
         try{
             //this gets our chuck of current text for the element we're on
             elementText = this.getText(element.getStartOffset(),
                     element.getEndOffset() - element.getStartOffset());
         } catch(Exception ex){
             //whoops!
-            System.out.println("no text");
+            System.out.println("no text");                              //NOI18N
         }
         int strLen = elementText.length();
         if (strLen == 0) {return;}
@@ -257,10 +257,10 @@ public class CodeDocument extends DefaultStyledDocument{
             char commentStartChar2 = elementText.charAt(i);
             if (commentStartChar1 == '/' && commentStartChar2 == '*'){
                 mode = COMMENT_MODE;
-                this.insertCommentString("/*", currentPos-1);
+                this.insertCommentString("/*", currentPos-1);           //NOI18N
             } else if (commentStartChar1 == '*' && commentStartChar2 == '/'){
                 mode = TEXT_MODE;
-                this.insertCommentString("*/", currentPos-1);
+                this.insertCommentString("*/", currentPos-1);           //NOI18N
             }
         }
     }

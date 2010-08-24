@@ -135,7 +135,7 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         list = new JList(lm);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setFocusable(false);
-        list.setPrototypeCellValue("Prototype");
+        list.setPrototypeCellValue("Prototype");  //NOI18N
         list.addListSelectionListener(lsl);
         list.addMouseListener(lml);
 

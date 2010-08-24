@@ -186,18 +186,18 @@ public class FlipFilter extends AbstractBufferedImageOp {
 	public String toString() {
 		switch (operation) {
 		case FLIP_H:
-			return "Flip Horizontal";
+			return "Flip Horizontal";  //NOI18N
 		case FLIP_V:
-			return "Flip Vertical";
+			return "Flip Vertical";  //NOI18N
 		case FLIP_HV:
-			return "Flip Diagonal";
+			return "Flip Diagonal";  //NOI18N
 		case FLIP_90CW:
-			return "Rotate 90";
+			return "Rotate 90";  //NOI18N
 		case FLIP_90CCW:
-			return "Rotate -90";
+			return "Rotate -90";  //NOI18N
 		case FLIP_180:
-			return "Rotate 180";
+			return "Rotate 180";  //NOI18N
 		}
-		return "Flip";
+		return "Flip";  //NOI18N
 	}
 }

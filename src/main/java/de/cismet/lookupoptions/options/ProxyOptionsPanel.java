@@ -199,7 +199,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     @Override
     public String getTooltip() {
-        return "change Proxy settings (tooltip test)";
+        return org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.getTooltip().text");  //NOI18N
     }
 
     /**

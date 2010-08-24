@@ -68,7 +68,7 @@ public class Static2DTools {
         int addedHeight = 0;
         BufferedImage image = null;
         if (icons.length == 0) {
-            throw new IllegalArgumentException("Icon[] with length=0 is not allowed.");
+            throw new IllegalArgumentException("Icon[] with length=0 is not allowed.");  //NOI18N
         }
         if (icons.length == 1) {
             return icons[0];
@@ -92,9 +92,10 @@ public class Static2DTools {
             iWidth = maxWidth;
             iHeight = gap * (icons.length - 1) + addedHeight;
         } else {
-            throw new IllegalArgumentException("OrientationParameter must be either Static2DTools.HORIZONTAL or Static2DTools.VERTICAL");
+            throw new IllegalArgumentException("OrientationParameter must be either Static2DTools.HORIZONTAL or Static2DTools.VERTICAL");  //NOI18N
         }
-        log.debug("JOIN(" + iWidth + "," + iHeight);
+        if(log.isDebugEnabled())
+            log.debug("JOIN(" + iWidth + "," + iHeight);  //NOI18N
 
         image = new BufferedImage(iWidth, iHeight + 1, BufferedImage.TYPE_INT_ARGB);
 
@@ -111,7 +112,7 @@ public class Static2DTools {
                 } else if (alignment == CENTER) {
                     alignmentPosition = (iHeight - icons[i].getIconHeight()) / 2;
                 } else {
-                    throw new IllegalArgumentException("If orientation is HORIZONTAL the aligment options must bei in {Static2DTools.TOP;Static2DTools.CENTER;Static2DTools.BOTTOM}");
+                    throw new IllegalArgumentException("If orientation is HORIZONTAL the aligment options must bei in {Static2DTools.TOP;Static2DTools.CENTER;Static2DTools.BOTTOM}");  //NOI18N
                 }
                 Graphics g = image.getGraphics();
                 icons[i].paintIcon(null, g, runningPosition, alignmentPosition);
@@ -127,7 +128,7 @@ public class Static2DTools {
                 } else if (alignment == CENTER) {
                     alignmentPosition = (iWidth - icons[i].getIconWidth()) / 2;
                 } else {
-                    throw new IllegalArgumentException("If orientation is VERTICAL the aligment options must bei in {Static2DTools.LEFT;Static2DTools.CENTER;Static2DTools.RIGHT}");
+                    throw new IllegalArgumentException("If orientation is VERTICAL the aligment options must bei in {Static2DTools.LEFT;Static2DTools.CENTER;Static2DTools.RIGHT}");  //NOI18N
                 }
                 Graphics g = image.getGraphics();
                 icons[i].paintIcon(null, g, alignmentPosition, runningPosition);
@@ -227,7 +228,8 @@ public class Static2DTools {
     }
 
     public static Image removeUnusedBorder(Image i, int borderPixelsAfterwards, double scalingFactor) {
-        log.debug("removeUnusedBorder");//NOI18N
+        if(log.isDebugEnabled())
+            log.debug("removeUnusedBorder");//NOI18N
 
         int width = (int) (i.getWidth(null) * scalingFactor);
         int height = (int) (i.getHeight(null) * scalingFactor);
@@ -291,7 +293,7 @@ public class Static2DTools {
             }
             bi = bi.getSubimage(minX, minY, maxX, maxY);
         } catch (Exception e) {
-            log.error("fehler in getSubimage. ver\u00E4ndere nichts am Bild", e);
+            log.error("Error in getSubimage. Image not changed", e);  //NOI18N
         }
         return bi;
     }

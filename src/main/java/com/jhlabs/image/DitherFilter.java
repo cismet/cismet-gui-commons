@@ -275,7 +275,7 @@ public class DitherFilter extends PointFilter {
 	}
 
 	public String toString() {
-		return "Colors/Dither...";
+		return "Colors/Dither...";  //NOI18N
 	}
 
 }

@@ -17,12 +17,12 @@ public class SecurityOptionsCategory extends AbstractOptionsCategory {
 
     @Override
     public String getName() {
-        return org.openide.util.NbBundle.getMessage(SecurityOptionsCategory.class, "SecurityOptionsCategory.name");
+        return org.openide.util.NbBundle.getMessage(SecurityOptionsCategory.class, "SecurityOptionsCategory.name");  //NOI18N
     }
 
     @Override
     public Icon getIcon() {
-        Image image = ImageUtilities.loadImage("de/cismet/lookupoptions/options/security.png");
+        Image image = ImageUtilities.loadImage("de/cismet/lookupoptions/options/security.png");  //NOI18N
         if (image != null) {
             return new ImageIcon(image);
         } else {

@@ -129,6 +129,6 @@ public class MirrorFilter extends AbstractBufferedImageOp {
     }
     
 	public String toString() {
-		return "Effects/Mirror...";
+		return "Effects/Mirror...";  //NOI18N
 	}
 }

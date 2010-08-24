@@ -141,7 +141,7 @@ public class ContourFilter extends WholeImageFilter {
 	}
 
 	public String toString() {
-		return "Stylize/Contour...";
+		return "Stylize/Contour...";  //NOI18N
 	}
 
 }

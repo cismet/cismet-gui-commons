@@ -114,6 +114,6 @@ public class FourColorFilter extends PointFilter {
 	}
 	
 	public String toString() {
-		return "Texture/Four Color Fill...";
+		return "Texture/Four Color Fill...";  //NOI18N
 	}
 }

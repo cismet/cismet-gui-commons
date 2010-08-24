@@ -78,11 +78,11 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener,H
         JHistoryButton ret=new JHistoryButton();
         ret.setDirection(direction);
         ret.setHistoryModel(model);
-        String ressourcePath="/de/cismet/tools/gui/historybutton/res/";
-        String forward="forward";
-        String back="back";
+        String ressourcePath="/de/cismet/tools/gui/historybutton/res/";  //NOI18N
+        String forward="forward";  //NOI18N
+        String back="back";  //NOI18N
         String name;
-        String filetype=".png";
+        String filetype=".png";  //NOI18N
         if (direction==DIRECTION_FORWARD) {
             name=forward;
         }
@@ -91,19 +91,19 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener,H
         }
         switch(iconSize) {
             case ICON_SIZE_16:
-                ret.setIcon(new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath+name+"16"+filetype)));
+                ret.setIcon(new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath+name+"16"+filetype)));  //NOI18N
                 break;
             case ICON_SIZE_22:
-                ret.setIcon(new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath+name+"22"+filetype)));
+                ret.setIcon(new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath+name+"22"+filetype)));  //NOI18N
                 break;
             case ICON_SIZE_32:
-                ret.setIcon(new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath+name+"32"+filetype)));
+                ret.setIcon(new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath+name+"32"+filetype)));  //NOI18N
                 break;
             case ICON_SIZE_64:
-                ret.setIcon(new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath+name+"64"+filetype)));
+                ret.setIcon(new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath+name+"64"+filetype)));  //NOI18N
                 break;
             case ICON_SIZE_128:
-                ret.setIcon(new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath+name+"128"+filetype)));
+                ret.setIcon(new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath+name+"128"+filetype)));  //NOI18N
                 break;
         }
         return ret;
@@ -218,7 +218,7 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener,H
                     historyModel.forward(false);
                 }
             }
-            fireActionPerformed(new ActionEvent(this,0,"JHistoryButtonMenuActionPerformed"));
+            fireActionPerformed(new ActionEvent(this,0,"JHistoryButtonMenuActionPerformed"));  //NOI18N
         }
         else if (e!=null&&e.getSource() instanceof JHistoryButton) {//&&e.getActionCommand()!="JHistoryButtonMenuActionPerformed"
             Object o=null;

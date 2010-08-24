@@ -256,6 +256,6 @@ public class ShadowFilter extends AbstractBufferedImageOp {
 	}
 
 	public String toString() {
-		return "Stylize/Drop Shadow...";
+		return "Stylize/Drop Shadow...";  //NOI18N
 	}
 }

@@ -44,13 +44,13 @@ public class Example {
     private JPanel _createPanel() {
         _tf = new CompleterTextField(TimeZone.getAvailableIDs(), false);
 
-        final JCheckBox caseCheck = new JCheckBox("Case-sensitive");
+        final JCheckBox caseCheck = new JCheckBox(org.openide.util.NbBundle.getMessage(Example.class, "Example.caseCheck.text"));  //NOI18N
         caseCheck.setSelected(_tf.isCaseSensitive());
 
-        final JCheckBox correctCheck = new JCheckBox("Correct case");
+        final JCheckBox correctCheck = new JCheckBox(org.openide.util.NbBundle.getMessage(Example.class, "Example.correctCheck.text"));  //NOI18N
         correctCheck.setSelected(_tf.isCorrectingCase());
         correctCheck.setEnabled(!caseCheck.isSelected());
-        correctCheck.setToolTipText("Will change the case of the entered string to match the case of the matched string");
+        correctCheck.setToolTipText(org.openide.util.NbBundle.getMessage(Example.class, "Example.correctCheck.tooltip"));  //NOI18N
 
         caseCheck.addActionListener(new ActionListener() {
 
@@ -74,7 +74,7 @@ public class Example {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panel.add(new JLabel("Auto-complete text field:"));
+        panel.add(new JLabel(org.openide.util.NbBundle.getMessage(Example.class, "Example._createPanel().panel.JLabel_anon1.text")));  //NOI18N
         panel.add(_tf);
 
         panel.add(Box.createGlue());
@@ -87,13 +87,13 @@ public class Example {
         panel.add(Box.createVerticalStrut(20));
 
         _tfww = new CompleterTextField(TimeZone.getAvailableIDs(), true);
-        final JCheckBox caseCheck2 = new JCheckBox("Case-sensitive");
+        final JCheckBox caseCheck2 = new JCheckBox(org.openide.util.NbBundle.getMessage(Example.class, "Example.caseCheck2.text"));  //NOI18N
         caseCheck2.setSelected(_tfww.isCaseSensitive());
 
-        final JCheckBox correctCheck2 = new JCheckBox("Correct case");
+        final JCheckBox correctCheck2 = new JCheckBox(org.openide.util.NbBundle.getMessage(Example.class, "Example.correctCheck2.text"));  //NOI18N
         correctCheck2.setSelected(_tfww.isCorrectingCase());
         correctCheck2.setEnabled(!caseCheck2.isSelected());
-        correctCheck2.setToolTipText("Will change the case of the entered string to match the case of the matched string");
+        correctCheck2.setToolTipText(org.openide.util.NbBundle.getMessage(Example.class, "Example.correctCheck2.tooltip"));  //NOI18N
 
         caseCheck2.addActionListener(new ActionListener() {
 
@@ -114,7 +114,7 @@ public class Example {
             }
         });
 
-        panel.add(new JLabel("Auto-complete text field with window:"));
+        panel.add(new JLabel(org.openide.util.NbBundle.getMessage(Example.class, "Example._createPanel().panel.JLabel_anon2.text")));  //NOI18N
         panel.add(_tfww);
 
         panel.add(Box.createGlue());
@@ -129,21 +129,27 @@ public class Example {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(_combo.getSelectedItem() + " " + _combo.getSelectedIndex() + " " + _combo.getModel());
+                System.out.println(_combo.getSelectedItem() + " " + _combo.getSelectedIndex() + " " + _combo.getModel());   //NOI18N
             }
         });
-        tbn.setText("getSelected");
+        tbn.setText(org.openide.util.NbBundle.getMessage(Example.class,"Example._createPanel().tbn.text"));  //NOI18N
         panel.add(tbn);
 //    _combo = new CompleterComboBox(new String[]{""," ","aa","Aa","aA","AA","Spielplatz"});
         final DefaultListCellRenderer dlcr = new DefaultListCellRenderer();
-        _combo = new JComboBox(new TT[]{new TT("aa"), new TT("Aa"), new TT("aA"), new TT("AA"), new TT("Spielplatz"), null});
+        _combo = new JComboBox(new TT[]{
+            new TT(org.openide.util.NbBundle.getMessage(Example.class,"Example._createPanel().dlcr.TT_anon1.bdy")),  //NOI18N
+            new TT(org.openide.util.NbBundle.getMessage(Example.class,"Example._createPanel().dlcr.TT_anon2.bdy")),  //NOI18N
+            new TT(org.openide.util.NbBundle.getMessage(Example.class,"Example._createPanel().dlcr.TT_anon3.bdy")),  //NOI18N
+            new TT(org.openide.util.NbBundle.getMessage(Example.class,"Example._createPanel().dlcr.TT_anon4.bdy")),  //NOI18N
+            new TT(org.openide.util.NbBundle.getMessage(Example.class,"Example._createPanel().dlcr.TT_anon5.bdy")),  //NOI18N
+            null});
         _combo.setRenderer(new ListCellRenderer() {
 
             @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component ret = dlcr.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if (value == null) {
-                    ((JLabel) ret).setText("nix");
+                    ((JLabel) ret).setText("nix");  //NOI18N
                 }
                 return ret;
             }
@@ -151,15 +157,15 @@ public class Example {
         final ComboCompleterFilter filter = ComboCompleterFilter.addCompletionMechanism(_combo);
 //    _combo = new CompleterComboBox(new String[]{"x"," ","aa","Aa","aA","AA","Spielplatz"});
         filter.setStrict(false);
-        filter.setNullRespresentation("nix");
+        filter.setNullRespresentation("nix");       //NOI18N
 //    _combo = new CompleterComboBox(TimeZone.getAvailableIDs());
-        final JCheckBox caseCheck3 = new JCheckBox("Case-sensitive");
+        final JCheckBox caseCheck3 = new JCheckBox(org.openide.util.NbBundle.getMessage(Example.class, "Example.caseCheck3.text"));  //NOI18N
         caseCheck3.setSelected(filter.isCaseSensitive());
 
-        final JCheckBox correctCheck3 = new JCheckBox("Correct case");
+        final JCheckBox correctCheck3 = new JCheckBox(org.openide.util.NbBundle.getMessage(Example.class, "Example.correctCheck3.text"));  //NOI18N
         correctCheck3.setSelected(filter.isCorrectingCase());
         correctCheck3.setEnabled(!caseCheck3.isSelected());
-        correctCheck3.setToolTipText("Will change the case of the entered string to match the case of the matched string");
+        correctCheck3.setToolTipText(org.openide.util.NbBundle.getMessage(Example.class, "Example.correctCheck3.tooltip"));  //NOI18N
 
         caseCheck3.addActionListener(new ActionListener() {
 
@@ -180,7 +186,7 @@ public class Example {
             }
         });
 
-        panel.add(new JLabel("Auto-complete combo:"));
+        panel.add(new JLabel(org.openide.util.NbBundle.getMessage(Example.class,"Example._createPanel().panel.JLabel_anon3.text")));  //NOI18N
         panel.add(_combo);
 
         panel.add(Box.createGlue());

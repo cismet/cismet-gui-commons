@@ -188,7 +188,7 @@ public class RippleFilter extends TransformFilter {
 	}
 
 	public String toString() {
-		return "Distort/Ripple...";
+		return "Distort/Ripple...";  //NOI18N
 	}
 
 }

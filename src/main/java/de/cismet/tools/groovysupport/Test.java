@@ -20,64 +20,64 @@ public class Test{
     JTextPane editor = new JTextPane();
     CodeDocument doc = new CodeDocument();
     Vector keywords = new Vector();
-    keywords.addElement("abstract");
-    keywords.addElement("boolean");
-    keywords.addElement("break");
-    keywords.addElement("byte");
-    keywords.addElement("byvalue");
-    keywords.addElement("case");
-    keywords.addElement("cast");
-    keywords.addElement("catch");
-    keywords.addElement("char");
-    keywords.addElement("class");
-    keywords.addElement("const");
-    keywords.addElement("continue");
-    keywords.addElement("default");
-    keywords.addElement("do");
-    keywords.addElement("double");
-    keywords.addElement("extends");
-    keywords.addElement("else");
-    keywords.addElement("false");
-    keywords.addElement("final");
-    keywords.addElement("finally");
-    keywords.addElement("float");
-    keywords.addElement("for");
-    keywords.addElement("future");
-    keywords.addElement("generic");
-    keywords.addElement("if");
-    keywords.addElement("implements");
-    keywords.addElement("import");
-    keywords.addElement("inner");
-    keywords.addElement("instanceof");
-    keywords.addElement("int");
-    keywords.addElement("interface");
-    keywords.addElement("long");
-    keywords.addElement("native");
-    keywords.addElement("new");
-    keywords.addElement("null");
-    keywords.addElement("operator");
-    keywords.addElement("outer");
-    keywords.addElement("package");
-    keywords.addElement("private");
-    keywords.addElement("protected");
-    keywords.addElement("public");
-    keywords.addElement("rest");
-    keywords.addElement("return");
-    keywords.addElement("short");
-    keywords.addElement("static");
-    keywords.addElement("super");
-    keywords.addElement("switch");
-    keywords.addElement("synchronized");
-    keywords.addElement("this");
-    keywords.addElement("throw");
-    keywords.addElement("throws");
-    keywords.addElement("transient");
-    keywords.addElement("true");
-    keywords.addElement("try");
-    keywords.addElement("var");
-    keywords.addElement("void");
-    keywords.addElement("volatile");
-    keywords.addElement("while");
+    keywords.addElement("abstract");    //NOI18N
+    keywords.addElement("boolean");     //NOI18N
+    keywords.addElement("break");       //NOI18N
+    keywords.addElement("byte");        //NOI18N
+    keywords.addElement("byvalue");     //NOI18N
+    keywords.addElement("case");        //NOI18N
+    keywords.addElement("cast");        //NOI18N
+    keywords.addElement("catch");       //NOI18N
+    keywords.addElement("char");        //NOI18N
+    keywords.addElement("class");       //NOI18N
+    keywords.addElement("const");       //NOI18N
+    keywords.addElement("continue");    //NOI18N
+    keywords.addElement("default");     //NOI18N
+    keywords.addElement("do");          //NOI18N
+    keywords.addElement("double");      //NOI18N
+    keywords.addElement("extends");     //NOI18N
+    keywords.addElement("else");        //NOI18N
+    keywords.addElement("false");       //NOI18N
+    keywords.addElement("final");       //NOI18N
+    keywords.addElement("finally");     //NOI18N
+    keywords.addElement("float");       //NOI18N
+    keywords.addElement("for");         //NOI18N
+    keywords.addElement("future");      //NOI18N
+    keywords.addElement("generic");     //NOI18N
+    keywords.addElement("if");          //NOI18N
+    keywords.addElement("implements");  //NOI18N
+    keywords.addElement("import");      //NOI18N
+    keywords.addElement("inner");       //NOI18N
+    keywords.addElement("instanceof");  //NOI18N
+    keywords.addElement("int");         //NOI18N
+    keywords.addElement("interface");   //NOI18N
+    keywords.addElement("long");        //NOI18N
+    keywords.addElement("native");      //NOI18N
+    keywords.addElement("new");         //NOI18N
+    keywords.addElement("null");        //NOI18N
+    keywords.addElement("operator");    //NOI18N
+    keywords.addElement("outer");       //NOI18N
+    keywords.addElement("package");     //NOI18N
+    keywords.addElement("private");     //NOI18N
+    keywords.addElement("protected");   //NOI18N
+    keywords.addElement("public");      //NOI18N
+    keywords.addElement("rest");        //NOI18N
+    keywords.addElement("return");      //NOI18N
+    keywords.addElement("short");       //NOI18N
+    keywords.addElement("static");      //NOI18N
+    keywords.addElement("super");       //NOI18N
+    keywords.addElement("switch");      //NOI18N
+    keywords.addElement("synchronized");//NOI18N
+    keywords.addElement("this");        //NOI18N
+    keywords.addElement("throw");       //NOI18N
+    keywords.addElement("throws");      //NOI18N
+    keywords.addElement("transient");   //NOI18N
+    keywords.addElement("true");        //NOI18N
+    keywords.addElement("try");         //NOI18N
+    keywords.addElement("var");         //NOI18N
+    keywords.addElement("void");        //NOI18N
+    keywords.addElement("volatile");    //NOI18N
+    keywords.addElement("while");       //NOI18N
     doc.setKeywords(keywords);
     editor.setDocument(doc);
     frame.setSize(400,400);

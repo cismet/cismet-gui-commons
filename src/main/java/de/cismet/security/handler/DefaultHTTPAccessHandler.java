@@ -43,34 +43,42 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler {
             parameter.append(currentLine);
         }
         HttpMethod httpMethod;
-        log.debug("Access method: " + method);
+        if(log.isDebugEnabled())
+            log.debug("Access method: " + method); //NOI18N
 
         switch (method) {
             case POST_REQUEST:
                 httpMethod = new PostMethod(url.toString());
-                ((PostMethod) httpMethod).setRequestEntity(new StringRequestEntity(parameter.toString(), "text/xml", "UTF-8"));
+                ((PostMethod) httpMethod).setRequestEntity(new StringRequestEntity(parameter.toString(), "text/xml", "UTF-8"));  //NOI18N
                 break;
             case GET_REQUEST:
                 if (parameter.length() > 0) {
-                    log.debug("http getRequest: " + url.toString() + "?" + parameter);
-                    httpMethod = new GetMethod(url.toString() + "?" + parameter);
+                    if(log.isDebugEnabled())
+                        log.debug("http getRequest: " + url.toString() + "?" + parameter); //NOI18N
+                    httpMethod = new GetMethod(url.toString() + "?" + parameter);  //NOI18N
                 } else {
-                    log.debug("keine Parameter");
-                    log.debug("http getRequest: " + url.toString());
+                    if(log.isDebugEnabled()) {
+                        log.debug("No Parameter");                       //NOI18N
+                        log.debug("http getRequest: " + url.toString());    //NOI18N
+                    }
                     httpMethod = new GetMethod(url.toString());
                 }
                 break;
             default:
                 if (parameter.length() > 0) {
-                    log.debug("Keine Methode spezifiziert default: " + ACCESS_METHODS.GET_REQUEST);
-                    log.debug("http getRequest: " + url.toString() + "?" + parameter);
+                    if(log.isDebugEnabled()) {
+                        log.debug("No Method specifies default: " + ACCESS_METHODS.GET_REQUEST); //NOI18N
+                        log.debug("http getRequest: " + url.toString() + "?" + parameter); //NOI18N
+                    }
                     //httpMethod = new PostMethod(url.toString());
                     //((PostMethod) httpMethod).setRequestEntity(new StringRequestEntity(parameter.toString(), "text/xml", "UTF-8"));
-                    httpMethod = new GetMethod(url.toString() + "?" + parameter);
+                    httpMethod = new GetMethod(url.toString() + "?" + parameter);  //NOI18N
                 } else {
-                    log.debug("Keine Methode spezifiziert default: " + ACCESS_METHODS.GET_REQUEST);
-                    log.debug("keine Parameter");
-                    log.debug("http getRequest: " + url.toString());
+                    if(log.isDebugEnabled()) {
+                        log.debug("No Method specifies default: " + ACCESS_METHODS.GET_REQUEST); //NOI18N
+                        log.debug("no Parameter");  //NOI18N
+                        log.debug("http getRequest: " + url.toString());  //NOI18N
+                    }
                     httpMethod = new GetMethod(url.toString());
                 }
         }
@@ -78,14 +86,17 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler {
         int statuscode = client.executeMethod(httpMethod);
         switch (statuscode) {
             case (HttpStatus.SC_UNAUTHORIZED):
-                log.info("Status Code from Server SC_UNAUTHORIZED: " + HttpStatus.SC_UNAUTHORIZED);
-                throw new CannotReadFromURLException("Sie sind nicht authorisiert um auf diese URL zuzugreifen.");
+                if(log.isInfoEnabled())
+                    log.info("Status Code from Server SC_UNAUTHORIZED: " + HttpStatus.SC_UNAUTHORIZED); //NOI18N
+                throw new CannotReadFromURLException("You are not authorised to access this URL."); //NOI18N
             case (HttpStatus.SC_OK):
-                log.debug("httpstatuscode ok");
+                if(log.isDebugEnabled())
+                    log.debug("httpstatuscode ok"); //NOI18N
                 return new BufferedInputStream(httpMethod.getResponseBodyAsStream());
             default:
-                log.debug("bad httpstatuscode");
-                throw new BadHttpStatusCodeException("Statuscode: " + statuscode);
+                if(log.isDebugEnabled())
+                    log.debug("bad httpstatuscode"); //NOI18N
+                throw new BadHttpStatusCodeException("Statuscode: " + statuscode); //NOI18N
         }
 
     }

@@ -4,16 +4,12 @@ import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Composite;
-import java.awt.EventQueue;
+import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Stroke;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -35,10 +31,10 @@ import org.jdesktop.swingx.graphics.ShadowRenderer;
  * @author srichter
  * @author nhaffke
  */
-public class PureCoolPanel extends JPanel implements ComponentListener {
+public class PureCoolPanel extends JPanel {
 
     // Lumbermill Logger initialisieren
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(PureCoolPanel.class);
     @InjectedResource()
     public int offset, offsetRight, offsetTop, offsetBetween, arcSize, shadowLength, blurFactor;
     @InjectedResource()
@@ -46,27 +42,13 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
     @InjectedResource()
     public Color shadowColor, colorBorder, colorMapBorder, colorTitle, colorInter, colorDarkLine, colorBrightLine, colorGlossy, gradientColorTop, gradientColorBottom;
     private static final int IMAGE_TYPE = BufferedImage.TYPE_4BYTE_ABGR;
-    private boolean noTitlePanel, mustBlur;
-    private double geoBuffer;
-    private int lastX, lastWidth, panelWidth;
     private ImageIcon icons;
-    private Image map;
-    private BufferedImage cacheImage, gradientImage, blurredMap, cachedBlurredMap, orgMap;
+    private BufferedImage cacheImage, gradientImage;
     private JPanel spinner;
     private JComponent panTitle, panMap, panInter, panContent;
-    private Rectangle mapBounds;
     private final Composite composite;
     private final ShadowRenderer shadowRenderer;
-
-    /**
-     * Kontruktor des CoolPanels mit einer Puffergroesse. Diese wird dazu verwendet,
-     * um um Punktgeometrien eine BoundingBox der Groesse dieses Puffers zu erstellen.
-     * @param geoBuffer Puffergroesse um das Geometrieobjekt herum
-     */
-    public PureCoolPanel(double geoBuffer) {
-        this();
-        this.geoBuffer = geoBuffer;
-    }
+    private Dimension lastPaintSize;
 
     /**
      * Kontruktor des CoolPanels. Erzeugt ein CoolPanel, damit es in einem Renderer
@@ -77,32 +59,15 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
         FuseLoader.load();
 
         // Ressourcen hierarchisch rekursiv nach oben einfuegen
-        ResourceInjector.get("purecoolpanel.style").inject(true, getInstance());  //NOI18N
+        ResourceInjector.get("purecoolpanel.style").inject(true, this);  //NOI18N
 //
         gradientColorTop = javax.swing.UIManager.getDefaults().getColor("Button.shadow");  //NOI18N
         gradientColorBottom = javax.swing.UIManager.getDefaults().getColor("Button.background");  //NOI18N
         composite = AlphaComposite.SrcAtop.derive(titleLinesOpacity);
         shadowRenderer = new ShadowRenderer(shadowLength, shadowIntensity, shadowColor);
-        initImagesAndMore();
-        this.addComponentListener(this);
-        
-    }
-
-    protected void initImagesAndMore() {
-        mapBounds = null;
         cacheImage = null;
-        noTitlePanel = true;
-        mustBlur = true;
-        geoBuffer = 40d;
-        lastX = 0;
-        lastWidth = 0;
-        panelWidth = 0;
-        map = null;
-        blurredMap = null;
-        orgMap = null;
-
         gradientImage = null;
-
+        lastPaintSize = getSize();
     }
 
     /**
@@ -137,8 +102,8 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
                 shadow.flush();
 
 //            BufferedImage ref = renderer.appendReflection(tmp);
-                ImageIcon icons = new ImageIcon(result);
-                this.icons = icons;
+                ImageIcon newIcon = new ImageIcon(result);
+                this.icons = newIcon;
             } catch (Exception e) {
                 this.icons = null;
             }
@@ -152,12 +117,12 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
      *
      * @param g Graphics-Objekt auf das gezeichnet wird
      */
+    @Override
     protected void paintComponent(Graphics g) {
-        //        log.info("CoolPanel: paintComponent()");
         super.paintComponent(g);
         final Graphics2D g2d = (Graphics2D) g;
-
-        if (cacheImage == null) {
+        if (cacheImage == null || !getSize().equals(lastPaintSize)) {
+            lastPaintSize = getSize();
             // Image zum Zeichnen erstellen von dem wird spaeter der Schlagschatten erstellt wird
             final BufferedImage box = new BufferedImage(getWidth() - offset, getHeight() - offset, IMAGE_TYPE);
 
@@ -175,7 +140,6 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
             }
 
             // RoundedRectangle zeichnen und mit Gradient fuellen
-//            boxGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             boxGraphics.setColor(Color.BLACK);
             boxGraphics.fillRoundRect(offset, 0, box.getWidth() - offset, box.getHeight(), arcSize, arcSize);
             boxGraphics.setComposite(AlphaComposite.SrcAtop);
@@ -185,7 +149,6 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
 
             // Falls TitlePanel existiert, speziell zeichnen
             if (getPanTitle() != null) {
-                noTitlePanel = false;
                 Rectangle bounds = getPanTitle().getBounds();
                 boxGraphics.setComposite(AlphaComposite.SrcAtop.derive(titlePanelOpacity));
                 boxGraphics.setColor(colorTitle);
@@ -201,7 +164,6 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
             if (getPanInter() != null) {
                 final Rectangle bounds = getPanInter().getBounds();
                 boxGraphics.setComposite(AlphaComposite.SrcAtop.derive(interPanelOpacity));
-//            bg.setColor(colInter);
                 boxGraphics.setPaint(new GradientPaint(0, bounds.y, new Color(0, 0, 0, 160), 0, bounds.y + bounds.height, Color.BLACK));
                 boxGraphics.fillRect(0, bounds.y, bounds.width + offset, bounds.height);
                 boxGraphics.setComposite(AlphaComposite.SrcAtop.derive(interLinesOpacity));
@@ -299,10 +261,6 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
         this.panContent = panContent;
     }
 
-    public PureCoolPanel getInstance() {
-        return this;
-    }
-
     public JPanel getSpinner() {
         return spinner;
     }
@@ -332,20 +290,6 @@ public class PureCoolPanel extends JPanel implements ComponentListener {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    public void componentResized(ComponentEvent arg0) {
-        cacheImage = null;
-        repaint();
-    }
-
-    public void componentMoved(ComponentEvent arg0) {
-    }
-
-    public void componentShown(ComponentEvent arg0) {
-    }
-
-    public void componentHidden(ComponentEvent arg0) {
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

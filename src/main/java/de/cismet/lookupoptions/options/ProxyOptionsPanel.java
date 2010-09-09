@@ -38,8 +38,6 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     //~ Static fields/initializers ---------------------------------------------
 
-    /** Use serialVersionUID for interoperability. */
-    private static final long serialVersionUID = -1996842916105715449L;
 
     private static final transient Logger LOG = Logger.getLogger(ProxyOptionsPanel.class);
 

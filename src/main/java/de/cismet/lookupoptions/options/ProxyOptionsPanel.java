@@ -216,8 +216,9 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             final String username,
             final String password,
             final String domain) {
-        if (isActivated) {
             final Proxy newProxy = new Proxy(host, port, username, password, domain, true);
+        if (isActivated) {
+            Proxy.toPreferences(newProxy);
             WebAccessManager.getInstance().setHttpProxy(newProxy);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("set proxy in system-property: " + newProxy); // NOI18N
@@ -236,6 +237,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
                 System.setProperty(Proxy.SYSTEM_PROXY_DOMAIN, newProxy.getDomain());
             }
         } else {
+            Proxy.toPreferences(null);
             WebAccessManager.getInstance().setHttpProxy(null);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("clear proxy in system-property");            // NOI18N

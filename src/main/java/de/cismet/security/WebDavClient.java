@@ -1,6 +1,5 @@
 package de.cismet.security;
 
-import de.cismet.security.Proxy;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -10,6 +9,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -74,8 +74,7 @@ public class WebDavClient {
 
             if (proxy.getUsername() != null) {
                 AuthScope scope = new AuthScope(proxy.getHost(), proxy.getPort());
-                UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-                        proxy.getUsername(), proxy.getPassword());
+                Credentials credentials = new NTCredentials(proxy.getUsername(), proxy.getPassword(), "", proxy.getDomain());
                 client.getState().setProxyCredentials(scope, credentials);
             }
         }

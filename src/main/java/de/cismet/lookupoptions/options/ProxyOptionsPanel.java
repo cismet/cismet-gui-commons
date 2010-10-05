@@ -285,6 +285,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             pwdPassword.setText(proxy.getPassword());
             txtDomain.setText(proxy.getDomain());
         }
+        applyChanges();
     }
 
     @Override

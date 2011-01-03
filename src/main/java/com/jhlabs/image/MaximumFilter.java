@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,7 +20,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
@@ -21,41 +27,53 @@ import java.awt.image.*;
 
 /**
  * A filter which replcaes each pixel by the maximum of itself and its eight neightbours.
+ *
+ * @version  $Revision$, $Date$
  */
 public class MaximumFilter extends WholeImageFilter {
 
-	public MaximumFilter() {
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	protected int[] filterPixels( int width, int height, int[] inPixels, Rectangle transformedSpace ) {
-		int index = 0;
-		int[] outPixels = new int[width * height];
+    /**
+     * Creates a new MaximumFilter object.
+     */
+    public MaximumFilter() {
+    }
 
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				int pixel = 0xff000000;
-				for (int dy = -1; dy <= 1; dy++) {
-					int iy = y+dy;
-					int ioffset;
-					if (0 <= iy && iy < height) {
-						ioffset = iy*width;
-						for (int dx = -1; dx <= 1; dx++) {
-							int ix = x+dx;
-							if (0 <= ix && ix < width) {
-								pixel = PixelUtils.combinePixels(pixel, inPixels[ioffset+ix], PixelUtils.MAX);
-							}
-						}
-					}
-				}
-				outPixels[index++] = pixel;
-			}
-		}
-		return outPixels;
-	}
+    //~ Methods ----------------------------------------------------------------
 
-	public String toString() {
-		return "Blur/Maximum";  //NOI18N
-	}
+    @Override
+    protected int[] filterPixels(final int width,
+            final int height,
+            final int[] inPixels,
+            final Rectangle transformedSpace) {
+        int index = 0;
+        final int[] outPixels = new int[width * height];
 
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int pixel = 0xff000000;
+                for (int dy = -1; dy <= 1; dy++) {
+                    final int iy = y + dy;
+                    final int ioffset;
+                    if ((0 <= iy) && (iy < height)) {
+                        ioffset = iy * width;
+                        for (int dx = -1; dx <= 1; dx++) {
+                            final int ix = x + dx;
+                            if ((0 <= ix) && (ix < width)) {
+                                pixel = PixelUtils.combinePixels(pixel, inPixels[ioffset + ix], PixelUtils.MAX);
+                            }
+                        }
+                    }
+                }
+                outPixels[index++] = pixel;
+            }
+        }
+        return outPixels;
+    }
+
+    @Override
+    public String toString() {
+        return "Blur/Maximum"; // NOI18N
+    }
 }
-

@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,29 +20,40 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 /**
  * A grayscale colormap. Black is 0, white is 1.
+ *
+ * @version  $Revision$, $Date$
  */
-public class GrayscaleColormap implements Colormap  {
-	
-	public GrayscaleColormap() {
-	}
+public class GrayscaleColormap implements Colormap {
 
-	/**
-	 * Convert a value in the range 0..1 to an RGB color.
-	 * @param v a value in the range 0..1
-	 * @return an RGB color
-	 */
-	public int getColor(float v) {
-		int n = (int)(v*255);
-		if (n < 0)
-			n = 0;
-		else if (n > 255)
-			n = 255;
-		return 0xff000000 | (n << 16) | (n << 8) | n;
-	}
-	
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new GrayscaleColormap object.
+     */
+    public GrayscaleColormap() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * Convert a value in the range 0..1 to an RGB color.
+     *
+     * @param   v  a value in the range 0..1
+     *
+     * @return  an RGB color
+     */
+    @Override
+    public int getColor(final float v) {
+        int n = (int)(v * 255);
+        if (n < 0) {
+            n = 0;
+        } else if (n > 255) {
+            n = 255;
+        }
+        return 0xff000000 | (n << 16) | (n << 8) | n;
+    }
 }

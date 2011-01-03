@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,7 +20,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
@@ -21,55 +27,69 @@ import java.awt.image.*;
 
 /**
  * Sets the opacity (alpha) of every pixel in an image to a constant value.
+ *
+ * @version  $Revision$, $Date$
  */
 public class OpacityFilter extends PointFilter {
-	
-	private int opacity;
-	private int opacity24;
 
-	/**
-	 * Construct an OpacityFilter with 50% opacity.
-	 */
-	public OpacityFilter() {
-		this(0x88);
-	}
+    //~ Instance fields --------------------------------------------------------
 
-	/**
-	 * Construct an OpacityFilter with the given opacity (alpha).
-	 * @param opacity the opacity (alpha) in the range 0..255
-	 */
-	public OpacityFilter(int opacity) {
-		setOpacity(opacity);
-	}
+    private int opacity;
+    private int opacity24;
 
-	/**
-	 * Set the opacity.
-	 * @param opacity the opacity (alpha) in the range 0..255
-     * @see #getOpacity
-	 */
-	public void setOpacity(int opacity) {
-		this.opacity = opacity;
-		opacity24 = opacity << 24;
-	}
-	
-	/**
-	 * Get the opacity setting.
-	 * @return the opacity
-     * @see #setOpacity
-	 */
-	public int getOpacity() {
-		return opacity;
-	}
-	
-	public int filterRGB(int x, int y, int rgb) {
-		if ((rgb & 0xff000000) != 0)
-			return (rgb & 0xffffff) | opacity24;
-		return rgb;
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public String toString() {
-		return "Colors/Transparency...";  //NOI18N
-	}
+    /**
+     * Construct an OpacityFilter with 50% opacity.
+     */
+    public OpacityFilter() {
+        this(0x88);
+    }
 
+    /**
+     * Construct an OpacityFilter with the given opacity (alpha).
+     *
+     * @param  opacity  the opacity (alpha) in the range 0..255
+     */
+    public OpacityFilter(final int opacity) {
+        setOpacity(opacity);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * Set the opacity.
+     *
+     * @param  opacity  the opacity (alpha) in the range 0..255
+     *
+     * @see    #getOpacity
+     */
+    public void setOpacity(final int opacity) {
+        this.opacity = opacity;
+        opacity24 = opacity << 24;
+    }
+
+    /**
+     * Get the opacity setting.
+     *
+     * @return  the opacity
+     *
+     * @see     #setOpacity
+     */
+    public int getOpacity() {
+        return opacity;
+    }
+
+    @Override
+    public int filterRGB(final int x, final int y, final int rgb) {
+        if ((rgb & 0xff000000) != 0) {
+            return (rgb & 0xffffff) | opacity24;
+        }
+        return rgb;
+    }
+
+    @Override
+    public String toString() {
+        return "Colors/Transparency..."; // NOI18N
+    }
 }
-

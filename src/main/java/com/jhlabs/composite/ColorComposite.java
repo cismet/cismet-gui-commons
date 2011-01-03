@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,64 +20,103 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.composite;
 
 import java.awt.*;
 import java.awt.image.*;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public final class ColorComposite extends RGBComposite {
 
-	public ColorComposite( float alpha ) {
-        super( alpha );
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public CompositeContext createContext( ColorModel srcColorModel, ColorModel dstColorModel, RenderingHints hints ) {
-		return new Context( extraAlpha, srcColorModel, dstColorModel );
-	}
+    /**
+     * Creates a new ColorComposite object.
+     *
+     * @param  alpha  DOCUMENT ME!
+     */
+    public ColorComposite(final float alpha) {
+        super(alpha);
+    }
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public CompositeContext createContext(final ColorModel srcColorModel,
+            final ColorModel dstColorModel,
+            final RenderingHints hints) {
+        return new Context(extraAlpha, srcColorModel, dstColorModel);
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     static class Context extends RGBCompositeContext {
-		private float[] sHSB = new float[3];
+
+        //~ Instance fields ----------------------------------------------------
+
+        private float[] sHSB = new float[3];
         private float[] dHSB = new float[3];
 
-        public Context( float alpha, ColorModel srcColorModel, ColorModel dstColorModel ) {
-            super( alpha, srcColorModel, dstColorModel );
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new Context object.
+         *
+         * @param  alpha          DOCUMENT ME!
+         * @param  srcColorModel  DOCUMENT ME!
+         * @param  dstColorModel  DOCUMENT ME!
+         */
+        public Context(final float alpha, final ColorModel srcColorModel, final ColorModel dstColorModel) {
+            super(alpha, srcColorModel, dstColorModel);
         }
 
-        public void composeRGB( int[] src, int[] dst, float alpha ) {
-            int w = src.length;
+        //~ Methods ------------------------------------------------------------
 
-            for ( int i = 0; i < w; i += 4 ) {
-                int sr = src[i];
-                int dir = dst[i];
-                int sg = src[i+1];
-                int dig = dst[i+1];
-                int sb = src[i+2];
-                int dib = dst[i+2];
-                int sa = src[i+3];
-                int dia = dst[i+3];
-                int dor, dog, dob;
+        @Override
+        public void composeRGB(final int[] src, final int[] dst, final float alpha) {
+            final int w = src.length;
 
-                Color.RGBtoHSB( sr, sg, sb, sHSB );
-                Color.RGBtoHSB( dir, dig, dib, dHSB );
+            for (int i = 0; i < w; i += 4) {
+                final int sr = src[i];
+                final int dir = dst[i];
+                final int sg = src[i + 1];
+                final int dig = dst[i + 1];
+                final int sb = src[i + 2];
+                final int dib = dst[i + 2];
+                final int sa = src[i + 3];
+                final int dia = dst[i + 3];
+                final int dor;
+                final int dog;
+                final int dob;
+
+                Color.RGBtoHSB(sr, sg, sb, sHSB);
+                Color.RGBtoHSB(dir, dig, dib, dHSB);
 
                 dHSB[0] = sHSB[0];
                 dHSB[1] = sHSB[1];
 
-                int doRGB = Color.HSBtoRGB( dHSB[0], dHSB[1], dHSB[2] );
+                final int doRGB = Color.HSBtoRGB(dHSB[0], dHSB[1], dHSB[2]);
                 dor = (doRGB & 0xff0000) >> 16;
                 dog = (doRGB & 0xff00) >> 8;
                 dob = (doRGB & 0xff);
 
-                float a = alpha*sa/255f;
-                float ac = 1-a;
+                final float a = alpha * sa / 255f;
+                final float ac = 1 - a;
 
-                dst[i] = (int)(a*dor + ac*dir);
-                dst[i+1] = (int)(a*dog + ac*dig);
-                dst[i+2] = (int)(a*dob + ac*dib);
-                dst[i+3] = (int)(sa*alpha + dia*ac);
+                dst[i] = (int)((a * dor) + (ac * dir));
+                dst[i + 1] = (int)((a * dog) + (ac * dig));
+                dst[i + 2] = (int)((a * dob) + (ac * dib));
+                dst[i + 3] = (int)((sa * alpha) + (dia * ac));
             }
         }
     }
-
 }

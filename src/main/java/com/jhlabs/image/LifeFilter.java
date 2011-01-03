@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,7 +20,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
@@ -21,52 +27,67 @@ import java.awt.image.*;
 
 /**
  * A filter which performs one round of the game of Life on an image.
+ *
+ * @version  $Revision$, $Date$
  */
 public class LifeFilter extends BinaryFilter {
 
-	public LifeFilter() {
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	protected int[] filterPixels( int width, int height, int[] inPixels, Rectangle transformedSpace ) {
-		int index = 0;
-		int[] outPixels = new int[width * height];
+    /**
+     * Creates a new LifeFilter object.
+     */
+    public LifeFilter() {
+    }
 
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				int r = 0, g = 0, b = 0;
-				int pixel = inPixels[y*width+x];
-				int a = pixel & 0xff000000;
-				int neighbours = 0;
+    //~ Methods ----------------------------------------------------------------
 
-				for (int row = -1; row <= 1; row++) {
-					int iy = y+row;
-					int ioffset;
-					if (0 <= iy && iy < height) {
-						ioffset = iy*width;
-						for (int col = -1; col <= 1; col++) {
-							int ix = x+col;
-							if (!(row == 0 && col == 0) && 0 <= ix && ix < width) {
-								int rgb = inPixels[ioffset+ix];
-								if (blackFunction.isBlack(rgb))
-									neighbours++;
-							}
-						}
-					}
-				}
-				
-				if (blackFunction.isBlack(pixel))
-					outPixels[index++] = (neighbours == 2 || neighbours == 3) ? pixel : 0xffffffff;
-				else
-					outPixels[index++] = neighbours == 3 ? 0xff000000 : pixel;
-			}
+    @Override
+    protected int[] filterPixels(final int width,
+            final int height,
+            final int[] inPixels,
+            final Rectangle transformedSpace) {
+        int index = 0;
+        final int[] outPixels = new int[width * height];
 
-		}
-		return outPixels;
-	}
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                final int r = 0;
+                final int g = 0;
+                final int b = 0;
+                final int pixel = inPixels[(y * width) + x];
+                final int a = pixel & 0xff000000;
+                int neighbours = 0;
 
-	public String toString() {
-		return "Binary/Life";  //NOI18N
-	}
+                for (int row = -1; row <= 1; row++) {
+                    final int iy = y + row;
+                    final int ioffset;
+                    if ((0 <= iy) && (iy < height)) {
+                        ioffset = iy * width;
+                        for (int col = -1; col <= 1; col++) {
+                            final int ix = x + col;
+                            if (!((row == 0) && (col == 0)) && (0 <= ix) && (ix < width)) {
+                                final int rgb = inPixels[ioffset + ix];
+                                if (blackFunction.isBlack(rgb)) {
+                                    neighbours++;
+                                }
+                            }
+                        }
+                    }
+                }
 
+                if (blackFunction.isBlack(pixel)) {
+                    outPixels[index++] = ((neighbours == 2) || (neighbours == 3)) ? pixel : 0xffffffff;
+                } else {
+                    outPixels[index++] = (neighbours == 3) ? 0xff000000 : pixel;
+                }
+            }
+        }
+        return outPixels;
+    }
+
+    @Override
+    public String toString() {
+        return "Binary/Life"; // NOI18N
+    }
 }
-

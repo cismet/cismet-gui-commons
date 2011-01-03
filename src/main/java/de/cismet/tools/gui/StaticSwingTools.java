@@ -1,36 +1,10 @@
-/*
- * StaticSwingTools.java
- * Copyright (C) 2005 by:
- *
- *----------------------------
- * cismet GmbH
- * Goebenstrasse 40
- * 66117 Saarbruecken
- * http://www.cismet.de
- *----------------------------
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- *----------------------------
- * Author:
- * thorsten.hell@cismet.de
- *----------------------------
- *
- * Created on 2. Januar 2006, 12:59
- *
- */
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui;
 
 import java.awt.Color;
@@ -45,12 +19,16 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTargetDropEvent;
+
 import java.io.File;
 import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -64,31 +42,52 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 /**
+ * DOCUMENT ME!
  *
- * @author thorsten.hell@cismet.de
+ * @author   thorsten.hell@cismet.de
+ * @version  $Revision$, $Date$
  */
 public class StaticSwingTools {
 
-    private final static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StaticSwingTools.class);
+    //~ Static fields/initializers ---------------------------------------------
 
-    public static void jTreeExpandAllNodes(JTree tree) {
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StaticSwingTools.class);
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tree  DOCUMENT ME!
+     */
+    public static void jTreeExpandAllNodes(final JTree tree) {
         int row = 0;
         while (row < tree.getRowCount()) {
             tree.expandRow(row);
             row++;
         }
     }
-    
-    public static void jTreeExpandAllNodesAndScroll2Last(JTree tree) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tree  DOCUMENT ME!
+     */
+    public static void jTreeExpandAllNodesAndScroll2Last(final JTree tree) {
         // expand to the last leaf from the root
-        DefaultMutableTreeNode root;
-        root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+        final DefaultMutableTreeNode root;
+        root = (DefaultMutableTreeNode)tree.getModel().getRoot();
         tree.scrollPathToVisible(new TreePath(root.getLastLeaf().getPath()));
     }
 
-    public static void jTreeCollapseAllNodes(JTree tree) {
-        TreePath p = tree.getSelectionPath();
-        
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tree  DOCUMENT ME!
+     */
+    public static void jTreeCollapseAllNodes(final JTree tree) {
+        final TreePath p = tree.getSelectionPath();
+
         int row = tree.getRowCount() - 1;
         tree.setSelectionPath(p);
         while (row >= 0) {
@@ -97,28 +96,43 @@ public class StaticSwingTools {
         }
         tree.setSelectionPath(p);
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   <T>    DOCUMENT ME!
+     * @param   c      DOCUMENT ME!
+     * @param   clazz  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @SuppressWarnings("unchecked")
-    public static <T extends Component> T findSpecificParentComponent(Container c, Class<T> clazz) {
+    public static <T extends Component> T findSpecificParentComponent(Container c, final Class<T> clazz) {
 //        while (c != null && !(c.getClass().equals(clazz))) {
-        while (c != null && !(clazz.isAssignableFrom(c.getClass()))) {
+        while ((c != null) && !(clazz.isAssignableFrom(c.getClass()))) {
             c = c.getParent();
         }
-        return (T) c;
+        return (T)c;
     }
-    //From The Java Developers Almanac
-    public static void jTableScrollToVisible(JTable table, int rowIndex, int vColIndex) {
+    /**
+     * From The Java Developers Almanac.
+     *
+     * @param  table      DOCUMENT ME!
+     * @param  rowIndex   DOCUMENT ME!
+     * @param  vColIndex  DOCUMENT ME!
+     */
+    public static void jTableScrollToVisible(final JTable table, final int rowIndex, final int vColIndex) {
         if (!(table.getParent() instanceof JViewport)) {
             return;
         }
-        JViewport viewport = (JViewport) table.getParent();
+        final JViewport viewport = (JViewport)table.getParent();
 
         // This rectangle is relative to the table where the
         // northwest corner of cell (0,0) is always (0,0).
-        Rectangle rect = table.getCellRect(rowIndex, vColIndex, true);
+        final Rectangle rect = table.getCellRect(rowIndex, vColIndex, true);
 
         // The location of the viewport relative to the table
-        Point pt = viewport.getViewPosition();
+        final Point pt = viewport.getViewPosition();
 
         // Translate the cell location so that it is relative
         // to the view, assuming the northwest corner of the
@@ -129,175 +143,264 @@ public class StaticSwingTools {
         viewport.scrollRectToVisible(rect);
     }
 
-    public static String getLinkFromDropEvent(DropTargetDropEvent dtde) {
-        //System.out.println("getLinkFromDropEvent");
-        String link = null;
-        Transferable t = dtde.getTransferable();
-        DataFlavor[] flavors = t.getTransferDataFlavors();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   dtde  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getLinkFromDropEvent(final DropTargetDropEvent dtde) {
+        // System.out.println("getLinkFromDropEvent");
+        final String link = null;
+        final Transferable t = dtde.getTransferable();
+        final DataFlavor[] flavors = t.getTransferDataFlavors();
         for (int i = 0; i < flavors.length; i++) {
-            DataFlavor flavor = flavors[i];
+            final DataFlavor flavor = flavors[i];
             try {
                 if (flavor.equals(DataFlavor.javaFileListFlavor)) {
-                    //System.out.println("importData: FileListFlavor");
-                    List l = (List) t.getTransferData(DataFlavor.javaFileListFlavor);
-                    Iterator iter = l.iterator();
+                    // System.out.println("importData: FileListFlavor");
+                    final List l = (List)t.getTransferData(DataFlavor.javaFileListFlavor);
+                    final Iterator iter = l.iterator();
                     while (iter.hasNext()) {
-                        File file = (File) iter.next();
+                        final File file = (File)iter.next();
                         System.out.println(file);
                         try {
-                            String can = file.getCanonicalPath();
+                            final String can = file.getCanonicalPath();
                             return can;
                         } catch (IOException ex) {
-                            log.warn("Fehler bei file.getCanonicalPath()", ex);  //NOI18N
+                            log.warn("Fehler bei file.getCanonicalPath()", ex); // NOI18N
                         }
                     }
                 } else if (flavor.equals(DataFlavor.stringFlavor)) {
-                    String fileOrURL = (String) t.getTransferData(flavor);
-                    if(log.isDebugEnabled())
-                        log.debug("GOT STRING: " + fileOrURL); //NOI18N
-                    
+                    final String fileOrURL = (String)t.getTransferData(flavor);
+                    if (log.isDebugEnabled()) {
+                        log.debug("GOT STRING: " + fileOrURL);                  // NOI18N
+                    }
+
                     try {
-                        URL url = new URL(fileOrURL);
+                        final URL url = new URL(fileOrURL);
                         return url.toString();
                     } catch (MalformedURLException ex) {
-                        log.warn("Illegal URL", ex);  //NOI18N
+                        log.warn("Illegal URL", ex); // NOI18N
                         return null;
                     }
-                    
                 } else {
-                    //log.warn("importData rejected: "+ flavor);
-                    //mach nix und probiers weiter
+                    // log.warn("importData rejected: "+ flavor);
+                    // mach nix und probiers weiter
                 }
             } catch (IOException ex) {
-                log.warn("IOError getting data: " + ex);  //NOI18N
+                log.warn("IOError getting data: " + ex); // NOI18N
             } catch (UnsupportedFlavorException e) {
-                log.warn("Unsupported Flavor: ", e);  //NOI18N
+                log.warn("Unsupported Flavor: ", e); // NOI18N
             }
         }
         return null;
     }
-    
-    public static void jTabbedPaneWithVerticalTextAddTab(JTabbedPane tabPane, String text, JComponent comp) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tabPane  DOCUMENT ME!
+     * @param  text     DOCUMENT ME!
+     * @param  comp     DOCUMENT ME!
+     */
+    public static void jTabbedPaneWithVerticalTextAddTab(final JTabbedPane tabPane,
+            final String text,
+            final JComponent comp) {
         jTabbedPaneWithVerticalTextAddTab(tabPane, text, null, comp);
     }
 
-    public static void jTabbedPaneWithVerticalTextAddTab(JTabbedPane tabPane, String text, Icon icon, JComponent comp) {
-        int tabPlacement = tabPane.getTabPlacement();
-        Object textIconGap = UIManager.get("TabbedPane.textIconGap");   //NOI18N
-        Insets tabInsets = UIManager.getInsets("TabbedPane.tabInsets");  //NOI18N
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tabPane  DOCUMENT ME!
+     * @param  text     DOCUMENT ME!
+     * @param  icon     DOCUMENT ME!
+     * @param  comp     DOCUMENT ME!
+     */
+    public static void jTabbedPaneWithVerticalTextAddTab(final JTabbedPane tabPane,
+            final String text,
+            final Icon icon,
+            final JComponent comp) {
+        final int tabPlacement = tabPane.getTabPlacement();
+        final Object textIconGap = UIManager.get("TabbedPane.textIconGap");   // NOI18N
+        final Insets tabInsets = UIManager.getInsets("TabbedPane.tabInsets"); // NOI18N
         tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
-        UIManager.put("TabbedPane.textIconGap", new Integer(1));  //NOI18N
-        // UIManager.put("TabbedPane.tabInsets", new Insets(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom));
-        UIManager.put("TabbedPane.tabInsets", tabInsets);  //NOI18N
+        UIManager.put("TabbedPane.textIconGap", new Integer(1));              // NOI18N
+        // UIManager.put("TabbedPane.tabInsets", new Insets(tabInsets.left, tabInsets.top, tabInsets.right,
+        // tabInsets.bottom));
+        UIManager.put("TabbedPane.tabInsets", tabInsets);                     // NOI18N
         SwingUtilities.updateComponentTreeUI(tabPane);
         switch (tabPlacement) {
             case JTabbedPane.LEFT:
-            case JTabbedPane.RIGHT:
+            case JTabbedPane.RIGHT: {
                 if (icon == null) {
                     tabPane.addTab(null, new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT), comp);
-                    
                 } else {
                     Icon newIcon;
                     if (tabPlacement == JTabbedPane.RIGHT) {
-                        Icon[] icons = new Icon[2];
+                        final Icon[] icons = new Icon[2];
                         icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT);
                         icons[1] = icon;
                         newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
                     } else {
-                        Icon[] icons = new Icon[2];
+                        final Icon[] icons = new Icon[2];
                         icons[1] = icon;
                         icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT);
                         newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
                     }
-                    if(log.isDebugEnabled())
-                        log.debug("newIconHeight" + newIcon.getIconHeight());  //NOI18N
+                    if (log.isDebugEnabled()) {
+                        log.debug("newIconHeight" + newIcon.getIconHeight()); // NOI18N
+                    }
                     tabPane.addTab(null, newIcon, comp);
                 }
                 break;
-            default:
+            }
+            default: {
                 tabPane.addTab(text, null, comp);
+            }
         }
         tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
-        UIManager.put("TabbedPane.tabInsets", tabInsets);  //NOI18N
-        
+        UIManager.put("TabbedPane.tabInsets", tabInsets);                     // NOI18N
     }
-    
-    public static void jTabbedPaneWithVerticalTextSetNewText(JTabbedPane tabPane, String text, JComponent comp) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tabPane  DOCUMENT ME!
+     * @param  text     DOCUMENT ME!
+     * @param  comp     DOCUMENT ME!
+     */
+    public static void jTabbedPaneWithVerticalTextSetNewText(final JTabbedPane tabPane,
+            final String text,
+            final JComponent comp) {
         jTabbedPaneWithVerticalTextSetNewText(tabPane, text, null, comp);
     }
 
-    public static void jTabbedPaneWithVerticalTextSetNewText(JTabbedPane tabPane, String text, Icon icon, JComponent comp) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tabPane  DOCUMENT ME!
+     * @param  text     DOCUMENT ME!
+     * @param  icon     DOCUMENT ME!
+     * @param  comp     DOCUMENT ME!
+     */
+    public static void jTabbedPaneWithVerticalTextSetNewText(final JTabbedPane tabPane,
+            final String text,
+            final Icon icon,
+            final JComponent comp) {
         jTabbedPaneWithVerticalTextSetNewText(tabPane, text, icon, Color.black, comp);
     }
 
-    public static void jTabbedPaneWithVerticalTextSetNewText(JTabbedPane tabPane, String text, Icon icon, Color textColor, JComponent comp) {
-        int tabPlacement = tabPane.getTabPlacement();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  tabPane    DOCUMENT ME!
+     * @param  text       DOCUMENT ME!
+     * @param  icon       DOCUMENT ME!
+     * @param  textColor  DOCUMENT ME!
+     * @param  comp       DOCUMENT ME!
+     */
+    public static void jTabbedPaneWithVerticalTextSetNewText(final JTabbedPane tabPane,
+            final String text,
+            final Icon icon,
+            final Color textColor,
+            final JComponent comp) {
+        final int tabPlacement = tabPane.getTabPlacement();
         switch (tabPlacement) {
             case JTabbedPane.LEFT:
-            case JTabbedPane.RIGHT:
+            case JTabbedPane.RIGHT: {
                 if (icon == null) {
-                    tabPane.setIconAt(tabPane.indexOfComponent(comp), new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT, textColor));
+                    tabPane.setIconAt(tabPane.indexOfComponent(comp),
+                        new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT, textColor));
                 } else {
                     Icon newIcon;
                     if (tabPlacement == JTabbedPane.RIGHT) {
-                        Icon[] icons = new Icon[2];
+                        final Icon[] icons = new Icon[2];
                         icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT, textColor);
                         icons[1] = icon;
                         newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
                     } else {
-                        Icon[] icons = new Icon[2];
+                        final Icon[] icons = new Icon[2];
                         icons[1] = icon;
                         icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT, textColor);
                         newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
                     }
-                    if(log.isDebugEnabled())
-                        log.debug("newIconHeight" + newIcon.getIconHeight());  //NOI18N
+                    if (log.isDebugEnabled()) {
+                        log.debug("newIconHeight" + newIcon.getIconHeight()); // NOI18N
+                    }
                     tabPane.setIconAt(tabPane.indexOfComponent(comp), newIcon);
                 }
                 return;
-            default:
+            }
+            default: {
                 tabPane.setTitleAt(tabPane.indexOfComponent(comp), text);
+            }
         }
     }
-    
-    public static JTabbedPane jTabbedPaneWithVerticalTextCreator(int tabPlacement) {
-        java.util.Enumeration keys = UIManager.getDefaults().keys();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   tabPlacement  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static JTabbedPane jTabbedPaneWithVerticalTextCreator(final int tabPlacement) {
+        final java.util.Enumeration keys = UIManager.getDefaults().keys();
         while (keys.hasMoreElements()) {
-            Object key = keys.nextElement();
-            Object value = UIManager.get(key);
-            if (key.toString().indexOf("abbed") != -1) {  //NOI18N
-                if(log.isDebugEnabled())
-                    log.debug(key + "," + value); //NOI18N
+            final Object key = keys.nextElement();
+            final Object value = UIManager.get(key);
+            if (key.toString().indexOf("abbed") != -1) { // NOI18N
+                if (log.isDebugEnabled()) {
+                    log.debug(key + "," + value);        // NOI18N
+                }
             }
         }
         switch (tabPlacement) {
             case JTabbedPane.LEFT:
-            case JTabbedPane.RIGHT:
+            case JTabbedPane.RIGHT: {
 //                Object textIconGap = UIManager.get("TabbedPane.textIconGap");
 //                Insets tabInsets = UIManager.getInsets("TabbedPane.tabInsets");
 //                tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
 //                UIManager.put("TabbedPane.textIconGap", new Integer(1));
 //                // UIManager.put("TabbedPane.tabInsets", new Insets(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom));
 //                UIManager.put("TabbedPane.tabInsets", tabInsets);
-                JTabbedPane tabPane = new JTabbedPane(tabPlacement);
+                final JTabbedPane tabPane = new JTabbedPane(tabPlacement);
 //
 //                UIManager.put("TabbedPane.textIconGap", textIconGap);
 //                UIManager.put("TabbedPane.tabInsets", tabInsets);
 //                //SwingUtilities.updateComponentTreeUI(tabPane);
                 // tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
-                //UIManager.put("TabbedPane.tabInsets", tabInsets);
+                // UIManager.put("TabbedPane.tabInsets", tabInsets);
                 return tabPane;
-            default:
+            }
+            default: {
                 return new JTabbedPane(tabPlacement);
+            }
         }
     }
-    
-    public static JTabbedPane jTabbedPaneWithVerticalTextCreator(int tabPlacement, int tabLayoutPolicy) {
-        JTabbedPane jtp = jTabbedPaneWithVerticalTextCreator(tabPlacement);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   tabPlacement     DOCUMENT ME!
+     * @param   tabLayoutPolicy  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static JTabbedPane jTabbedPaneWithVerticalTextCreator(final int tabPlacement, final int tabLayoutPolicy) {
+        final JTabbedPane jtp = jTabbedPaneWithVerticalTextCreator(tabPlacement);
         return jtp;
     }
-    
-    public static void setNiftyScrollBars(JScrollPane sPane) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  sPane  DOCUMENT ME!
+     */
+    public static void setNiftyScrollBars(final JScrollPane sPane) {
         Dimension d = sPane.getVerticalScrollBar().getPreferredSize();
         sPane.getVerticalScrollBar().getComponent(0).setVisible(false);
         sPane.getVerticalScrollBar().getComponent(1).setVisible(false);
@@ -309,63 +412,91 @@ public class StaticSwingTools {
         sPane.setBackground(sPane.getViewport().getBackground());
         sPane.getHorizontalScrollBar().setBackground(sPane.getViewport().getBackground());
         sPane.getVerticalScrollBar().setBackground(sPane.getViewport().getBackground());
-        
     }
-    
-    public static Frame getFirstParentFrame(Component c) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   c  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Frame getFirstParentFrame(final Component c) {
         return getParentFrame(c, true);
     }
-    
-    public static Frame getParentFrame(Component c) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   c  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Frame getParentFrame(final Component c) {
         return getParentFrame(c, false);
     }
-    
-    public static Frame getParentFrame(Component c, boolean first) {
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   c      DOCUMENT ME!
+     * @param   first  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Frame getParentFrame(final Component c, final boolean first) {
         try {
             Object o = c;
             do {
-                o = ((Component) o).getParent();
-                if(log.isDebugEnabled())
-                    log.debug("getParent:" + o);  //NOI18N
-            } while (!(o instanceof Frame && ((Component) o).getParent() == null || first));
-            if(log.isDebugEnabled())
-                log.debug("getParentFrame returns " + o);  //NOI18N
-            return (Frame) o;
+                o = ((Component)o).getParent();
+                if (log.isDebugEnabled()) {
+                    log.debug("getParent:" + o);          // NOI18N
+                }
+            } while (!(((o instanceof Frame) && (((Component)o).getParent() == null)) || first));
+            if (log.isDebugEnabled()) {
+                log.debug("getParentFrame returns " + o); // NOI18N
+            }
+            return (Frame)o;
         } catch (Exception e) {
-            if(log.isDebugEnabled())
-                log.warn("getParentFrame returns null", e);  //NOI18N
+            if (log.isDebugEnabled()) {
+                log.warn("getParentFrame returns null", e); // NOI18N
+            }
             return null;
-            
         }
     }
-    
-    public static Rectangle getComponentsExtent(Component... components) {
-        Rectangle r = new Rectangle();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   components  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Rectangle getComponentsExtent(final Component... components) {
+        final Rectangle r = new Rectangle();
         Integer maxX = null;
         Integer minX = null;
         Integer maxY = null;
         Integer minY = null;
-        
-        
-        for (Component comp : components) {
-            //firsttimecheck
+
+        for (final Component comp : components) {
+            // firsttimecheck
             if (maxX == null) {
                 minX = comp.getX();
                 minY = comp.getY();
                 maxX = comp.getWidth() + minX;
                 maxY = comp.getHeight() + minY;
-                
             } else {
-                //min
+                // min
                 minX = Math.min(minX, comp.getX());
                 minY = Math.min(minY, comp.getY());
 
-                //max
+                // max
                 maxX = Math.max(maxX, comp.getX() + comp.getWidth());
                 maxY = Math.max(maxY, comp.getY() + comp.getHeight());
             }
         }
-        
+
         r.setRect(minX, minY, maxX - minX, maxY - minY);
         return r;
     }

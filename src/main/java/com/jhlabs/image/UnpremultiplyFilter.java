@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,44 +20,56 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
 import java.awt.image.*;
 
 /**
- * A filter which unpremultiplies an image's alpha.
- * Note: this does not change the image type of the BufferedImage
+ * A filter which unpremultiplies an image's alpha. Note: this does not change the image type of the BufferedImage
+ *
+ * @version  $Revision$, $Date$
  */
 public class UnpremultiplyFilter extends PointFilter {
 
-	public UnpremultiplyFilter() {
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public int filterRGB(int x, int y, int rgb) {
-		int a = (rgb >> 24) & 0xff;
-		int r = (rgb >> 16) & 0xff;
-		int g = (rgb >> 8) & 0xff;
-		int b = rgb & 0xff;
-		if ( a == 0 || a == 255 )
-			return rgb;
+    /**
+     * Creates a new UnpremultiplyFilter object.
+     */
+    public UnpremultiplyFilter() {
+    }
 
-		float f = 255.0f / a;
-		r *= f;
-		g *= f;
-		b *= f;
-		if ( r > 255 )
-			r = 255;
-		if ( g > 255 )
-			g = 255;
-		if ( b > 255 )
-			b = 255;
-		return (a << 24) | (r << 16) | (g << 8) | b;
-	}
+    //~ Methods ----------------------------------------------------------------
 
-	public String toString() {
-		return "Alpha/Unpremultiply";  //NOI18N
-	}
+    @Override
+    public int filterRGB(final int x, final int y, final int rgb) {
+        final int a = (rgb >> 24) & 0xff;
+        int r = (rgb >> 16) & 0xff;
+        int g = (rgb >> 8) & 0xff;
+        int b = rgb & 0xff;
+        if ((a == 0) || (a == 255)) {
+            return rgb;
+        }
+
+        final float f = 255.0f / a;
+        r *= f;
+        g *= f;
+        b *= f;
+        if (r > 255) {
+            r = 255;
+        }
+        if (g > 255) {
+            g = 255;
+        }
+        if (b > 255) {
+            b = 255;
+        }
+        return (a << 24) | (r << 16) | (g << 8) | b;
+    }
+
+    @Override
+    public String toString() {
+        return "Alpha/Unpremultiply"; // NOI18N
+    }
 }
-

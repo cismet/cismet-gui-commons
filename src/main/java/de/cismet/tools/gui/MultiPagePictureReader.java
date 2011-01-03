@@ -1,60 +1,58 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui;
 
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageDecoder;
 import com.sun.media.jai.codec.SeekableStream;
+
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+
 import java.io.File;
 import java.io.IOException;
-import java.awt.image.RenderedImage;
+
 import java.lang.ref.SoftReference;
+
 import javax.media.jai.RenderedImageAdapter;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public class MultiPagePictureReader {
 
+    //~ Static fields/initializers ---------------------------------------------
+
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MultiPagePictureReader.class);
-    private static final String CODEC_JPEG = "jpeg";  //NOI18N
-    private static final String CODEC_TIFF = "tiff";  //NOI18N
+    private static final String CODEC_JPEG = "jpeg"; // NOI18N
+    private static final String CODEC_TIFF = "tiff"; // NOI18N
+
+    //~ Instance fields --------------------------------------------------------
+
     private final ImageDecoder decoder;
     private final int pageCount;
     private final SoftReference<BufferedImage>[] cache;
     private boolean caching = true;
 
-    public void setCaching(boolean enabled) {
-        this.caching = enabled;
-    }
+    //~ Constructors -----------------------------------------------------------
 
-    public boolean getCaching() {
-        return this.caching;
-    }
-
-    private final String getCodecString(File imageFile) {
-        final String filename = imageFile.getName().toLowerCase();
-        final String extension = filename.substring(filename.lastIndexOf(".") + 1);  //NOI18N
-        if (extension.matches("(tiff|tif)")) {  //NOI18N
-            return CODEC_TIFF;
-        } else if (extension.matches("(jpg|jpeg)")) {  //NOI18N
-            return CODEC_JPEG;
-        }
-        return null;
-    }
-
-    private final BufferedImage getFormCache(int position) {
-        final SoftReference<BufferedImage> cacheItem = cache[position];
-        if (cacheItem != null) {
-            return cacheItem.get();
-        }
-        return null;
-    }
-
-    private final void addToCache(int position, BufferedImage image) {
-        final SoftReference<BufferedImage> newCacheItem = new SoftReference<BufferedImage>(image);
-        cache[position] = newCacheItem;
-    }
-
-    public MultiPagePictureReader(File imageFile) throws IOException {
-        if (imageFile != null && imageFile.isFile()) {
+    /**
+     * Creates a new MultiPagePictureReader object.
+     *
+     * @param   imageFile  DOCUMENT ME!
+     *
+     * @throws  IOException  DOCUMENT ME!
+     */
+    public MultiPagePictureReader(final File imageFile) throws IOException {
+        if ((imageFile != null) && imageFile.isFile()) {
             final String codec = getCodecString(imageFile);
             if (codec != null) {
                 final SeekableStream ss = new FileSeekableStream(imageFile);
@@ -65,19 +63,100 @@ public class MultiPagePictureReader {
                     cache[i] = new SoftReference<BufferedImage>(null);
                 }
             } else {
-                throw new IOException("Unsupported filetype: " + imageFile.getAbsolutePath() + " is not a tiff or jpeg file!");  //NOI18N
+                throw new IOException("Unsupported filetype: " + imageFile.getAbsolutePath()
+                            + " is not a tiff or jpeg file!");          // NOI18N
             }
         } else {
-            throw new IOException("Could not open file: " + imageFile);  //NOI18N
+            throw new IOException("Could not open file: " + imageFile); // NOI18N
         }
     }
 
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  enabled  DOCUMENT ME!
+     */
+    public void setCaching(final boolean enabled) {
+        this.caching = enabled;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean getCaching() {
+        return this.caching;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   imageFile  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getCodecString(final File imageFile) {
+        final String filename = imageFile.getName().toLowerCase();
+        final String extension = filename.substring(filename.lastIndexOf(".") + 1); // NOI18N
+        if (extension.matches("(tiff|tif)")) {                                      // NOI18N
+            return CODEC_TIFF;
+        } else if (extension.matches("(jpg|jpeg)")) {                               // NOI18N
+            return CODEC_JPEG;
+        }
+        return null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   position  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private BufferedImage getFormCache(final int position) {
+        final SoftReference<BufferedImage> cacheItem = cache[position];
+        if (cacheItem != null) {
+            return cacheItem.get();
+        }
+        return null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  position  DOCUMENT ME!
+     * @param  image     DOCUMENT ME!
+     */
+    private void addToCache(final int position, final BufferedImage image) {
+        final SoftReference<BufferedImage> newCacheItem = new SoftReference<BufferedImage>(image);
+        cache[position] = newCacheItem;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  IOException  DOCUMENT ME!
+     */
     public final int getNumberOfPages() throws IOException {
         return pageCount;
     }
 
-    public final BufferedImage loadPage(int page) throws IOException {
-        if (page > -1 && page < pageCount) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   page  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  IOException  DOCUMENT ME!
+     */
+    public final BufferedImage loadPage(final int page) throws IOException {
+        if ((page > -1) && (page < pageCount)) {
             BufferedImage result = getFormCache(page);
             if (result == null) {
                 final RenderedImage renderImage = decoder.decodeAsRenderedImage(page);
@@ -89,10 +168,13 @@ public class MultiPagePictureReader {
             }
             return result;
         } else {
-            throw new IOException("Could not find page " + page + " in file. Range is [0.." + (pageCount - 1) + "].");  //NOI18N
+            throw new IOException("Could not find page " + page + " in file. Range is [0.." + (pageCount - 1) + "]."); // NOI18N
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     public final void close() {
         try {
             decoder.getInputStream().close();
@@ -101,4 +183,3 @@ public class MultiPagePictureReader {
         }
     }
 }
-

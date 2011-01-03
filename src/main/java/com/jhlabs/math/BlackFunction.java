@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,12 +20,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.math;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public class BlackFunction implements BinaryFunction {
-	public boolean isBlack(int rgb) {
-		return rgb == 0xff000000;
-	}
-}
 
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public boolean isBlack(final int rgb) {
+        return rgb == 0xff000000;
+    }
+}

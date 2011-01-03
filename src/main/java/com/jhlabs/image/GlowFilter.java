@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,90 +20,127 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.image.*;
 
 /**
  * A filter which adds Gaussian blur to an image, producing a glowing effect.
- * @author Jerry Huxtable
+ *
+ * @author   Jerry Huxtable
+ * @version  $Revision$, $Date$
  */
 public class GlowFilter extends GaussianFilter {
 
-	private float amount = 0.5f;
-	
-	public GlowFilter() {
-		radius = 2;
-	}
-	
-	/**
-	 * Set the amount of glow.
-	 * @param amount the amount
-     * @min-value 0
-     * @max-value 1
-     * @see #getAmount
-	 */
-	public void setAmount( float amount ) {
-		this.amount = amount;
-	}
-	
-	/**
-	 * Get the amount of glow.
-	 * @return the amount
-     * @see #setAmount
-	 */
-	public float getAmount() {
-		return amount;
-	}
-	
-    public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
-        int width = src.getWidth();
-        int height = src.getHeight();
+    //~ Instance fields --------------------------------------------------------
 
-        if ( dst == null )
-            dst = createCompatibleDestImage( src, null );
+    private float amount = 0.5f;
 
-        int[] inPixels = new int[width*height];
-        int[] outPixels = new int[width*height];
-        src.getRGB( 0, 0, width, height, inPixels, 0, width );
+    //~ Constructors -----------------------------------------------------------
 
-		if ( radius > 0 ) {
-			convolveAndTranspose(kernel, inPixels, outPixels, width, height, alpha, alpha && premultiplyAlpha, false, CLAMP_EDGES);
-			convolveAndTranspose(kernel, outPixels, inPixels, height, width, alpha, false, alpha && premultiplyAlpha, CLAMP_EDGES);
-		}
+    /**
+     * Creates a new GlowFilter object.
+     */
+    public GlowFilter() {
+        radius = 2;
+    }
 
-        src.getRGB( 0, 0, width, height, outPixels, 0, width );
+    //~ Methods ----------------------------------------------------------------
 
-		float a = 4*amount;
+    /**
+     * Set the amount of glow.
+     *
+     * @param      amount  the amount
+     *
+     * @see        #getAmount
+     * @min-value  0
+     * @max-value  1
+     */
+    public void setAmount(final float amount) {
+        this.amount = amount;
+    }
 
-		int index = 0;
-		for ( int y = 0; y < height; y++ ) {
-			for ( int x = 0; x < width; x++ ) {
-				int rgb1 = outPixels[index];
-				int r1 = (rgb1 >> 16) & 0xff;
-				int g1 = (rgb1 >> 8) & 0xff;
-				int b1 = rgb1 & 0xff;
+    /**
+     * Get the amount of glow.
+     *
+     * @return  the amount
+     *
+     * @see     #setAmount
+     */
+    public float getAmount() {
+        return amount;
+    }
 
-				int rgb2 = inPixels[index];
-				int r2 = (rgb2 >> 16) & 0xff;
-				int g2 = (rgb2 >> 8) & 0xff;
-				int b2 = rgb2 & 0xff;
+    @Override
+    public BufferedImage filter(final BufferedImage src, BufferedImage dst) {
+        final int width = src.getWidth();
+        final int height = src.getHeight();
 
-				r1 = PixelUtils.clamp( (int)(r1 + a * r2) );
-				g1 = PixelUtils.clamp( (int)(g1 + a * g2) );
-				b1 = PixelUtils.clamp( (int)(b1 + a * b2) );
+        if (dst == null) {
+            dst = createCompatibleDestImage(src, null);
+        }
 
-				inPixels[index] = (rgb1 & 0xff000000) | (r1 << 16) | (g1 << 8) | b1;
-				index++;
-			}
-		}
+        final int[] inPixels = new int[width * height];
+        final int[] outPixels = new int[width * height];
+        src.getRGB(0, 0, width, height, inPixels, 0, width);
 
-        dst.setRGB( 0, 0, width, height, inPixels, 0, width );
+        if (radius > 0) {
+            convolveAndTranspose(
+                kernel,
+                inPixels,
+                outPixels,
+                width,
+                height,
+                alpha,
+                alpha
+                        && premultiplyAlpha,
+                false,
+                CLAMP_EDGES);
+            convolveAndTranspose(
+                kernel,
+                outPixels,
+                inPixels,
+                height,
+                width,
+                alpha,
+                false,
+                alpha
+                        && premultiplyAlpha,
+                CLAMP_EDGES);
+        }
+
+        src.getRGB(0, 0, width, height, outPixels, 0, width);
+
+        final float a = 4 * amount;
+
+        int index = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                final int rgb1 = outPixels[index];
+                int r1 = (rgb1 >> 16) & 0xff;
+                int g1 = (rgb1 >> 8) & 0xff;
+                int b1 = rgb1 & 0xff;
+
+                final int rgb2 = inPixels[index];
+                final int r2 = (rgb2 >> 16) & 0xff;
+                final int g2 = (rgb2 >> 8) & 0xff;
+                final int b2 = rgb2 & 0xff;
+
+                r1 = PixelUtils.clamp((int)(r1 + (a * r2)));
+                g1 = PixelUtils.clamp((int)(g1 + (a * g2)));
+                b1 = PixelUtils.clamp((int)(b1 + (a * b2)));
+
+                inPixels[index] = (rgb1 & 0xff000000) | (r1 << 16) | (g1 << 8) | b1;
+                index++;
+            }
+        }
+
+        dst.setRGB(0, 0, width, height, inPixels, 0, width);
         return dst;
     }
 
-	public String toString() {
-		return "Blur/Glow...";  //NOI18N
-	}
+    @Override
+    public String toString() {
+        return "Blur/Glow..."; // NOI18N
+    }
 }

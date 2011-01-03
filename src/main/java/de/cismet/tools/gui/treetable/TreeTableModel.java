@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui.treetable;
 /*
  * TreeTableModel.java
@@ -22,48 +29,70 @@ package de.cismet.tools.gui.treetable;
 import javax.swing.tree.TreeModel;
 
 /**
- * TreeTableModel is the model used by a JTreeTable. It extends TreeModel
- * to add methods for getting inforamtion about the set of columns each 
- * node in the TreeTableModel may have. Each column, like a column in 
- * a TableModel, has a name and a type associated with it. Each node in 
- * the TreeTableModel can return a value for each of the columns and 
- * set that value if isCellEditable() returns true. 
+ * TreeTableModel is the model used by a JTreeTable. It extends TreeModel to add methods for getting inforamtion about
+ * the set of columns each node in the TreeTableModel may have. Each column, like a column in a TableModel, has a name
+ * and a type associated with it. Each node in the TreeTableModel can return a value for each of the columns and set
+ * that value if isCellEditable() returns true.
  *
- * @author Philip Milne 
- * @author Scott Violet
+ * @author   Philip Milne
+ * @author   Scott Violet
+ * @version  $Revision$, $Date$
  */
-public interface TreeTableModel extends TreeModel
-{
+public interface TreeTableModel extends TreeModel {
+
+    //~ Methods ----------------------------------------------------------------
+
     /**
      * Returns the number ofs availible column.
+     *
+     * @return  DOCUMENT ME!
      */
-    public int getColumnCount();
+    int getColumnCount();
 
     /**
      * Returns the name for column number <code>column</code>.
+     *
+     * @param   column  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    public String getColumnName(int column);
+    String getColumnName(int column);
 
     /**
      * Returns the type for column number <code>column</code>.
+     *
+     * @param   column  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    public Class getColumnClass(int column);
+    Class getColumnClass(int column);
 
     /**
-     * Returns the value to be displayed for node <code>node</code>, 
-     * at column number <code>column</code>.
+     * Returns the value to be displayed for node <code>node</code>, at column number <code>column</code>.
+     *
+     * @param   node    DOCUMENT ME!
+     * @param   column  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    public Object getValueAt(Object node, int column);
+    Object getValueAt(Object node, int column);
 
     /**
-     * Indicates whether the the value for node <code>node</code>, 
-     * at column number <code>column</code> is editable.
+     * Indicates whether the the value for node <code>node</code>, at column number <code>column</code> is editable.
+     *
+     * @param   node    DOCUMENT ME!
+     * @param   column  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    public boolean isCellEditable(Object node, int column);
+    boolean isCellEditable(Object node, int column);
 
     /**
-     * Sets the value for node <code>node</code>, 
-     * at column number <code>column</code>.
+     * Sets the value for node <code>node</code>, at column number <code>column</code>.
+     *
+     * @param  aValue  DOCUMENT ME!
+     * @param  node    DOCUMENT ME!
+     * @param  column  DOCUMENT ME!
      */
-    public void setValueAt(Object aValue, Object node, int column);
+    void setValueAt(Object aValue, Object node, int column);
 }

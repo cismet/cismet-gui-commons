@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,32 +20,59 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.math;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public class TurbulenceFunction extends CompoundFunction2D {
 
-	private float octaves;
+    //~ Instance fields --------------------------------------------------------
 
-	public TurbulenceFunction(Function2D basis, float octaves) {
-		super(basis);
-		this.octaves = octaves;
-	}
-	
-	public void setOctaves(float octaves) {
-		this.octaves = octaves;
-	}
+    private float octaves;
 
-	public float getOctaves() {
-		return octaves;
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public float evaluate(float x, float y) {
-		float t = 0.0f;
+    /**
+     * Creates a new TurbulenceFunction object.
+     *
+     * @param  basis    DOCUMENT ME!
+     * @param  octaves  DOCUMENT ME!
+     */
+    public TurbulenceFunction(final Function2D basis, final float octaves) {
+        super(basis);
+        this.octaves = octaves;
+    }
 
-		for (float f = 1.0f; f <= octaves; f *= 2)
-			t += Math.abs(basis.evaluate(f * x, f * y)) / f;
-		return t;
-	}
+    //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  octaves  DOCUMENT ME!
+     */
+    public void setOctaves(final float octaves) {
+        this.octaves = octaves;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float getOctaves() {
+        return octaves;
+    }
+
+    @Override
+    public float evaluate(final float x, final float y) {
+        float t = 0.0f;
+
+        for (float f = 1.0f; f <= octaves; f *= 2) {
+            t += Math.abs(basis.evaluate(f * x, f * y)) / f;
+        }
+        return t;
+    }
 }

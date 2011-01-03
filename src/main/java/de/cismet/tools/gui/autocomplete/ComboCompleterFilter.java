@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui.autocomplete;
 
 import javax.swing.JComboBox;
@@ -8,47 +15,55 @@ import javax.swing.text.DocumentFilter.FilterBypass;
 import javax.swing.text.PlainDocument;
 
 /**
- * Class to add completion mechanism to combo boxes.
- * The class assumes that the look and field uses a JTextField as the combo
- * box editor. A check should be done to ensure this is true before
- * adding this class to a ComboBox.
- * 
- * To add to a combo, call the static method addCompletionMechanism(yourCombo),
- * or do the following:
- * 
- *   if (!(myCombo.getEditor().getEditorComponent() instanceof JTextField))
- *     return;
- *   
- *   JTextField tf = (JTextField)myCombo.getEditor().getEditorComponent();
- *   PlainDocument pd = new PlainDocument();
- *   this.filter = new ComboCompleterFilter(myCombo);
- *   pd.setDocumentFilter(this.filter);
- *   tf.setDocument(pd);
+ * Class to add completion mechanism to combo boxes. The class assumes that the look and field uses a JTextField as the
+ * combo box editor. A check should be done to ensure this is true before adding this class to a ComboBox.
  *
- * @author ncochran
+ * <p>To add to a combo, call the static method addCompletionMechanism(yourCombo), or do the following:</p>
  *
+ * <p>if (!(myCombo.getEditor().getEditorComponent() instanceof JTextField)) return;</p>
+ *
+ * <p>JTextField tf = (JTextField)myCombo.getEditor().getEditorComponent(); PlainDocument pd = new PlainDocument();
+ * this.filter = new ComboCompleterFilter(myCombo); pd.setDocumentFilter(this.filter); tf.setDocument(pd);</p>
+ *
+ * @author   ncochran
+ * @version  $Revision$, $Date$
  */
 public class ComboCompleterFilter extends AbstractCompleterFilter {
 
+    //~ Instance fields --------------------------------------------------------
+
     private final JComboBox combo;
-    private String nullRespresentation = "null";  //NOI18N
+    private String nullRespresentation = "null"; // NOI18N
+
+    //~ Constructors -----------------------------------------------------------
 
     /**
-     * @return the nullRespresentation
+     * Creates a new ComboCompleterFilter object.
+     *
+     * @param  combo  DOCUMENT ME!
+     */
+    public ComboCompleterFilter(final JComboBox combo) {
+        this.combo = combo;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the nullRespresentation
      */
     public String getNullRespresentation() {
         return nullRespresentation;
     }
 
     /**
-     * @param nullRespresentation the nullRespresentation to set
+     * DOCUMENT ME!
+     *
+     * @param  nullRespresentation  the nullRespresentation to set
      */
-    public void setNullRespresentation(String nullRespresentation) {
-        this.nullRespresentation = nullRespresentation != null ? nullRespresentation : "null";  //NOI18N
-    }
-
-    public ComboCompleterFilter(JComboBox combo) {
-        this.combo = combo;
+    public void setNullRespresentation(final String nullRespresentation) {
+        this.nullRespresentation = (nullRespresentation != null) ? nullRespresentation : "null"; // NOI18N
     }
 
     @Override
@@ -57,51 +72,54 @@ public class ComboCompleterFilter extends AbstractCompleterFilter {
     }
 
     @Override
-    public Object getCompleterObjectAt(int i) {
+    public Object getCompleterObjectAt(final int i) {
         return this.combo.getItemAt(i);
     }
 
     @Override
     public JTextField getTextField() {
-        return (JTextField) this.combo.getEditor().getEditorComponent();
+        return (JTextField)this.combo.getEditor().getEditorComponent();
     }
 
     /**
      * Helper method to add auto-completion to a jcombobox or derivation.
      *
-     * The look and feel must use a JTextField as the combo box editor (or null
-     * will be returned).
+     * <p>The look and feel must use a JTextField as the combo box editor (or null will be returned).</p>
      *
-     * The JTextField will have it's document set to a new PlainDocument and the returned
-     * filter will be set to autocomplete the contents.
-     * Use the returned filter to set options
-     * such as case-sensitivity.
+     * <p>The JTextField will have it's document set to a new PlainDocument and the returned filter will be set to
+     * autocomplete the contents. Use the returned filter to set options such as case-sensitivity.</p>
      *
-     * @param combo
+     * @param   combo  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
-    static public ComboCompleterFilter addCompletionMechanism(JComboBox combo) {
+    public static ComboCompleterFilter addCompletionMechanism(final JComboBox combo) {
         combo.setEditable(true);
         if (!(combo.getEditor().getEditorComponent() instanceof JTextField)) {
             return null;
         }
 
-        JTextField tf = (JTextField) combo.getEditor().getEditorComponent();
-        PlainDocument pd = new PlainDocument();
-        ComboCompleterFilter filter = new ComboCompleterFilter(combo);
+        final JTextField tf = (JTextField)combo.getEditor().getEditorComponent();
+        final PlainDocument pd = new PlainDocument();
+        final ComboCompleterFilter filter = new ComboCompleterFilter(combo);
         pd.setDocumentFilter(filter);
         tf.setDocument(pd);
         return filter;
     }
 
     @Override
-    public void replace(FilterBypass filterBypass, int offset, int length, String string, AttributeSet attributeSet) throws BadLocationException {
-        //TODO: DANGER??
-        if (combo.isFocusOwner() || getTextField().isFocusOwner() || getTextField().getText().length() < 1) {
+    public void replace(final FilterBypass filterBypass,
+            final int offset,
+            final int length,
+            final String string,
+            final AttributeSet attributeSet) throws BadLocationException {
+        // TODO: DANGER??
+        if (combo.isFocusOwner() || getTextField().isFocusOwner() || (getTextField().getText().length() < 1)) {
             super.replace(filterBypass, offset, length, string, attributeSet);
             // Try to select the item in the combo list
             if (firstSelectedIndex != -1) {
                 final JTextField tf = getTextField();
-                int preTextLen = this.preText.length();
+                final int preTextLen = this.preText.length();
                 final String text = tf.getText();
                 combo.setSelectedIndex(firstSelectedIndex);
                 filterBypass.replace(0, tf.getDocument().getLength(), text, attributeSet);
@@ -111,15 +129,16 @@ public class ComboCompleterFilter extends AbstractCompleterFilter {
     }
 
     @Override
-    public void remove(FilterBypass filterBypass, int offset, int length) throws BadLocationException {
+    public void remove(final FilterBypass filterBypass, final int offset, final int length)
+            throws BadLocationException {
         super.remove(filterBypass, offset, length);
-        if (strict || firstSelectedIndex > -1) {
+        if (strict || (firstSelectedIndex > -1)) {
             combo.setSelectedIndex(firstSelectedIndex);
         }
     }
 
     @Override
-    public void setStrict(boolean strict) {
+    public void setStrict(final boolean strict) {
         super.setStrict(strict);
         if (!strict) {
             combo.setSelectedIndex(-1);

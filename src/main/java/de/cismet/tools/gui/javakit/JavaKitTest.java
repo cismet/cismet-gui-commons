@@ -1,6 +1,13 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui.javakit;
 /*
- * @(#)JavaKitTest.java	1.2 99/05/27
+ * @(#)JavaKitTest.java 1.2 99/05/27
  *
  * Copyright (c) 1998 Sun Microsystems, Inc. All Rights Reserved.
  *
@@ -20,66 +27,78 @@ package de.cismet.tools.gui.javakit;
  */
 
 import java.awt.*;
-import java.net.*;
+
 import java.io.*;
+
+import java.net.*;
+
 import javax.swing.*;
 import javax.swing.text.*;
 
-
 /**
- * Simple wrapper around JEditorPane to browse java text
- * using the JavaEditorKit plug-in.
+ * Simple wrapper around JEditorPane to browse java text using the JavaEditorKit plug-in.
  *
- * java JavaKitTest filename
+ * <p>java JavaKitTest filename</p>
+ *
+ * @version  $Revision$, $Date$
  */
 public class JavaKitTest {
 
-    public static void main(String[] args) {
-	if (args.length != 1) {
-	    System.err.println("need filename argument");  //NOI18N
-	    System.exit(1);
-	}
-	try {
-	    JEditorPane editor = new JEditorPane();
-	    JavaEditorKit kit = new JavaEditorKit();
-	    editor.setEditorKitForContentType("text/java", kit);  //NOI18N
-	    editor.setContentType("text/java");  //NOI18N
-	    editor.setBackground(Color.white);
-	    editor.setFont(new Font("Courier", 0, 12));  //NOI18N
-	    editor.setEditable(true);
+    //~ Methods ----------------------------------------------------------------
 
-	    // PENDING(prinz) This should have a customizer and
-	    // be serialized.  This is a bogus initialization.
-	    JavaContext styles = kit.getStylePreferences();
-	    Style s;
-	    s = styles.getStyleForScanValue(Token.COMMENT.getScanValue());
-	    StyleConstants.setForeground(s, new Color(102, 153, 153));
-	    s = styles.getStyleForScanValue(Token.STRINGVAL.getScanValue());
-	    StyleConstants.setForeground(s, new Color(102, 153, 102));
-	    Color keyword = new Color(102, 102, 255);
-	    for (int code = 70; code <= 130; code++) {
-		s = styles.getStyleForScanValue(code);
-		if (s != null) {
-		    StyleConstants.setForeground(s, keyword);
-		}
-	    }
-                File file = new File(args[0]);
-                editor.read(new FileReader(file), file);
-                JScrollPane scroller = new JScrollPane();
-                JViewport vp = scroller.getViewport();
-                vp.setBackingStoreEnabled(true);
-                vp.add(editor);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  args  DOCUMENT ME!
+     */
+    public static void main(final String[] args) {
+        if (args.length != 1) {
+            System.err.println("need filename argument");        // NOI18N
+            System.exit(1);
+        }
+        try {
+            final JEditorPane editor = new JEditorPane();
+            final JavaEditorKit kit = new JavaEditorKit();
+            editor.setEditorKitForContentType("text/java", kit); // NOI18N
+            editor.setContentType("text/java");                  // NOI18N
+            editor.setBackground(Color.white);
+            editor.setFont(new Font("Courier", 0, 12));          // NOI18N
+            editor.setEditable(true);
 
-	    JFrame f = new JFrame(org.openide.util.NbBundle.getMessage(JavaKitTest.class, "JavaKitTest.main(String[]).f.title", args[0]));  //NOI18N
-	    f.getContentPane().setLayout(new BorderLayout());
-	    f.getContentPane().add("Center", scroller);  //NOI18N
-	    f.pack();
-	    f.setSize(600, 600);
-	    f.setVisible(true);
-	} catch (Throwable e) {
-	    e.printStackTrace();
-	    System.exit(1);
-	}
+            // PENDING(prinz) This should have a customizer and
+            // be serialized.  This is a bogus initialization.
+            final JavaContext styles = kit.getStylePreferences();
+            Style s;
+            s = styles.getStyleForScanValue(Token.COMMENT.getScanValue());
+            StyleConstants.setForeground(s, new Color(102, 153, 153));
+            s = styles.getStyleForScanValue(Token.STRINGVAL.getScanValue());
+            StyleConstants.setForeground(s, new Color(102, 153, 102));
+            final Color keyword = new Color(102, 102, 255);
+            for (int code = 70; code <= 130; code++) {
+                s = styles.getStyleForScanValue(code);
+                if (s != null) {
+                    StyleConstants.setForeground(s, keyword);
+                }
+            }
+            final File file = new File(args[0]);
+            editor.read(new FileReader(file), file);
+            final JScrollPane scroller = new JScrollPane();
+            final JViewport vp = scroller.getViewport();
+            vp.setBackingStoreEnabled(true);
+            vp.add(editor);
+
+            final JFrame f = new JFrame(org.openide.util.NbBundle.getMessage(
+                        JavaKitTest.class,
+                        "JavaKitTest.main(String[]).f.title",
+                        args[0]));                      // NOI18N
+            f.getContentPane().setLayout(new BorderLayout());
+            f.getContentPane().add("Center", scroller); // NOI18N
+            f.pack();
+            f.setSize(600, 600);
+            f.setVisible(true);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
-
 }

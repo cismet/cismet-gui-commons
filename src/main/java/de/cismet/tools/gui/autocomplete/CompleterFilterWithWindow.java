@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui.autocomplete;
 
 import java.awt.Window;
@@ -27,27 +34,66 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public class CompleterFilterWithWindow extends CompleterFilter {
 
-    public CompleterFilterWithWindow(Object[] completerObjs, JTextField textField) {
+    //~ Static fields/initializers ---------------------------------------------
+
+    public static int MAX_VISIBLE_ROWS = 8;
+
+    //~ Instance fields --------------------------------------------------------
+
+    private FilterWindowListener fwl;
+    private JWindow win;
+    private TextFieldKeyListener tfkl;
+    private ListSelListener lsl;
+    private ListMouseListener lml;
+    private JList list;
+    private JScrollPane sp;
+    private FilterListModel lm;
+    private boolean isAdjusting = false;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new CompleterFilterWithWindow object.
+     *
+     * @param  completerObjs  DOCUMENT ME!
+     * @param  textField      DOCUMENT ME!
+     */
+    public CompleterFilterWithWindow(final Object[] completerObjs, final JTextField textField) {
         super(completerObjs, textField);
         _init();
     }
 
+    //~ Methods ----------------------------------------------------------------
+
     @Override
-    public void insertString(FilterBypass filterBypass, int offset, String string, AttributeSet attributeSet) throws BadLocationException {
+    public void insertString(final FilterBypass filterBypass,
+            final int offset,
+            final String string,
+            final AttributeSet attributeSet) throws BadLocationException {
         setFilterWindowVisible(false);
         super.insertString(filterBypass, offset, string, attributeSet);
     }
 
     @Override
-    public void remove(FilterBypass filterBypass, int offset, int length) throws BadLocationException {
+    public void remove(final FilterBypass filterBypass, final int offset, final int length)
+            throws BadLocationException {
         setFilterWindowVisible(false);
         super.remove(filterBypass, offset, length);
     }
 
     @Override
-    public void replace(FilterBypass filterBypass, int offset, int length, String string, AttributeSet attributeSet) throws BadLocationException {
+    public void replace(final FilterBypass filterBypass,
+            final int offset,
+            final int length,
+            final String string,
+            final AttributeSet attributeSet) throws BadLocationException {
         if (isAdjusting) {
             filterBypass.replace(offset, length, string, attributeSet);
             return;
@@ -74,28 +120,43 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         list.setSelectedValue(textField.getText(), true);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void _init() {
         fwl = new FilterWindowListener();
         lm = new FilterListModel(objectList);
         tfkl = new TextFieldKeyListener();
         textField.addKeyListener(tfkl);
 
-        EscapeAction escape = new EscapeAction();
-        textField.registerKeyboardAction(escape, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        final EscapeAction escape = new EscapeAction();
+        textField.registerKeyboardAction(
+            escape,
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean isFilterWindowVisible() {
         return ((win != null) && (win.isVisible()));
     }
 
     @Override
-    public void setCaseSensitive(boolean caseSensitive) {
+    public void setCaseSensitive(final boolean caseSensitive) {
         super.setCaseSensitive(caseSensitive);
         lm.setCaseSensitive(caseSensitive);
     }
 
-    public void setFilterWindowVisible(boolean visible) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  visible  DOCUMENT ME!
+     */
+    public void setFilterWindowVisible(final boolean visible) {
         if (visible) {
             _initWindow();
             list.setModel(lm);
@@ -109,7 +170,7 @@ public class CompleterFilterWithWindow extends CompleterFilter {
 
             win.setVisible(false);
             win.removeFocusListener(fwl);
-            Window ancestor = SwingUtilities.getWindowAncestor(textField);
+            final Window ancestor = SwingUtilities.getWindowAncestor(textField);
             ancestor.removeMouseListener(fwl);
             textField.removeFocusListener(fwl);
             textField.removeAncestorListener(fwl);
@@ -123,8 +184,11 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void _initWindow() {
-        Window ancestor = SwingUtilities.getWindowAncestor(textField);
+        final Window ancestor = SwingUtilities.getWindowAncestor(textField);
         win = new JWindow(ancestor);
         win.addWindowFocusListener(fwl);
         textField.addAncestorListener(fwl);
@@ -135,7 +199,7 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         list = new JList(lm);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setFocusable(false);
-        list.setPrototypeCellValue("Prototype");  //NOI18N
+        list.setPrototypeCellValue("Prototype"); // NOI18N
         list.addListSelectionListener(lsl);
         list.addMouseListener(lml);
 
@@ -150,6 +214,9 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         win.getContentPane().add(sp);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void _setWindowHeight() {
         int height = list.getFixedCellHeight() * Math.min(MAX_VISIBLE_ROWS, lm.getSize());
         height += list.getInsets().top + list.getInsets().bottom;
@@ -160,7 +227,7 @@ public class CompleterFilterWithWindow extends CompleterFilter {
     }
 
     @Override
-    public void setCompleterMatches(Object[] objectsToMatch) {
+    public void setCompleterMatches(final Object[] objectsToMatch) {
         if (isFilterWindowVisible()) {
             setFilterWindowVisible(false);
         }
@@ -169,48 +236,70 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         lm.setCompleterMatches(objectsToMatch);
     }
 
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class EscapeAction extends AbstractAction {
 
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  e  DOCUMENT ME!
+         */
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(final ActionEvent e) {
             if (isFilterWindowVisible()) {
                 setFilterWindowVisible(false);
             }
         }
     }
 
-    private class FilterWindowListener extends MouseAdapter
-            implements AncestorListener, FocusListener, WindowFocusListener {
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class FilterWindowListener extends MouseAdapter implements AncestorListener,
+        FocusListener,
+        WindowFocusListener {
+
+        //~ Methods ------------------------------------------------------------
 
         @Override
-        public void ancestorMoved(AncestorEvent event) {
+        public void ancestorMoved(final AncestorEvent event) {
             setFilterWindowVisible(false);
         }
 
         @Override
-        public void ancestorAdded(AncestorEvent event) {
+        public void ancestorAdded(final AncestorEvent event) {
             setFilterWindowVisible(false);
         }
 
         @Override
-        public void ancestorRemoved(AncestorEvent event) {
+        public void ancestorRemoved(final AncestorEvent event) {
             setFilterWindowVisible(false);
         }
 
         @Override
-        public void focusLost(FocusEvent e) {
+        public void focusLost(final FocusEvent e) {
             if (e.getOppositeComponent() != win) {
                 setFilterWindowVisible(false);
             }
         }
 
         @Override
-        public void focusGained(FocusEvent e) {
+        public void focusGained(final FocusEvent e) {
         }
 
         @Override
-        public void windowLostFocus(WindowEvent e) {
-            Window w = e.getOppositeWindow();
+        public void windowLostFocus(final WindowEvent e) {
+            final Window w = e.getOppositeWindow();
 
             if (w.getFocusOwner() != textField) {
                 setFilterWindowVisible(false);
@@ -218,24 +307,31 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         }
 
         @Override
-        public void windowGainedFocus(WindowEvent e) {
+        public void windowGainedFocus(final WindowEvent e) {
         }
 
         @Override
-        public void mousePressed(MouseEvent e) {
+        public void mousePressed(final MouseEvent e) {
             setFilterWindowVisible(false);
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     private class TextFieldKeyListener extends KeyAdapter {
 
+        //~ Methods ------------------------------------------------------------
+
         @Override
-        public void keyPressed(KeyEvent e) {
-            if (!((e.getKeyCode() == KeyEvent.VK_DOWN) ||
-                    (e.getKeyCode() == KeyEvent.VK_UP) ||
-                    ((e.getKeyCode() == KeyEvent.VK_PAGE_DOWN) && (isFilterWindowVisible())) ||
-                    ((e.getKeyCode() == KeyEvent.VK_PAGE_UP) && (isFilterWindowVisible())) ||
-                    (e.getKeyCode() == KeyEvent.VK_ENTER))) {
+        public void keyPressed(final KeyEvent e) {
+            if (!((e.getKeyCode() == KeyEvent.VK_DOWN)
+                            || (e.getKeyCode() == KeyEvent.VK_UP)
+                            || ((e.getKeyCode() == KeyEvent.VK_PAGE_DOWN) && (isFilterWindowVisible()))
+                            || ((e.getKeyCode() == KeyEvent.VK_PAGE_UP) && (isFilterWindowVisible()))
+                            || (e.getKeyCode() == KeyEvent.VK_ENTER))) {
                 return;
             }
 
@@ -280,10 +376,17 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     private class ListSelListener implements ListSelectionListener {
 
+        //~ Methods ------------------------------------------------------------
+
         @Override
-        public void valueChanged(ListSelectionEvent e) {
+        public void valueChanged(final ListSelectionEvent e) {
             isAdjusting = true;
             textField.setText(list.getSelectedValue().toString());
             isAdjusting = false;
@@ -291,23 +394,20 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     private class ListMouseListener extends MouseAdapter {
 
+        //~ Methods ------------------------------------------------------------
+
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mouseClicked(final MouseEvent e) {
             if (e.getClickCount() == 2) {
                 setFilterWindowVisible(false);
             }
         }
     }
-    private FilterWindowListener fwl;
-    private JWindow win;
-    private TextFieldKeyListener tfkl;
-    private ListSelListener lsl;
-    private ListMouseListener lml;
-    private JList list;
-    private JScrollPane sp;
-    private FilterListModel lm;
-    private boolean isAdjusting = false;
-    public static int MAX_VISIBLE_ROWS = 8;
 }

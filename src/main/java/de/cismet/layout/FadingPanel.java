@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.layout;
 
 import java.awt.AlphaComposite;
@@ -8,21 +15,29 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
+
 import java.util.concurrent.ExecutionException;
+
 import javax.swing.SwingWorker;
 import javax.swing.event.EventListenerList;
 
 /**
  * Implements a Component that fades from one image to an other in a given time.
- * @author jruiz
+ *
+ * @author   jruiz
+ * @version  $Revision$, $Date$
  */
 public class FadingPanel extends Component {
+
+    //~ Instance fields --------------------------------------------------------
 
     private BufferedImage fadeFromImage;
     private BufferedImage fadeToImage;
     private EventListenerList fadeListenerList;
     private long fadeDuration;
     private long startTime = 0;
+
+    //~ Constructors -----------------------------------------------------------
 
     /**
      * Standard construtor.
@@ -31,54 +46,63 @@ public class FadingPanel extends Component {
         fadeListenerList = new EventListenerList();
     }
 
+    //~ Methods ----------------------------------------------------------------
+
     /**
-     * Register a fadingpanel listener
-     * @param listener
+     * Register a fadingpanel listener.
+     *
+     * @param  listener  DOCUMENT ME!
      */
     public void addFadingPanelListener(final FadingPanelListener listener) {
         fadeListenerList.add(FadingPanelListener.class, listener);
     }
 
     /**
-     * informs the listener that the fade animation is finished
+     * informs the listener that the fade animation is finished.
      */
     private void fireFadeFinished() {
-        for (FadingPanelListener listener : fadeListenerList.getListeners(FadingPanelListener.class)) {
+        for (final FadingPanelListener listener : fadeListenerList.getListeners(FadingPanelListener.class)) {
             listener.fadeFinished();
         }
     }
 
     /**
-     * Returns the fade status of the component
-     * @return true is the component is actualy fading, else false
+     * Returns the fade status of the component.
+     *
+     * @return  true is the component is actualy fading, else false
      */
     public boolean isFading() {
         return startTime > 0;
     }
 
     /**
-     * Fades from one component to an other, by first creating an image from
-     * both components. Then @see startFading(BufferedImage, BufferedImage, long)
-     * @param fadeFromComponent
-     * @param fadeToComponent
-     * @param fadeDuration
+     * Fades from one component to an other, by first creating an image from both components. Then @see
+     * startFading(BufferedImage, BufferedImage, long)
+     *
+     * @param  fadeFromComponent  DOCUMENT ME!
+     * @param  fadeToComponent    DOCUMENT ME!
+     * @param  fadeDuration       DOCUMENT ME!
      */
-    public void startFading(Component fadeFromComponent, Component fadeToComponent, long fadeDuration) {
+    public void startFading(final Component fadeFromComponent,
+            final Component fadeToComponent,
+            final long fadeDuration) {
         startFading(
-                createImageFromComponent(fadeFromComponent),
-                createImageFromComponent(fadeToComponent),
-                fadeDuration);
+            createImageFromComponent(fadeFromComponent),
+            createImageFromComponent(fadeToComponent),
+            fadeDuration);
     }
 
     /**
-     * Fades an image to an other, in a specific duration of time.
-     * If the Component is still fading, then the timer is reseted.
-     * Else a new fade thread will be started.
-     * @param fadeFromImage the image to fade from
-     * @param fadeToImage the image to fade to
-     * @param fadeDuration the duration in ms for the fade animation
+     * Fades an image to an other, in a specific duration of time. If the Component is still fading, then the timer is
+     * reseted. Else a new fade thread will be started.
+     *
+     * @param  fadeFromImage  the image to fade from
+     * @param  fadeToImage    the image to fade to
+     * @param  fadeDuration   the duration in ms for the fade animation
      */
-    public void startFading(final BufferedImage fadeFromImage, final BufferedImage fadeToImage, final long fadeDuration) {
+    public void startFading(final BufferedImage fadeFromImage,
+            final BufferedImage fadeToImage,
+            final long fadeDuration) {
         this.fadeFromImage = fadeFromImage;
         this.fadeToImage = fadeToImage;
         this.fadeDuration = fadeDuration;
@@ -89,50 +113,50 @@ public class FadingPanel extends Component {
             resetStartTime();
         } else {
             // sonst einen neuen fade-thread starten
-            SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 
-                @Override
-                protected Void doInBackground() throws Exception {
-                    // als erstes Zeit zurücksetzen
-                    resetStartTime();
-                    // faden bis fadeDuration erreicht wurde
-                    while (ellapsedTime() < fadeDuration) {
-                        // neu zeichnen (repaint ist thread-safe)
-                        repaint();
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        // als erstes Zeit zurücksetzen
+                        resetStartTime();
+                        // faden bis fadeDuration erreicht wurde
+                        while (ellapsedTime() < fadeDuration) {
+                            // neu zeichnen (repaint ist thread-safe)
+                            repaint();
+                        }
+                        // Startzeit wieder auf 0 setzen
+                        // dies ist wichtig damit das Objekt weiß, dass das Faden
+                        // beendet wurde (isFading)
+                        startTime = 0;
+                        return null;
                     }
-                    // Startzeit wieder auf 0 setzen
-                    // dies ist wichtig damit das Objekt weiß, dass das Faden
-                    // beendet wurde (isFading)
-                    startTime = 0;
-                    return null;
-                }
 
-                @Override
-                protected void done() {
-                    try {
-                        get();
-                    } catch (InterruptedException ex) {
-                        //Exceptions.printStackTrace(ex);
-                    } catch (ExecutionException ex) {
-                        //Exceptions.printStackTrace(ex);
+                    @Override
+                    protected void done() {
+                        try {
+                            get();
+                        } catch (InterruptedException ex) {
+                            // Exceptions.printStackTrace(ex);
+                        } catch (ExecutionException ex) {
+                            // Exceptions.printStackTrace(ex);
+                        }
+                        // Arbeit fertig, listener informieren
+                        fireFadeFinished();
                     }
-                    // Arbeit fertig, listener informieren
-                    fireFadeFinished();
-                }
-            };
+                };
             worker.execute();
         }
     }
 
     @Override
-    public void update(Graphics graphics) {
+    public void update(final Graphics graphics) {
         paint(graphics);
     }
 
     @Override
-    public synchronized void paint(Graphics graphics) {
+    public synchronized void paint(final Graphics graphics) {
         // wenn keine Bilder
-        if (fadeFromImage == null || fadeToImage == null) {
+        if ((fadeFromImage == null) || (fadeToImage == null)) {
             // dann nix zum Faden
             return;
         }
@@ -144,16 +168,16 @@ public class FadingPanel extends Component {
             alpha = 1;
         } else {
             // je mehr Zeit vergeht, desto größer wird alpha
-            alpha = (float) ellapsedTime() / fadeDuration;
+            alpha = (float)ellapsedTime() / fadeDuration;
             // alpha ist minimal 0 wenn noch keine Zeit vergangen ist,
             alpha = (alpha < 0) ? 0 : alpha;
             // und maximal 1 wenn die fadeDauer erreicht wurde
             alpha = (alpha > 1) ? 1 : alpha;
         }
 
-        Graphics2D graphics2d = (Graphics2D) graphics;
+        final Graphics2D graphics2d = (Graphics2D)graphics;
         // alte Composite sichern
-        Composite oldComposite = graphics2d.getComposite();
+        final Composite oldComposite = graphics2d.getComposite();
         // "from" immer mehr durchsichtig malen
         graphics2d.setComposite(AlphaComposite.SrcOver.derive(1 - alpha));
         graphics2d.drawImage(fadeFromImage, null, 0, 0);
@@ -166,7 +190,8 @@ public class FadingPanel extends Component {
 
     /**
      * Returns the ellapsed time between now and the last start time.
-     * @return ellapsed time in ms
+     *
+     * @return  ellapsed time in ms
      */
     public long ellapsedTime() {
         return System.currentTimeMillis() - startTime;
@@ -181,10 +206,12 @@ public class FadingPanel extends Component {
 
     /**
      * Creates an "alpha-compatible" buffered image from a given component.
-     * @param component the component
-     * @return the bufferd image
+     *
+     * @param   component  the component
+     *
+     * @return  the bufferd image
      */
-    public static BufferedImage createImageFromComponent(Component component) {
+    public static BufferedImage createImageFromComponent(final Component component) {
         // keine Komponente?
         if (component == null) {
             // dann kein Bild
@@ -192,11 +219,13 @@ public class FadingPanel extends Component {
         }
 
         // Standart-Grafik-Konfiguration des Bildschirms holen
-        GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+        final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                    .getDefaultScreenDevice()
+                    .getDefaultConfiguration();
 
         // Höhe und Breite der Komponente schonmal merken
-        int width = component.getSize().width;
-        int height = component.getSize().height;
+        final int width = component.getSize().width;
+        final int height = component.getSize().height;
 
         // Image anhand der Grafik-Einstellungen erzeugen lassen
         BufferedImage image;
@@ -212,7 +241,7 @@ public class FadingPanel extends Component {
         // Image wurde richtig erzeugt?
         if (image != null) {
             // dann Objekt zum Malen in das Image holen
-            Graphics graphics = image.getGraphics();
+            final Graphics graphics = image.getGraphics();
             // und die Komponente sich darin malen lassen
             component.paint(graphics);
             // ressource freigeben

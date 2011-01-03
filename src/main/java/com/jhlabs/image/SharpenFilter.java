@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,27 +20,38 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.image.*;
 
 /**
  * A filter which performs a simple 3x3 sharpening operation.
+ *
+ * @version  $Revision$, $Date$
  */
 public class SharpenFilter extends ConvolveFilter {
-	
-	private static float[] sharpenMatrix = {
-		 0.0f, -0.2f,  0.0f,
-		-0.2f,  1.8f, -0.2f,
-		 0.0f, -0.2f,  0.0f
-	};
 
-	public SharpenFilter() {
-		super(sharpenMatrix);
-	}
+    //~ Static fields/initializers ---------------------------------------------
 
-	public String toString() {
-		return "Blur/Sharpen";  //NOI18N
-	}
+    private static float[] sharpenMatrix = {
+            0.0f, -0.2f, 0.0f,
+            -0.2f, 1.8f, -0.2f,
+            0.0f, -0.2f, 0.0f
+        };
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new SharpenFilter object.
+     */
+    public SharpenFilter() {
+        super(sharpenMatrix);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public String toString() {
+        return "Blur/Sharpen"; // NOI18N
+    }
 }

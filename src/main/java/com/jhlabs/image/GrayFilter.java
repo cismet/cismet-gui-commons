@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,7 +20,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
@@ -21,28 +27,36 @@ import java.awt.image.*;
 
 /**
  * A filter which 'grays out' an image by averaging each pixel with white.
+ *
+ * @version  $Revision$, $Date$
  */
 public class GrayFilter extends PointFilter {
 
-	public GrayFilter() {
-		canFilterIndexColorModel = true;
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public int filterRGB(int x, int y, int rgb) {
-		int a = rgb & 0xff000000;
-		int r = (rgb >> 16) & 0xff;
-		int g = (rgb >> 8) & 0xff;
-		int b = rgb & 0xff;
-		r = (r+255)/2;
-		g = (g+255)/2;
-		b = (b+255)/2;
-		return a | (r << 16) | (g << 8) | b;
-	}
+    /**
+     * Creates a new GrayFilter object.
+     */
+    public GrayFilter() {
+        canFilterIndexColorModel = true;
+    }
 
-	public String toString() {
-		return "Colors/Gray Out";  //NOI18N
-	}
+    //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public int filterRGB(final int x, final int y, final int rgb) {
+        final int a = rgb & 0xff000000;
+        int r = (rgb >> 16) & 0xff;
+        int g = (rgb >> 8) & 0xff;
+        int b = rgb & 0xff;
+        r = (r + 255) / 2;
+        g = (g + 255) / 2;
+        b = (b + 255) / 2;
+        return a | (r << 16) | (g << 8) | b;
+    }
+
+    @Override
+    public String toString() {
+        return "Colors/Gray Out"; // NOI18N
+    }
 }
-
-

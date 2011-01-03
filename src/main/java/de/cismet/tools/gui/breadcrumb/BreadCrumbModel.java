@@ -1,28 +1,100 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package de.cismet.tools.gui.breadcrumb;
 
 import java.util.List;
 
 /**
+ * DOCUMENT ME!
  *
- * @author thorsten
+ * @author   thorsten
+ * @version  $Revision$, $Date$
  */
 public interface BreadCrumbModel {
-    public void addBreadCrumbModelListener(BreadCrumbModelListener bcListener);
-    public void removeBreadCrumbModelListener(BreadCrumbModelListener bcListener);
-    public int getSize();
-    public BreadCrumb getCrumbAt(int position);
-    public int getPositionOf(BreadCrumb bc);
-    public void appendCrumb(BreadCrumb bc);
-    public void startWithNewCrumb(BreadCrumb bc);
-    public void removeTill(BreadCrumb bc);
-    public List<BreadCrumb> getAllCrumbs();
-    public BreadCrumb getLastCrumb();
-    public BreadCrumb getFirstCrumb();
-    public void clear();
 
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bcListener  DOCUMENT ME!
+     */
+    void addBreadCrumbModelListener(BreadCrumbModelListener bcListener);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bcListener  DOCUMENT ME!
+     */
+    void removeBreadCrumbModelListener(BreadCrumbModelListener bcListener);
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    int getSize();
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   position  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    BreadCrumb getCrumbAt(int position);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   bc  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    int getPositionOf(BreadCrumb bc);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bc  DOCUMENT ME!
+     */
+    void appendCrumb(BreadCrumb bc);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bc  DOCUMENT ME!
+     */
+    void startWithNewCrumb(BreadCrumb bc);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bc  DOCUMENT ME!
+     */
+    void removeTill(BreadCrumb bc);
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    List<BreadCrumb> getAllCrumbs();
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    BreadCrumb getLastCrumb();
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    BreadCrumb getFirstCrumb();
+    /**
+     * DOCUMENT ME!
+     */
+    void clear();
 }

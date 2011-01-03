@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,31 +20,41 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.image.*;
 
 /**
  * A BufferedImageOp which combines two other BufferedImageOps, one after the other.
+ *
+ * @version  $Revision$, $Date$
  */
 public class CompoundFilter extends AbstractBufferedImageOp {
-	private BufferedImageOp filter1;
-	private BufferedImageOp filter2;
-	
-	/**
+
+    //~ Instance fields --------------------------------------------------------
+
+    private BufferedImageOp filter1;
+    private BufferedImageOp filter2;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
      * Construct a CompoundFilter.
-     * @param filter1 the first filter
-     * @param filter2 the second filter
+     *
+     * @param  filter1  the first filter
+     * @param  filter2  the second filter
      */
-    public CompoundFilter( BufferedImageOp filter1, BufferedImageOp filter2 ) {
-		this.filter1 = filter1;
-		this.filter2 = filter2;
-	}
-	
-	public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
-		BufferedImage image = filter1.filter( src, dst );
-		image = filter2.filter( image, dst );
-		return image;
-	}
+    public CompoundFilter(final BufferedImageOp filter1, final BufferedImageOp filter2) {
+        this.filter1 = filter1;
+        this.filter2 = filter2;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public BufferedImage filter(final BufferedImage src, final BufferedImage dst) {
+        BufferedImage image = filter1.filter(src, dst);
+        image = filter2.filter(image, dst);
+        return image;
+    }
 }

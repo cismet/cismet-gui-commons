@@ -1,32 +1,49 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.lookupoptions;
 
-import de.cismet.lookupoptions.options.DefaultOptionsCategory;
-import de.cismet.tools.configuration.NoWriteError;
-import javax.swing.JPanel;
 import org.jdom.Element;
+
+import javax.swing.JPanel;
+
+import de.cismet.lookupoptions.options.DefaultOptionsCategory;
+
+import de.cismet.tools.configuration.NoWriteError;
 
 /**
  * The base-class for Options Panels.
- * @author jruiz
+ *
+ * @author   jruiz
+ * @version  $Revision$, $Date$
  */
 public abstract class AbstractOptionsPanel extends JPanel implements OptionsPanelController {
+
+    //~ Instance fields --------------------------------------------------------
 
     private Class<? extends AbstractOptionsCategory> categoryClass;
     private String name;
 
+    //~ Constructors -----------------------------------------------------------
+
     /**
-     * constructor
-     * @param name
+     * constructor.
+     *
+     * @param  name  DOCUMENT ME!
      */
     public AbstractOptionsPanel(final String name) {
         this(name, DefaultOptionsCategory.class);
     }
 
     /**
-     * constructor
-     * if the category is null, then it is set to CATEGORY_GENERAL
-     * @param name
-     * @param category
+     * constructor if the category is null, then it is set to CATEGORY_GENERAL.
+     *
+     * @param  name           DOCUMENT ME!
+     * @param  categoryClass  DOCUMENT ME!
      */
     public AbstractOptionsPanel(final String name, final Class<? extends AbstractOptionsCategory> categoryClass) {
         if (name == null) {
@@ -37,8 +54,12 @@ public abstract class AbstractOptionsPanel extends JPanel implements OptionsPane
         this.categoryClass = categoryClass;
     }
 
+    //~ Methods ----------------------------------------------------------------
+
     /**
-     * @return the category of the lookup panel
+     * DOCUMENT ME!
+     *
+     * @return  the category of the lookup panel
      */
     @Override
     public Class<? extends OptionsCategory> getCategoryClass() {
@@ -46,7 +67,9 @@ public abstract class AbstractOptionsPanel extends JPanel implements OptionsPane
     }
 
     /**
-     * @return the name of the lookup panel
+     * DOCUMENT ME!
+     *
+     * @return  the name of the lookup panel
      */
     @Override
     public String getName() {
@@ -54,7 +77,9 @@ public abstract class AbstractOptionsPanel extends JPanel implements OptionsPane
     }
 
     /**
-     * @return Integer.MAX_Value by default
+     * DOCUMENT ME!
+     *
+     * @return  Integer.MAX_Value by default
      */
     @Override
     public int getOrder() {
@@ -62,7 +87,9 @@ public abstract class AbstractOptionsPanel extends JPanel implements OptionsPane
     }
 
     /**
-     * @return no tooltip by default
+     * DOCUMENT ME!
+     *
+     * @return  no tooltip by default
      */
     @Override
     public String getTooltip() {
@@ -70,7 +97,9 @@ public abstract class AbstractOptionsPanel extends JPanel implements OptionsPane
     }
 
     /**
-     * @return no help by default
+     * DOCUMENT ME!
+     *
+     * @return  no help by default
      */
     @Override
     public String getHelp() {
@@ -78,16 +107,25 @@ public abstract class AbstractOptionsPanel extends JPanel implements OptionsPane
     }
 
     /**
-     * @return the panel
+     * DOCUMENT ME!
+     *
+     * @return  the panel
      */
     @Override
     public JPanel getPanel() {
         return this;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   o  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public int compareTo(final OptionsPanelController o) {
-        int orderCompare = getOrder() - o.getOrder();
+        final int orderCompare = getOrder() - o.getOrder();
         if (orderCompare == 0) {
             return getName().compareTo(o.getName());
         } else {
@@ -106,18 +144,23 @@ public abstract class AbstractOptionsPanel extends JPanel implements OptionsPane
     }
 
     @Override
-    public void applyChanges() { }
+    public void applyChanges() {
+    }
 
     @Override
-    public void update() { }
+    public void update() {
+    }
 
     @Override
-    public void configure(Element parent) { }
+    public void configure(final Element parent) {
+    }
 
     @Override
-    public Element getConfiguration() throws NoWriteError { return null; }
+    public Element getConfiguration() throws NoWriteError {
+        return null;
+    }
 
     @Override
-    public void masterConfigure(Element parent) { }
-
+    public void masterConfigure(final Element parent) {
+    }
 }

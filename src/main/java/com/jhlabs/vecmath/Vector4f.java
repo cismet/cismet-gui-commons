@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,60 +20,105 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.vecmath;
 
 /**
  * Vector math package, converted to look similar to javax.vecmath.
+ *
+ * @version  $Revision$, $Date$
  */
 public class Vector4f extends Tuple4f {
 
-	public Vector4f() {
-		this( 0, 0, 0, 0 );
-	}
-	
-	public Vector4f( float[] x ) {
-		this.x = x[0];
-		this.y = x[1];
-		this.z = x[2];
-		this.w = x[2];
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public Vector4f( float x, float y, float z, float w ) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.w = w;
-	}
+    /**
+     * Creates a new Vector4f object.
+     */
+    public Vector4f() {
+        this(0, 0, 0, 0);
+    }
 
-	public Vector4f( Vector4f t ) {
-		x = t.x;
-		y = t.y;
-		z = t.z;
-		w = t.w;
-	}
+    /**
+     * Creates a new Vector4f object.
+     *
+     * @param  t  DOCUMENT ME!
+     */
+    public Vector4f(final Vector4f t) {
+        x = t.x;
+        y = t.y;
+        z = t.z;
+        w = t.w;
+    }
 
-	public Vector4f( Tuple4f t ) {
-		x = t.x;
-		y = t.y;
-		z = t.z;
-		w = t.w;
-	}
+    /**
+     * Creates a new Vector4f object.
+     *
+     * @param  x  DOCUMENT ME!
+     */
+    public Vector4f(final float[] x) {
+        this.x = x[0];
+        this.y = x[1];
+        this.z = x[2];
+        this.w = x[2];
+    }
 
-	public float dot( Vector4f v ) {
-		return v.x * x + v.y * y + v.z * z + v.w * w;
-	}
+    /**
+     * Creates a new Vector4f object.
+     *
+     * @param  t  DOCUMENT ME!
+     */
+    public Vector4f(final Tuple4f t) {
+        x = t.x;
+        y = t.y;
+        z = t.z;
+        w = t.w;
+    }
 
-	public float length() {
-		return (float)Math.sqrt( x*x+y*y+z*z+w*w );
-	}
+    /**
+     * Creates a new Vector4f object.
+     *
+     * @param  x  DOCUMENT ME!
+     * @param  y  DOCUMENT ME!
+     * @param  z  DOCUMENT ME!
+     * @param  w  DOCUMENT ME!
+     */
+    public Vector4f(final float x, final float y, final float z, final float w) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
+    }
 
-	public void normalize() {
-		float d = 1.0f/( x*x+y*y+z*z+w*w );
-		x *= d;
-		y *= d;
-		z *= d;
-		w *= d;
-	}
+    //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   v  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float dot(final Vector4f v) {
+        return (v.x * x) + (v.y * y) + (v.z * z) + (v.w * w);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float length() {
+        return (float)Math.sqrt((x * x) + (y * y) + (z * z) + (w * w));
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void normalize() {
+        final float d = 1.0f / ((x * x) + (y * y) + (z * z) + (w * w));
+        x *= d;
+        y *= d;
+        z *= d;
+        w *= d;
+    }
 }

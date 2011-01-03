@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,27 +20,38 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.image.*;
 
 /**
- * A simple embossing filter. 
+ * A simple embossing filter.
+ *
+ * @version  $Revision$, $Date$
  */
 public class BumpFilter extends ConvolveFilter {
-	
-	private static float[] embossMatrix = {
-		-1.0f, -1.0f,  0.0f,
-		-1.0f,  1.0f,  1.0f,
-		 0.0f,  1.0f,  1.0f
-	};
 
-	public BumpFilter() {
-		super(embossMatrix);
-	}
+    //~ Static fields/initializers ---------------------------------------------
 
-	public String toString() {
-		return "Blur/Emboss Edges";  //NOI18N
-	}
+    private static float[] embossMatrix = {
+            -1.0f, -1.0f, 0.0f,
+            -1.0f, 1.0f, 1.0f,
+            0.0f, 1.0f, 1.0f
+        };
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new BumpFilter object.
+     */
+    public BumpFilter() {
+        super(embossMatrix);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public String toString() {
+        return "Blur/Emboss Edges"; // NOI18N
+    }
 }

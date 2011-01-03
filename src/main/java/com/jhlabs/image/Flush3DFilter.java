@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,7 +20,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
@@ -21,41 +27,56 @@ import java.awt.image.*;
 
 /**
  * This filter tries to apply the Swing "flush 3D" effect to the black lines in an image.
+ *
+ * @version  $Revision$, $Date$
  */
 public class Flush3DFilter extends WholeImageFilter {
 
-	public Flush3DFilter() {
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	protected int[] filterPixels( int width, int height, int[] inPixels, Rectangle transformedSpace ) {
-		int index = 0;
-		int[] outPixels = new int[width * height];
+    /**
+     * Creates a new Flush3DFilter object.
+     */
+    public Flush3DFilter() {
+    }
 
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				int pixel = inPixels[y*width+x];
+    //~ Methods ----------------------------------------------------------------
 
-				if (pixel != 0xff000000 && y > 0 && x > 0) {
-					int count = 0;
-					if (inPixels[y*width+x-1] == 0xff000000)
-						count++;
-					if (inPixels[(y-1)*width+x] == 0xff000000)
-						count++;
-					if (inPixels[(y-1)*width+x-1] == 0xff000000)
-						count++;
-					if (count >= 2)
-						pixel = 0xffffffff;
-				}
-				outPixels[index++] = pixel;
-			}
+    @Override
+    protected int[] filterPixels(final int width,
+            final int height,
+            final int[] inPixels,
+            final Rectangle transformedSpace) {
+        int index = 0;
+        final int[] outPixels = new int[width * height];
 
-		}
-		return outPixels;
-	}
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int pixel = inPixels[(y * width) + x];
 
-	public String toString() {
-		return "Stylize/Flush 3D...";  //NOI18N
-	}
+                if ((pixel != 0xff000000) && (y > 0) && (x > 0)) {
+                    int count = 0;
+                    if (inPixels[(y * width) + x - 1] == 0xff000000) {
+                        count++;
+                    }
+                    if (inPixels[((y - 1) * width) + x] == 0xff000000) {
+                        count++;
+                    }
+                    if (inPixels[((y - 1) * width) + x - 1] == 0xff000000) {
+                        count++;
+                    }
+                    if (count >= 2) {
+                        pixel = 0xffffffff;
+                    }
+                }
+                outPixels[index++] = pixel;
+            }
+        }
+        return outPixels;
+    }
 
+    @Override
+    public String toString() {
+        return "Stylize/Flush 3D..."; // NOI18N
+    }
 }
-

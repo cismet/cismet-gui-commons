@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,30 +20,38 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
 import java.awt.image.*;
 
 /**
- * A filter which produces  the stipple effect for Swing icons specified in the Java Look and Feel Guidelines.
+ * A filter which produces the stipple effect for Swing icons specified in the Java Look and Feel Guidelines.
+ *
+ * @version  $Revision$, $Date$
  */
 public class JavaLnFFilter extends PointFilter {
 
-	public JavaLnFFilter() {
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public int filterRGB(int x, int y, int rgb) {
-		if ((x & 1) == (y & 1))
-			return rgb;
-		return ImageMath.mixColors(0.25f, 0xff999999, rgb);
-	}
+    /**
+     * Creates a new JavaLnFFilter object.
+     */
+    public JavaLnFFilter() {
+    }
 
-	public String toString() {
-		return "Stylize/Java L&F Stipple"; //NOI18N
-	}
+    //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public int filterRGB(final int x, final int y, final int rgb) {
+        if ((x & 1) == (y & 1)) {
+            return rgb;
+        }
+        return ImageMath.mixColors(0.25f, 0xff999999, rgb);
+    }
+
+    @Override
+    public String toString() {
+        return "Stylize/Java L&F Stipple"; // NOI18N
+    }
 }
-
-

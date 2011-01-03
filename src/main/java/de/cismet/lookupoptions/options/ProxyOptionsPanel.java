@@ -38,7 +38,6 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     //~ Static fields/initializers ---------------------------------------------
 
-
     private static final transient Logger LOG = Logger.getLogger(ProxyOptionsPanel.class);
 
     private static final String OPTION_NAME = org.openide.util.NbBundle.getMessage(
@@ -197,7 +196,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     @Override
     public String getTooltip() {
-        return org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.getTooltip().text");  //NOI18N
+        return org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.getTooltip().text"); // NOI18N
     }
 
     /**
@@ -216,7 +215,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             final String username,
             final String password,
             final String domain) {
-            final Proxy newProxy = new Proxy(host, port, username, password, domain, true);
+        final Proxy newProxy = new Proxy(host, port, username, password, domain, true);
         if (isActivated) {
             Proxy.toPreferences(newProxy);
             WebAccessManager.getInstance().setHttpProxy(newProxy);
@@ -290,7 +289,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     @Override
     public void configure(final Element parent) {
-        Proxy proxy = Proxy.fromPreferences();
+        final Proxy proxy = Proxy.fromPreferences();
         if (proxy != null) {
             setProxy(proxy);
             stillConfigured = true;
@@ -389,7 +388,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         if (LOG.isDebugEnabled()) {
             LOG.debug("getConfiguration [type: " + proxyType.toString() // NOI18N
                         + " | host: " + host   // NOI18N
-                        + " | port: " + port  // NOI18N
+                        + " | port: " + port   // NOI18N
                         + " | username: " + username // NOI18N
                         + " | password: " + pwEncrypted // NOI18N
                         + " | domain: " + domain + " ]"); // NOI18N

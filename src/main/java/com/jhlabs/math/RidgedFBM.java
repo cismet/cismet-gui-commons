@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,13 +20,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.math;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public class RidgedFBM implements Function2D {
 
-	public float evaluate(float x, float y) {
-		return 1-Math.abs(Noise.noise2(x, y));
-	}
+    //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public float evaluate(final float x, final float y) {
+        return 1 - Math.abs(Noise.noise2(x, y));
+    }
 }

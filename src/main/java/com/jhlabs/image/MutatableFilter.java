@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,11 +20,26 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.image.*;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public interface MutatableFilter {
-	public void mutate(float mutationLevel, BufferedImageOp dst, boolean keepShape, boolean keepColors);
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  mutationLevel  DOCUMENT ME!
+     * @param  dst            DOCUMENT ME!
+     * @param  keepShape      DOCUMENT ME!
+     * @param  keepColors     DOCUMENT ME!
+     */
+    void mutate(float mutationLevel, BufferedImageOp dst, boolean keepShape, boolean keepColors);
 }

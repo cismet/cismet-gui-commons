@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,26 +20,35 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.image.*;
 
 /**
  * A filter which averages the 3x3 neighbourhood of each pixel, providing a simple blur.
+ *
+ * @version  $Revision$, $Date$
  */
 public class AverageFilter extends ConvolveFilter {
-	
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    /** The convolution kernal for the averaging. */
+    protected static float[] theMatrix = { 0.1f, 0.1f, 0.1f, 0.1f, 0.2f, 0.1f, 0.1f, 0.1f, 0.1f };
+
+    //~ Constructors -----------------------------------------------------------
+
     /**
-     * The convolution kernal for the averaging.
+     * Creates a new AverageFilter object.
      */
-	protected static float[] theMatrix = { 0.1f, 0.1f, 0.1f, 0.1f, 0.2f, 0.1f, 0.1f, 0.1f, 0.1f };
+    public AverageFilter() {
+        super(theMatrix);
+    }
 
-	public AverageFilter() {
-		super( theMatrix );
-	}
+    //~ Methods ----------------------------------------------------------------
 
-	public String toString() {
-		return "Blur/Average Blur";
-	}
+    @Override
+    public String toString() {
+        return "Blur/Average Blur";
+    }
 }

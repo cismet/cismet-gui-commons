@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,30 +20,54 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.image.*;
 
 /**
  * A simple blur filter. You should probably use BoxBlurFilter instead.
+ *
+ * @version  $Revision$, $Date$
  */
 public class BlurFilter extends ConvolveFilter {
- 	
- 	/**
-     * A 3x3 convolution kernel for a simple blur.
-     */
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    /** A 3x3 convolution kernel for a simple blur. */
     protected static float[] blurMatrix = {
-		1/14f, 2/14f, 1/14f,
-		2/14f, 2/14f, 2/14f,
-		1/14f, 2/14f, 1/14f
-	};
+            1
+                    / 14f,
+            2
+                    / 14f,
+            1
+                    / 14f,
+            2
+                    / 14f,
+            2
+                    / 14f,
+            2
+                    / 14f,
+            1
+                    / 14f,
+            2
+                    / 14f,
+            1
+                    / 14f
+        };
 
-	public BlurFilter() {
-		super( blurMatrix );
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public String toString() {
-		return "Blur/Simple Blur";  //NOI18N
-	}
+    /**
+     * Creates a new BlurFilter object.
+     */
+    public BlurFilter() {
+        super(blurMatrix);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public String toString() {
+        return "Blur/Simple Blur"; // NOI18N
+    }
 }

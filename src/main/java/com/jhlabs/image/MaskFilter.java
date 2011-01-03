@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,43 +20,70 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
 import java.awt.image.*;
+
 import java.io.*;
 
 /**
  * Applies a bit mask to each ARGB pixel of an image. You can use this for, say, masking out the red channel.
+ *
+ * @version  $Revision$, $Date$
  */
 public class MaskFilter extends PointFilter {
 
-	private int mask;
+    //~ Instance fields --------------------------------------------------------
 
-	public MaskFilter() {
-		this(0xff00ffff);
-	}
+    private int mask;
 
-	public MaskFilter(int mask) {
-		canFilterIndexColorModel = true;
-		setMask(mask);
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public void setMask(int mask) {
-		this.mask = mask;
-	}
+    /**
+     * Creates a new MaskFilter object.
+     */
+    public MaskFilter() {
+        this(0xff00ffff);
+    }
 
-	public int getMask() {
-		return mask;
-	}
+    /**
+     * Creates a new MaskFilter object.
+     *
+     * @param  mask  DOCUMENT ME!
+     */
+    public MaskFilter(final int mask) {
+        canFilterIndexColorModel = true;
+        setMask(mask);
+    }
 
-	public int filterRGB(int x, int y, int rgb) {
-		return rgb & mask;
-	}
+    //~ Methods ----------------------------------------------------------------
 
-	public String toString() {
-		return "Mask";  //NOI18N
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  mask  DOCUMENT ME!
+     */
+    public void setMask(final int mask) {
+        this.mask = mask;
+    }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getMask() {
+        return mask;
+    }
+
+    @Override
+    public int filterRGB(final int x, final int y, final int rgb) {
+        return rgb & mask;
+    }
+
+    @Override
+    public String toString() {
+        return "Mask"; // NOI18N
+    }
 }

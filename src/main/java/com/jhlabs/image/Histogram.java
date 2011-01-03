@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,7 +20,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
@@ -21,172 +27,286 @@ import java.awt.image.*;
 
 /**
  * An image histogram.
+ *
+ * @version  $Revision$, $Date$
  */
 public class Histogram {
 
-	public static final int RED = 0;
-	public static final int GREEN = 1;
-	public static final int BLUE = 2;
-	public static final int GRAY = 3;
+    //~ Static fields/initializers ---------------------------------------------
 
-	protected int[][] histogram;
-	protected int numSamples;
-	protected int[] minValue;
-	protected int[] maxValue;
-	protected int[] minFrequency;
-	protected int[] maxFrequency;
-	protected float[] mean;
-	protected boolean isGray;
+    public static final int RED = 0;
+    public static final int GREEN = 1;
+    public static final int BLUE = 2;
+    public static final int GRAY = 3;
 
-	public Histogram() {
-		histogram = null;
-		numSamples = 0;
-		isGray = true;
-		minValue = null;
-		maxValue = null;
-		minFrequency = null;
-		maxFrequency = null;
-		mean = null;
-	}
+    //~ Instance fields --------------------------------------------------------
 
-	public Histogram(int[] pixels, int w, int h, int offset, int stride) {
-		histogram = new int[3][256];
-		minValue = new int[4];
-		maxValue = new int[4];
-		minFrequency = new int[3];
-		maxFrequency = new int[3];
-		mean = new float[3];
+    protected int[][] histogram;
+    protected int numSamples;
+    protected int[] minValue;
+    protected int[] maxValue;
+    protected int[] minFrequency;
+    protected int[] maxFrequency;
+    protected float[] mean;
+    protected boolean isGray;
 
-		numSamples = w*h;
-		isGray = true;
+    //~ Constructors -----------------------------------------------------------
 
-		int index = 0;
-		for (int y = 0; y < h; y++) {
-			index = offset+y*stride;
-			for (int x = 0; x < w; x++) {
-				int rgb = pixels[index++];
-				int r = (rgb >> 16) & 0xff;
-				int g = (rgb >> 8) & 0xff;
-				int b = rgb & 0xff;
-				histogram[RED][r]++;
-				histogram[GREEN][g]++;
-				histogram[BLUE][b]++;
-			}
-		}
+    /**
+     * Creates a new Histogram object.
+     */
+    public Histogram() {
+        histogram = null;
+        numSamples = 0;
+        isGray = true;
+        minValue = null;
+        maxValue = null;
+        minFrequency = null;
+        maxFrequency = null;
+        mean = null;
+    }
 
-		for (int i = 0; i < 256; i++) {
-			if (histogram[RED][i] != histogram[GREEN][i] || histogram[GREEN][i] != histogram[BLUE][i]) {
-				isGray = false;
-				break;
-			}
-		}
+    /**
+     * Creates a new Histogram object.
+     *
+     * @param  pixels  DOCUMENT ME!
+     * @param  w       DOCUMENT ME!
+     * @param  h       DOCUMENT ME!
+     * @param  offset  DOCUMENT ME!
+     * @param  stride  DOCUMENT ME!
+     */
+    public Histogram(final int[] pixels, final int w, final int h, final int offset, final int stride) {
+        histogram = new int[3][256];
+        minValue = new int[4];
+        maxValue = new int[4];
+        minFrequency = new int[3];
+        maxFrequency = new int[3];
+        mean = new float[3];
 
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 256; j++) {
-				if (histogram[i][j] > 0) {
-					minValue[i] = j;
-					break;
-				}
-			}
+        numSamples = w * h;
+        isGray = true;
 
-			for (int j = 255; j >= 0; j--) {
-				if (histogram[i][j] > 0) {
-					maxValue[i] = j;
-					break;
-				}
-			}
+        int index = 0;
+        for (int y = 0; y < h; y++) {
+            index = offset + (y * stride);
+            for (int x = 0; x < w; x++) {
+                final int rgb = pixels[index++];
+                final int r = (rgb >> 16) & 0xff;
+                final int g = (rgb >> 8) & 0xff;
+                final int b = rgb & 0xff;
+                histogram[RED][r]++;
+                histogram[GREEN][g]++;
+                histogram[BLUE][b]++;
+            }
+        }
 
-			minFrequency[i] = Integer.MAX_VALUE;
-			maxFrequency[i] = 0;
-			for (int j = 0; j < 256; j++) {
-				minFrequency[i] = Math.min(minFrequency[i], histogram[i][j]);
-				maxFrequency[i] = Math.max(maxFrequency[i], histogram[i][j]);
-				mean[i] += (float)(j*histogram[i][j]);
-			}
-			mean[i] /= (float)numSamples;
-		}
-		minValue[GRAY] = Math.min(Math.min(minValue[RED], minValue[GREEN]), minValue[BLUE]);
-		maxValue[GRAY] = Math.max(Math.max(maxValue[RED], maxValue[GREEN]), maxValue[BLUE]);
-	}
+        for (int i = 0; i < 256; i++) {
+            if ((histogram[RED][i] != histogram[GREEN][i]) || (histogram[GREEN][i] != histogram[BLUE][i])) {
+                isGray = false;
+                break;
+            }
+        }
 
-	public boolean isGray() {
-		return isGray;
-	}
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 256; j++) {
+                if (histogram[i][j] > 0) {
+                    minValue[i] = j;
+                    break;
+                }
+            }
 
-	public int getNumSamples() {
-		return numSamples;
-	}
+            for (int j = 255; j >= 0; j--) {
+                if (histogram[i][j] > 0) {
+                    maxValue[i] = j;
+                    break;
+                }
+            }
 
-	public int getFrequency(int value) {
-		if (numSamples > 0 && isGray && value >= 0 && value <= 255)
-			return histogram[0][value];
-		return -1;
-	}
+            minFrequency[i] = Integer.MAX_VALUE;
+            maxFrequency[i] = 0;
+            for (int j = 0; j < 256; j++) {
+                minFrequency[i] = Math.min(minFrequency[i], histogram[i][j]);
+                maxFrequency[i] = Math.max(maxFrequency[i], histogram[i][j]);
+                mean[i] += (float)(j * histogram[i][j]);
+            }
+            mean[i] /= (float)numSamples;
+        }
+        minValue[GRAY] = Math.min(Math.min(minValue[RED], minValue[GREEN]), minValue[BLUE]);
+        maxValue[GRAY] = Math.max(Math.max(maxValue[RED], maxValue[GREEN]), maxValue[BLUE]);
+    }
 
-	public int getFrequency(int channel, int value) {
-		if (numSamples < 1 || channel < 0 || channel > 2 ||
-		 value < 0 || value > 255)
-			return -1;
-		return histogram[channel][value];
-	}
+    //~ Methods ----------------------------------------------------------------
 
-	public int getMinFrequency() {
-		if (numSamples > 0 && isGray)
-			return minFrequency[0];
-		return -1;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isGray() {
+        return isGray;
+    }
 
-	public int getMinFrequency(int channel) {
-		if (numSamples < 1 || channel < 0 || channel > 2)
-			return -1;
-		return minFrequency[channel];
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getNumSamples() {
+        return numSamples;
+    }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   value  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getFrequency(final int value) {
+        if ((numSamples > 0) && isGray && (value >= 0) && (value <= 255)) {
+            return histogram[0][value];
+        }
+        return -1;
+    }
 
-	public int getMaxFrequency() {
-		if (numSamples > 0 && isGray)
-			return maxFrequency[0];
-		return -1;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   channel  DOCUMENT ME!
+     * @param   value    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getFrequency(final int channel, final int value) {
+        if ((numSamples < 1) || (channel < 0) || (channel > 2)
+                    || (value < 0)
+                    || (value > 255)) {
+            return -1;
+        }
+        return histogram[channel][value];
+    }
 
-	public int getMaxFrequency(int channel) {
-		if (numSamples < 1 || channel < 0 || channel > 2)
-			return -1;
-		return maxFrequency[channel];
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getMinFrequency() {
+        if ((numSamples > 0) && isGray) {
+            return minFrequency[0];
+        }
+        return -1;
+    }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   channel  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getMinFrequency(final int channel) {
+        if ((numSamples < 1) || (channel < 0) || (channel > 2)) {
+            return -1;
+        }
+        return minFrequency[channel];
+    }
 
-	public int getMinValue() {
-		if (numSamples > 0 && isGray)
-			return minValue[0];
-		return -1;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getMaxFrequency() {
+        if ((numSamples > 0) && isGray) {
+            return maxFrequency[0];
+        }
+        return -1;
+    }
 
-	public int getMinValue(int channel) {
-		return minValue[channel];
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   channel  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getMaxFrequency(final int channel) {
+        if ((numSamples < 1) || (channel < 0) || (channel > 2)) {
+            return -1;
+        }
+        return maxFrequency[channel];
+    }
 
-	public int getMaxValue() {
-		if (numSamples > 0 && isGray)
-			return maxValue[0];
-		return -1;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getMinValue() {
+        if ((numSamples > 0) && isGray) {
+            return minValue[0];
+        }
+        return -1;
+    }
 
-	public int getMaxValue(int channel) {
-		return maxValue[channel];
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   channel  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getMinValue(final int channel) {
+        return minValue[channel];
+    }
 
-	public float getMeanValue() {
-		if (numSamples > 0 && isGray)
-			return mean[0];
-		return -1.0F;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getMaxValue() {
+        if ((numSamples > 0) && isGray) {
+            return maxValue[0];
+        }
+        return -1;
+    }
 
-	public float getMeanValue(int channel) {
-		if (numSamples > 0 && RED <= channel && channel <= BLUE)
-			return mean[channel];
-		return -1.0F;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   channel  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getMaxValue(final int channel) {
+        return maxValue[channel];
+    }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float getMeanValue() {
+        if ((numSamples > 0) && isGray) {
+            return mean[0];
+        }
+        return -1.0F;
+    }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   channel  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float getMeanValue(final int channel) {
+        if ((numSamples > 0) && (RED <= channel) && (channel <= BLUE)) {
+            return mean[channel];
+        }
+        return -1.0F;
+    }
 }

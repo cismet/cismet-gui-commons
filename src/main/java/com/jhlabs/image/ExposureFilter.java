@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,7 +20,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
@@ -21,39 +27,49 @@ import java.awt.image.*;
 
 /**
  * A filter which changes the exposure of an image.
+ *
+ * @version  $Revision$, $Date$
  */
 public class ExposureFilter extends TransferFilter {
 
-	private float exposure = 1.0f;
+    //~ Instance fields --------------------------------------------------------
 
-	protected float transferFunction( float f ) {
-		return 1 - (float)Math.exp(-f * exposure);
-	}
+    private float exposure = 1.0f;
+
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    protected float transferFunction(final float f) {
+        return 1 - (float)Math.exp(-f * exposure);
+    }
 
     /**
      * Set the exposure level.
-     * @param exposure the exposure level
-     * @min-value 0
-     * @max-value 5+
-     * @see #getExposure
+     *
+     * @param      exposure  the exposure level
+     *
+     * @see        #getExposure
+     * @min-value  0
+     * @max-value  5+
      */
-	public void setExposure(float exposure) {
-		this.exposure = exposure;
-		initialized = false;
-	}
-	
+    public void setExposure(final float exposure) {
+        this.exposure = exposure;
+        initialized = false;
+    }
+
     /**
      * Get the exposure level.
-     * @return the exposure level
-     * @see #setExposure
+     *
+     * @return  the exposure level
+     *
+     * @see     #setExposure
      */
-	public float getExposure() {
-		return exposure;
-	}
+    public float getExposure() {
+        return exposure;
+    }
 
-	public String toString() {
-		return "Colors/Exposure...";  //NOI18N
-	}
-
+    @Override
+    public String toString() {
+        return "Colors/Exposure..."; // NOI18N
+    }
 }
-

@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,7 +20,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
@@ -21,88 +27,111 @@ import java.awt.image.*;
 
 /**
  * A filter which tiles an image into a lerger one.
+ *
+ * @version  $Revision$, $Date$
  */
 public class TileImageFilter extends AbstractBufferedImageOp {
 
-	private int width;
-	private int height;
-	private int tileWidth;
-	private int tileHeight;
+    //~ Instance fields --------------------------------------------------------
 
-	/**
+    private int width;
+    private int height;
+    private int tileWidth;
+    private int tileHeight;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
      * Construct a TileImageFilter.
      */
     public TileImageFilter() {
-		this(32, 32);
-	}
+        this(32, 32);
+    }
 
-	/**
+    /**
      * Construct a TileImageFilter.
-     * @param width the output image width
-     * @param height the output image height
+     *
+     * @param  width   the output image width
+     * @param  height  the output image height
      */
-	public TileImageFilter(int width, int height) {
-		this.width = width;
-		this.height = height;
-	}
+    public TileImageFilter(final int width, final int height) {
+        this.width = width;
+        this.height = height;
+    }
 
-	/**
+    //~ Methods ----------------------------------------------------------------
+
+    /**
      * Set the output image width.
-     * @param width the width
-     * @see #getWidth
+     *
+     * @param  width  the width
+     *
+     * @see    #getWidth
      */
-	public void setWidth(int width) {
-		this.width = width;
-	}
+    public void setWidth(final int width) {
+        this.width = width;
+    }
 
-	/**
+    /**
      * Get the output image width.
-     * @return the width
-     * @see #setWidth
+     *
+     * @return  the width
+     *
+     * @see     #setWidth
      */
-	public int getWidth() {
-		return width;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	/**
+    /**
      * Set the output image height.
-     * @param height the height
-     * @see #getHeight
+     *
+     * @param  height  the height
+     *
+     * @see    #getHeight
      */
-	public void setHeight(int height) {
-		this.height = height;
-	}
+    public void setHeight(final int height) {
+        this.height = height;
+    }
 
-	/**
+    /**
      * Get the output image height.
-     * @return the height
-     * @see #setHeight
+     *
+     * @return  the height
+     *
+     * @see     #setHeight
      */
-	public int getHeight() {
-		return height;
-	}
+    public int getHeight() {
+        return height;
+    }
 
-    public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
-        int tileWidth = src.getWidth();
-        int tileHeight = src.getHeight();
+    @Override
+    public BufferedImage filter(final BufferedImage src, BufferedImage dst) {
+        final int tileWidth = src.getWidth();
+        final int tileHeight = src.getHeight();
 
-        if ( dst == null ) {
-            ColorModel dstCM = src.getColorModel();
-			dst = new BufferedImage(dstCM, dstCM.createCompatibleWritableRaster(width, height), dstCM.isAlphaPremultiplied(), null);
-		}
+        if (dst == null) {
+            final ColorModel dstCM = src.getColorModel();
+            dst = new BufferedImage(
+                    dstCM,
+                    dstCM.createCompatibleWritableRaster(width, height),
+                    dstCM.isAlphaPremultiplied(),
+                    null);
+        }
 
-		Graphics2D g = dst.createGraphics();
-		for ( int y = 0; y < height; y += tileHeight) {
-			for ( int x = 0; x < width; x += tileWidth ) {
-				g.drawImage( src, null, x, y );
-			}
-		}
-		g.dispose();
+        final Graphics2D g = dst.createGraphics();
+        for (int y = 0; y < height; y += tileHeight) {
+            for (int x = 0; x < width; x += tileWidth) {
+                g.drawImage(src, null, x, y);
+            }
+        }
+        g.dispose();
 
         return dst;
     }
 
-	public String toString() {
-		return "Tile";  //NOI18N
-	}
+    @Override
+    public String toString() {
+        return "Tile"; // NOI18N
+    }
 }

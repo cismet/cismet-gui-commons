@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,25 +20,43 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.math;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public class VLNoise implements Function2D {
 
-	private float distortion = 10.0f;
+    //~ Instance fields --------------------------------------------------------
 
-	public void setDistortion(float distortion) {
-		this.distortion = distortion;
-	}
+    private float distortion = 10.0f;
 
-	public float getDistortion() {
-		return distortion;
-	}
+    //~ Methods ----------------------------------------------------------------
 
-	public float evaluate(float x, float y) {
-		float ox = Noise.noise2(x+0.5f, y) * distortion;
-		float oy = Noise.noise2(x, y+0.5f) * distortion;
-		return Noise.noise2(x+ox, y+oy);
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  distortion  DOCUMENT ME!
+     */
+    public void setDistortion(final float distortion) {
+        this.distortion = distortion;
+    }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float getDistortion() {
+        return distortion;
+    }
+
+    @Override
+    public float evaluate(final float x, final float y) {
+        final float ox = Noise.noise2(x + 0.5f, y) * distortion;
+        final float oy = Noise.noise2(x, y + 0.5f) * distortion;
+        return Noise.noise2(x + ox, y + oy);
+    }
 }

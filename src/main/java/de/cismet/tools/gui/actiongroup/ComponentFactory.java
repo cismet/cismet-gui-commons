@@ -1,102 +1,139 @@
-/*
- * ComponentFactory.java
- * Copyright (C) 2005 by:
- *
- *----------------------------
- * cismet GmbH
- * Goebenstrasse 40
- * 66117 Saarbruecken
- * http://www.cismet.de
- *----------------------------
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- *----------------------------
- * Author:
- * thorsten.hell@cismet.de
- *----------------------------
- *
- * Created on 22. Februar 2006, 14:19
- *
- */
-
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui.actiongroup;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButton;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToggleButton;
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public final class ComponentFactory {
-    
-    private ComponentFactory() { }
-    
-    public static AbstractButton getRadioButton(Action action) {
-        JRadioButton button = new JRadioButton(action);
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new ComponentFactory object.
+     */
+    private ComponentFactory() {
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   action  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static AbstractButton getRadioButton(final Action action) {
+        final JRadioButton button = new JRadioButton(action);
         connectActionAndButton(action, button);
         return button;
     }
-    
-    public static AbstractButton getToggleButton(Action action) {
-        JToggleButton button = new JToggleButton(action);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   action  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static AbstractButton getToggleButton(final Action action) {
+        final JToggleButton button = new JToggleButton(action);
         connectActionAndButton(action, button);
         return button;
     }
-    
-    public static JMenuItem getRadioMenuItem(Action action) {
-        JRadioButtonMenuItem menu = new JRadioButtonMenuItem(action);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   action  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static JMenuItem getRadioMenuItem(final Action action) {
+        final JRadioButtonMenuItem menu = new JRadioButtonMenuItem(action);
         connectActionAndButton(action, menu);
         return menu;
     }
-    
-    private static void connectActionAndButton(Action action, AbstractButton button) {
-        SelectionStateAdapter adapter = new SelectionStateAdapter(action, button);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  action  DOCUMENT ME!
+     * @param  button  DOCUMENT ME!
+     */
+    private static void connectActionAndButton(final Action action, final AbstractButton button) {
+        final SelectionStateAdapter adapter = new SelectionStateAdapter(action, button);
         adapter.configure();
     }
-    
+
+    //~ Inner Classes ----------------------------------------------------------
+
     /**
-     * Class that connects the selection state of the action
-     * to the selection state of the button.
+     * Class that connects the selection state of the action to the selection state of the button.
      *
-     * @author R.J. Lorimer
+     * @author   R.J. Lorimer
+     * @version  $Revision$, $Date$
      */
     private static class SelectionStateAdapter implements PropertyChangeListener, ItemListener {
+
+        //~ Instance fields ----------------------------------------------------
+
         private Action action;
         private AbstractButton button;
-        public SelectionStateAdapter(Action theAction, AbstractButton theButton) {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new SelectionStateAdapter object.
+         *
+         * @param  theAction  DOCUMENT ME!
+         * @param  theButton  DOCUMENT ME!
+         */
+        public SelectionStateAdapter(final Action theAction, final AbstractButton theButton) {
             action = theAction;
             button = theButton;
         }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         */
         protected void configure() {
             action.addPropertyChangeListener(this);
             button.addItemListener(this);
         }
-        public void itemStateChanged(ItemEvent e) {
-            boolean value = e.getStateChange() == ItemEvent.SELECTED;
-            Boolean valueObj = Boolean.valueOf(value);
+        @Override
+        public void itemStateChanged(final ItemEvent e) {
+            final boolean value = e.getStateChange() == ItemEvent.SELECTED;
+            final Boolean valueObj = Boolean.valueOf(value);
             action.putValue(ActionConstants.SELECTED_KEY, valueObj);
         }
-        
-        public void propertyChange(PropertyChangeEvent evt) {
-            if(evt.getPropertyName().equals(ActionConstants.SELECTED_KEY)) {
-                Boolean newSelectedState = (Boolean)evt.getNewValue();
+
+        @Override
+        public void propertyChange(final PropertyChangeEvent evt) {
+            if (evt.getPropertyName().equals(ActionConstants.SELECTED_KEY)) {
+                final Boolean newSelectedState = (Boolean)evt.getNewValue();
                 button.setSelected(newSelectedState.booleanValue());
             }
         }

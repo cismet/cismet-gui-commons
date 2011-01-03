@@ -1,64 +1,87 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.lookupoptions;
 
-import de.cismet.tools.configuration.Configurable;
 import javax.swing.JPanel;
+
+import de.cismet.tools.configuration.Configurable;
 
 /**
  * This class represents one panel in Options Dialog.
- * @author jruiz
+ *
+ * @author   jruiz
+ * @version  $Revision$, $Date$
  */
 public interface OptionsPanelController extends Comparable<OptionsPanelController>, Configurable {
 
-    /**
-     * @return the category of this options panel
-     */
-    public Class<? extends OptionsCategory> getCategoryClass();
+    //~ Methods ----------------------------------------------------------------
 
     /**
-     * @return the name of this options panel
+     * DOCUMENT ME!
+     *
+     * @return  the category of this options panel
      */
-    public String getName();
+    Class<? extends OptionsCategory> getCategoryClass();
 
     /**
-     * @return the order-value of this options panel
+     * DOCUMENT ME!
+     *
+     * @return  the name of this options panel
      */
-    public int getOrder();
+    String getName();
 
     /**
-     * @return the tooltip for this options panel
+     * DOCUMENT ME!
+     *
+     * @return  the order-value of this options panel
      */
-    public String getTooltip();
+    int getOrder();
 
     /**
-     * @return the help page (string containing html) for this options panel
+     * DOCUMENT ME!
+     *
+     * @return  the tooltip for this options panel
      */
-    public String getHelp();
+    String getTooltip();
 
     /**
-     * @return the panel representing this Options
+     * DOCUMENT ME!
+     *
+     * @return  the help page (string containing html) for this options panel
      */
-    public JPanel getPanel();
+    String getHelp();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the panel representing this Options
+     */
+    JPanel getPanel();
 
     /**
      * This method is called when Options Dialog "OK" button is pressed.
      */
-    public void applyChanges();
+    void applyChanges();
 
     /**
      * Component should load its data here.
      */
-    public void update();
+    void update();
 
     /**
      * This method is called when Options Dialog "Cancel" button is pressed.
      */
-    public void cancel();
+    void cancel();
 
     /**
      * Should return true if some option value has been changed.
-     * @return true if some option value has been changed
+     *
+     * @return  true if some option value has been changed
      */
-    public boolean isChanged();
-
-
+    boolean isChanged();
 }

@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,7 +20,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
@@ -21,77 +27,159 @@ import java.awt.image.*;
 
 /**
  * A filter which allows the red, green and blue channels of an image to be mixed into each other.
+ *
+ * @version  $Revision$, $Date$
  */
 public class ChannelMixFilter extends PointFilter {
-	
-	private int blueGreen, redBlue, greenRed;
-	private int intoR, intoG, intoB;
-	
-	public ChannelMixFilter() {
-		canFilterIndexColorModel = true;
-	}
 
-	public void setBlueGreen(int blueGreen) {
-		this.blueGreen = blueGreen;
-	}
+    //~ Instance fields --------------------------------------------------------
 
-	public int getBlueGreen() {
-		return blueGreen;
-	}
+    private int blueGreen;
+    private int redBlue;
+    private int greenRed;
+    private int intoR;
+    private int intoG;
+    private int intoB;
 
-	public void setRedBlue(int redBlue) {
-		this.redBlue = redBlue;
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public int getRedBlue() {
-		return redBlue;
-	}
+    /**
+     * Creates a new ChannelMixFilter object.
+     */
+    public ChannelMixFilter() {
+        canFilterIndexColorModel = true;
+    }
 
-	public void setGreenRed(int greenRed) {
-		this.greenRed = greenRed;
-	}
+    //~ Methods ----------------------------------------------------------------
 
-	public int getGreenRed() {
-		return greenRed;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  blueGreen  DOCUMENT ME!
+     */
+    public void setBlueGreen(final int blueGreen) {
+        this.blueGreen = blueGreen;
+    }
 
-	public void setIntoR(int intoR) {
-		this.intoR = intoR;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getBlueGreen() {
+        return blueGreen;
+    }
 
-	public int getIntoR() {
-		return intoR;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  redBlue  DOCUMENT ME!
+     */
+    public void setRedBlue(final int redBlue) {
+        this.redBlue = redBlue;
+    }
 
-	public void setIntoG(int intoG) {
-		this.intoG = intoG;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getRedBlue() {
+        return redBlue;
+    }
 
-	public int getIntoG() {
-		return intoG;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  greenRed  DOCUMENT ME!
+     */
+    public void setGreenRed(final int greenRed) {
+        this.greenRed = greenRed;
+    }
 
-	public void setIntoB(int intoB) {
-		this.intoB = intoB;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getGreenRed() {
+        return greenRed;
+    }
 
-	public int getIntoB() {
-		return intoB;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  intoR  DOCUMENT ME!
+     */
+    public void setIntoR(final int intoR) {
+        this.intoR = intoR;
+    }
 
-	public int filterRGB(int x, int y, int rgb) {
-		int a = rgb & 0xff000000;
-		int r = (rgb >> 16) & 0xff;
-		int g = (rgb >> 8) & 0xff;
-		int b = rgb & 0xff;
-		int nr = PixelUtils.clamp((intoR * (blueGreen*g+(255-blueGreen)*b)/255 + (255-intoR)*r)/255);
-		int ng = PixelUtils.clamp((intoG * (redBlue*b+(255-redBlue)*r)/255 + (255-intoG)*g)/255);
-		int nb = PixelUtils.clamp((intoB * (greenRed*r+(255-greenRed)*g)/255 + (255-intoB)*b)/255);
-		return a | (nr << 16) | (ng << 8) | nb;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getIntoR() {
+        return intoR;
+    }
 
-	public String toString() {
-		return "Colors/Mix Channels...";
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  intoG  DOCUMENT ME!
+     */
+    public void setIntoG(final int intoG) {
+        this.intoG = intoG;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getIntoG() {
+        return intoG;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  intoB  DOCUMENT ME!
+     */
+    public void setIntoB(final int intoB) {
+        this.intoB = intoB;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getIntoB() {
+        return intoB;
+    }
+
+    @Override
+    public int filterRGB(final int x, final int y, final int rgb) {
+        final int a = rgb & 0xff000000;
+        final int r = (rgb >> 16) & 0xff;
+        final int g = (rgb >> 8) & 0xff;
+        final int b = rgb & 0xff;
+        final int nr = PixelUtils.clamp(((intoR * ((blueGreen * g) + ((255 - blueGreen) * b)) / 255)
+                            + ((255 - intoR) * r))
+                        / 255);
+        final int ng = PixelUtils.clamp(((intoG * ((redBlue * b) + ((255 - redBlue) * r)) / 255)
+                            + ((255 - intoG) * g))
+                        / 255);
+        final int nb = PixelUtils.clamp(((intoB * ((greenRed * r) + ((255 - greenRed) * g)) / 255)
+                            + ((255 - intoB) * b))
+                        / 255);
+        return a | (nr << 16) | (ng << 8) | nb;
+    }
+
+    @Override
+    public String toString() {
+        return "Colors/Mix Channels...";
+    }
 }
-

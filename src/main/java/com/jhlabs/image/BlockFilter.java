@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,7 +20,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
@@ -21,42 +27,57 @@ import java.awt.image.*;
 
 /**
  * A Filter to pixellate images.
+ *
+ * @version  $Revision$, $Date$
  */
 public class BlockFilter extends TransformFilter {
-	
-	private int blockSize = 2;
 
-	/**
-	 * Set the pixel block size.
-	 * @param blockSize the number of pixels along each block edge
-     * @min-value 1
-     * @max-value 100+
-     * @see #getBlockSize
-	 */
-	public void setBlockSize(int blockSize) {
-		this.blockSize = blockSize;
-	}
+    //~ Instance fields --------------------------------------------------------
 
-	/**
-	 * Get the pixel block size.
-	 * @return the number of pixels along each block edge
-     * @see #setBlockSize
-	 */
-	public int getBlockSize() {
-		return blockSize;
-	}
+    private int blockSize = 2;
 
+    //~ Constructors -----------------------------------------------------------
 
-	public BlockFilter() {
-	}
+    /**
+     * Creates a new BlockFilter object.
+     */
+    public BlockFilter() {
+    }
 
-	protected void transformInverse(int x, int y, float[] out) {
-		out[0] = (x / blockSize) * blockSize;
-		out[1] = (y / blockSize) * blockSize;
-	}
+    //~ Methods ----------------------------------------------------------------
 
-	public String toString() {
-		return "Stylize/Mosaic...";
-	}
+    /**
+     * Set the pixel block size.
+     *
+     * @param      blockSize  the number of pixels along each block edge
+     *
+     * @see        #getBlockSize
+     * @min-value  1
+     * @max-value  100+
+     */
+    public void setBlockSize(final int blockSize) {
+        this.blockSize = blockSize;
+    }
+
+    /**
+     * Get the pixel block size.
+     *
+     * @return  the number of pixels along each block edge
+     *
+     * @see     #setBlockSize
+     */
+    public int getBlockSize() {
+        return blockSize;
+    }
+
+    @Override
+    protected void transformInverse(final int x, final int y, final float[] out) {
+        out[0] = (x / blockSize) * blockSize;
+        out[1] = (y / blockSize) * blockSize;
+    }
+
+    @Override
+    public String toString() {
+        return "Stylize/Mosaic...";
+    }
 }
-

@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,7 +20,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
@@ -21,48 +27,62 @@ import java.awt.image.*;
 
 /**
  * Scales an image using the area-averaging algorithm, which can't be done with AffineTransformOp.
+ *
+ * @version  $Revision$, $Date$
  */
 public class ScaleFilter extends AbstractBufferedImageOp {
 
-	private int width;
-	private int height;
+    //~ Instance fields --------------------------------------------------------
+
+    private int width;
+    private int height;
+
+    //~ Constructors -----------------------------------------------------------
 
     /**
      * Construct a ScaleFilter.
      */
-	public ScaleFilter() {
-		this(32, 32);
-	}
+    public ScaleFilter() {
+        this(32, 32);
+    }
 
     /**
      * Construct a ScaleFilter.
-     * @param width the width to scale to
-     * @param height the height to scale to
+     *
+     * @param  width   the width to scale to
+     * @param  height  the height to scale to
      */
-	public ScaleFilter( int width, int height ) {
-		this.width = width;
-		this.height = height;
-	}
+    public ScaleFilter(final int width, final int height) {
+        this.width = width;
+        this.height = height;
+    }
 
-    public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
-        int w = src.getWidth();
-        int h = src.getHeight();
+    //~ Methods ----------------------------------------------------------------
 
-		if ( dst == null ) {
-			ColorModel dstCM = src.getColorModel();
-			dst = new BufferedImage(dstCM, dstCM.createCompatibleWritableRaster(w, h), dstCM.isAlphaPremultiplied(), null);
-		}
+    @Override
+    public BufferedImage filter(final BufferedImage src, BufferedImage dst) {
+        final int w = src.getWidth();
+        final int h = src.getHeight();
 
-		Image scaleImage = src.getScaledInstance( w, h, Image.SCALE_AREA_AVERAGING );
-		Graphics2D g = dst.createGraphics();
-		g.drawImage( src, 0, 0, width, height, null );
-		g.dispose();
+        if (dst == null) {
+            final ColorModel dstCM = src.getColorModel();
+            dst = new BufferedImage(
+                    dstCM,
+                    dstCM.createCompatibleWritableRaster(w, h),
+                    dstCM.isAlphaPremultiplied(),
+                    null);
+        }
+
+        final Image scaleImage = src.getScaledInstance(w, h, Image.SCALE_AREA_AVERAGING);
+        final Graphics2D g = dst.createGraphics();
+        g.drawImage(src, 0, 0, width, height, null);
+        g.dispose();
 
         return dst;
     }
 
-	public String toString() {
-		return "Distort/Scale";  //NOI18N
-	}
-
+    @Override
+    public String toString() {
+        return "Distort/Scale"; // NOI18N
+    }
 }

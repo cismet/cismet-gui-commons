@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,64 +20,115 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.vecmath;
 
 /**
  * Vector math package, converted to look similar to javax.vecmath.
+ *
+ * @version  $Revision$, $Date$
  */
 public class Point4f extends Tuple4f {
 
-	public Point4f() {
-		this( 0, 0, 0, 0 );
-	}
-	
-	public Point4f( float[] x ) {
-		this.x = x[0];
-		this.y = x[1];
-		this.z = x[2];
-		this.w = x[3];
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public Point4f( float x, float y, float z, float w ) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.w = w;
-	}
+    /**
+     * Creates a new Point4f object.
+     */
+    public Point4f() {
+        this(0, 0, 0, 0);
+    }
 
-	public Point4f( Point4f t ) {
-		this.x = t.x;
-		this.y = t.y;
-		this.z = t.z;
-		this.w = t.w;
-	}
+    /**
+     * Creates a new Point4f object.
+     *
+     * @param  t  DOCUMENT ME!
+     */
+    public Point4f(final Point4f t) {
+        this.x = t.x;
+        this.y = t.y;
+        this.z = t.z;
+        this.w = t.w;
+    }
 
-	public Point4f( Tuple4f t ) {
-		this.x = t.x;
-		this.y = t.y;
-		this.z = t.z;
-		this.w = t.w;
-	}
+    /**
+     * Creates a new Point4f object.
+     *
+     * @param  x  DOCUMENT ME!
+     */
+    public Point4f(final float[] x) {
+        this.x = x[0];
+        this.y = x[1];
+        this.z = x[2];
+        this.w = x[3];
+    }
 
-	public float distanceL1( Point4f p ) {
-		return Math.abs(x-p.x) + Math.abs(y-p.y) + Math.abs(z-p.z) + Math.abs(w-p.w);
-	}
+    /**
+     * Creates a new Point4f object.
+     *
+     * @param  t  DOCUMENT ME!
+     */
+    public Point4f(final Tuple4f t) {
+        this.x = t.x;
+        this.y = t.y;
+        this.z = t.z;
+        this.w = t.w;
+    }
 
-	public float distanceSquared( Point4f p ) {
-		float dx = x-p.x;
-		float dy = y-p.y;
-		float dz = z-p.z;
-		float dw = w-p.w;
-		return dx*dx+dy*dy+dz*dz+dw*dw;
-	}
+    /**
+     * Creates a new Point4f object.
+     *
+     * @param  x  DOCUMENT ME!
+     * @param  y  DOCUMENT ME!
+     * @param  z  DOCUMENT ME!
+     * @param  w  DOCUMENT ME!
+     */
+    public Point4f(final float x, final float y, final float z, final float w) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
+    }
 
-	public float distance( Point4f p ) {
-		float dx = x-p.x;
-		float dy = y-p.y;
-		float dz = z-p.z;
-		float dw = w-p.w;
-		return (float)Math.sqrt( dx*dx+dy*dy+dz*dz+dw*dw );
-	}
+    //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   p  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float distanceL1(final Point4f p) {
+        return Math.abs(x - p.x) + Math.abs(y - p.y) + Math.abs(z - p.z) + Math.abs(w - p.w);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   p  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float distanceSquared(final Point4f p) {
+        final float dx = x - p.x;
+        final float dy = y - p.y;
+        final float dz = z - p.z;
+        final float dw = w - p.w;
+        return (dx * dx) + (dy * dy) + (dz * dz) + (dw * dw);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   p  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float distance(final Point4f p) {
+        final float dx = x - p.x;
+        final float dy = y - p.y;
+        final float dz = z - p.z;
+        final float dw = w - p.w;
+        return (float)Math.sqrt((dx * dx) + (dy * dy) + (dz * dz) + (dw * dw));
+    }
 }

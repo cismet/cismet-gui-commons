@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,24 +20,47 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.math;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public abstract class CompoundFunction2D implements Function2D {
 
-	protected Function2D basis;
-	
-	public CompoundFunction2D(Function2D basis) {
-		this.basis = basis;
-	}
-	
-	public void setBasis(Function2D basis) {
-		this.basis = basis;
-	}
+    //~ Instance fields --------------------------------------------------------
 
-	public Function2D getBasis() {
-		return basis;
-	}
+    protected Function2D basis;
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new CompoundFunction2D object.
+     *
+     * @param  basis  DOCUMENT ME!
+     */
+    public CompoundFunction2D(final Function2D basis) {
+        this.basis = basis;
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  basis  DOCUMENT ME!
+     */
+    public void setBasis(final Function2D basis) {
+        this.basis = basis;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Function2D getBasis() {
+        return basis;
+    }
 }
-

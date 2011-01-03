@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,19 +20,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 /**
- * An interface for color maps.  These are passed to filters which convert gray values to
- * colors. This is similar to the ColorModel class but works with floating point values.
+ * An interface for color maps. These are passed to filters which convert gray values to colors. This is similar to the
+ * ColorModel class but works with floating point values.
+ *
+ * @version  $Revision$, $Date$
  */
 public interface Colormap {
-	/**
-	 * Convert a value in the range 0..1 to an RGB color.
-	 * @param v a value in the range 0..1
-	 * @return an RGB color
-	 */
-	public int getColor(float v);
-}
 
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * Convert a value in the range 0..1 to an RGB color.
+     *
+     * @param   v  a value in the range 0..1
+     *
+     * @return  an RGB color
+     */
+    int getColor(float v);
+}

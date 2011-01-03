@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,34 +20,45 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.image.*;
 
 /**
  * A BufferedImageOp which iterates another BufferedImageOp.
+ *
+ * @version  $Revision$, $Date$
  */
 public class IteratedFilter extends AbstractBufferedImageOp {
-	private BufferedImageOp filter;
-	private int iterations;
-	
+
+    //~ Instance fields --------------------------------------------------------
+
+    private BufferedImageOp filter;
+    private int iterations;
+
+    //~ Constructors -----------------------------------------------------------
+
     /**
      * Construct an IteratedFilter.
-     * @param filter the filetr to iterate
-     * @param iterations the number of iterations
+     *
+     * @param  filter      the filetr to iterate
+     * @param  iterations  the number of iterations
      */
-	public IteratedFilter( BufferedImageOp filter, int iterations ) {
-		this.filter = filter;
-		this.iterations = iterations;
-	}
-	
-	public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
-		BufferedImage image = src;
+    public IteratedFilter(final BufferedImageOp filter, final int iterations) {
+        this.filter = filter;
+        this.iterations = iterations;
+    }
 
-		for ( int i = 0; i < iterations; i++ )
-			image = filter.filter( image, dst );
-		
-		return image;
-	}
+    //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public BufferedImage filter(final BufferedImage src, final BufferedImage dst) {
+        BufferedImage image = src;
+
+        for (int i = 0; i < iterations; i++) {
+            image = filter.filter(image, dst);
+        }
+
+        return image;
+    }
 }

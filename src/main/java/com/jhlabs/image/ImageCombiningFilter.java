@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,58 +20,90 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
 import java.awt.image.*;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public class ImageCombiningFilter {
 
-	public int filterRGB(int x, int y, int rgb1, int rgb2) {
-		int a1 = (rgb1 >> 24) & 0xff;
-		int r1 = (rgb1 >> 16) & 0xff;
-		int g1 = (rgb1 >> 8) & 0xff;
-		int b1 = rgb1 & 0xff;
-		int a2 = (rgb2 >> 24) & 0xff;
-		int r2 = (rgb2 >> 16) & 0xff;
-		int g2 = (rgb2 >> 8) & 0xff;
-		int b2 = rgb2 & 0xff;
-		int r = PixelUtils.clamp(r1 + r2);
-		int g = PixelUtils.clamp(r1 + r2);
-		int b = PixelUtils.clamp(r1 + r2);
-		return (a1 << 24) | (r << 16) | (g << 8) | b;
-	}
+    //~ Methods ----------------------------------------------------------------
 
-	public ImageProducer filter(Image image1, Image image2, int x, int y, int w, int h) {
-		int[] pixels1 = new int[w * h];
-		int[] pixels2 = new int[w * h];
-		int[] pixels3 = new int[w * h];
-		PixelGrabber pg1 = new PixelGrabber(image1, x, y, w, h, pixels1, 0, w);
-		PixelGrabber pg2 = new PixelGrabber(image2, x, y, w, h, pixels2, 0, w);
-		try {
-			pg1.grabPixels();
-			pg2.grabPixels();
-		} catch (InterruptedException e) {
-			System.err.println("interrupted waiting for pixels!"); //NOI18N
-			return null;
-		}
-		if ((pg1.status() & ImageObserver.ABORT) != 0) {
-			System.err.println("image fetch aborted or errored"); //NOI18N
-			return null;
-		}
-		if ((pg2.status() & ImageObserver.ABORT) != 0) {
-			System.err.println("image fetch aborted or errored"); //NOI18N
-			return null;
-		}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   x     DOCUMENT ME!
+     * @param   y     DOCUMENT ME!
+     * @param   rgb1  DOCUMENT ME!
+     * @param   rgb2  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int filterRGB(final int x, final int y, final int rgb1, final int rgb2) {
+        final int a1 = (rgb1 >> 24) & 0xff;
+        final int r1 = (rgb1 >> 16) & 0xff;
+        final int g1 = (rgb1 >> 8) & 0xff;
+        final int b1 = rgb1 & 0xff;
+        final int a2 = (rgb2 >> 24) & 0xff;
+        final int r2 = (rgb2 >> 16) & 0xff;
+        final int g2 = (rgb2 >> 8) & 0xff;
+        final int b2 = rgb2 & 0xff;
+        final int r = PixelUtils.clamp(r1 + r2);
+        final int g = PixelUtils.clamp(r1 + r2);
+        final int b = PixelUtils.clamp(r1 + r2);
+        return (a1 << 24) | (r << 16) | (g << 8) | b;
+    }
 
-		for (int j = 0; j < h; j++) {
-			for (int i = 0; i < w; i++) {
-				int k = j * w + i;
-				pixels3[k] = filterRGB(x+i, y+j, pixels1[k], pixels2[k]);
-			}
-		}
-		return new MemoryImageSource(w, h, pixels3, 0, w);
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   image1  DOCUMENT ME!
+     * @param   image2  DOCUMENT ME!
+     * @param   x       DOCUMENT ME!
+     * @param   y       DOCUMENT ME!
+     * @param   w       DOCUMENT ME!
+     * @param   h       DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public ImageProducer filter(final Image image1,
+            final Image image2,
+            final int x,
+            final int y,
+            final int w,
+            final int h) {
+        final int[] pixels1 = new int[w * h];
+        final int[] pixels2 = new int[w * h];
+        final int[] pixels3 = new int[w * h];
+        final PixelGrabber pg1 = new PixelGrabber(image1, x, y, w, h, pixels1, 0, w);
+        final PixelGrabber pg2 = new PixelGrabber(image2, x, y, w, h, pixels2, 0, w);
+        try {
+            pg1.grabPixels();
+            pg2.grabPixels();
+        } catch (InterruptedException e) {
+            System.err.println("interrupted waiting for pixels!"); // NOI18N
+            return null;
+        }
+        if ((pg1.status() & ImageObserver.ABORT) != 0) {
+            System.err.println("image fetch aborted or errored");  // NOI18N
+            return null;
+        }
+        if ((pg2.status() & ImageObserver.ABORT) != 0) {
+            System.err.println("image fetch aborted or errored");  // NOI18N
+            return null;
+        }
 
+        for (int j = 0; j < h; j++) {
+            for (int i = 0; i < w; i++) {
+                final int k = (j * w) + i;
+                pixels3[k] = filterRGB(x + i, y + j, pixels1[k], pixels2[k]);
+            }
+        }
+        return new MemoryImageSource(w, h, pixels3, 0, w);
+    }
 }

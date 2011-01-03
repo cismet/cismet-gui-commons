@@ -1,16 +1,26 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.layout;
 
 import java.util.EventListener;
 
 /**
  * Listener interface for the fading panel.
- * @author jruiz
+ *
+ * @author   jruiz
+ * @version  $Revision$, $Date$
  */
 public interface FadingPanelListener extends EventListener {
 
-    /**
-     * Is called when the fade animation is finished
-     */
-    public void fadeFinished();
+    //~ Methods ----------------------------------------------------------------
 
+    /**
+     * Is called when the fade animation is finished.
+     */
+    void fadeFinished();
 }

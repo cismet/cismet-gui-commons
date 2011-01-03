@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,118 +20,165 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.image.*;
+
 import java.util.*;
 
 /**
- * A filter which can be used to produce wipes by transferring the luma of a mask image into the alpha channel of the source.
+ * A filter which can be used to produce wipes by transferring the luma of a mask image into the alpha channel of the
+ * source.
+ *
+ * @version  $Revision$, $Date$
  */
 public class HalftoneFilter extends AbstractBufferedImageOp {
-	
-	private float density = 0;
-	private float softness = 0;
-	private boolean invert;
-	private BufferedImage mask;
 
-	public HalftoneFilter() {
-	}
+    //~ Instance fields --------------------------------------------------------
 
-	/**
-	 * Set the density of the image in the range 0..1.
-	 * *arg density The density
-	 */
-	public void setDensity( float density ) {
-		this.density = density;
-	}
-	
-	public float getDensity() {
-		return density;
-	}
-	
-	/**
-	 * Set the softness of the effect in the range 0..1.
-	 * @param softness the softness
-     * @min-value 0
-     * @max-value 1
-     * @see #getSoftness
-	 */
-	public void setSoftness( float softness ) {
-		this.softness = softness;
-	}
-	
-	/**
-	 * Get the softness of the effect.
-	 * @return the softness
-     * @see #setSoftness
-	 */
-	public float getSoftness() {
-		return softness;
-	}
-	
-	public void setMask( BufferedImage mask ) {
-		this.mask = mask;
-	}
-	
-	public BufferedImage getMask() {
-		return mask;
-	}
-	
-	public void setInvert( boolean invert ) {
-		this.invert = invert;
-	}
-	
-	public boolean getInvert() {
-		return invert;
-	}
-	
-    public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
-        int width = src.getWidth();
-        int height = src.getHeight();
+    private float density = 0;
+    private float softness = 0;
+    private boolean invert;
+    private BufferedImage mask;
 
-        if ( dst == null )
-            dst = createCompatibleDestImage( src, null );
-		if ( mask == null )
-			return dst;
+    //~ Constructors -----------------------------------------------------------
 
-        int maskWidth = mask.getWidth();
-        int maskHeight = mask.getHeight();
+    /**
+     * Creates a new HalftoneFilter object.
+     */
+    public HalftoneFilter() {
+    }
 
-		float d = density * (1+softness);
-		float lower = 255 * (d-softness);
-		float upper = 255 * d;
-        float s = 255*softness;
+    //~ Methods ----------------------------------------------------------------
 
-		int[] inPixels = new int[width];
-		int[] maskPixels = new int[maskWidth];
+    /**
+     * Set the density of the image in the range 0..1.*arg density The density
+     *
+     * @param  density  DOCUMENT ME!
+     */
+    public void setDensity(final float density) {
+        this.density = density;
+    }
 
-        for ( int y = 0; y < height; y++ ) {
-			getRGB( src, 0, y, width, 1, inPixels );
-			getRGB( mask, 0, y % maskHeight, maskWidth, 1, maskPixels );
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float getDensity() {
+        return density;
+    }
 
-			for ( int x = 0; x < width; x++ ) {
-				int maskRGB = maskPixels[x % maskWidth];
-				int inRGB = inPixels[x];
-				int v = PixelUtils.brightness( maskRGB );
-				int iv = PixelUtils.brightness( inRGB );
-				float f = ImageMath.smoothStep( iv-s, iv+s, v );
-				int a = (int)(255 * f);
+    /**
+     * Set the softness of the effect in the range 0..1.
+     *
+     * @param      softness  the softness
+     *
+     * @see        #getSoftness
+     * @min-value  0
+     * @max-value  1
+     */
+    public void setSoftness(final float softness) {
+        this.softness = softness;
+    }
 
-				if ( invert )
-					a = 255-a;
-//				inPixels[x] = (a << 24) | (inRGB & 0x00ffffff);
-				inPixels[x] = (inRGB & 0xff000000) | (a << 16) | (a << 8) | a;
-			}
+    /**
+     * Get the softness of the effect.
+     *
+     * @return  the softness
+     *
+     * @see     #setSoftness
+     */
+    public float getSoftness() {
+        return softness;
+    }
 
-			setRGB( dst, 0, y, width, 1, inPixels );
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  mask  DOCUMENT ME!
+     */
+    public void setMask(final BufferedImage mask) {
+        this.mask = mask;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public BufferedImage getMask() {
+        return mask;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  invert  DOCUMENT ME!
+     */
+    public void setInvert(final boolean invert) {
+        this.invert = invert;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean getInvert() {
+        return invert;
+    }
+
+    @Override
+    public BufferedImage filter(final BufferedImage src, BufferedImage dst) {
+        final int width = src.getWidth();
+        final int height = src.getHeight();
+
+        if (dst == null) {
+            dst = createCompatibleDestImage(src, null);
+        }
+        if (mask == null) {
+            return dst;
+        }
+
+        final int maskWidth = mask.getWidth();
+        final int maskHeight = mask.getHeight();
+
+        final float d = density * (1 + softness);
+        final float lower = 255 * (d - softness);
+        final float upper = 255 * d;
+        final float s = 255 * softness;
+
+        final int[] inPixels = new int[width];
+        final int[] maskPixels = new int[maskWidth];
+
+        for (int y = 0; y < height; y++) {
+            getRGB(src, 0, y, width, 1, inPixels);
+            getRGB(mask, 0, y % maskHeight, maskWidth, 1, maskPixels);
+
+            for (int x = 0; x < width; x++) {
+                final int maskRGB = maskPixels[x % maskWidth];
+                final int inRGB = inPixels[x];
+                final int v = PixelUtils.brightness(maskRGB);
+                final int iv = PixelUtils.brightness(inRGB);
+                final float f = ImageMath.smoothStep(iv - s, iv + s, v);
+                int a = (int)(255 * f);
+
+                if (invert) {
+                    a = 255 - a;
+                }
+//                              inPixels[x] = (a << 24) | (inRGB & 0x00ffffff);
+                inPixels[x] = (inRGB & 0xff000000) | (a << 16) | (a << 8) | a;
+            }
+
+            setRGB(dst, 0, y, width, 1, inPixels);
         }
 
         return dst;
     }
 
-	public String toString() {
-		return "Stylize/Halftone...";  //NOI18N
-	}
+    @Override
+    public String toString() {
+        return "Stylize/Halftone..."; // NOI18N
+    }
 }

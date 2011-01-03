@@ -1,53 +1,83 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.security;
 
-import de.cismet.tools.gui.StaticSwingTools;
-import java.awt.Component;
-import java.net.URL;
-import java.util.prefs.Preferences;
-import javax.swing.JFrame;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.CredentialsNotAvailableException;
+
 import org.jdesktop.swingx.JXLoginPane;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.auth.DefaultUserNameStore;
 import org.jdesktop.swingx.auth.LoginService;
 
+import java.awt.Component;
+
+import java.net.URL;
+
+import java.util.prefs.Preferences;
+
+import javax.swing.JFrame;
+
+import de.cismet.tools.gui.StaticSwingTools;
+
 /**
+ * DOCUMENT ME!
  *
- * @author spuhl
+ * @author   spuhl
+ * @version  $Revision$, $Date$
  */
 public abstract class PasswordDialog extends LoginService {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(PasswordDialog.class);
+
+    //~ Instance fields --------------------------------------------------------
+
     protected DefaultUserNameStore usernames;
+    protected Component parent;
+    protected boolean isAuthenticationDone = false;
+    protected URL url;
     private Preferences appPrefs = null;
     private UsernamePasswordCredentials creds;
-    protected Component parent;
     private JFrame parentFrame;
-    protected  boolean isAuthenticationDone = false;
     private boolean isAuthenticationCanceled = false;
-    protected URL url;
     private Object dummy = new Object();
     private String username = null;
     private String title;
-    private String prefTitle;    
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(PasswordDialog.class);
+    private String prefTitle;
 
-    public String getUserName() {
-        return creds.getUserName();
-    }
-    
-    public PasswordDialog(URL url) {
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new PasswordDialog object.
+     *
+     * @param  url  DOCUMENT ME!
+     */
+    public PasswordDialog(final URL url) {
         super();
-        if(log.isDebugEnabled())
-            log.debug("Creating new PaswordDialog Instance for URL: " + url.toString());  //NOI18N
-        this.url = url;        
+        if (log.isDebugEnabled()) {
+            log.debug("Creating new PaswordDialog Instance for URL: " + url.toString()); // NOI18N
+        }
+        this.url = url;
     }
 
-    public PasswordDialog(URL url, Component parentComponent) {
+    /**
+     * Creates a new PasswordDialog object.
+     *
+     * @param  url              DOCUMENT ME!
+     * @param  parentComponent  DOCUMENT ME!
+     */
+    public PasswordDialog(final URL url, final Component parentComponent) {
         this(url);
         if (parentComponent != null) {
             this.parent = (StaticSwingTools.getParentFrame(parentComponent));
@@ -55,44 +85,70 @@ public abstract class PasswordDialog extends LoginService {
                 this.parent = (StaticSwingTools.getFirstParentFrame(parentComponent));
             }
         }
-
-
     }
 
-    public void setUsernamePassword(UsernamePasswordCredentials creds) {
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getUserName() {
+        return creds.getUserName();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  creds  DOCUMENT ME!
+     */
+    public void setUsernamePassword(final UsernamePasswordCredentials creds) {
         this.creds = creds;
     }
 
-    public UsernamePasswordCredentials getCredentials()
-            throws CredentialsNotAvailableException {
-        if(log.isDebugEnabled())
-            log.debug("Credentials requested for :" + url.toString() + " alias: " + title);  //NOI18N
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  CredentialsNotAvailableException  DOCUMENT ME!
+     */
+    public UsernamePasswordCredentials getCredentials() throws CredentialsNotAvailableException {
+        if (log.isDebugEnabled()) {
+            log.debug("Credentials requested for :" + url.toString() + " alias: " + title);                    // NOI18N
+        }
         usernames = new DefaultUserNameStore();
         appPrefs = Preferences.userNodeForPackage(this.getClass());
-        usernames.setPreferences(appPrefs.node("loginURLHash" + Integer.toString(url.toString().hashCode())));  //NOI18N
+        usernames.setPreferences(appPrefs.node("loginURLHash" + Integer.toString(url.toString().hashCode()))); // NOI18N
 
-        if (creds != null) {            
+        if (creds != null) {
             return creds;
         }
 
-        synchronized (dummy) {            
+        synchronized (dummy) {
             if (creds != null) {
                 return creds;
             }
-            isAuthenticationCanceled = false;            
+            isAuthenticationCanceled = false;
             requestUsernamePassword();
 
             return creds;
-
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @throws  CredentialsNotAvailableException  DOCUMENT ME!
+     */
     private void requestUsernamePassword() throws CredentialsNotAvailableException {
-        if(log.isDebugEnabled())
-            log.debug("requestUsernamePassword"); //NOI18N
-        JXLoginPane login = new JXLoginPane(this, null, usernames);
+        if (log.isDebugEnabled()) {
+            log.debug("requestUsernamePassword"); // NOI18N
+        }
+        final JXLoginPane login = new JXLoginPane(this, null, usernames);
 
-        String[] names = usernames.getUserNames();
+        final String[] names = usernames.getUserNames();
         if (names.length != 0) {
             username = names[names.length - 1];
         }
@@ -100,32 +156,36 @@ public abstract class PasswordDialog extends LoginService {
         login.setUserName(username);
         title = WebAccessManager.getInstance().getServerAliasProperty(url.toString());
         if (title != null) {
-            String msg=org.openide.util.NbBundle.getMessage(PasswordDialog.class,"PasswordDialog.requestUsernamePassword().login.message");
-            login.setMessage(msg+ " \"" + title + "\" ");//NOI18N
+            final String msg = org.openide.util.NbBundle.getMessage(
+                    PasswordDialog.class,
+                    "PasswordDialog.requestUsernamePassword().login.message");
+            login.setMessage(msg + " \"" + title + "\" ");              // NOI18N
         } else {
             title = url.toString();
-            if (title.startsWith("http://") && title.length() > 21) {//NOI18N
-                title = title.substring(7, 21) + "...";  //NOI18N
+            if (title.startsWith("http://") && (title.length() > 21)) { // NOI18N
+                title = title.substring(7, 21) + "...";                 // NOI18N
             } else if (title.length() > 14) {
-                title = title.substring(0, 14) + "...";  //NOI18N
+                title = title.substring(0, 14) + "...";                 // NOI18N
             }
 
-            String msg=org.openide.util.NbBundle.getMessage(PasswordDialog.class,"PasswordDialog.requestUsernamePassword().login.message");
-            login.setMessage( msg +  "\n" + " \"" + title + "\" ");//NOI18N
+            final String msg = org.openide.util.NbBundle.getMessage(
+                    PasswordDialog.class,
+                    "PasswordDialog.requestUsernamePassword().login.message");
+            login.setMessage(msg + "\n" + " \"" + title + "\" "); // NOI18N
         }
 
-        if(log.isDebugEnabled())
-            log.debug("parentFrame in GUICredentialprovider:" + parent);  //NOI18N
-        JXLoginPane.JXLoginDialog dialog = new JXLoginPane.JXLoginDialog((JFrame) parent, login);
+        if (log.isDebugEnabled()) {
+            log.debug("parentFrame in GUICredentialprovider:" + parent); // NOI18N
+        }
+        final JXLoginPane.JXLoginDialog dialog = new JXLoginPane.JXLoginDialog((JFrame)parent, login);
 
         try {
-            ((JXPanel) ((JXPanel) login.getComponent(1)).getComponent(1)).getComponent(3).requestFocus();
+            ((JXPanel)((JXPanel)login.getComponent(1)).getComponent(1)).getComponent(3).requestFocus();
         } catch (Exception skip) {
         }
         login.setVisible(true);
         dialog.setAlwaysOnTop(true);
         dialog.setVisible(true);
-        
 
         if (!isAuthenticationDone) {
             isAuthenticationCanceled = true;
@@ -133,14 +193,24 @@ public abstract class PasswordDialog extends LoginService {
         }
     }
 
+    @Override
     public abstract boolean authenticate(String name, char[] password, String server) throws Exception;
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean isAuthenticationCanceled() {
         return isAuthenticationCanceled;
     }
 
-    public void setTitle(String title) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  title  DOCUMENT ME!
+     */
+    public void setTitle(final String title) {
         this.title = title;
     }
-    
 }

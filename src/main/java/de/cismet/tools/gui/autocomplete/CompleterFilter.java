@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * CompleterFilter.java
  *
@@ -11,25 +18,38 @@ package de.cismet.tools.gui.autocomplete;
 import javax.swing.JTextField;
 
 /**
- * A filter that will attempt to autocomplete enties into a textfield with the string representations
- * of objects in a given array.
- * 
- * Add this filter class to the Document of the text field.
- * 
- * The first match in the array is the one used to autocomplete. So sort your array by most important
- * objects first.
- * @author neilcochrane
+ * A filter that will attempt to autocomplete enties into a textfield with the string representations of objects in a
+ * given array.
+ *
+ * <p>Add this filter class to the Document of the text field.</p>
+ *
+ * <p>The first match in the array is the one used to autocomplete. So sort your array by most important objects first.
+ * </p>
+ *
+ * @author   neilcochrane
+ * @version  $Revision$, $Date$
  */
 public class CompleterFilter extends AbstractCompleterFilter {
 
-    /** Creates a new instance of CompleterFilter
-     * @param completerObjs an array of objects used to attempt completion
-     * @param textField the text component to receive the completion
+    //~ Instance fields --------------------------------------------------------
+
+    protected JTextField textField;
+    protected Object[] objectList;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new instance of CompleterFilter.
+     *
+     * @param  completerObjs  an array of objects used to attempt completion
+     * @param  textField      the text component to receive the completion
      */
-    public CompleterFilter(Object[] completerObjs, JTextField textField) {
+    public CompleterFilter(final Object[] completerObjs, final JTextField textField) {
         this.objectList = completerObjs;
         this.textField = textField;
     }
+
+    //~ Methods ----------------------------------------------------------------
 
     @Override
     public int getCompleterListSize() {
@@ -37,7 +57,7 @@ public class CompleterFilter extends AbstractCompleterFilter {
     }
 
     @Override
-    public Object getCompleterObjectAt(int i) {
+    public Object getCompleterObjectAt(final int i) {
         return this.objectList[i];
     }
 
@@ -48,12 +68,11 @@ public class CompleterFilter extends AbstractCompleterFilter {
 
     /**
      * Set the list of objects to match against.
-     * @param objectsToMatch
+     *
+     * @param  objectsToMatch  DOCUMENT ME!
      */
-    public void setCompleterMatches(Object[] objectsToMatch) {
+    public void setCompleterMatches(final Object[] objectsToMatch) {
         this.objectList = objectsToMatch;
         this.firstSelectedIndex = -1;
     }
-    protected JTextField textField;
-    protected Object[] objectList;
 }

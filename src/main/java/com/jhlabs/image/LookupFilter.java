@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,66 +20,77 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.*;
 import java.awt.image.*;
 
 /**
- * A filter which uses the brightness of each pixel to lookup a color from a colormap. 
+ * A filter which uses the brightness of each pixel to lookup a color from a colormap.
+ *
+ * @version  $Revision$, $Date$
  */
 public class LookupFilter extends PointFilter {
-	
-	private Colormap colormap = new Gradient();
-	
-	/**
+
+    //~ Instance fields --------------------------------------------------------
+
+    private Colormap colormap = new Gradient();
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
      * Construct a LookupFilter.
      */
     public LookupFilter() {
-		canFilterIndexColorModel = true;
-	}
+        canFilterIndexColorModel = true;
+    }
 
-	/**
+    /**
      * Construct a LookupFilter.
-     * @param colormap the color map
+     *
+     * @param  colormap  the color map
      */
-	public LookupFilter(Colormap colormap) {
-		canFilterIndexColorModel = true;
-		this.colormap = colormap;
-	}
+    public LookupFilter(final Colormap colormap) {
+        canFilterIndexColorModel = true;
+        this.colormap = colormap;
+    }
+
+    //~ Methods ----------------------------------------------------------------
 
     /**
      * Set the colormap to be used for the filter.
-     * @param colormap the colormap
-     * @see #getColormap
+     *
+     * @param  colormap  the colormap
+     *
+     * @see    #getColormap
      */
-	public void setColormap(Colormap colormap) {
-		this.colormap = colormap;
-	}
+    public void setColormap(final Colormap colormap) {
+        this.colormap = colormap;
+    }
 
     /**
      * Get the colormap to be used for the filter.
-     * @return the colormap
-     * @see #setColormap
+     *
+     * @return  the colormap
+     *
+     * @see     #setColormap
      */
-	public Colormap getColormap() {
-		return colormap;
-	}
+    public Colormap getColormap() {
+        return colormap;
+    }
 
-	public int filterRGB(int x, int y, int rgb) {
-//		int a = rgb & 0xff000000;
-		int r = (rgb >> 16) & 0xff;
-		int g = (rgb >> 8) & 0xff;
-		int b = rgb & 0xff;
-		rgb = (r + g + b) / 3;
-		return colormap.getColor(rgb/255.0f);
-	}
+    @Override
+    public int filterRGB(final int x, final int y, int rgb) {
+//              int a = rgb & 0xff000000;
+        final int r = (rgb >> 16) & 0xff;
+        final int g = (rgb >> 8) & 0xff;
+        final int b = rgb & 0xff;
+        rgb = (r + g + b) / 3;
+        return colormap.getColor(rgb / 255.0f);
+    }
 
-	public String toString() {
-		return "Colors/Lookup..."; //NOI18N
-	}
-
+    @Override
+    public String toString() {
+        return "Colors/Lookup..."; // NOI18N
+    }
 }
-
-

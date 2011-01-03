@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui.autocomplete;
 
 import java.util.ArrayList;
@@ -7,15 +14,32 @@ import javax.swing.AbstractListModel;
 
 /**
  * Class to hold the remaining objects that still match the users input.
- * @author ncochran
  *
+ * @author   ncochran
+ * @version  $Revision$, $Date$
  */
 public class FilterListModel extends AbstractListModel {
 
-    public FilterListModel(Object[] unfilteredList) {
+    //~ Instance fields --------------------------------------------------------
+
+    private Object[] fullList;
+    private ArrayList<Object> filteredList;
+    private String filter;
+    private boolean caseSensitive = false;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new FilterListModel object.
+     *
+     * @param  unfilteredList  DOCUMENT ME!
+     */
+    public FilterListModel(final Object[] unfilteredList) {
         fullList = unfilteredList;
         filteredList = new ArrayList<Object>(Arrays.asList(unfilteredList));
     }
+
+    //~ Methods ----------------------------------------------------------------
 
     @Override
     public int getSize() {
@@ -23,17 +47,27 @@ public class FilterListModel extends AbstractListModel {
     }
 
     @Override
-    public Object getElementAt(int index) {
+    public Object getElementAt(final int index) {
         return filteredList.get(index);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public String getFilter() {
         return filter;
     }
 
-    public void setFilter(String filter) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  filter  DOCUMENT ME!
+     */
+    public void setFilter(final String filter) {
         filteredList.clear();
-        for (Object obj : fullList) {
+        for (final Object obj : fullList) {
             if (obj.toString().length() < filter.length()) {
                 continue;
             }
@@ -51,26 +85,40 @@ public class FilterListModel extends AbstractListModel {
         fireContentsChanged(this, 0, filteredList.size());
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     public void clearFilter() {
         filter = null;
         filteredList = new ArrayList<Object>(Arrays.asList(fullList));
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean getCaseSensitive() {
         return this.caseSensitive;
     }
 
-    public void setCaseSensitive(boolean caseSensitive) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  caseSensitive  DOCUMENT ME!
+     */
+    public void setCaseSensitive(final boolean caseSensitive) {
         this.caseSensitive = caseSensitive;
         clearFilter();
     }
 
-    public void setCompleterMatches(Object[] objectsToMatch) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  objectsToMatch  DOCUMENT ME!
+     */
+    public void setCompleterMatches(final Object[] objectsToMatch) {
         fullList = objectsToMatch;
         clearFilter();
     }
-    private Object[] fullList;
-    private ArrayList<Object> filteredList;
-    private String filter;
-    private boolean caseSensitive = false;
 }

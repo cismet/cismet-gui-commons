@@ -24,7 +24,6 @@ package de.cismet.tools.gui;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-
 /**
  * DOCUMENT ME!
  *
@@ -32,46 +31,76 @@ import javax.swing.JComponent;
  * @version  $Revision$, $Date$
  */
 public interface BasicGuiComponentProvider {
-    public static enum GuiType {TOOLBARCOMPONENT,GUICOMPONENT,DUMMY};
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String getId();
+
+    //~ Enums ------------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @version  $Revision$, $Date$
      */
-    public String getName();
+    public static enum GuiType {
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String getDescription();
+        //~ Enum constants -----------------------------------------------------
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public Icon getIcon();
+        TOOLBARCOMPONENT, GUICOMPONENT, DUMMY
+    }
+
+    //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
-    public JComponent getComponent();
+    String getId();
 
-    public GuiType getType();
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    String getName();
 
-    public Object getPositionHint();
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    String getDescription();
 
-    public void  setLinkObject(Object link);
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    Icon getIcon();
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    JComponent getComponent();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    GuiType getType();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    Object getPositionHint();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  link  DOCUMENT ME!
+     */
+    void setLinkObject(Object link);
 }

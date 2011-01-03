@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,22 +20,26 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.image.*;
 
 /**
  * A filter which solarizes an image.
+ *
+ * @version  $Revision$, $Date$
  */
 public class SolarizeFilter extends TransferFilter {
 
-	protected float transferFunction( float v ) {
-		return v > 0.5f ? 2*(v-0.5f) : 2*(0.5f-v);
-	}
+    //~ Methods ----------------------------------------------------------------
 
-	public String toString() {
-		return "Colors/Solarize";  //NOI18N
-	}
+    @Override
+    protected float transferFunction(final float v) {
+        return (v > 0.5f) ? (2 * (v - 0.5f)) : (2 * (0.5f - v));
+    }
+
+    @Override
+    public String toString() {
+        return "Colors/Solarize"; // NOI18N
+    }
 }
-

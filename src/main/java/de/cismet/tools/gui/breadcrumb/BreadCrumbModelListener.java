@@ -1,17 +1,42 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package de.cismet.tools.gui.breadcrumb;
 
 /**
+ * DOCUMENT ME!
  *
- * @author thorsten
+ * @author   thorsten
+ * @version  $Revision$, $Date$
  */
 public interface BreadCrumbModelListener {
-    public void breadCrumbModelChanged(BreadCrumbEvent bce);
-    public void breadCrumbAdded(BreadCrumbEvent bce);
-    public void breadCrumbActionPerformed(BreadCrumbEvent bce);
 
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bce  DOCUMENT ME!
+     */
+    void breadCrumbModelChanged(BreadCrumbEvent bce);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bce  DOCUMENT ME!
+     */
+    void breadCrumbAdded(BreadCrumbEvent bce);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bce  DOCUMENT ME!
+     */
+    void breadCrumbActionPerformed(BreadCrumbEvent bce);
 }

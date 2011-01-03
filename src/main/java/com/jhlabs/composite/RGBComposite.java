@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,89 +20,160 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.composite;
 
 import java.awt.*;
 import java.awt.image.*;
 
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 public abstract class RGBComposite implements Composite {
 
-	protected float extraAlpha;
+    //~ Instance fields --------------------------------------------------------
 
-	public RGBComposite() {
-		this( 1.0f );
-	}
+    protected float extraAlpha;
 
-	public RGBComposite( float alpha ) {
-		if ( alpha < 0.0f || alpha > 1.0f )
-			throw new IllegalArgumentException("RGBComposite: alpha must be between 0 and 1"); //NOI18N
-		this.extraAlpha = alpha;
-	}
+    //~ Constructors -----------------------------------------------------------
 
-	public float getAlpha() {
-		return extraAlpha;
-	}
+    /**
+     * Creates a new RGBComposite object.
+     */
+    public RGBComposite() {
+        this(1.0f);
+    }
 
-	public int hashCode() {
-		return Float.floatToIntBits(extraAlpha);
-	}
+    /**
+     * Creates a new RGBComposite object.
+     *
+     * @param   alpha  DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  DOCUMENT ME!
+     */
+    public RGBComposite(final float alpha) {
+        if ((alpha < 0.0f) || (alpha > 1.0f)) {
+            throw new IllegalArgumentException("RGBComposite: alpha must be between 0 and 1"); // NOI18N
+        }
+        this.extraAlpha = alpha;
+    }
 
-	public boolean equals(Object o) {
-		if (!(o instanceof RGBComposite))
-			return false;
-		RGBComposite c = (RGBComposite)o;
+    //~ Methods ----------------------------------------------------------------
 
-		if ( extraAlpha != c.extraAlpha )
-			return false;
-		return true;
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public float getAlpha() {
+        return extraAlpha;
+    }
 
+    @Override
+    public int hashCode() {
+        return Float.floatToIntBits(extraAlpha);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (!(o instanceof RGBComposite)) {
+            return false;
+        }
+        final RGBComposite c = (RGBComposite)o;
+
+        if (extraAlpha != c.extraAlpha) {
+            return false;
+        }
+        return true;
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     public abstract static class RGBCompositeContext implements CompositeContext {
+
+        //~ Instance fields ----------------------------------------------------
 
         private float alpha;
         private ColorModel srcColorModel;
         private ColorModel dstColorModel;
 
-        public RGBCompositeContext( float alpha, ColorModel srcColorModel, ColorModel dstColorModel ) {
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new RGBCompositeContext object.
+         *
+         * @param  alpha          DOCUMENT ME!
+         * @param  srcColorModel  DOCUMENT ME!
+         * @param  dstColorModel  DOCUMENT ME!
+         */
+        public RGBCompositeContext(final float alpha, final ColorModel srcColorModel, final ColorModel dstColorModel) {
             this.alpha = alpha;
             this.srcColorModel = srcColorModel;
             this.dstColorModel = dstColorModel;
         }
 
+        //~ Methods ------------------------------------------------------------
+
+        @Override
         public void dispose() {
         }
-        
-        // Multiply two numbers in the range 0..255 such that 255*255=255
-        static int multiply255( int a, int b ) {
-            int t = a * b + 0x80;
+        /**
+         * Multiply two numbers in the range 0..255 such that 255*255=255.
+         *
+         * @param   a  DOCUMENT ME!
+         * @param   b  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        static int multiply255(final int a, final int b) {
+            final int t = (a * b) + 0x80;
             return ((t >> 8) + t) >> 8;
         }
-        
-        static int clamp( int a ) {
-            return a < 0 ? 0 : a > 255 ? 255 : a;
-        }
-	
-        public abstract void composeRGB( int[] src, int[] dst, float alpha );
 
-        public void compose( Raster src, Raster dstIn, WritableRaster dstOut ) {
-            float alpha = this.alpha;
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   a  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        static int clamp(final int a) {
+            return (a < 0) ? 0 : ((a > 255) ? 255 : a);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  src    DOCUMENT ME!
+         * @param  dst    DOCUMENT ME!
+         * @param  alpha  DOCUMENT ME!
+         */
+        public abstract void composeRGB(int[] src, int[] dst, float alpha);
+
+        @Override
+        public void compose(final Raster src, final Raster dstIn, final WritableRaster dstOut) {
+            final float alpha = this.alpha;
 
             int[] srcPix = null;
             int[] dstPix = null;
 
-            int x = dstOut.getMinX();
-            int w = dstOut.getWidth();
-            int y0 = dstOut.getMinY();
-            int y1 = y0 + dstOut.getHeight();
+            final int x = dstOut.getMinX();
+            final int w = dstOut.getWidth();
+            final int y0 = dstOut.getMinY();
+            final int y1 = y0 + dstOut.getHeight();
 
-            for ( int y = y0; y < y1; y++ ) {
-                srcPix = src.getPixels( x, y, w, 1, srcPix );
-                dstPix = dstIn.getPixels( x, y, w, 1, dstPix );
-                composeRGB( srcPix, dstPix, alpha );
-                dstOut.setPixels( x, y, w, 1, dstPix );
+            for (int y = y0; y < y1; y++) {
+                srcPix = src.getPixels(x, y, w, 1, srcPix);
+                dstPix = dstIn.getPixels(x, y, w, 1, dstPix);
+                composeRGB(srcPix, dstPix, alpha);
+                dstOut.setPixels(x, y, w, 1, dstPix);
             }
         }
-
     }
 }

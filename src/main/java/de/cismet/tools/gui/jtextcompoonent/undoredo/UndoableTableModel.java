@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -9,22 +16,39 @@ import javax.swing.table.*;
 import javax.swing.undo.*;
 
 /**
- * TableModel decoration for Undo/Redo Support
- * 
- * WARNING: might fail on sorted Tables!
- * 
- * @author srichter
+ * TableModel decoration for Undo/Redo Support.
+ *
+ * <p>WARNING: might fail on sorted Tables!</p>
+ *
+ * @author   srichter
+ * @version  $Revision$, $Date$
  */
 public class UndoableTableModel extends AbstractTableModel implements TableModelListener {
+
+    //~ Instance fields --------------------------------------------------------
 
     private TableModel delegate;
     private UndoableEditSupport support = new UndoableEditSupport();
 
-    public UndoableTableModel(TableModel delegate) {
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new UndoableTableModel object.
+     *
+     * @param  delegate  DOCUMENT ME!
+     */
+    public UndoableTableModel(final TableModel delegate) {
         setDelegate(delegate);
     }
 
-    public void setDelegate(TableModel delegate) {
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  delegate  DOCUMENT ME!
+     */
+    public void setDelegate(final TableModel delegate) {
         if (this.delegate != null) {
             this.delegate.removeTableModelListener(this);
         }
@@ -36,73 +60,124 @@ public class UndoableTableModel extends AbstractTableModel implements TableModel
     }
 
     @Override
-    public Class<?> getColumnClass(int columnIndex) {
+    public Class<?> getColumnClass(final int columnIndex) {
         return delegate.getColumnClass(columnIndex);
     }
 
+    @Override
     public int getColumnCount() {
         return delegate.getColumnCount();
     }
 
     @Override
-    public String getColumnName(int columnIndex) {
+    public String getColumnName(final int columnIndex) {
         return delegate.getColumnName(columnIndex);
     }
 
+    @Override
     public int getRowCount() {
         return delegate.getRowCount();
     }
 
-    public Object getValueAt(int rowIndex, int columnIndex) {
+    @Override
+    public Object getValueAt(final int rowIndex, final int columnIndex) {
         return delegate.getValueAt(rowIndex, columnIndex);
     }
 
     @Override
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
+    public boolean isCellEditable(final int rowIndex, final int columnIndex) {
         return delegate.isCellEditable(rowIndex, columnIndex);
     }
 
     @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        Object oldValue = delegate.getValueAt(rowIndex, columnIndex);
+    public void setValueAt(final Object aValue, final int rowIndex, final int columnIndex) {
+        final Object oldValue = delegate.getValueAt(rowIndex, columnIndex);
         delegate.setValueAt(aValue, rowIndex, columnIndex);
-        Object newValue = delegate.getValueAt(rowIndex, columnIndex);
+        final Object newValue = delegate.getValueAt(rowIndex, columnIndex);
         fireChangeEdit(rowIndex, columnIndex, oldValue, newValue);
     }
 
-    public void addUndoableEditListener(UndoableEditListener l) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  l  DOCUMENT ME!
+     */
+    public void addUndoableEditListener(final UndoableEditListener l) {
         support.addUndoableEditListener(l);
     }
 
-    public void removeUndoableEditListener(UndoableEditListener l) {
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  l  DOCUMENT ME!
+     */
+    public void removeUndoableEditListener(final UndoableEditListener l) {
         support.removeUndoableEditListener(l);
     }
 
-    public void tableChanged(TableModelEvent e) {
-        TableModelEvent newEvent = new TableModelEvent(this, e.getFirstRow(), e.getLastRow(), e.getColumn(), e.getType());
+    @Override
+    public void tableChanged(final TableModelEvent e) {
+        final TableModelEvent newEvent = new TableModelEvent(
+                this,
+                e.getFirstRow(),
+                e.getLastRow(),
+                e.getColumn(),
+                e.getType());
         fireTableChanged(newEvent);
     }
 
-    protected void fireChangeEdit(int row, int col, Object oldValue, Object newValue) {
-        UndoableEdit edit = new TableChangeEdit(row, col, oldValue, newValue);
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  row       DOCUMENT ME!
+     * @param  col       DOCUMENT ME!
+     * @param  oldValue  DOCUMENT ME!
+     * @param  newValue  DOCUMENT ME!
+     */
+    protected void fireChangeEdit(final int row, final int col, final Object oldValue, final Object newValue) {
+        final UndoableEdit edit = new TableChangeEdit(row, col, oldValue, newValue);
         support.beginUpdate();
         support.postEdit(edit);
         support.endUpdate();
     }
 
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     private class TableChangeEdit extends AbstractUndoableEdit {
+
+        //~ Instance fields ----------------------------------------------------
 
         private int columnIndex;
         private int rowIndex;
         private Object oldValue;
         private Object newValue;
 
-        public TableChangeEdit(int rowIndex, int columnIndex, Object oldValue, Object newValue) {
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new TableChangeEdit object.
+         *
+         * @param  rowIndex     DOCUMENT ME!
+         * @param  columnIndex  DOCUMENT ME!
+         * @param  oldValue     DOCUMENT ME!
+         * @param  newValue     DOCUMENT ME!
+         */
+        public TableChangeEdit(final int rowIndex,
+                final int columnIndex,
+                final Object oldValue,
+                final Object newValue) {
             this.columnIndex = columnIndex;
             this.rowIndex = rowIndex;
             this.oldValue = oldValue;
             this.newValue = newValue;
         }
+
+        //~ Methods ------------------------------------------------------------
 
         @Override
         public void undo() {

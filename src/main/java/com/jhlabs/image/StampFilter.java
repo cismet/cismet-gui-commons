@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
 Copyright 2006 Jerry Huxtable
 
@@ -13,150 +20,181 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
 package com.jhlabs.image;
 
 import java.awt.image.*;
 
 /**
  * A filter which produces a rubber-stamp type of effect by performing a thresholded blur.
+ *
+ * @version  $Revision$, $Date$
  */
 public class StampFilter extends PointFilter {
 
-	private float threshold;
-	private float softness = 0;
+    //~ Instance fields --------------------------------------------------------
+
+    private float threshold;
+    private float softness = 0;
     private float radius = 5;
-	private float lowerThreshold3;
-	private float upperThreshold3;
-	private int white = 0xffffffff;
-	private int black = 0xff000000;
+    private float lowerThreshold3;
+    private float upperThreshold3;
+    private int white = 0xffffffff;
+    private int black = 0xff000000;
 
-	/**
+    //~ Constructors -----------------------------------------------------------
+
+    /**
      * Construct a StampFilter.
      */
-	public StampFilter() {
-		this(0.5f);
-	}
+    public StampFilter() {
+        this(0.5f);
+    }
 
-	/**
+    /**
      * Construct a StampFilter.
-     * @param threshold the threshold value
+     *
+     * @param  threshold  the threshold value
      */
-	public StampFilter( float threshold ) {
-		setThreshold( threshold );
-	}
+    public StampFilter(final float threshold) {
+        setThreshold(threshold);
+    }
 
-	/**
-	 * Set the radius of the effect.
-	 * @param radius the radius
-     * @min-value 0
-     * @see #getRadius
-	 */
-	public void setRadius(float radius) {
-		this.radius = radius;
-	}
-	
-	/**
-	 * Get the radius of the effect.
-	 * @return the radius
-     * @see #setRadius
-	 */
-	public float getRadius() {
-		return radius;
-	}
+    //~ Methods ----------------------------------------------------------------
 
-	/**
+    /**
+     * Set the radius of the effect.
+     *
+     * @param      radius  the radius
+     *
+     * @see        #getRadius
+     * @min-value  0
+     */
+    public void setRadius(final float radius) {
+        this.radius = radius;
+    }
+
+    /**
+     * Get the radius of the effect.
+     *
+     * @return  the radius
+     *
+     * @see     #setRadius
+     */
+    public float getRadius() {
+        return radius;
+    }
+
+    /**
      * Set the threshold value.
-     * @param threshold the threshold value
-     * @see #getThreshold
+     *
+     * @param  threshold  the threshold value
+     *
+     * @see    #getThreshold
      */
-	public void setThreshold(float threshold) {
-		this.threshold = threshold;
-	}
-	
-	/**
+    public void setThreshold(final float threshold) {
+        this.threshold = threshold;
+    }
+
+    /**
      * Get the threshold value.
-     * @return the threshold value
-     * @see #setThreshold
+     *
+     * @return  the threshold value
+     *
+     * @see     #setThreshold
      */
-	public float getThreshold() {
-		return threshold;
-	}
-	
-	/**
-	 * Set the softness of the effect in the range 0..1.
-	 * @param softness the softness
-     * @min-value 0
-     * @max-value 1
-     * @see #getSoftness
-	 */
-	public void setSoftness(float softness) {
-		this.softness = softness;
-	}
+    public float getThreshold() {
+        return threshold;
+    }
 
-	/**
-	 * Get the softness of the effect.
-	 * @return the softness
-     * @see #setSoftness
-	 */
-	public float getSoftness() {
-		return softness;
-	}
+    /**
+     * Set the softness of the effect in the range 0..1.
+     *
+     * @param      softness  the softness
+     *
+     * @see        #getSoftness
+     * @min-value  0
+     * @max-value  1
+     */
+    public void setSoftness(final float softness) {
+        this.softness = softness;
+    }
 
-	/**
+    /**
+     * Get the softness of the effect.
+     *
+     * @return  the softness
+     *
+     * @see     #setSoftness
+     */
+    public float getSoftness() {
+        return softness;
+    }
+
+    /**
      * Set the color to be used for pixels above the upper threshold.
-     * @param white the color
-     * @see #getWhite
+     *
+     * @param  white  the color
+     *
+     * @see    #getWhite
      */
-	public void setWhite(int white) {
-		this.white = white;
-	}
+    public void setWhite(final int white) {
+        this.white = white;
+    }
 
-	/**
+    /**
      * Get the color to be used for pixels above the upper threshold.
-     * @return the color
-     * @see #setWhite
+     *
+     * @return  the color
+     *
+     * @see     #setWhite
      */
-	public int getWhite() {
-		return white;
-	}
+    public int getWhite() {
+        return white;
+    }
 
-	/**
+    /**
      * Set the color to be used for pixels below the lower threshold.
-     * @param black the color
-     * @see #getBlack
+     *
+     * @param  black  the color
+     *
+     * @see    #getBlack
      */
-	public void setBlack(int black) {
-		this.black = black;
-	}
+    public void setBlack(final int black) {
+        this.black = black;
+    }
 
-	/**
+    /**
      * Set the color to be used for pixels below the lower threshold.
-     * @return the color
-     * @see #setBlack
+     *
+     * @return  the color
+     *
+     * @see     #setBlack
      */
-	public int getBlack() {
-		return black;
-	}
+    public int getBlack() {
+        return black;
+    }
 
-    public BufferedImage filter( BufferedImage src, BufferedImage dst ) {
-        dst = new GaussianFilter( (int)radius ).filter( src, null );
-        lowerThreshold3 = 255*3*(threshold - softness*0.5f);
-        upperThreshold3 = 255*3*(threshold + softness*0.5f);
-		return super.filter(dst, dst);
-	}
+    @Override
+    public BufferedImage filter(final BufferedImage src, BufferedImage dst) {
+        dst = new GaussianFilter((int)radius).filter(src, null);
+        lowerThreshold3 = 255 * 3 * (threshold - (softness * 0.5f));
+        upperThreshold3 = 255 * 3 * (threshold + (softness * 0.5f));
+        return super.filter(dst, dst);
+    }
 
-	public int filterRGB(int x, int y, int rgb) {
-		int a = rgb & 0xff000000;
-		int r = (rgb >> 16) & 0xff;
-		int g = (rgb >> 8) & 0xff;
-		int b = rgb & 0xff;
-		int l = r + g + b;
-		float f = ImageMath.smoothStep(lowerThreshold3, upperThreshold3, l);
+    @Override
+    public int filterRGB(final int x, final int y, final int rgb) {
+        final int a = rgb & 0xff000000;
+        final int r = (rgb >> 16) & 0xff;
+        final int g = (rgb >> 8) & 0xff;
+        final int b = rgb & 0xff;
+        final int l = r + g + b;
+        final float f = ImageMath.smoothStep(lowerThreshold3, upperThreshold3, l);
         return ImageMath.mixColors(f, black, white);
-	}
+    }
 
-	public String toString() {
-		return "Stylize/Stamp...";  //NOI18N
-	}
+    @Override
+    public String toString() {
+        return "Stylize/Stamp..."; // NOI18N
+    }
 }

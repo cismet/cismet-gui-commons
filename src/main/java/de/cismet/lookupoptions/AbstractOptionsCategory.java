@@ -1,13 +1,24 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.lookupoptions;
 
 import javax.swing.Icon;
 
 /**
- * This class provides a skeletal implementation of the OptionsCategory
- * interface to minimize the effort required to implement this interface.
- * @author jruiz
+ * This class provides a skeletal implementation of the OptionsCategory interface to minimize the effort required to
+ * implement this interface.
+ *
+ * @author   jruiz
+ * @version  $Revision$, $Date$
  */
 public abstract class AbstractOptionsCategory implements OptionsCategory {
+
+    //~ Methods ----------------------------------------------------------------
 
     @Override
     public Icon getIcon() {
@@ -22,14 +33,20 @@ public abstract class AbstractOptionsCategory implements OptionsCategory {
         return Integer.MAX_VALUE;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   o  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public int compareTo(final OptionsCategory o) {
-        int orderCompare = getOrder() - o.getOrder();
+        final int orderCompare = getOrder() - o.getOrder();
         if (orderCompare == 0) {
             return getName().compareTo(o.getName());
         } else {
             return orderCompare;
         }
     }
-
 }

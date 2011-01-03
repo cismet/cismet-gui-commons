@@ -1,29 +1,42 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.lookupoptions;
 
 import javax.swing.Icon;
 
 /**
  * This class represents one category in Options Dialog.
- * @author jruiz
+ *
+ * @author   jruiz
+ * @version  $Revision$, $Date$
  */
 public interface OptionsCategory extends Comparable<OptionsCategory> {
 
+    //~ Methods ----------------------------------------------------------------
+
     /**
      * Returns 32x32 icon used in list on the top of Options Dialog.
-     * @return 32x32 icon
+     *
+     * @return  32x32 icon
      */
-    public Icon getIcon();
+    Icon getIcon();
 
     /**
      * Returns name of category used in list on the top side of Options Dialog.
-     * @return name of category
+     *
+     * @return  name of category
      */
-    public String getName();
+    String getName();
 
     /**
      * Return the relative order of category in the Options Dialog.
-     * @return relative order
+     *
+     * @return  relative order
      */
-    public int getOrder();
-
+    int getOrder();
 }

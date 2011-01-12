@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui.slideabletree;
 
 /*
@@ -5,23 +12,41 @@ package de.cismet.tools.gui.slideabletree;
  * and open the template in the editor.
  */
 import java.util.Enumeration;
+
 import javax.swing.JTree;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 /**
+ * DOCUMENT ME!
  *
- * @author dmeiers
+ * @author   dmeiers
+ * @version  $Revision$, $Date$
  */
 public class SlideableSubTree extends JTree {
 
-    SlideableSubTree(TreeNode node) {
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new SlideableSubTree object.
+     *
+     * @param  node  DOCUMENT ME!
+     */
+    SlideableSubTree(final TreeNode node) {
         super(node);
     }
 
-    public void print(TreeNode node, String indent) {
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  node    DOCUMENT ME!
+     * @param  indent  DOCUMENT ME!
+     */
+    public void print(final TreeNode node, String indent) {
         System.out.println(indent + node.toString());
-        indent+="\t";
+        indent += "\t";
         for (int i = 0; i < node.getChildCount(); i++) {
             if (node.getChildCount() > 0) {
                 final TreeNode child = node.getChildAt(i);
@@ -36,44 +61,33 @@ public class SlideableSubTree extends JTree {
     }
 
     /*
-     * subtree zu knoten herausfinden, neuen path erstellen,
-     * mehtode weiterleiten ! Achtung Methode protected!!
+     * subtree zu knoten herausfinden, neuen path erstellen, mehtode weiterleiten ! Achtung Methode protected!!
      */
     @Override
-    public void setExpandedState(TreePath path, boolean state) {
+    public void setExpandedState(final TreePath path, final boolean state) {
         super.setExpandedState(path, state);
     }
     /*
-     * subtree ausfindig machen, mehtode weiterleiten, Paths in Enuemration
-     *  anpassen
-     * Problem Protected!!
+     * subtree ausfindig machen, mehtode weiterleiten, Paths in Enuemration anpassen Problem Protected!!
      */
 
     @Override
-    public boolean removeDescendantSelectedPaths(TreePath path, boolean includePath) {
+    public boolean removeDescendantSelectedPaths(final TreePath path, final boolean includePath) {
         return super.removeDescendantSelectedPaths(path, includePath);
-
-
     }
 
     @Override
-    public void removeDescendantToggledPaths(Enumeration<TreePath> toRemove) {
+    public void removeDescendantToggledPaths(final Enumeration<TreePath> toRemove) {
         super.removeDescendantToggledPaths(toRemove);
-
-
     }
 
     @Override
-    public Enumeration<TreePath> getDescendantToggledPaths(TreePath parent) {
+    public Enumeration<TreePath> getDescendantToggledPaths(final TreePath parent) {
         return super.getDescendantToggledPaths(parent);
-
     }
 
     @Override
     public void clearToggledPaths() {
         super.clearToggledPaths();
     }
-
-
-
 }

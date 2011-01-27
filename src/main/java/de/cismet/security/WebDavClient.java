@@ -30,6 +30,8 @@ import java.io.InputStream;
 
 import java.net.MalformedURLException;
 
+import de.cismet.netutil.Proxy;
+
 /**
  * Communicates with a web dav server.
  *

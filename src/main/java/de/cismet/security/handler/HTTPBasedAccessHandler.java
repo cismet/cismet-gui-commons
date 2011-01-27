@@ -23,8 +23,9 @@ import java.net.URL;
 
 import java.util.Hashtable;
 
+import de.cismet.netutil.Proxy;
+
 import de.cismet.security.GUICredentialsProvider;
-import de.cismet.security.Proxy;
 import de.cismet.security.WebAccessManager;
 
 /**

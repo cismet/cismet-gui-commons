@@ -17,7 +17,8 @@ import org.openide.util.lookup.ServiceProvider;
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
 
-import de.cismet.security.Proxy;
+import de.cismet.netutil.Proxy;
+
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.PasswordEncrypter;

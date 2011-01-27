@@ -25,6 +25,8 @@ import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import de.cismet.netutil.Proxy;
+
 import de.cismet.security.AccessHandler.ACCESS_HANDLER_TYPES;
 
 import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;

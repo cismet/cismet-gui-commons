@@ -30,6 +30,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.cismet.netutil.Proxy;
+
 import de.cismet.security.*;
 
 import de.cismet.tools.gui.StaticSwingTools;

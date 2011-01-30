@@ -27,6 +27,8 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JRRewindableDataSource;
 
+import java.util.Collection;
+
 import de.cismet.cids.dynamics.CidsBean;
 
 /**
@@ -51,6 +53,15 @@ public class CidsBeanDataSource implements JRRewindableDataSource {
      */
     public CidsBeanDataSource(final CidsBean[] cidsBeans) {
         this.cidsBeans = cidsBeans;
+    }
+
+    /**
+     * Creates a new CidsBeanDataSource object.
+     *
+     * @param  cidsBeans  DOCUMENT ME!
+     */
+    public CidsBeanDataSource(final Collection<CidsBean> cidsBeans) {
+        this.cidsBeans = cidsBeans.toArray(new CidsBean[0]);
     }
 
     //~ Methods ----------------------------------------------------------------

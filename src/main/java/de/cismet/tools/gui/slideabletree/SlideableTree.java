@@ -265,6 +265,10 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
         return paths.elements();
     }
 
+
+
+    
+
     /*
      * Durch alle subtress durch, angepasste pfad zu dem knoten der editiert wird
      */

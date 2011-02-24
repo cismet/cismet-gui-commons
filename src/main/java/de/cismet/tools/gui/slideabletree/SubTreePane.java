@@ -27,6 +27,8 @@ import org.jdesktop.swingx.JXTaskPane;
 
 import java.awt.Color;
 
+import javax.swing.UIManager;
+
 /**
  * DOCUMENT ME!
  *
@@ -38,7 +40,8 @@ public class SubTreePane extends JXTaskPane {
     //~ Instance fields --------------------------------------------------------
 
     private boolean selected = false;
-    private Color defaultTitleColor;
+    private Color defaultTitleColor = Color.BLACK;
+    private int titleBarHeight;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -46,10 +49,20 @@ public class SubTreePane extends JXTaskPane {
      * Creates a new SubTreePane object.
      */
     public SubTreePane() {
-        defaultTitleColor = this.getForeground();
+        this.setUI(new MyTaskPaneUI());
+        this.setForeground(defaultTitleColor);
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getTitleBarHeight() {
+        return (this.getHeight() - this.getContentPane().getHeight());
+    }
 
     /**
      * DOCUMENT ME!
@@ -72,5 +85,6 @@ public class SubTreePane extends JXTaskPane {
             this.setForeground(defaultTitleColor);
         }
         this.selected = selected;
+        revalidate();
     }
 }

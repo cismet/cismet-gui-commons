@@ -7,14 +7,17 @@
 ****************************************************/
 package de.cismet.tools.gui.slideabletree;
 
+import org.apache.log4j.Logger;
+
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.jdesktop.swingx.VerticalLayout;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.EventQueue;
 import java.awt.Rectangle;
-import java.awt.dnd.DragSource;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -23,12 +26,15 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
@@ -64,11 +70,13 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     //~ Instance fields --------------------------------------------------------
 
+    protected boolean useSlideableTreeView = false;
+    private final Logger logger;
     private JXTaskPaneContainer container;
     private ArrayList<SlideableSubTree> trees;
     private ArrayList<SubTreePane> panes;
     private JScrollPane containerScrollPane;
-    private DragSource dragSource;
+    private JPanel panel;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -76,31 +84,66 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      * Creates a new SlideableTree object.
      */
     public SlideableTree() {
-        trees = new ArrayList<SlideableSubTree>();
-        panes = new ArrayList<SubTreePane>();
-        container = new JXTaskPaneContainer();
-        dragSource = DragSource.getDefaultDragSource();
-        this.setLayout(new BorderLayout());
+        this(false);
+    }
 
-        /*
-         * Erzeuge fuer alle obersten Knoten einen eigenen SubTree dieser wird einem JXTaskpane zugeordnet
-         */
-        createSubTrees(this.getModel());
-        addToTreeContainer(panes);
+    /**
+     * Creates a new SlideableTree object.
+     *
+     * @param  useSlideableView  DOCUMENT ME!
+     */
+    public SlideableTree(final boolean useSlideableView) {
+        this.useSlideableTreeView = useSlideableView;
+        logger = Logger.getLogger(getClass());
 
-        final VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.setGap(7);
-        container.setLayout(verticalLayout);
-        container.setBorder(new EmptyBorder(0, 0, 0, 0));
+        if (useSlideableTreeView) {
+            trees = new ArrayList<SlideableSubTree>();
+            panes = new ArrayList<SubTreePane>();
+            container = new JXTaskPaneContainer();
 
-        // die Panes mit den SubTrees zu dem Container hinzufuegen
-        addToTreeContainer(panes);
+            /*
+             * Je nach LookAndFeel wird der BackgroundPainter benutzt um den Hintergrund eines TaskPanecontainers zu
+             * zeichen. In diesem Fall funktioniert setBackground nicht mehr...
+             */
+            container.setBackgroundPainter(null);
+            // Hintergurnd der Titlebar der JXTaskPanes ändern;
+            UIManager.getDefaults().put("TaskPane.titleBackgroundGradientStart", new Color(222, 222, 222));
+            UIManager.getDefaults().put("TaskPane.titleBackgroundGradientEnd", new Color(244, 244, 244));
+            this.setLayout(new BorderLayout());
+            final VerticalLayout verticalLayout = new VerticalLayout();
+            verticalLayout.setGap(7);
+            container.setLayout(verticalLayout);
+            container.setBorder(new EmptyBorder(0, 5, 0, 5));
+            container.setBackground(new Color(255, 255, 255));
 
-        containerScrollPane = new JScrollPane(container);
-        // fuer niftyScrollBar
-        StaticSwingTools.setNiftyScrollBars(containerScrollPane);
-        this.add(containerScrollPane, BorderLayout.CENTER);
-//        this.add(container, BorderLayout.CENTER);
+            // die Panes mit den SubTrees zu dem Container hinzufuegen addToTreeContainer(panes);
+
+            containerScrollPane = new JScrollPane(container);
+            // containerScrollPane.setOpaque(true);
+            // fuer niftyScrollBar
+            StaticSwingTools.setNiftyScrollBars(containerScrollPane);
+
+            /*
+             * Erzeuge fuer alle obersten Knoten einen eigenen SubTree dieser wird einem JXTaskpane zugeordnet
+             */
+            createSubTrees(this.getModel());
+            addToTreeContainer(panes);
+            this.setDragEnabled(true);
+
+            this.add(containerScrollPane, BorderLayout.CENTER);
+
+//            final UIDefaults defaults = UIManager.getDefaults();
+//            System.out.println(defaults.size() + " properties deffined !");
+//            final String[] colName = { "Key", "Value" };
+//            final String[][] rowData = new String[defaults.size()][2];
+//            int i = 0;
+//            for (final Enumeration e = defaults.keys(); e.hasMoreElements(); i++) {
+//                final Object key = e.nextElement();
+//                rowData[i][0] = key.toString();
+//                rowData[i][1] = "" + defaults.get(key);
+//                System.out.println(rowData[i][0] + " ,, " + rowData[i][1]);
+//            }
+        }
     }
 
     /**
@@ -109,7 +152,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      * @param  model  DOCUMENT ME!
      */
     public SlideableTree(final TreeModel model) {
-        this();
+        this(false);
         this.setModel(model);
     }
 
@@ -124,24 +167,49 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isUseSlideableTreeView() {
+        return useSlideableTreeView;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public JXTaskPaneContainer getContainer() {
+        return container;
+    }
+
     @Override
     public void addSelectionPath(final TreePath path) {
-        if (trees != null) {
-            final SlideableSubTree t = getSubTreeForPath(path);
-            final TreePath subTreePath = getPathForSubTree(path);
-            t.addSelectionPath(path);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                final SlideableSubTree t = getSubTreeForPath(path);
+                final TreePath subTreePath = getPathForSubTree(path);
+                t.addSelectionPath(path);
+            }
+        } else {
+            super.addSelectionPath(path);
         }
-        // super.addSelectionPath(path);
     }
 
     @Override
     public void addSelectionPaths(final TreePath[] paths) {
-        if (trees != null) {
-            for (int i = 0; i < paths.length; i++) {
-                addSelectionPath(paths[i]);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (int i = 0; i < paths.length; i++) {
+                    addSelectionPath(paths[i]);
+                }
             }
+            super.addSelectionPaths(paths);
+        } else {
+            super.addSelectionPaths(paths);
         }
-        super.addSelectionPaths(paths);
     }
 
     @Override
@@ -153,10 +221,14 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void addSelectionRows(final int[] rows) {
-        for (int i = 0; i < rows.length; i++) {
-            addSelectionRow(rows[i]);
+        if (useSlideableTreeView) {
+            for (int i = 0; i < rows.length; i++) {
+                addSelectionRow(rows[i]);
+            }
+            super.addSelectionRows(rows);
+        } else {
+            super.addSelectionRows(rows);
         }
-        super.addSelectionRows(rows);
     }
 
     /*
@@ -167,12 +239,14 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public void addSelectionInterval(final int index0, final int index1) {
-        if (index1 < index0) {
-            return;
-        } else {
-            for (int i = index0; i <= index1; i++) {
-                final TreePath path = getPathForRow(i);
-                addSelectionPath(path);
+        if (useSlideableTreeView) {
+            if (index1 < index0) {
+                return;
+            } else {
+                for (int i = index0; i <= index1; i++) {
+                    final TreePath path = getPathForRow(i);
+                    addSelectionPath(path);
+                }
             }
         }
         super.addSelectionInterval(index0, index1);
@@ -183,32 +257,41 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public void cancelEditing() {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.cancelEditing();
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.cancelEditing();
+                }
             }
+        } else {
+            super.cancelEditing();
         }
-        // super.cancelEditing();
     }
 
     /*
-     * fuer alle subtrees
+     * fuer alle subtrees, und die Pane
      */
     @Override
     public void clearSelection() {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.clearSelection();
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    panes.get(trees.indexOf(t)).setSelected(false);
+                    t.clearSelection();
+                }
             }
+        } else {
+            super.clearSelection();
         }
-        // super.clearSelection();
     }
 
     @Override
     protected void clearToggledPaths() {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.clearToggledPaths();
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.clearToggledPaths();
+                }
             }
         }
         super.clearToggledPaths();
@@ -216,16 +299,20 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void expandRow(final int row) {
-        if ((row < 0) || (row > getRowCount())) {
-            return;
-        }
-        if ((trees != null) && (panes != null)) {
-            final SlideableSubTree t = getSubTreeForRow(row);
-            final int index = trees.indexOf(t);
-            final JXTaskPane pane = panes.get(index);
-            pane.setCollapsed(false);
-            final TreePath subTreePath = getPathForSubTree(getPathForRow(row));
-            t.expandPath(subTreePath);
+        if (useSlideableTreeView) {
+            if ((row < 0) || (row > getRowCount())) {
+                return;
+            }
+            if ((trees != null) && (panes != null)) {
+                final SlideableSubTree t = getSubTreeForRow(row);
+                final int index = trees.indexOf(t);
+                final JXTaskPane pane = panes.get(index);
+                pane.setCollapsed(false);
+                final TreePath subTreePath = getPathForSubTree(getPathForRow(row));
+                t.expandPath(subTreePath);
+            }
+        } else {
+            super.expandRow(row);
         }
     }
 
@@ -235,49 +322,51 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public Enumeration<TreePath> getExpandedDescendants(final TreePath parent) {
-        final Vector<TreePath> paths = new Vector<TreePath>();
-        final Object lastPathElement = parent.getLastPathComponent();
-        final Object origRoot = this.getModel().getRoot();
+        if (useSlideableTreeView) {
+            final Vector<TreePath> paths = new Vector<TreePath>();
+            final Object lastPathElement = parent.getLastPathComponent();
+            final Object origRoot = this.getModel().getRoot();
 
-        if (trees != null) {
-            // falls der durch parent representierte knoten der Rootnode des
-            // original baum ist, alle SubTreeRoots falls das JXTaskPane aufgeklappt zurueckgeben
-            if (lastPathElement.equals(origRoot)) {
-                for (final SlideableSubTree t : trees) {
-                    final JXTaskPane pane = panes.get(trees.indexOf(t));
-                    if (!(pane.isCollapsed())) {
-                        final Object subTreeRoot = t.getModel().getRoot();
-                        paths.add(getPathforOriginalTree(new TreePath(subTreeRoot)));
+            if (trees != null) {
+                // falls der durch parent representierte knoten der Rootnode des
+                // original baum ist, alle SubTreeRoots falls das JXTaskPane aufgeklappt zurueckgeben
+                if (lastPathElement.equals(origRoot)) {
+                    for (final SlideableSubTree t : trees) {
+                        final JXTaskPane pane = panes.get(trees.indexOf(t));
+                        if (!(pane.isCollapsed())) {
+                            final Object subTreeRoot = t.getModel().getRoot();
+                            paths.add(getPathforOriginalTree(new TreePath(subTreeRoot)));
+                        }
                     }
-                }
-            } // sonst lediglich fuer den Subtree der den durch parent representierten
-            // knoten enthaelt
-            else {
-                final SlideableSubTree subTree = getSubTreeForPath(parent);
-                final Enumeration<TreePath> newPaths = subTree.getExpandedDescendants(getPathForSubTree(parent));
-                if (newPaths != null) {
-                    while (newPaths.hasMoreElements()) {
-                        paths.add(getPathforOriginalTree(newPaths.nextElement()));
+                } // sonst lediglich fuer den Subtree der den durch parent representierten
+                // knoten enthaelt
+                else {
+                    final SlideableSubTree subTree = getSubTreeForPath(parent);
+                    final Enumeration<TreePath> newPaths = subTree.getExpandedDescendants(getPathForSubTree(parent));
+                    if (newPaths != null) {
+                        while (newPaths.hasMoreElements()) {
+                            paths.add(getPathforOriginalTree(newPaths.nextElement()));
+                        }
                     }
                 }
             }
+            return paths.elements();
+        } else {
+            return super.getExpandedDescendants(parent);
         }
-        return paths.elements();
     }
-
-
-
-    
 
     /*
      * Durch alle subtress durch, angepasste pfad zu dem knoten der editiert wird
      */
     @Override
     public TreePath getEditingPath() {
-        for (final JTree t : trees) {
-            final TreePath path = t.getEditingPath();
-            if (path != null) {
-                return getPathforOriginalTree(path);
+        if (useSlideableTreeView) {
+            for (final JTree t : trees) {
+                final TreePath path = t.getEditingPath();
+                if (path != null) {
+                    return getPathforOriginalTree(path);
+                }
             }
         }
         return super.getEditingPath();
@@ -288,43 +377,47 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public TreePath getPathForLocation(final int x, final int y) {
-        final TreePath closestPath = getClosestPathForLocation(x, y);
-        // closest Path ist null wenn koordinaten nicht innerhalb des SlideableTree liegen..
-        if (closestPath == null) {
-            return null;
-        } else {
-            final JXTaskPane pane = panes.get(trees.indexOf(getSubTreeForPath(closestPath)));
-            final int paneX = pane.getX();
-            final int paneY = pane.getY();
-            final int titleBarHeight = (pane.getHeight() - pane.getContentPane().getHeight());
-            // Sonderfall closest ist Rootnode eines subTrees
-            if (closestPath.getPathCount() == 2) {
-                if ((y >= paneY) && (y <= (paneY + titleBarHeight))) {
+        if (useSlideableTreeView) {
+            final TreePath closestPath = getClosestPathForLocation(x, y);
+            // closest Path ist null wenn koordinaten nicht innerhalb des SlideableTree liegen..
+            if (closestPath == null) {
+                return null;
+            } else {
+                final JXTaskPane pane = panes.get(trees.indexOf(getSubTreeForPath(closestPath)));
+                final int paneX = pane.getX();
+                final int paneY = pane.getY();
+                final int titleBarHeight = (pane.getHeight() - pane.getContentPane().getHeight());
+                // Sonderfall closest ist Rootnode eines subTrees
+                if (closestPath.getPathCount() == 2) {
+                    if ((y >= paneY) && (y <= (paneY + titleBarHeight))) {
+                        return closestPath;
+                    }
+                }
+
+                final int treeX = getSubTreeForPath(closestPath).getX();
+                final int treeY = getSubTreeForPath(closestPath).getY();
+                final int newX = x - paneX - treeX;
+                final int newY = y - paneY - treeY - titleBarHeight;
+
+                final Rectangle r = getPathBounds(closestPath);
+                double recX = 0;
+                double recY = 0;
+                double recWidth = 0;
+                double recHeight = 0;
+                if (r != null) {
+                    recX = r.getX();
+                    recY = r.getY();
+                    recWidth = r.getWidth();
+                    recHeight = r.getHeight();
+                }
+                // liegen Koordinaten innerhalb des closestPath?
+                if ((newX >= recX) && (newX <= (recX + recWidth)) && (newY >= recY) && (newY <= (recY + recHeight))) {
                     return closestPath;
                 }
+                return null;
             }
-
-            final int treeX = getSubTreeForPath(closestPath).getX();
-            final int treeY = getSubTreeForPath(closestPath).getY();
-            final int newX = x - paneX - treeX;
-            final int newY = y - paneY - treeY - titleBarHeight;
-
-            final Rectangle r = getPathBounds(closestPath);
-            double recX = 0;
-            double recY = 0;
-            double recWidth = 0;
-            double recHeight = 0;
-            if (r != null) {
-                recX = r.getX();
-                recY = r.getY();
-                recWidth = r.getWidth();
-                recHeight = r.getHeight();
-            }
-            // liegen Koordinaten innerhalb des closestPath?
-            if ((newX >= recX) && (newX <= (recX + recWidth)) && (newY >= recY) && (newY <= (recY + recHeight))) {
-                return closestPath;
-            }
-            return null;
+        } else {
+            return super.getPathForLocation(x, y);
         }
     }
 
@@ -333,101 +426,110 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public TreePath getClosestPathForLocation(final int x, final int y) {
-        System.out.println("VisibleRect: " + this.getVisibleRect());
-        System.out.println("Tree X/Y von: " + this.getX() + "/" + this.getY());
-        System.out.println("Tree X/Y bis: " + this.getX() + this.getWidth() + "/" + this.getY() + this.getHeight());
-        final Component c = container.getComponentAt(x, y);
-        if (c instanceof JXTaskPane) {
-            final JXTaskPane pane = (JXTaskPane)c;
-            final SlideableSubTree t = trees.get(panes.indexOf(pane));
-            final int titleBarHeight = (pane.getHeight() - pane.getContentPane().getHeight());
-            if (y <= (titleBarHeight + pane.getY())) {
-                // der rootNode des SubTrees ist der closestNode
-                return getPathforOriginalTree(new TreePath(t.getModel().getRoot()));
-            } else if ((y > (titleBarHeight + pane.getY())) && (y < (pane.getY() + titleBarHeight + t.getY()))) {
-                final int distanceToTitle = Math.abs(y - (titleBarHeight + pane.getY()));
-                final int distanceToTree = Math.abs(y - (pane.getY() + titleBarHeight + t.getY()));
-                if (distanceToTitle < distanceToTree) {
+        if (useSlideableTreeView) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("VisibleRect: " + this.getVisibleRect());
+                logger.debug("Tree X/Y von: " + this.getX() + "/" + this.getY());
+                logger.debug("Tree X/Y bis: " + this.getX() + this.getWidth() + "/" + this.getY() + this.getHeight());
+            }
+            final Component c = container.getComponentAt(x, y);
+            if (c instanceof JXTaskPane) {
+                final JXTaskPane pane = (JXTaskPane)c;
+                final SlideableSubTree t = trees.get(panes.indexOf(pane));
+                final int titleBarHeight = (pane.getHeight() - pane.getContentPane().getHeight());
+                if (y <= (titleBarHeight + pane.getY())) {
+                    // der rootNode des SubTrees ist der closestNode
                     return getPathforOriginalTree(new TreePath(t.getModel().getRoot()));
-                }
-            }
-            final int newY = y - pane.getY() - t.getY() - titleBarHeight;
-            final int newX = x - pane.getX() - t.getX();
-            TreePath subTreePath = t.getClosestPathForLocation(newX, newY);
-            // ist null falls kein Knoten sichtbar ist, z.b wenn der rootNode des
-            // subTree ein blatt ist
-            if (subTreePath == null) {
-                subTreePath = new TreePath(t.getModel().getRoot());
-            }
-            return getPathforOriginalTree(subTreePath);
-
-            // y liegt zwischen titlebar und tree, geringsten abstand bestimmen
-        } else if (c instanceof JXTaskPaneContainer) {
-            // falls berechne den nahestehendsten JXTaskpane..
-            JXTaskPane closest = null;
-            boolean lastComponent = false;
-            for (final JXTaskPane p : panes) {
-                final int paneY = p.getY();
-                // liegt y vor p?
-                if (y < paneY) {
-                    if (panes.indexOf(p) == 0) {
-                        closest = p;
-                        lastComponent = false;
-                    } else {
-                        final int distance = Math.abs(y - paneY);
-                        final JXTaskPane predecessor = panes.get(panes.indexOf(p) - 1);
-                        final int distanceToPredecessor = Math.abs(y - (predecessor.getY() + predecessor.getHeight()));
-                        if (distance <= distanceToPredecessor) {
-                            closest = p;
-                            lastComponent = false;
-                        } else {
-                            closest = predecessor;
-                            lastComponent = true;
-                        }
+                } else if ((y > (titleBarHeight + pane.getY())) && (y < (pane.getY() + titleBarHeight + t.getY()))) {
+                    final int distanceToTitle = Math.abs(y - (titleBarHeight + pane.getY()));
+                    final int distanceToTree = Math.abs(y - (pane.getY() + titleBarHeight + t.getY()));
+                    if (distanceToTitle < distanceToTree) {
+                        return getPathforOriginalTree(new TreePath(t.getModel().getRoot()));
                     }
                 }
-            }
-            if (closest == null) {
-                closest = panes.get(panes.size() - 1);
-                lastComponent = true;
-            }
-            final SlideableSubTree t = trees.get(panes.indexOf(closest));
-            if (lastComponent) {
-                final int newY = closest.getY() + closest.getHeight();
-                TreePath subTreePath = t.getClosestPathForLocation(0, newY);
+                final int newY = y - pane.getY() - t.getY() - titleBarHeight;
+                final int newX = x - pane.getX() - t.getX();
+                TreePath subTreePath = t.getClosestPathForLocation(x, y);
+                // ist null falls kein Knoten sichtbar ist, z.b wenn der rootNode des
+                // subTree ein blatt ist
                 if (subTreePath == null) {
                     subTreePath = new TreePath(t.getModel().getRoot());
                 }
                 return getPathforOriginalTree(subTreePath);
+
+                // y liegt zwischen titlebar und tree, geringsten abstand bestimmen
+            } else if (c instanceof JXTaskPaneContainer) {
+                // falls berechne den nahestehendsten JXTaskpane..
+                JXTaskPane closest = null;
+                boolean lastComponent = false;
+                for (final JXTaskPane p : panes) {
+                    final int paneY = p.getY();
+                    // liegt y vor p?
+                    if (y < paneY) {
+                        if (panes.indexOf(p) == 0) {
+                            closest = p;
+                            lastComponent = false;
+                        } else {
+                            final int distance = Math.abs(y - paneY);
+                            final JXTaskPane predecessor = panes.get(panes.indexOf(p) - 1);
+                            final int distanceToPredecessor = Math.abs(y
+                                            - (predecessor.getY() + predecessor.getHeight()));
+                            if (distance <= distanceToPredecessor) {
+                                closest = p;
+                                lastComponent = false;
+                            } else {
+                                closest = predecessor;
+                                lastComponent = true;
+                            }
+                        }
+                    }
+                }
+                if (closest == null) {
+                    closest = panes.get(panes.size() - 1);
+                    lastComponent = true;
+                }
+                final SlideableSubTree t = trees.get(panes.indexOf(closest));
+                if (lastComponent) {
+                    final int newY = closest.getY() + closest.getHeight();
+                    TreePath subTreePath = t.getClosestPathForLocation(0, newY);
+                    if (subTreePath == null) {
+                        subTreePath = new TreePath(t.getModel().getRoot());
+                    }
+                    return getPathforOriginalTree(subTreePath);
+                }
+                return getPathforOriginalTree(new TreePath(t.getModel().getRoot()));
+            } // falls x/y nicht innerhalb des container liegen return null
+            else {
+                return null;
             }
-            return getPathforOriginalTree(new TreePath(t.getModel().getRoot()));
-        } // falls x/y nicht innerhalb des container liegen return null
-        else {
-            return null;
+        } else {
+            return super.getClosestPathForLocation(x, y);
         }
     }
 
     @Override
     protected Enumeration<TreePath> getDescendantToggledPaths(final TreePath parent) {
-        final Vector<TreePath> toggledPaths = new Vector<TreePath>();
-        final Object lastPathComponent = parent.getLastPathComponent();
-        final Object parentRoot = this.getModel().getRoot();
+        if (useSlideableTreeView) {
+            final Vector<TreePath> toggledPaths = new Vector<TreePath>();
+            final Object lastPathComponent = parent.getLastPathComponent();
+            final Object parentRoot = this.getModel().getRoot();
 
-        if (trees != null) {
-            if (lastPathComponent.equals(parentRoot)) {
-                // falls parent gleich dem RootNode des ParentTree ist
-                // was tun ??
-            } else {
-                final SlideableSubTree t = getSubTreeForPath(parent);
-                final TreePath subTreePath = getPathForSubTree(parent);
-                final Enumeration toggledSubPaths = t.getDescendantToggledPaths(subTreePath);
+            if (trees != null) {
+                if (lastPathComponent.equals(parentRoot)) {
+                    // falls parent gleich dem RootNode des ParentTree ist
+                    // was tun ??
+                } else {
+                    final SlideableSubTree t = getSubTreeForPath(parent);
+                    final TreePath subTreePath = getPathForSubTree(parent);
+                    final Enumeration toggledSubPaths = t.getDescendantToggledPaths(subTreePath);
 
-                while (toggledSubPaths.hasMoreElements()) {
-                    final TreePath originPath = getPathforOriginalTree((TreePath)toggledSubPaths.nextElement());
-                    toggledPaths.add(getPathforOriginalTree(originPath));
+                    while (toggledSubPaths.hasMoreElements()) {
+                        final TreePath originPath = getPathforOriginalTree((TreePath)toggledSubPaths.nextElement());
+                        toggledPaths.add(getPathforOriginalTree(originPath));
+                    }
                 }
+                return toggledPaths.elements();
             }
-            return toggledPaths.elements();
         }
         return super.getDescendantToggledPaths(parent);
     }
@@ -437,32 +539,34 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public int getMaxSelectionRow() {
-        if (trees != null) {
-            int offset = 0;
-            final int maxSelection = 0;
-            int indexOfTree = 0;
-            /*
-             * letzen Baum mit selektion herausfinden
-             */
-            for (int i = trees.size() - 1; i
-                        >= 0; i--) {
-                final SlideableSubTree t = trees.get(i);
-                if (maxSelection != -1) {
-                    indexOfTree = i;
-                    break;
-                }
-            }
-            if (maxSelection == -1) {
-                return maxSelection;
-            } else {
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                int offset = 0;
+                final int maxSelection = 0;
+                int indexOfTree = 0;
                 /*
-                 * Offset berechnen
+                 * letzen Baum mit selektion herausfinden
                  */
-                for (int i = 0; i
-                            < indexOfTree; i++) {
-                    offset += trees.get(i).getRowCount() + 1;
+                for (int i = trees.size() - 1; i
+                            >= 0; i--) {
+                    final SlideableSubTree t = trees.get(i);
+                    if (maxSelection != -1) {
+                        indexOfTree = i;
+                        break;
+                    }
                 }
-                return maxSelection + offset;
+                if (maxSelection == -1) {
+                    return maxSelection;
+                } else {
+                    /*
+                     * Offset berechnen
+                     */
+                    for (int i = 0; i
+                                < indexOfTree; i++) {
+                        offset += trees.get(i).getRowCount() + 1;
+                    }
+                    return maxSelection + offset;
+                }
             }
         }
         return super.getMaxSelectionRow();
@@ -473,23 +577,25 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public int getMinSelectionRow() {
-        if (trees != null) {
-            int offset = 0;
-            int minSelection = 0;
-            final int indexOfTree = 0;
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                int offset = 0;
+                int minSelection = 0;
+                final int indexOfTree = 0;
 
-            for (final SlideableSubTree t : trees) {
-                minSelection = t.getMinSelectionRow();
-                if (minSelection == -1) {
-                    offset += t.getRowCount() + 1;
-                } else {
-                    break;
+                for (final SlideableSubTree t : trees) {
+                    minSelection = t.getMinSelectionRow();
+                    if (minSelection == -1) {
+                        offset += t.getRowCount() + 1;
+                    } else {
+                        break;
+                    }
                 }
-            }
-            if (minSelection == -1) {
-                return minSelection;
-            } else {
-                return minSelection + offset;
+                if (minSelection == -1) {
+                    return minSelection;
+                } else {
+                    return minSelection + offset;
+                }
             }
         }
         return super.getMinSelectionRow();
@@ -500,16 +606,20 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public Rectangle getPathBounds(final TreePath path) {
-        final SlideableSubTree t = getSubTreeForPath(path);
-        // wenn durch path representierter Knoten die Wurzel des Originalbaum ist
+        if (useSlideableTreeView) {
+            final SlideableSubTree t = getSubTreeForPath(path);
+            // wenn durch path representierter Knoten die Wurzel des Originalbaum ist
 
-        if (t == null) {
-            return super.getPathBounds(path);
+            if (t == null) {
+                return super.getPathBounds(path);
+            } else {
+                final Rectangle rec = t.getPathBounds(getPathForSubTree(path));
+                final JXTaskPane pane = panes.get(trees.indexOf(t));
+                rec.setLocation((int)rec.getX() + pane.getX(), (int)rec.getY() + pane.getY());
+                return rec;
+            }
         } else {
-            final Rectangle rec = t.getPathBounds(getPathForSubTree(path));
-            final JXTaskPane pane = panes.get(trees.indexOf(t));
-            rec.setLocation((int)rec.getX() + pane.getX(), (int)rec.getY() + pane.getY());
-            return rec;
+            return super.getPathBounds(path);
         }
     }
 
@@ -518,19 +628,23 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public int getRowCount() {
-        int sum = 0;
+        if (useSlideableTreeView) {
+            int sum = 0;
 
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                // Anzahl der sichtbaren Zeilen + 1 fuer den jeweiligen Root des SubTree
-                sum += t.getRowCount();
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    // Anzahl der sichtbaren Zeilen + 1 fuer den jeweiligen Root des SubTree
+                    sum += t.getRowCount();
 
-                if (!t.isRootVisible()) {
-                    sum++;
+                    if (!t.isRootVisible()) {
+                        sum++;
+                    }
                 }
             }
+            return sum;
+        } else {
+            return super.getRowCount();
         }
-        return sum;
     }
 
     /*
@@ -540,19 +654,23 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public TreePath getSelectionPath() {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                /*final SubTreePane pane = panes.get(trees.indexOf(t));
-                 * if (pane.isSelected()) { return getPathforOriginalTree(new TreePath(t.getModel().getRoot())); }
-                 */
-                final TreePath firstSelection = t.getSelectionPath();
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    /*final SubTreePane pane = panes.get(trees.indexOf(t));
+                     * if (pane.isSelected()) { return getPathforOriginalTree(new TreePath(t.getModel().getRoot())); }
+                     */
+                    final TreePath firstSelection = t.getSelectionPath();
 
-                if (firstSelection != null) {
-                    return getPathforOriginalTree(firstSelection);
+                    if (firstSelection != null) {
+                        return getPathforOriginalTree(firstSelection);
+                    }
                 }
             }
+            return null;
+        } else {
+            return super.getSelectionPath();
         }
-        return null;
     }
 
     /*
@@ -560,28 +678,32 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public TreePath[] getSelectionPaths() {
-        final ArrayList<TreePath> paths = new ArrayList<TreePath>();
+        if (useSlideableTreeView) {
+            final ArrayList<TreePath> paths = new ArrayList<TreePath>();
 
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                final TreePath[] selections = t.getSelectionPaths();
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    final TreePath[] selections = t.getSelectionPaths();
 
-                if (selections != null) {
-                    for (int i = 0; i
-                                < selections.length; i++) {
-                        paths.add(getPathforOriginalTree(selections[i]));
+                    if (selections != null) {
+                        for (int i = 0; i
+                                    < selections.length; i++) {
+                            paths.add(getPathforOriginalTree(selections[i]));
+                        }
                     }
                 }
-            }
-            if (paths.isEmpty()) {
-                return null;
-            }
-            final TreePath[] path = new TreePath[paths.size()];
-            paths.toArray(path);
+                if (paths.isEmpty()) {
+                    return null;
+                }
+                final TreePath[] path = new TreePath[paths.size()];
+                paths.toArray(path);
 
-            return path;
+                return path;
+            }
+            return null;
+        } else {
+            return super.getSelectionPaths();
         }
-        return null;
     }
 
     /*
@@ -589,13 +711,15 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public int getSelectionCount() {
-        int sum = 0;
+        if (useSlideableTreeView) {
+            int sum = 0;
 
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                sum += t.getSelectionCount();
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    sum += t.getSelectionCount();
+                }
+                return sum;
             }
-            return sum;
         }
         return super.getSelectionCount();
     }
@@ -606,40 +730,48 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public TreePath getPathForRow(final int row) {
-        final SlideableSubTree t = getSubTreeForRow(row);
-        final int subTreeRow = getRowForSubTree(row);
+        if (useSlideableTreeView) {
+            final SlideableSubTree t = getSubTreeForRow(row);
+            final int subTreeRow = getRowForSubTree(row);
 
-        if (t != null) {
-            if ((subTreeRow < 0) && !t.isRootVisible()) {
-                return getPathforOriginalTree(new TreePath(t.getModel().getRoot()));
-            } else {
-                final TreePath tmp = t.getPathForRow(subTreeRow);
-                final TreePath path = getPathforOriginalTree(tmp);
+            if (t != null) {
+                if ((subTreeRow < 0) && !t.isRootVisible()) {
+                    return getPathforOriginalTree(new TreePath(t.getModel().getRoot()));
+                } else {
+                    final TreePath tmp = t.getPathForRow(subTreeRow);
+                    final TreePath path = getPathforOriginalTree(tmp);
 
-                return path;
+                    return path;
+                }
             }
+            return null;
+        } else {
+            return getPathForRow(row);
         }
-        return null;
     }
 
     @Override
     public int getRowForPath(final TreePath path) {
-        final SlideableSubTree subTree = getSubTreeForPath(path);
-        final TreePath subPath = getPathForSubTree(path);
-        int offset = 0;
-        int row = -1;
+        if (useSlideableTreeView) {
+            final SlideableSubTree subTree = getSubTreeForPath(path);
+            final TreePath subPath = getPathForSubTree(path);
+            int offset = 0;
+            int row = -1;
 
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                if (t.equals(subTree)) {
-                    break;
-                } else {
-                    offset += t.getRowCount() + 1;
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    if (t.equals(subTree)) {
+                        break;
+                    } else {
+                        offset += t.getRowCount() + 1;
+                    }
                 }
+                row = subTree.getRowForPath(subPath) + offset;
             }
-            row = subTree.getRowForPath(subPath) + offset;
+            return row;
+        } else {
+            return super.getRowForPath(path);
         }
-        return row;
     }
 
     @Override
@@ -649,19 +781,23 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     protected TreePath[] getPathBetweenRows(final int index0, final int index1) {
-        final ArrayList<TreePath> list = new ArrayList<TreePath>();
+        if (useSlideableTreeView) {
+            final ArrayList<TreePath> list = new ArrayList<TreePath>();
 
-        for (int i = index0 + 1; i
-                    <= index1; i++) {
-            list.add(getPathForRow(i));
-        }
-        final TreePath[] finalPaths = new TreePath[list.size()];
+            for (int i = index0 + 1; i
+                        <= index1; i++) {
+                list.add(getPathForRow(i));
+            }
+            final TreePath[] finalPaths = new TreePath[list.size()];
 
-        for (int i = 0; i
-                    < finalPaths.length; i++) {
-            finalPaths[i] = list.get(i);
+            for (int i = 0; i
+                        < finalPaths.length; i++) {
+                finalPaths[i] = list.get(i);
+            }
+            return finalPaths;
+        } else {
+            return getPathBetweenRows(index0, index1);
         }
-        return finalPaths;
     }
 
     /*
@@ -670,13 +806,17 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public boolean hasBeenExpanded(final TreePath path) {
-        final SlideableSubTree t = getSubTreeForPath(path);
-        // keinen SubTree gefunden, Knoten ist also die Wurzel oder nicht enthalten
+        if (useSlideableTreeView) {
+            final SlideableSubTree t = getSubTreeForPath(path);
+            // keinen SubTree gefunden, Knoten ist also die Wurzel oder nicht enthalten
 
-        if (t == null) {
-            return super.hasBeenExpanded(path);
+            if (t == null) {
+                return super.hasBeenExpanded(path);
+            } else {
+                return t.hasBeenExpanded(getPathForSubTree(path));
+            }
         } else {
-            return t.hasBeenExpanded(getPathForSubTree(path));
+            return super.hasBeenExpanded(path);
         }
     }
 
@@ -685,16 +825,20 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public boolean isEditing() {
-        boolean isEditing = false;
+        if (useSlideableTreeView) {
+            boolean isEditing = false;
 
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                if (t.isEditing()) {
-                    isEditing = true;
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    if (t.isEditing()) {
+                        isEditing = true;
+                    }
                 }
             }
+            return isEditing;
+        } else {
+            return super.isEditable();
         }
-        return isEditing;
     }
 
     /*
@@ -702,12 +846,16 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public boolean isExpanded(final TreePath path) {
-        final SlideableSubTree t = getSubTreeForPath(path);
+        if (useSlideableTreeView) {
+            final SlideableSubTree t = getSubTreeForPath(path);
 
-        if (t == null) {
-            return super.isExpanded(path);
+            if (t == null) {
+                return super.isExpanded(path);
+            } else {
+                return t.isExpanded(getPathForSubTree(path));
+            }
         } else {
-            return t.isExpanded(getPathForSubTree(path));
+            return super.isExpanded(path);
         }
     }
 
@@ -716,9 +864,13 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public boolean isExpanded(final int row) {
-        final TreePath path = getPathForRow(row);
+        if (useSlideableTreeView) {
+            final TreePath path = getPathForRow(row);
 
-        return isExpanded(path);
+            return isExpanded(path);
+        } else {
+            return super.isExpanded(row);
+        }
     }
 
     /*
@@ -727,13 +879,17 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public boolean isPathSelected(final TreePath path) {
-        final SlideableSubTree t = getSubTreeForPath(path);
+        if (useSlideableTreeView) {
+            final SlideableSubTree t = getSubTreeForPath(path);
 
-        if (t == null) {
-            // was passiert falls der Knoten die wurzel ist?
-            return super.isPathSelected(path);
+            if (t == null) {
+                // was passiert falls der Knoten die wurzel ist?
+                return super.isPathSelected(path);
+            } else {
+                return t.isPathSelected(getPathForSubTree(path));
+            }
         } else {
-            return t.isPathSelected(getPathForSubTree(path));
+            return super.isPathSelected(path);
         }
     }
 
@@ -742,13 +898,17 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public boolean isRowSelected(final int row) {
-        final TreePath path = getPathForRow(row);
-        if (path == null) {
-            return false;
-        }
-        final boolean isSelected = isPathSelected(path);
+        if (useSlideableTreeView) {
+            final TreePath path = getPathForRow(row);
+            if (path == null) {
+                return false;
+            }
+            final boolean isSelected = isPathSelected(path);
 
-        return isSelected;
+            return isSelected;
+        } else {
+            return super.isRowSelected(row);
+        }
     }
 
     /*
@@ -756,14 +916,18 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public boolean isSelectionEmpty() {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                if (!(t.isSelectionEmpty())) {
-                    return false;
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    if (!(t.isSelectionEmpty())) {
+                        return false;
+                    }
                 }
             }
+            return true;
+        } else {
+            return super.isSelectionEmpty();
         }
-        return true;
     }
     /*
      * Vorgehensweise wie bei makeVisible
@@ -771,12 +935,16 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public boolean isVisible(final TreePath path) {
-        final SlideableSubTree t = getSubTreeForPath(path);
+        if (useSlideableTreeView) {
+            final SlideableSubTree t = getSubTreeForPath(path);
 
-        if (t == null) {
-            return super.isVisible(path);
+            if (t == null) {
+                return super.isVisible(path);
+            } else {
+                return t.isVisible(getPathForSubTree(path));
+            }
         } else {
-            return t.isVisible(getPathForSubTree(path));
+            return super.isVisible();
         }
     }
 
@@ -786,63 +954,79 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public void makeVisible(final TreePath path) {
-        final JTree t = getSubTreeForPath(path);
+        if (useSlideableTreeView) {
+            final JTree t = getSubTreeForPath(path);
 
-        if (t == null) {
-            super.makeVisible(path);
+            if (t == null) {
+                super.makeVisible(path);
+            } else {
+                t.makeVisible(getPathForSubTree(path));
+            }
         } else {
-            t.makeVisible(getPathForSubTree(path));
+            super.makeVisible(path);
         }
     }
 
     @Override
     public void removeSelectionInterval(final int index0, final int index1) {
-        if (trees != null) {
-            if (index1 < index0) {
-                return;
-            } else {
-                for (int i = index0; i
-                            <= index1; i++) {
-                    final TreePath path = getPathForRow(i);
-                    removeSelectionPath(path);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                if (index1 < index0) {
+                    return;
+                } else {
+                    for (int i = index0; i
+                                <= index1; i++) {
+                        final TreePath path = getPathForRow(i);
+                        removeSelectionPath(path);
+                    }
                 }
+                super.removeSelectionInterval(index0, index1);
             }
+        } else {
             super.removeSelectionInterval(index0, index1);
         }
     }
 
     @Override
     public void removeSelectionPath(final TreePath path) {
-        if (trees != null) {
-            final SlideableSubTree subTree = getSubTreeForPath(path);
-            subTree.removeSelectionPath(getPathForSubTree(path));
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                final SlideableSubTree subTree = getSubTreeForPath(path);
+                subTree.removeSelectionPath(getPathForSubTree(path));
+            }
         }
         super.removeSelectionPath(path);
     }
 
     @Override
     public void removeSelectionPaths(final TreePath[] paths) {
-        for (int i = 0; i
-                    < paths.length; i++) {
-            removeSelectionPath(paths[i]);
+        if (useSlideableTreeView) {
+            for (int i = 0; i
+                        < paths.length; i++) {
+                removeSelectionPath(paths[i]);
+            }
         }
         super.removeSelectionPaths(paths);
     }
 
     @Override
     public void removeSelectionRow(final int row) {
-        final TreePath path = getPathForRow(row);
-        removeSelectionPath(
-            path);
+        if (useSlideableTreeView) {
+            final TreePath path = getPathForRow(row);
+            removeSelectionPath(
+                path);
+        }
         super.removeSelectionRow(row);
     }
 
     @Override
     public void removeSelectionRows(final int[] rows) {
-        for (int i = 0; i
-                    < rows.length; i++) {
-            final TreePath path = getPathForRow(i);
-            removeSelectionPath(path);
+        if (useSlideableTreeView) {
+            for (int i = 0; i
+                        < rows.length; i++) {
+                final TreePath path = getPathForRow(i);
+                removeSelectionPath(path);
+            }
         }
         super.removeSelectionRows(rows);
     }
@@ -852,11 +1036,15 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     protected boolean removeDescendantSelectedPaths(final TreePath path, final boolean includePath) {
-        final SlideableSubTree t = getSubTreeForPath(path);
-        final TreePath subTreePath = getPathForSubTree(path);
+        if (useSlideableTreeView) {
+            final SlideableSubTree t = getSubTreeForPath(path);
+            final TreePath subTreePath = getPathForSubTree(path);
 
-        if (trees != null) {
-            return t.removeDescendantSelectedPaths(subTreePath, includePath);
+            if (trees != null) {
+                return t.removeDescendantSelectedPaths(subTreePath, includePath);
+            } else {
+                return super.removeDescendantSelectedPaths(path, includePath);
+            }
         } else {
             return super.removeDescendantSelectedPaths(path, includePath);
         }
@@ -864,13 +1052,17 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     protected void removeDescendantToggledPaths(final Enumeration<TreePath> toRemove) {
-        if (trees != null) {
-            while (toRemove.hasMoreElements()) {
-                final TreePath path = toRemove.nextElement();
-                final SlideableSubTree t = getSubTreeForPath(path);
-                final Vector<TreePath> subToRemove = new Vector<TreePath>();
-                subToRemove.add(getPathForSubTree(path));
-                t.removeDescendantToggledPaths(subToRemove.elements());
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                while (toRemove.hasMoreElements()) {
+                    final TreePath path = toRemove.nextElement();
+                    final SlideableSubTree t = getSubTreeForPath(path);
+                    final Vector<TreePath> subToRemove = new Vector<TreePath>();
+                    subToRemove.add(getPathForSubTree(path));
+                    t.removeDescendantToggledPaths(subToRemove.elements());
+                }
+            } else {
+                super.removeDescendantToggledPaths(toRemove);
             }
         } else {
             super.removeDescendantToggledPaths(toRemove);
@@ -882,33 +1074,35 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public int[] getSelectionRows() {
-        final int[][] result = new int[trees.size()][];
-        int offset = 0;
-        int count = 0;
+        if (useSlideableTreeView) {
+            final int[][] result = new int[trees.size()][];
+            int offset = 0;
+            int count = 0;
 
-        if (trees != null) {
-            // getSelectionRows fuer jeden Subtree
-            for (final SlideableSubTree t : trees) {
-                result[trees.indexOf(t)] = t.getSelectionRows();
-                count += result[trees.indexOf(t)].length;
-                // Offset aufaddieren fuer korrekte Inidzes
+            if (trees != null) {
+                // getSelectionRows fuer jeden Subtree
+                for (final SlideableSubTree t : trees) {
+                    result[trees.indexOf(t)] = t.getSelectionRows();
+                    count += result[trees.indexOf(t)].length;
+                    // Offset aufaddieren fuer korrekte Inidzes
+                    for (int i = 0; i
+                                < result[trees.indexOf(t)].length; i++) {
+                        result[trees.indexOf(t)][i] += offset;
+                    }
+                    offset += t.getRowCount() + 1;
+                }
+                final int[] selectionRows = new int[count];
+                // Ergebnisse zusammenfassen
+
                 for (int i = 0; i
-                            < result[trees.indexOf(t)].length; i++) {
-                    result[trees.indexOf(t)][i] += offset;
+                            < selectionRows.length; i++) {
+                    for (int j = 0; j
+                                < result[i].length; j++) {
+                        selectionRows[i] = result[i][j];
+                    }
                 }
-                offset += t.getRowCount() + 1;
+                return selectionRows;
             }
-            final int[] selectionRows = new int[count];
-            // Ergebnisse zusammenfassen
-
-            for (int i = 0; i
-                        < selectionRows.length; i++) {
-                for (int j = 0; j
-                            < result[i].length; j++) {
-                    selectionRows[i] = result[i][j];
-                }
-            }
-            return selectionRows;
         }
         return super.getSelectionRows();
     }
@@ -919,15 +1113,19 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public void scrollPathToVisible(final TreePath path) {
-        if (trees != null) {
-            final SlideableSubTree t = getSubTreeForPath(path);
-            // path ist die wurzel des baums, oder gar nicht enthalten
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                final SlideableSubTree t = getSubTreeForPath(path);
+                // path ist die wurzel des baums, oder gar nicht enthalten
 
-            if (t == null) {
-                super.scrollPathToVisible(path);
-            } else {
-                t.scrollPathToVisible(getPathForSubTree(path));
+                if (t == null) {
+                    super.scrollPathToVisible(path);
+                } else {
+                    t.scrollPathToVisible(getPathForSubTree(path));
+                }
             }
+        } else {
+            super.scrollPathToVisible(path);
         }
     }
 
@@ -937,19 +1135,25 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public void scrollRowToVisible(final int row) {
-        final TreePath path = getPathForRow(row);
-        scrollPathToVisible(
-            path);
+        if (useSlideableTreeView) {
+            final TreePath path = getPathForRow(row);
+            scrollPathToVisible(
+                path);
+        } else {
+            super.scrollRowToVisible(row);
+        }
     }
 
     @Override
     public void setAnchorSelectionPath(final TreePath newPath) {
-        if (trees != null) {
-            final SlideableSubTree t = getSubTreeForPath(newPath);
-            final TreePath subTreePath = getPathForSubTree(newPath);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                final SlideableSubTree t = getSubTreeForPath(newPath);
+                final TreePath subTreePath = getPathForSubTree(newPath);
 
-            if (t != null) {
-                t.setAnchorSelectionPath(subTreePath);
+                if (t != null) {
+                    t.setAnchorSelectionPath(subTreePath);
+                }
             }
         }
         super.setAnchorSelectionPath(newPath);
@@ -957,9 +1161,11 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setCellEditor(final TreeCellEditor cellEditor) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setCellEditor(cellEditor);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setCellEditor(cellEditor);
+                }
             }
         }
         super.setCellEditor(cellEditor);
@@ -967,30 +1173,25 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setCellRenderer(final TreeCellRenderer x) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setCellRenderer(x);
-                final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)t.getModel().getRoot();
-                final JXTaskPane pane = panes.get(trees.indexOf(t));
-                final DefaultTreeCellRenderer renderer;
-                if (x instanceof DefaultTreeCellRenderer) {
-                    renderer = (DefaultTreeCellRenderer)t.getCellRenderer();
-                    final JLabel l = (JLabel)renderer.getTreeCellRendererComponent(
-                            this,
-                            rootNode,
-                            false,
-                            !(pane.isCollapsed()),
-                            rootNode.isLeaf(),
-                            0,
-                            false);
-                    pane.setIcon(l.getIcon());
-//                    if (rootNode.isLeaf()) {
-//                        pane.setIcon(renderer.getDefaultLeafIcon());
-//                    } else if (!(pane.isCollapsed())) {
-//                        pane.setIcon(renderer.getDefaultOpenIcon());
-//                    } else {
-//                        pane.setIcon(renderer.getDefaultClosedIcon());
-//                    }
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setCellRenderer(x);
+                    final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)t.getModel().getRoot();
+                    final JXTaskPane pane = panes.get(trees.indexOf(t));
+                    final DefaultTreeCellRenderer renderer;
+                    if (x instanceof DefaultTreeCellRenderer) {
+                        renderer = (DefaultTreeCellRenderer)t.getCellRenderer();
+                        final JLabel l = (JLabel)renderer.getTreeCellRendererComponent(
+                                this,
+                                rootNode,
+                                false,
+                                !(pane.isCollapsed()),
+                                rootNode.isLeaf(),
+                                0,
+                                false);
+                        pane.setIcon(l.getIcon());
+                    }
                 }
             }
         }
@@ -999,9 +1200,11 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setDragEnabled(final boolean b) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setDragEnabled(b);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setDragEnabled(b);
+                }
             }
         }
         super.setDragEnabled(b);
@@ -1009,9 +1212,11 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setEditable(final boolean flag) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setEditable(flag);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setEditable(flag);
+                }
             }
         }
         super.setEditable(flag);
@@ -1019,9 +1224,11 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setExpandsSelectedPaths(final boolean newValue) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setExpandsSelectedPaths(newValue);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setExpandsSelectedPaths(newValue);
+                }
             }
         }
         super.setExpandsSelectedPaths(newValue);
@@ -1032,18 +1239,24 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     protected void setExpandedState(final TreePath path, final boolean state) {
-        if (trees != null) {
-            final SlideableSubTree t = getSubTreeForPath(path);
-            final TreePath subTreePath = getPathForSubTree(path);
-            t.setExpandedState(subTreePath, state);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                final SlideableSubTree t = getSubTreeForPath(path);
+                final TreePath subTreePath = getPathForSubTree(path);
+                t.setExpandedState(subTreePath, state);
+            }
+        } else {
+            super.setExpandedState(path, state);
         }
     }
 
     @Override
     public void setInvokesStopCellEditing(final boolean newValue) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setInvokesStopCellEditing(newValue);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setInvokesStopCellEditing(newValue);
+                }
             }
         }
         super.setInvokesStopCellEditing(newValue);
@@ -1051,19 +1264,25 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setLargeModel(final boolean newValue) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setLargeModel(newValue);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setLargeModel(newValue);
+                }
+                super.setLargeModel(newValue);
             }
+        } else {
             super.setLargeModel(newValue);
         }
     }
 
     @Override
     public void setLeadSelectionPath(final TreePath newPath) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setLeadSelectionPath(newPath);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setLeadSelectionPath(newPath);
+                }
             }
         }
         super.setLeadSelectionPath(newPath);
@@ -1074,30 +1293,40 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      *  aendert sich das Model, muesssen neue Subtrees mit neuem DelegatingModel erzeugt werden.
      */
     public void setModel(final TreeModel newModel) {
-        final TreeModel oldModel = this.getModel();
-        treeModel = newModel;
-        firePropertyChange(TREE_MODEL_PROPERTY, oldModel, newModel);
+        if (useSlideableTreeView) {
+            final TreeModel oldModel = this.getModel();
+            treeModel = newModel;
+            firePropertyChange(TREE_MODEL_PROPERTY, oldModel, newModel);
 
-        if (trees != null) {
-            createSubTrees(newModel);
-            flushTreeContainer();
-            addToTreeContainer(panes);
+            if (trees != null) {
+                createSubTrees(newModel);
+                flushTreeContainer();
+                addToTreeContainer(panes);
+            }
+        } else {
+            super.setModel(newModel);
         }
     }
 
     @Override
     public void setRootVisible(final boolean rootVisible) {
-        for (final SlideableSubTree t : trees) {
-            t.setRootVisible(rootVisible);
+        if (useSlideableTreeView) {
+            for (final SlideableSubTree t : trees) {
+                t.setRootVisible(rootVisible);
+            }
         }
         super.setRootVisible(rootVisible);
     }
 
     @Override
     public void setRowHeight(final int rowHeight) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setRowHeight(rowHeight);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setRowHeight(rowHeight);
+                }
+            } else {
+                super.setRowHeight(rowHeight);
             }
         } else {
             super.setRowHeight(rowHeight);
@@ -1106,32 +1335,40 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setScrollsOnExpand(final boolean newValue) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setScrollsOnExpand(newValue);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setScrollsOnExpand(newValue);
+                }
             }
+        } else {
+            super.setScrollsOnExpand(newValue);
         }
     }
 
     @Override
     public void setSelectionInterval(final int index0, final int index1) {
-        if (trees != null) {
-            final ArrayList<TreePath> pathList = new ArrayList<TreePath>();
-            if (index1 < index0) {
-                return;
-            } else {
-                for (int i = index0; i
-                            <= index1; i++) {
-                    final TreePath path = getPathForRow(i);
-                    pathList.add(path);
-                }
-                final TreePath[] finalPaths = new TreePath[pathList.size()];
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                final ArrayList<TreePath> pathList = new ArrayList<TreePath>();
+                if (index1 < index0) {
+                    return;
+                } else {
+                    for (int i = index0; i
+                                <= index1; i++) {
+                        final TreePath path = getPathForRow(i);
+                        pathList.add(path);
+                    }
+                    final TreePath[] finalPaths = new TreePath[pathList.size()];
 
-                for (int i = 0; i
-                            < finalPaths.length; i++) {
-                    finalPaths[i] = pathList.get(i);
+                    for (int i = 0; i
+                                < finalPaths.length; i++) {
+                        finalPaths[i] = pathList.get(i);
+                    }
+                    setSelectionPaths(finalPaths);
                 }
-                setSelectionPaths(finalPaths);
+            } else {
+                super.setSelectionInterval(index0, index1);
             }
         } else {
             super.setSelectionInterval(index0, index1);
@@ -1140,9 +1377,13 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setSelectionModel(final TreeSelectionModel selectionModel) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setSelectionModel(selectionModel);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setSelectionModel(selectionModel);
+                }
+            } else {
+                super.setSelectionModel(selectionModel);
             }
         } else {
             super.setSelectionModel(selectionModel);
@@ -1151,55 +1392,74 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setSelectionPath(final TreePath path) {
-        if (trees != null) {
-            final SlideableSubTree t = getSubTreeForPath(path);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                final SlideableSubTree t = getSubTreeForPath(path);
 
-            for (final JTree tmpTree : trees) {
-                if (t.equals(tmpTree)) {
-                    continue;
+                for (final JTree tmpTree : trees) {
+                    if (t.equals(tmpTree)) {
+                        continue;
+                    } else {
+                        tmpTree.clearSelection();
+                    }
+                }
+                if (t == null) {
+                    // was wenn der Root knoten selektiert werden soll
                 } else {
-                    tmpTree.clearSelection();
+                    t.setSelectionPath(getPathForSubTree(path));
                 }
             }
-            if (t == null) {
-                // was wenn der Root knoten selektiert werden soll
-            } else {
-                t.setSelectionPath(getPathForSubTree(path));
-            }
+        } else {
+            super.setSelectionPath(path);
         }
-        // super.setSelectionPath(path);
     }
 
     @Override
     public void setSelectionPaths(final TreePath[] paths) {
-        for (int i = 0; i
-                    < paths.length; i++) {
-            setSelectionPath(paths[i]);
+        if (useSlideableTreeView) {
+            for (int i = 0; i
+                        < paths.length; i++) {
+                setSelectionPath(paths[i]);
+            }
+        } else {
+            super.setSelectionPaths(paths);
         }
     }
 
     @Override
     public void setSelectionRow(final int row) {
-        final TreePath path = getPathForRow(row);
-        final SlideableSubTree subTree = getSubTreeForPath(path);
-        subTree.setSelectionPath(getPathForSubTree(path));
+        if (useSlideableTreeView) {
+            final TreePath path = getPathForRow(row);
+            final SlideableSubTree subTree = getSubTreeForPath(path);
+            subTree.setSelectionPath(getPathForSubTree(path));
+        } else {
+            super.setSelectionRow(row);
+        }
     }
 
     @Override
     public void setSelectionRows(final int[] rows) {
-        for (int i = 0; i
-                    < rows.length; i++) {
-            final TreePath path = getPathForRow(rows[i]);
-            final SlideableSubTree subTree = getSubTreeForPath(path);
-            subTree.setSelectionPath(getPathForSubTree(path));
+        if (useSlideableTreeView) {
+            for (int i = 0; i
+                        < rows.length; i++) {
+                final TreePath path = getPathForRow(rows[i]);
+                final SlideableSubTree subTree = getSubTreeForPath(path);
+                subTree.setSelectionPath(getPathForSubTree(path));
+            }
+        } else {
+            super.setSelectionRows(rows);
         }
     }
 
     @Override
     public void setShowsRootHandles(final boolean newValue) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setShowsRootHandles(newValue);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setShowsRootHandles(newValue);
+                }
+            } else {
+                super.setShowsRootHandles(newValue);
             }
         } else {
             super.setShowsRootHandles(newValue);
@@ -1208,9 +1468,13 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setToggleClickCount(final int clickCount) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setToggleClickCount(clickCount);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setToggleClickCount(clickCount);
+                }
+            } else {
+                super.setToggleClickCount(clickCount);
             }
         } else {
             super.setToggleClickCount(clickCount);
@@ -1219,9 +1483,13 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setUI(final TreeUI ui) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setUI(ui);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setUI(ui);
+                }
+            } else {
+                super.setUI(ui);
             }
         } else {
             super.setUI(ui);
@@ -1230,9 +1498,11 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void setVisibleRowCount(final int newCount) {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.setVisibleRowCount(newCount);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.setVisibleRowCount(newCount);
+                }
             }
         }
         super.setVisibleRowCount(newCount);
@@ -1244,11 +1514,15 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public void startEditingAtPath(final TreePath path) {
-        final SlideableSubTree t = getSubTreeForPath(path);
-        if (t == null) {
-            super.startEditingAtPath(path);
+        if (useSlideableTreeView) {
+            final SlideableSubTree t = getSubTreeForPath(path);
+            if (t == null) {
+                super.startEditingAtPath(path);
+            } else {
+                t.startEditingAtPath(getPathForSubTree(path));
+            }
         } else {
-            t.startEditingAtPath(getPathForSubTree(path));
+            super.startEditingAtPath(path);
         }
     }
 
@@ -1257,24 +1531,30 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     @Override
     public boolean stopEditing() {
-        boolean stopped = false;
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                if (t.stopEditing()) {
-                    stopped = true;
+        if (useSlideableTreeView) {
+            boolean stopped = false;
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    if (t.stopEditing()) {
+                        stopped = true;
+                    }
                 }
+            } else {
+                return super.stopEditing();
             }
+            return stopped;
         } else {
             return super.stopEditing();
         }
-        return stopped;
     }
 
     @Override
     public void updateUI() {
-        if (trees != null) {
-            for (final SlideableSubTree t : trees) {
-                t.updateUI();
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final SlideableSubTree t : trees) {
+                    t.updateUI();
+                }
             }
         }
         super.updateUI();
@@ -1305,9 +1585,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
             subTree.addTreeExpansionListener(this);
             subTree.addTreeSelectionListener(this);
             subTree.addTreeWillExpandListener(this);
-            // subTree.setDragEnabled(true);
             subTree.setBorder(new EmptyBorder(1, 1, 1, 1));
-            // final MetaTreeNodeDNDHandler dndHandler = new MetaTreeNodeDNDHandler(subTree);
             trees.add(subTree);
             final SubTreePane tmpPane = new SubTreePane();
             final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)subTree.getModel().getRoot();
@@ -1324,75 +1602,16 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
                 icon = renderer.getOpenIcon();
             }
             tmpPane.setIcon(icon);
+            final Border border = BorderFactory.createLineBorder(new Color(234, 234, 234));
+            ((JComponent)tmpPane.getContentPane()).setBorder(border);
+            tmpPane.getContentPane().setBackground(Color.white);
             tmpPane.setTitle(newRootNode.toString());
-            tmpPane.addMouseListener(new MouseAdapter() {
-
-                    /*
-                     * wird auf eine Pane geklickt(linke maustaste) wird diese abhaengig vom zustand selektiert bzw.
-                     * deselektiert und ein event gefeuert das dieser Knoten expandiert wurde (pane klappt sich auf,
-                     * autom. Nachladen der Kinder) sowie, das der Knoten Selektiert wurde(für beschreibung)
-                     */
-                    @Override
-                    public void mouseClicked(final MouseEvent e) {
-                        if (e.isPopupTrigger()) {
-                            // System.out.println("popup menu");
-                        } else {
-                            final SubTreePane pane = (SubTreePane)e.getSource();
-                            final SlideableSubTree t = trees.get(panes.indexOf(pane));
-                            final TreePath subTreePath = new TreePath(t.getModel().getRoot());
-                            final TreePath path = SlideableTree.this.getPathforOriginalTree(subTreePath);
-                            if (pane.isSelected()) {
-                                SlideableTree.this.getSelectionModel().removeSelectionPath(path);
-                                SlideableTree.this.fireTreeCollapsed(path);
-                                pane.setSelected(false);
-                                final DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)t.getCellRenderer();
-                                if (renderer instanceof DefaultTreeCellRenderer) {
-                                    final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)t
-                                                .getModel().getRoot();
-                                    final JLabel l = (JLabel)renderer.getTreeCellRendererComponent(
-                                            SlideableTree.this,
-                                            rootNode,
-                                            false,
-                                            !(pane.isCollapsed()),
-                                            rootNode.isLeaf(),
-                                            0,
-                                            false);
-                                    pane.setIcon(l.getIcon());
-                                }
-                            } else {
-                                SlideableTree.this.fireValueChanged(
-                                    new TreeSelectionEvent(
-                                        SlideableTree.this,
-                                        path,
-                                        true,
-                                        SlideableTree.this.getLeadSelectionPath(),
-                                        path));
-
-//                            SlideableTree.this.getSelectionModel().setSelectionPath(path);
-                                SlideableTree.this.fireTreeExpanded(path);
-                                pane.setSelected(true);
-                                final DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)t.getCellRenderer();
-                                if (renderer instanceof DefaultTreeCellRenderer) {
-                                    final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)t
-                                                .getModel().getRoot();
-                                    final JLabel l = (JLabel)renderer.getTreeCellRendererComponent(
-                                            SlideableTree.this,
-                                            rootNode,
-                                            false,
-                                            !(pane.isCollapsed()),
-                                            rootNode.isLeaf(),
-                                            0,
-                                            false);
-                                    pane.setIcon(l.getIcon());
-                                }
-                            }
-                        }
-                    }
-                });
-
-            ((JComponent)tmpPane.getContentPane()).setBorder(new EmptyBorder(1, 16, 1, 1));
+            tmpPane.addMouseListener(new ClickAndSelectListener());
+            // ((JComponent)tmpPane.getContentPane()).setBorder(new EmptyBorder(1, 16, 1, 1));
             tmpPane.add(subTree);
+
             panes.add(tmpPane);
+            addToTreeContainer(panes);
         }
     }
 
@@ -1401,10 +1620,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      */
     private void flushTreeContainer() {
         if (container != null) {
-            for (int i = 0; i
-                        < container.getComponentCount(); i++) {
-                container.remove(container.getComponent(i));
-            }
+            container.removeAll();
         }
     }
 
@@ -1454,7 +1670,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      *
      * @return  DOCUMENT ME!
      */
-    private TreePath getPathforOriginalTree(final TreePath subTreePath) {
+    protected TreePath getPathforOriginalTree(final TreePath subTreePath) {
         final Object pathRoot = subTreePath.getPathComponent(0);
         final Object origRoot = this.getModel().getRoot();
         // falls der Methode bereits ein pfad des original Baum uebergeben wird,
@@ -1571,10 +1787,15 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public void fireTreeExpanded(final TreePath path) {
-        final TreeExpansionListener[] listener = this.getTreeExpansionListeners();
+        if (useSlideableTreeView) {
+            final TreeExpansionListener[] listener = this.getTreeExpansionListeners();
 
-        for (int i = 0; i < listener.length; i++) {
-            listener[i].treeExpanded(new TreeExpansionEvent(this, path));
+            for (int i = 0; i < listener.length; i++) {
+                listener[i].treeExpanded(new TreeExpansionEvent(this, path));
+            }
+            scrollPathToVisible(path);
+        } else {
+            super.fireTreeExpanded(path);
         }
     }
 
@@ -1750,19 +1971,28 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
         fireTreeCollapsed(getPathforOriginalTree(event.getPath()));
     }
 
+    /*
+     * wird aufgerufen wenn sich die Slektion innerhalb eines Subtrees ändert
+     */
     @Override
     public void valueChanged(final TreeSelectionEvent e) {
-        if (trees != null) {
-            final TreePath path = getPathforOriginalTree(e.getPath());
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                final TreePath path = getPathforOriginalTree(e.getPath());
 
-            for (final JTree tmpTree : trees) {
-                if (!(e.isAddedPath()) || tmpTree.equals((SlideableSubTree)e.getSource())) {
-                    continue;
-                } else {
-                    tmpTree.clearSelection();
+                if (e.isAddedPath()) {
+                    for (final JTree tmpTree : trees) {
+                        final SubTreePane pane = panes.get(trees.indexOf(tmpTree));
+                        if (tmpTree.equals((SlideableSubTree)e.getSource())) {
+                            pane.setSelected(true);
+                        } else {
+                            pane.setSelected(false);
+                            tmpTree.clearSelection();
+                        }
+                    }
                 }
+                fireValueChanged(e);
             }
-            fireValueChanged(e);
         }
     }
 
@@ -1778,41 +2008,29 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
     @Override
     public TreeModelListener createTreeModelListener() {
-        return new MyTreeModelHandler(this);
+        if (useSlideableTreeView) {
+            return new MyTreeModelHandler(this);
+        } else {
+            return super.createTreeModelListener();
+        }
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param  node    DOCUMENT ME!
-     * @param  indent  DOCUMENT ME!
+     * @param  l  node DOCUMENT ME!
      */
-    public void print(final TreeNode node, String indent) {
-        System.out.println(indent + node.toString());
-        indent += "\t";
-
-        for (int i = 0; i
-                    < node.getChildCount(); i++) {
-            if (node.getChildCount() > 0) {
-                final TreeNode child = node.getChildAt(i);
-
-                if (child.isLeaf()) {
-                    System.out.println(indent + child.toString());
-                } else {
-                    indent += "\t";
-                    this.print(child, indent);
-                }
-            }
-        }
-    }
-
     @Override
     public void addMouseListener(final MouseListener l) {
-        if (trees != null) {
-            for (final JTree t : trees) {
-                t.addMouseListener(l);
-                panes.get(trees.indexOf(t)).addMouseListener(l);
+        if (useSlideableTreeView) {
+            if (trees != null) {
+                for (final JTree t : trees) {
+                    t.addMouseListener(l);
+                    panes.get(trees.indexOf(t)).addMouseListener(l);
+                }
             }
+        } else {
+            super.addMouseListener(l);
         }
     }
 
@@ -1868,26 +2086,142 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
         @Override
         public void treeNodesChanged(final TreeModelEvent e) {
-            final SlideableSubTree t = getSubTreeForPath(e.getTreePath());
-            t.updateUI();
+            if (useSlideableTreeView) {
+                final SlideableSubTree t = getSubTreeForPath(e.getTreePath());
+                EventQueue.invokeLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            t.updateUI();
+                        }
+                    });
+                tree.scrollPathToVisible(e.getTreePath());
+            }
         }
 
         @Override
         public void treeNodesInserted(final TreeModelEvent e) {
-            final SlideableSubTree t = getSubTreeForPath(e.getTreePath());
-            t.updateUI();
+            if (useSlideableTreeView) {
+                final SlideableSubTree t = getSubTreeForPath(e.getTreePath());
+                EventQueue.invokeLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            t.updateUI();
+                        }
+                    });
+                tree.scrollPathToVisible(e.getTreePath());
+            }
         }
 
         @Override
         public void treeStructureChanged(final TreeModelEvent e) {
-            final SlideableSubTree t = getSubTreeForPath(e.getTreePath());
-            t.updateUI();
+            if (useSlideableTreeView) {
+                final SlideableSubTree t = getSubTreeForPath(e.getTreePath());
+                if (t == null) {
+                    if (tree.getModel().getRoot().equals(e.getTreePath().getLastPathComponent())) {
+                        // ein Knoten dirket unterhalb des Root Knoten hat sich geändert..
+                        tree.flushTreeContainer();
+                        tree.createSubTrees(tree.getModel());
+                        tree.addToTreeContainer(tree.getPanes());
+                    }
+                } else {
+                    EventQueue.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                t.updateUI();
+                            }
+                        });
+                    tree.scrollPathToVisible(e.getTreePath());
+                }
+            }
         }
 
         @Override
         public void treeNodesRemoved(final TreeModelEvent e) {
-            final SlideableSubTree t = getSubTreeForPath(e.getTreePath());
-            t.updateUI();
+            if (useSlideableTreeView) {
+                final SlideableSubTree t = getSubTreeForPath(e.getTreePath());
+                EventQueue.invokeLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            t.updateUI();
+                        }
+                    });
+                tree.scrollPathToVisible(e.getTreePath());
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    protected class ClickAndSelectListener extends MouseAdapter {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void mousePressed(final MouseEvent e) {
+            final SubTreePane pane = (SubTreePane)e.getSource();
+            // liegen Koordianten innerhalb der Titlebar?
+            if ((e.getX() < pane.getWidth()) && (e.getY() < pane.getTitleBarHeight())) {
+                {
+                    if (!e.isPopupTrigger()) {
+                        final SlideableSubTree t = trees.get(panes.indexOf(pane));
+                        final TreePath subTreePath = new TreePath(t.getModel().getRoot());
+                        final TreePath path = SlideableTree.this.getPathforOriginalTree(subTreePath);
+                        // setze RootKnoten des SubTrees als Selektion
+                        SlideableTree.this.clearSelection();
+                        SlideableTree.this.setSelectionPath(path);
+
+                        if (!pane.isCollapsed()) {
+                            // pane soll geschlossen werden
+                            pane.setSelected(false);
+
+                            SlideableTree.this.fireTreeCollapsed(path);
+
+                            // setze Icon
+                            final TreeCellRenderer cellRenderer = t.getCellRenderer();
+                            if (cellRenderer instanceof DefaultTreeCellRenderer) {
+                                final DefaultTreeCellRenderer defaultRenderer = (DefaultTreeCellRenderer)cellRenderer;
+                                final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)t.getModel().getRoot();
+                                final JLabel l = (JLabel)defaultRenderer.getTreeCellRendererComponent(
+                                        SlideableTree.this,
+                                        rootNode,
+                                        false,
+                                        (pane.isCollapsed()),
+                                        rootNode.isLeaf(),
+                                        0,
+                                        false);
+                                pane.setIcon(l.getIcon());
+                            }
+                        } else {
+                            // pane soll geöffnet werden
+                            pane.setSelected(true);
+
+                            SlideableTree.this.fireTreeExpanded(path);
+                            // setze icon neu
+                            final TreeCellRenderer cellRenderer = t.getCellRenderer();
+                            if (cellRenderer instanceof DefaultTreeCellRenderer) {
+                                final DefaultTreeCellRenderer defaultRenderer = (DefaultTreeCellRenderer)cellRenderer;
+                                final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)t.getModel().getRoot();
+                                final JLabel l = (JLabel)defaultRenderer.getTreeCellRendererComponent(
+                                        SlideableTree.this,
+                                        rootNode,
+                                        false,
+                                        (pane.isCollapsed()),
+                                        rootNode.isLeaf(),
+                                        0,
+                                        false);
+                                pane.setIcon(l.getIcon());
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

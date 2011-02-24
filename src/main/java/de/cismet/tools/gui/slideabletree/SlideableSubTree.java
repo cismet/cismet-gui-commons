@@ -38,28 +38,6 @@ public class SlideableSubTree extends JTree {
 
     //~ Methods ----------------------------------------------------------------
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  node    DOCUMENT ME!
-     * @param  indent  DOCUMENT ME!
-     */
-    public void print(final TreeNode node, String indent) {
-        System.out.println(indent + node.toString());
-        indent += "\t";
-        for (int i = 0; i < node.getChildCount(); i++) {
-            if (node.getChildCount() > 0) {
-                final TreeNode child = node.getChildAt(i);
-                if (child.isLeaf()) {
-                    System.out.println(indent + child.toString());
-                } else {
-                    indent += "\t";
-                    this.print(child, indent);
-                }
-            }
-        }
-    }
-
     /*
      * subtree zu knoten herausfinden, neuen path erstellen, mehtode weiterleiten ! Achtung Methode protected!!
      */

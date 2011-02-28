@@ -32,7 +32,7 @@
             <groupId>de.cismet.commons</groupId>
             <artifactId>wss-bean</artifactId>
             <version>1.1-SNAPSHOT</version>
-        </dependency>        
+        </dependency>
         <dependency>
             <groupId>org.swinglabs</groupId>
             <artifactId>swing-layout</artifactId>
@@ -92,9 +92,9 @@
             <version>unknown</version>
         </dependency>
         <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-log4j12</artifactId>
-          <version>1.5.8</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.5.8</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
@@ -134,6 +134,11 @@
             <artifactId>core-renderer</artifactId>
             <version>R8</version>
         </dependency>
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>looks</artifactId>
+            <version>2.2.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -161,6 +166,25 @@
                 </dependency>
             </dependencies>
         </profile>
+
+        <profile>
+            <id>skip-format</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>triemax</groupId>
+                        <artifactId>jalopy-maven</artifactId>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+  
     </profiles>
 </project>
 

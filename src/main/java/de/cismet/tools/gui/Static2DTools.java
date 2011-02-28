@@ -299,44 +299,44 @@ public class Static2DTools {
                 final int val = bi.getRGB(x, y);
 
                 if ((val != white) && (val != alpha)) {
-                    if (x > maxX) {
+                    if (x >= maxX) {
                         maxX = x;
                     }
-                    if (x < minX) {
+                    if (x <= minX) {
                         minX = x;
                     }
-                    if (y > maxY) {
+                    if (y >= maxY) {
                         maxY = y;
                     }
-                    if (y < minY) {
+                    if (y <= minY) {
                         minY = y;
                     }
                 }
             }
         }
-        final int border = 5;
+        
         try {
-            if ((minX - border) < 0) {
+            if ((minX - borderPixelsAfterwards) < 0) {
                 minX = 0;
             } else {
-                minX -= border;
+                minX -= borderPixelsAfterwards;
             }
-            if ((minY - border) < 0) {
+            if ((minY - borderPixelsAfterwards) < 0) {
                 minY = 0;
             } else {
-                minY -= border;
+                minY -= borderPixelsAfterwards;
             }
-            if ((maxX + border) > width) {
+            if ((maxX + borderPixelsAfterwards) > width) {
                 maxX = width;
             } else {
-                maxX += border;
+                maxX += borderPixelsAfterwards;
             }
-            if ((maxY + border) > height) {
+            if ((maxY + borderPixelsAfterwards) > height) {
                 maxY = height;
             } else {
-                maxY += border;
+                maxY += borderPixelsAfterwards;
             }
-            bi = bi.getSubimage(minX, minY, maxX, maxY);
+            bi = bi.getSubimage(minX, minY, maxX-minX, maxY-minY);
         } catch (Exception e) {
             log.error("Error in getSubimage. Image not changed", e); // NOI18N
         }

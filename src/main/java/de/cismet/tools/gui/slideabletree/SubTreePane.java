@@ -26,6 +26,7 @@ package de.cismet.tools.gui.slideabletree;
 import org.jdesktop.swingx.JXTaskPane;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 import javax.swing.UIManager;
 
@@ -41,7 +42,6 @@ public class SubTreePane extends JXTaskPane {
 
     private boolean selected = false;
     private Color defaultTitleColor = Color.BLACK;
-    private int titleBarHeight;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -51,6 +51,7 @@ public class SubTreePane extends JXTaskPane {
     public SubTreePane() {
         this.setUI(new MyTaskPaneUI());
         this.setForeground(defaultTitleColor);
+//        this.setAnimated(false);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -85,6 +86,5 @@ public class SubTreePane extends JXTaskPane {
             this.setForeground(defaultTitleColor);
         }
         this.selected = selected;
-        revalidate();
     }
 }

@@ -60,40 +60,6 @@ public class MyTaskPaneUI extends BasicTaskPaneUI {
 
         //~ Methods ------------------------------------------------------------
 
-// @Override
-// protected void paintTitleBackground(final JXTaskPane group, final Graphics g) {
-// super.paintTitleBackground(group, g);
-// final Color backgroundGradientStart = UIManager.getColor("TaskPane.titleBackgroundGradientStart");
-// final Color backgroundGradientEnd = UIManager.getColor("TaskPane.titleBackgroundGradientEnd");
-// final Graphics2D g2 = (Graphics2D)g;
-////            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-////                RenderingHints.VALUE_ANTIALIAS_ON);
-//            final GradientPaint gradient = new GradientPaint(
-//                    0,
-//                    0,
-//                    backgroundGradientStart,
-//                    0,
-//                    getTitleHeight(group)
-//                            - getRoundHeight(),
-//                    backgroundGradientEnd);
-//            g2.setPaint(gradient);
-//
-//            g2.fillRoundRect(
-//                0,
-//                0,
-//                group.getWidth(),
-//                getRoundHeight()
-//                        * 2,
-//                getRoundHeight(),
-//                getRoundHeight());
-//
-//            g2.fillRect(
-//                0,
-//                getRoundHeight(),
-//                group.getWidth(),
-//                getTitleHeight(group)
-//                        - getRoundHeight());
-//        }
         @Override
         protected void paintTitleBackground(final JXTaskPane group, final Graphics g) {
             if (group.isSpecial()) {

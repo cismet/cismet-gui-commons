@@ -61,6 +61,12 @@ import de.cismet.tools.gui.StaticSwingTools;
 /**
  * DOCUMENT ME!
  *
+ * <p>Diese Klasse SlideableTree stellt, falls gewuenscht, die obersten Knoten eines JTree als JXTaskpane dar. Die
+ * JXTaskpanes enthalten dann den Teilbaum unterhalb dieses Knotens.</p>
+ *
+ * <p>Standardmaessig wird die "normale" JTree Ansicht verwendet, nur wenn der Konstruktor public SlideableTree(final
+ * boolean useSlideableView) mit true aufegrufen wird, werden die Knoten mithilfe der JXTaskpanes dargestellt</p>
+ *
  * @author   dmeiers
  * @version  $Revision$, $Date$
  */
@@ -90,7 +96,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
     /**
      * Creates a new SlideableTree object.
      *
-     * @param  useSlideableView  DOCUMENT ME!
+     * @param  useSlideableView  gibt an ob die obersten Knoten durch JXTaskpanes dargestellt werden
      */
     public SlideableTree(final boolean useSlideableView) {
         this.useSlideableTreeView = useSlideableView;
@@ -106,7 +112,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
              * zeichen. In diesem Fall funktioniert setBackground nicht mehr...
              */
             container.setBackgroundPainter(null);
-            // Hintergurnd der Titlebar der JXTaskPanes ändern;
+            // Hintergurnd der Titlebar der JXTaskPanes aendern;
             UIManager.getDefaults().put("TaskPane.titleBackgroundGradientStart", new Color(222, 222, 222));
             UIManager.getDefaults().put("TaskPane.titleBackgroundGradientEnd", new Color(244, 244, 244));
             this.setLayout(new BorderLayout());
@@ -119,7 +125,6 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
             // die Panes mit den SubTrees zu dem Container hinzufuegen addToTreeContainer(panes);
 
             containerScrollPane = new JScrollPane(container);
-            // containerScrollPane.setOpaque(true);
             // fuer niftyScrollBar
             StaticSwingTools.setNiftyScrollBars(containerScrollPane);
 
@@ -131,18 +136,6 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
             this.setDragEnabled(true);
 
             this.add(containerScrollPane, BorderLayout.CENTER);
-
-//            final UIDefaults defaults = UIManager.getDefaults();
-//            System.out.println(defaults.size() + " properties deffined !");
-//            final String[] colName = { "Key", "Value" };
-//            final String[][] rowData = new String[defaults.size()][2];
-//            int i = 0;
-//            for (final Enumeration e = defaults.keys(); e.hasMoreElements(); i++) {
-//                final Object key = e.nextElement();
-//                rowData[i][0] = key.toString();
-//                rowData[i][1] = "" + defaults.get(key);
-//                System.out.println(rowData[i][0] + " ,, " + rowData[i][1]);
-//            }
         }
     }
 
@@ -1578,7 +1571,8 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
                     < childCount; i++) {
             final Object child = model.getChild(root, i);
             final TreeNode newRootNode = new DefaultMutableTreeNode(child);
-            final SlideableSubTree subTree = new SlideableSubTree(newRootNode);
+            // use specialSelection as default...
+            final SlideableSubTree subTree = new SlideableSubTree(newRootNode, true);
             final DelegatingModel modelDelegate = new DelegatingModel(child, model);
             subTree.setModel(modelDelegate);
             subTree.setRootVisible(false);
@@ -1593,7 +1587,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
             Icon icon = null;
             tmpPane.setCollapsed(true);
 
-            // icon ändert sich nicht, falls JXTaskpane collapsed/!(collapsed)
+            // icon aendert sich nicht, falls JXTaskpane collapsed/!(collapsed)
             if (rootNode.isLeaf()) {
                 icon = renderer.getLeafIcon();
             } else if (tmpPane.isCollapsed()) {
@@ -1972,7 +1966,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
     }
 
     /*
-     * wird aufgerufen wenn sich die Slektion innerhalb eines Subtrees ändert
+     * wird aufgerufen wenn sich die Slektion innerhalb eines Subtrees aendert
      */
     @Override
     public void valueChanged(final TreeSelectionEvent e) {
@@ -2092,7 +2086,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
                         @Override
                         public void run() {
-                            t.updateUI();
+                            // t.updateUI();
                         }
                     });
                 tree.scrollPathToVisible(e.getTreePath());
@@ -2107,7 +2101,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
                         @Override
                         public void run() {
-                            t.updateUI();
+                            // t.updateUI();
                         }
                     });
                 tree.scrollPathToVisible(e.getTreePath());
@@ -2120,7 +2114,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
                 final SlideableSubTree t = getSubTreeForPath(e.getTreePath());
                 if (t == null) {
                     if (tree.getModel().getRoot().equals(e.getTreePath().getLastPathComponent())) {
-                        // ein Knoten dirket unterhalb des Root Knoten hat sich geändert..
+                        // ein Knoten dirket unterhalb des Root Knoten hat sich geaendert..
                         tree.flushTreeContainer();
                         tree.createSubTrees(tree.getModel());
                         tree.addToTreeContainer(tree.getPanes());
@@ -2146,7 +2140,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
 
                         @Override
                         public void run() {
-                            t.updateUI();
+                            // t.updateUI();
                         }
                     });
                 tree.scrollPathToVisible(e.getTreePath());
@@ -2199,7 +2193,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
                                 pane.setIcon(l.getIcon());
                             }
                         } else {
-                            // pane soll geöffnet werden
+                            // pane soll geoeffnet werden
                             pane.setSelected(true);
 
                             SlideableTree.this.fireTreeExpanded(path);

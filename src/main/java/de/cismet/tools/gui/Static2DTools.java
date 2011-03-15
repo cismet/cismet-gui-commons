@@ -7,16 +7,22 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
+import org.apache.log4j.Logger;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.PixelGrabber;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -27,11 +33,13 @@ import javax.swing.ImageIcon;
  * @author   thorsten.hell@cismet.de
  * @version  $Revision$, $Date$
  */
+// NOTE: we should consider to use NetBeans Utils ImageUtilites API
 public class Static2DTools {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Static2DTools.class);
+    private static final transient Logger LOG = Logger.getLogger(Static2DTools.class);
+
     public static int HORIZONTAL = 0;
     public static int VERTICAL = 1;
     public static int LEFT = 2;
@@ -89,8 +97,8 @@ public class Static2DTools {
             throw new IllegalArgumentException(
                 "OrientationParameter must be either Static2DTools.HORIZONTAL or Static2DTools.VERTICAL"); // NOI18N
         }
-        if (log.isDebugEnabled()) {
-            log.debug("JOIN(" + iWidth + "," + iHeight);                                                   // NOI18N
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("JOIN(" + iWidth + "," + iHeight);                                                   // NOI18N
         }
 
         image = new BufferedImage(iWidth, iHeight + 1, BufferedImage.TYPE_INT_ARGB);
@@ -111,6 +119,8 @@ public class Static2DTools {
                 }
                 final Graphics g = image.getGraphics();
                 icons[i].paintIcon(null, g, runningPosition, alignmentPosition);
+                g.dispose();
+
                 runningPosition += icons[i].getIconWidth() + gap;
             } else {
                 // VERTICAL
@@ -118,7 +128,6 @@ public class Static2DTools {
                     alignmentPosition = 0;
                 } else if (alignment == RIGHT) {
                     alignmentPosition = iWidth - icons[i].getIconWidth();
-                    ;
                 } else if (alignment == CENTER) {
                     alignmentPosition = (iWidth - icons[i].getIconWidth()) / 2;
                 } else {
@@ -127,6 +136,7 @@ public class Static2DTools {
                 }
                 final Graphics g = image.getGraphics();
                 icons[i].paintIcon(null, g, alignmentPosition, runningPosition);
+                g.dispose();
                 runningPosition += icons[i].getIconHeight() + gap;
             }
         }
@@ -144,15 +154,9 @@ public class Static2DTools {
      * @return  DOCUMENT ME!
      */
     public static ImageIcon createOverlayIcon(final ImageIcon overlayIcon, final int width, final int heigth) {
-//        final BufferedImage resultImage = new BufferedImage(width, heigth, BufferedImage.TYPE_INT_ARGB);
         final Image scaledOverlayImage = overlayIcon.getImage()
                     .getScaledInstance((int)(width / 1.5), (int)(heigth / 1.5), Image.SCALE_SMOOTH);
-//        final BufferedImage result = new BufferedImage(width, heigth, BufferedImage.TYPE_INT_ARGB);
-//        result.getGraphics().drawImage(scaledOverlayImage, 0, 0, null);
-//        result.getGraphics().drawImage(scaledOverlayImage, width - scaledOverlayImage.getWidth(null), heigth - scaledOverlayImage.getHeight(null), null);
-//            final Image scaledOverlayImage = scaleImage(overlayIcon.getImage(), 0.5);
-//        final Graphics2D g2d = (Graphics2D) resultImage.getGraphics();
-//        g2d.drawImage(scaledOverlayImage, 0, 0, null);
+
         return new ImageIcon(scaledOverlayImage);
     }
 
@@ -173,70 +177,114 @@ public class Static2DTools {
         final Graphics2D graphics2D = image.createGraphics();
         base.paintIcon(null, graphics2D, midX - (base.getIconWidth() / 2), midY - (base.getIconHeight() / 2));
         overlay.paintIcon(null, graphics2D, maxWidth - overlay.getIconWidth(), maxHeight - overlay.getIconHeight());
-//        overlay.paintIcon(null, graphics2D, midX - (overlay.getIconWidth() / 2), midY - (overlay.getIconHeight() / 2));
+        graphics2D.dispose();
+
         return new ImageIcon(image);
     }
+
     /**
-     * public static Icon mergeIcons(Icon... icons) { if (icons.length == 0) { throw new
-     * IllegalArgumentException("Icon[] with length=0 is not allowed."); } if (icons.length == 1) { return icons[0]; }
-     * int maxWidth = 0; int maxHeight = 0; for (final Icon currentIcon : icons) { if (currentIcon != null) { maxWidth =
-     * Math.max(maxWidth, currentIcon.getIconWidth()); maxHeight = Math.max(maxHeight, currentIcon.getIconHeight()); } }
-     * final int midX = maxWidth / 2; final int midY = maxHeight / 2; final BufferedImage image = new
-     * BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_ARGB); final Graphics2D graphics2D =
-     * image.createGraphics(); for (final Icon currentIcon : icons) { if (currentIcon != null) {
-     * currentIcon.paintIcon(null, graphics2D, midX - (currentIcon.getIconWidth() / 2), midY -
-     * (currentIcon.getIconHeight() / 2)); } } return new ImageIcon(image); }
+     * Creates a {@link BufferedImage} from the given {@link Image}.
      *
-     * @param   turnIcon   DOCUMENT ME!
-     * @param   clockwise  DOCUMENT ME!
+     * @param   image  the <code>Image</code> to be turned into
      *
-     * @return  DOCUMENT ME!
+     * @return  a <code>BufferedImage</code> that is identical to the given <code>Image</code>
      */
-    public static ImageIcon turnIcon(final ImageIcon turnIcon, final boolean clockwise) {
-        final BufferedImage b = new BufferedImage(turnIcon.getIconWidth(),
-                turnIcon.getIconHeight(),
+    public static BufferedImage toBufferedImage(final Image image) {
+        if (image instanceof BufferedImage) {
+            return (BufferedImage)image;
+        }
+
+        // Determine if the image has transparent pixels
+        final boolean hasAlpha = hasAlpha(image);
+
+        // Create a buffered image with a format that's compatible with the screen
+        BufferedImage bimage = null;
+        try {
+            // Determine the type of transparency of the new buffered image
+            final int transparency;
+            if (hasAlpha) {
+                transparency = Transparency.BITMASK;
+            } else {
+                transparency = Transparency.OPAQUE;
+            }
+
+            // Create the buffered image
+            final GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            final GraphicsDevice gs = env.getDefaultScreenDevice();
+            final GraphicsConfiguration gc = gs.getDefaultConfiguration();
+            bimage = gc.createCompatibleImage(image.getWidth(null), image.getHeight(null), transparency);
+        } catch (final HeadlessException e) {
+            // The system does not have a screen
+            // Create a buffered image using the default color model
+            final int type;
+            if (hasAlpha) {
+                type = BufferedImage.TYPE_INT_ARGB;
+            } else {
+                type = BufferedImage.TYPE_INT_RGB;
+            }
+            bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), type);
+        }
+
+        // Copy image to buffered image
+        final Graphics g = bimage.createGraphics();
+        // Paint the image onto the buffered image
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+
+        return bimage;
+    }
+
+    /**
+     * This method returns true if the specified image has transparent pixels.
+     *
+     * @param   image  the image to test for alpha values
+     *
+     * @return  true if the image has alpha, false otherwise
+     */
+    public static boolean hasAlpha(final Image image) {
+        // If buffered image, the color model is readily available
+        if (image instanceof BufferedImage) {
+            final BufferedImage bimage = (BufferedImage)image;
+
+            return bimage.getColorModel().hasAlpha();
+        }
+
+        // Use a pixel grabber to retrieve the image's color model;
+        // grabbing a single pixel is usually sufficient
+        final PixelGrabber pg = new PixelGrabber(image, 0, 0, 1, 1, false);
+        try {
+            pg.grabPixels();
+        } catch (InterruptedException e) {
+            LOG.warn("interrupted while grabbing pixels, probably wrong results"); // NOI18N
+        }
+
+        // Get the image's color model
+        final ColorModel cm = pg.getColorModel();
+
+        return cm.hasAlpha();
+    }
+
+    /**
+     * Rotates the given {@link ImageIcon} in the given angle around the icon's center point. Rotation is clock-wise.
+     *
+     * @param   icon   the <code>ImageIcon</code> to rotate
+     * @param   angle  the rotation angle, presumably a value between 0 and 360 degrees.
+     *
+     * @return  the rotated <code>ImageIcon</code>
+     */
+    public static ImageIcon rotate(final ImageIcon icon, final double angle) {
+        final BufferedImage bi = new BufferedImage(icon.getIconWidth(),
+                icon.getIconHeight(),
                 BufferedImage.TYPE_INT_ARGB);
 
-        final Graphics2D g2 = (Graphics2D)b.getGraphics();
+        final Graphics2D g2 = (Graphics2D)bi.getGraphics();
+        final AffineTransform rotateTransform = AffineTransform.getRotateInstance(angle * Math.PI / 180d,
+                (bi.getWidth() / 2d),
+                (bi.getHeight() / 2d));
+        g2.drawImage(icon.getImage(), rotateTransform, null);
+        g2.dispose();
 
-        // g2.drawImage(turnIcon.getImage(),0,0,null);
-        return new ImageIcon(tilt(b, Math.PI));
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   image  DOCUMENT ME!
-     * @param   angle  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private static BufferedImage tilt(final BufferedImage image, final double angle) {
-        final double sin = Math.abs(Math.sin(angle));
-        final double cos = Math.abs(Math.cos(angle));
-        final int w = image.getWidth();
-        final int h = image.getHeight();
-        final int neww = (int)Math.floor((w * cos) + (h * sin));
-        final int newh = (int)Math.floor((h * cos) + (w * sin));
-        final GraphicsConfiguration gc = getDefaultConfiguration();
-        final BufferedImage result = gc.createCompatibleImage(neww, newh, Transparency.TRANSLUCENT);
-        final Graphics2D g = result.createGraphics();
-        g.translate((neww - w) / 2, (newh - h) / 2);
-        g.rotate(angle, w / 2, h / 2);
-        g.drawRenderedImage(image, null);
-        g.dispose();
-        return result;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private static GraphicsConfiguration getDefaultConfiguration() {
-        final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        final GraphicsDevice gd = ge.getDefaultScreenDevice();
-        return gd.getDefaultConfiguration();
+        return new ImageIcon(bi);
     }
 
     /**
@@ -257,6 +305,7 @@ public class Static2DTools {
                         + bottom,
                 BufferedImage.TYPE_INT_ARGB);
         icon.paintIcon(null, bi.getGraphics(), left, top);
+
         return new ImageIcon(bi);
     }
 
@@ -272,8 +321,8 @@ public class Static2DTools {
     public static Image removeUnusedBorder(final Image i,
             final int borderPixelsAfterwards,
             final double scalingFactor) {
-        if (log.isDebugEnabled()) {
-            log.debug("removeUnusedBorder"); // NOI18N
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("removeUnusedBorder"); // NOI18N
         }
 
         final int width = (int)(i.getWidth(null) * scalingFactor);
@@ -286,6 +335,7 @@ public class Static2DTools {
             RenderingHints.VALUE_RENDER_QUALITY);
         g.drawImage(i, 0, 0, width, height, null);
         g.drawLine(10, 0, 20, 0);
+        g.dispose();
 
         int maxX = 0;
         int maxY = 0;
@@ -314,7 +364,7 @@ public class Static2DTools {
                 }
             }
         }
-        
+
         try {
             if ((minX - borderPixelsAfterwards) < 0) {
                 minX = 0;
@@ -336,10 +386,11 @@ public class Static2DTools {
             } else {
                 maxY += borderPixelsAfterwards;
             }
-            bi = bi.getSubimage(minX, minY, maxX-minX, maxY-minY);
-        } catch (Exception e) {
-            log.error("Error in getSubimage. Image not changed", e); // NOI18N
+            bi = bi.getSubimage(minX, minY, maxX - minX, maxY - minY);
+        } catch (final Exception e) {
+            LOG.error("Error in getSubimage. Image not changed", e); // NOI18N
         }
+
         return bi;
     }
 
@@ -354,7 +405,8 @@ public class Static2DTools {
     public static Image scaleImage(final Image i, final double scalingFactor) {
         final int newWidth = (int)(i.getWidth(null) * scalingFactor);
         final int newHeight = (int)(i.getHeight(null) * scalingFactor);
-        final Image ii = i.getScaledInstance(newWidth, newHeight, i.SCALE_SMOOTH);
+        final Image ii = i.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+
         return ii;
     }
 
@@ -378,6 +430,7 @@ public class Static2DTools {
         final Graphics g = compatibleImage.getGraphics();
         g.drawImage(image, 0, 0, null);
         g.dispose();
+
         return compatibleImage;
     }
 
@@ -404,6 +457,7 @@ public class Static2DTools {
      */
     public static Color getOffsetAlphaColor(final Color c, final int offset, final int alpha) {
         final Color o = new Color(offset, offset, offset);
+
         return getOffsetAlphaColor(c, o, alpha);
     }
 
@@ -440,6 +494,7 @@ public class Static2DTools {
         } else {
             ret = value + offset;
         }
+
         return ret;
     }
 
@@ -466,7 +521,7 @@ public class Static2DTools {
             final boolean progressiveBilinear) {
         final int type = (img.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB
                                                                         : BufferedImage.TYPE_INT_ARGB;
-        BufferedImage ret = (BufferedImage)img;
+        BufferedImage ret = img;
         BufferedImage scratchImage = null;
         Graphics2D g2 = null;
         int w;
@@ -505,6 +560,7 @@ public class Static2DTools {
                     }
                 }
             }
+
             if (scratchImage == null) {
 // Use a single scratch buffer for all iterations
 // and then copy to the final, correctly sized image
@@ -519,9 +575,11 @@ public class Static2DTools {
             prevH = h;
             ret = scratchImage;
         } while (((w != targetWidth) || (h != targetHeight)));
+
         if (g2 != null) {
             g2.dispose();
         }
+
 // If we used a scratch buffer that is larger than our
 // target size, create an image of the right size and copy
 // the results into it

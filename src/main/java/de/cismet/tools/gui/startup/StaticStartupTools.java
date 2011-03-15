@@ -1,32 +1,19 @@
 /***************************************************
- *
- * cismet GmbH, Saarbruecken, Germany
- *
- *              ... and it just works.
- *
- ****************************************************/
-/*
- *  Copyright (C) 2011 thorsten
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui.startup;
 
 import com.jhlabs.image.BoxBlurFilter;
-import de.cismet.tools.gui.Static2DTools;
 
 import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.painter.CompoundPainter;
+import org.jdesktop.swingx.painter.GlossPainter;
+import org.jdesktop.swingx.painter.ImagePainter;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -51,10 +38,8 @@ import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.GlossPainter;
-import org.jdesktop.swingx.painter.ImagePainter;
+
+import de.cismet.tools.gui.Static2DTools;
 
 /**
  * DOCUMENT ME!
@@ -65,15 +50,17 @@ import org.jdesktop.swingx.painter.ImagePainter;
 public class StaticStartupTools {
 
     //~ Static fields/initializers ---------------------------------------------
+
     private static final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
             StaticStartupTools.class);
 
     //~ Methods ----------------------------------------------------------------
+
     /**
      * DOCUMENT ME!
      *
      * @param   frame  DOCUMENT ME!
-     * @param   file    DOCUMENT ME!
+     * @param   file   DOCUMENT ME!
      *
      * @throws  Exception  DOCUMENT ME!
      */
@@ -82,14 +69,19 @@ public class StaticStartupTools {
             if (!EventQueue.isDispatchThread()) {
                 log.fatal("not in EDT");
             }
-            GraphicsConfiguration configuration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+            final GraphicsConfiguration configuration = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                        .getDefaultScreenDevice()
+                        .getDefaultConfiguration();
 
-            //Create a buffered image which is the right (translucent) format for the current graphics device, this
-            //should ensure the fastest possible performance. Adding on some extra height to make room for the reflection
+            // Create a buffered image which is the right (translucent) format for the current graphics device, this
+            // should ensure the fastest possible performance. Adding on some extra height to make room for the
+            // reflection
 
-            final BufferedImage bi = configuration.createCompatibleImage(frame.getWidth(), frame.getHeight(), Transparency.TRANSLUCENT);
+            final BufferedImage bi = configuration.createCompatibleImage(frame.getWidth(),
+                    frame.getHeight(),
+                    Transparency.TRANSLUCENT);
             final Graphics g = bi.getGraphics();
-            //((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .4f));
+            // ((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .4f));
             frame.paintAll(g);
             g.dispose();
             final BoxBlurFilter blurFilter = new BoxBlurFilter();
@@ -104,8 +96,8 @@ public class StaticStartupTools {
             writer.write(Integer.toString(new Double(frame.getBounds().getWidth()).intValue()) + "\n");
             writer.write(Integer.toString(new Double(frame.getBounds().getHeight()).intValue()) + "\n");
             writer.close();
-        } catch (Throwable throwable) {
-            log.fatal("BUMM",throwable);
+        } catch (final Exception e) {
+            log.error("cannot save screenshot", e); // NOI18N
         }
     }
 
@@ -131,27 +123,25 @@ public class StaticStartupTools {
         reader.close();
         rectangle = new Rectangle();
         rectangle.setBounds(Integer.parseInt(x),
-                Integer.parseInt(y),
-                Integer.parseInt(width),
-                Integer.parseInt(height));
+            Integer.parseInt(y),
+            Integer.parseInt(width),
+            Integer.parseInt(height));
         final ImageIcon i = new ImageIcon(file + ".png");
-        final BufferedImage bi = (BufferedImage) (Static2DTools.removeUnusedBorder(i.getImage(), 0, 1));
+        final BufferedImage bi = (BufferedImage)(Static2DTools.removeUnusedBorder(i.getImage(), 0, 1));
         final JFrame fake = new JFrame(title);
-        JXPanel p = new JXPanel();
+        final JXPanel p = new JXPanel();
         p.setAlpha(.5f);
 
         p.setLayout(new BorderLayout());
-        //p.setImage(ii.getImage());
         fake.getContentPane().add(p, BorderLayout.CENTER);
         if (rectangle != null) {
             fake.setBounds(rectangle);
         }
 
-        JXBusyLabel busy = new JXBusyLabel(new Dimension(100, 100));
-        GlossPainter gp = new GlossPainter(new Color(255, 255, 255, 25),
+        final JXBusyLabel busy = new JXBusyLabel(new Dimension(100, 100));
+        final GlossPainter gp = new GlossPainter(new Color(255, 255, 255, 25),
                 GlossPainter.GlossPosition.TOP);
-        ImagePainter ip = new ImagePainter(bi);
-
+        final ImagePainter ip = new ImagePainter(bi);
 
         p.setBackgroundPainter(new CompoundPainter(ip, gp));
 

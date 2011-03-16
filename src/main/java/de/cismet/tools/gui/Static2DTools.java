@@ -268,7 +268,9 @@ public class Static2DTools {
      * the given angle is positive or counter clock-wise if the given angle is negative. There is no necessity to stick
      * to the bounds described for the <code>angle</code> parameter but there is no sense to rotate in an angle of e.g
      * 765 degrees because in this case a rotation in an angle of 45 degrees is more senseful. However, this method will
-     * accept any double values as an angle.
+     * accept any double values as an angle. Special double values such as {@link Double#NaN}
+     * {@link Double#NEGATIVE_INFINITY} and {@link Double#POSITIVE_INFINITY} will be handle as if angle is <code>
+     * 0</code>.
      *
      * @param   icon    the <code>ImageIcon</code> to rotate
      * @param   angle   the rotation angle, presumably a value between 0 and +/-PI if angle is in radian measure or 0
@@ -291,10 +293,14 @@ public class Static2DTools {
         final Graphics2D g2 = (Graphics2D)bi.getGraphics();
 
         final double radianAngle;
-        if (radian) {
-            radianAngle = angle;
+        if ((Double.isNaN(angle)) || (Double.isInfinite(angle))) {
+            radianAngle = 0;
         } else {
-            radianAngle = angle * Math.PI / 180d;
+            if (radian) {
+                radianAngle = angle;
+            } else {
+                radianAngle = angle * Math.PI / 180d;
+            }
         }
 
         final AffineTransform rotateTransform = AffineTransform.getRotateInstance(

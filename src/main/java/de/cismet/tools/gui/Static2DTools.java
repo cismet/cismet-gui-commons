@@ -39,7 +39,6 @@ public class Static2DTools {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient Logger LOG = Logger.getLogger(Static2DTools.class);
-
     public static int HORIZONTAL = 0;
     public static int VERTICAL = 1;
     public static int LEFT = 2;
@@ -265,20 +264,41 @@ public class Static2DTools {
     }
 
     /**
-     * Rotates the given {@link ImageIcon} in the given angle around the icon's center point. Rotation is clock-wise.
+     * Rotates the given {@link ImageIcon} in the given angle around the icon's center point. Rotation is clock-wise if
+     * the given angle is positive or counter clock-wise if the given angle is negative. There is no necessity to stick
+     * to the bounds described for the <code>angle</code> parameter but there is no sense to rotate in an angle of e.g
+     * 765 degrees because in this case a rotation in an angle of 45 degrees is more senseful. However, this method will
+     * accept any double values as an angle.
      *
-     * @param   icon   the <code>ImageIcon</code> to rotate
-     * @param   angle  the rotation angle, presumably a value between 0 and 360 degrees.
+     * @param   icon    the <code>ImageIcon</code> to rotate
+     * @param   angle   the rotation angle, presumably a value between 0 and +/-PI if angle is in radian measure or 0
+     *                  and +/-180 degrees.
+     * @param   radian  determines whether the given angle will be handles as an radian measure or not
      *
      * @return  the rotated <code>ImageIcon</code>
+     *
+     * @throws  IllegalArgumentException  if the given icon is <code>null</code>
      */
-    public static ImageIcon rotate(final ImageIcon icon, final double angle) {
+    public static ImageIcon rotate(final ImageIcon icon, final double angle, final boolean radian) {
+        if (icon == null) {
+            throw new IllegalArgumentException("icon must not be null"); // NOI18N
+        }
+
         final BufferedImage bi = new BufferedImage(icon.getIconWidth(),
                 icon.getIconHeight(),
                 BufferedImage.TYPE_INT_ARGB);
 
         final Graphics2D g2 = (Graphics2D)bi.getGraphics();
-        final AffineTransform rotateTransform = AffineTransform.getRotateInstance(angle * Math.PI / 180d,
+
+        final double radianAngle;
+        if (radian) {
+            radianAngle = angle;
+        } else {
+            radianAngle = angle * Math.PI / 180d;
+        }
+
+        final AffineTransform rotateTransform = AffineTransform.getRotateInstance(
+                radianAngle,
                 (bi.getWidth() / 2d),
                 (bi.getHeight() / 2d));
         g2.drawImage(icon.getImage(), rotateTransform, null);

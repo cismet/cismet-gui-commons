@@ -13,6 +13,8 @@ import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.jdesktop.swingx.VerticalLayout;
 
+import org.openide.util.Exceptions;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -134,6 +136,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
             createSubTrees(this.getModel());
             addToTreeContainer(panes);
             this.setDragEnabled(true);
+            this.setEditable(false);
 
             this.add(containerScrollPane, BorderLayout.CENTER);
         }
@@ -299,7 +302,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
             if ((trees != null) && (panes != null)) {
                 final SlideableSubTree t = getSubTreeForRow(row);
                 final int index = trees.indexOf(t);
-                final JXTaskPane pane = panes.get(index);
+                final SubTreePane pane = panes.get(index);
                 pane.setCollapsed(false);
                 final TreePath subTreePath = getPathForSubTree(getPathForRow(row));
                 t.expandPath(subTreePath);
@@ -325,7 +328,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
                 // original baum ist, alle SubTreeRoots falls das JXTaskPane aufgeklappt zurueckgeben
                 if (lastPathElement.equals(origRoot)) {
                     for (final SlideableSubTree t : trees) {
-                        final JXTaskPane pane = panes.get(trees.indexOf(t));
+                        final SubTreePane pane = panes.get(trees.indexOf(t));
                         if (!(pane.isCollapsed())) {
                             final Object subTreeRoot = t.getModel().getRoot();
                             paths.add(getPathforOriginalTree(new TreePath(subTreeRoot)));
@@ -376,7 +379,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
             if (closestPath == null) {
                 return null;
             } else {
-                final JXTaskPane pane = panes.get(trees.indexOf(getSubTreeForPath(closestPath)));
+                final SubTreePane pane = panes.get(trees.indexOf(getSubTreeForPath(closestPath)));
                 final int paneX = pane.getX();
                 final int paneY = pane.getY();
                 final int titleBarHeight = (pane.getHeight() - pane.getContentPane().getHeight());
@@ -426,8 +429,8 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
                 logger.debug("Tree X/Y bis: " + this.getX() + this.getWidth() + "/" + this.getY() + this.getHeight());
             }
             final Component c = container.getComponentAt(x, y);
-            if (c instanceof JXTaskPane) {
-                final JXTaskPane pane = (JXTaskPane)c;
+            if (c instanceof SubTreePane) {
+                final SubTreePane pane = (SubTreePane)c;
                 final SlideableSubTree t = trees.get(panes.indexOf(pane));
                 final int titleBarHeight = (pane.getHeight() - pane.getContentPane().getHeight());
                 if (y <= (titleBarHeight + pane.getY())) {
@@ -453,9 +456,9 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
                 // y liegt zwischen titlebar und tree, geringsten abstand bestimmen
             } else if (c instanceof JXTaskPaneContainer) {
                 // falls berechne den nahestehendsten JXTaskpane..
-                JXTaskPane closest = null;
+                SubTreePane closest = null;
                 boolean lastComponent = false;
-                for (final JXTaskPane p : panes) {
+                for (final SubTreePane p : panes) {
                     final int paneY = p.getY();
                     // liegt y vor p?
                     if (y < paneY) {
@@ -464,7 +467,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
                             lastComponent = false;
                         } else {
                             final int distance = Math.abs(y - paneY);
-                            final JXTaskPane predecessor = panes.get(panes.indexOf(p) - 1);
+                            final SubTreePane predecessor = panes.get(panes.indexOf(p) - 1);
                             final int distanceToPredecessor = Math.abs(y
                                             - (predecessor.getY() + predecessor.getHeight()));
                             if (distance <= distanceToPredecessor) {
@@ -607,7 +610,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
                 return super.getPathBounds(path);
             } else {
                 final Rectangle rec = t.getPathBounds(getPathForSubTree(path));
-                final JXTaskPane pane = panes.get(trees.indexOf(t));
+                final SubTreePane pane = panes.get(trees.indexOf(t));
                 rec.setLocation((int)rec.getX() + pane.getX(), (int)rec.getY() + pane.getY());
                 return rec;
             }
@@ -1171,7 +1174,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
                 for (final SlideableSubTree t : trees) {
                     t.setCellRenderer(x);
                     final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)t.getModel().getRoot();
-                    final JXTaskPane pane = panes.get(trees.indexOf(t));
+                    final SubTreePane pane = panes.get(trees.indexOf(t));
                     final DefaultTreeCellRenderer renderer;
                     if (x instanceof DefaultTreeCellRenderer) {
                         renderer = (DefaultTreeCellRenderer)t.getCellRenderer();
@@ -1575,6 +1578,7 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
             final SlideableSubTree subTree = new SlideableSubTree(newRootNode, true);
             final DelegatingModel modelDelegate = new DelegatingModel(child, model);
             subTree.setModel(modelDelegate);
+            subTree.setEditable(false);
             subTree.setRootVisible(false);
             subTree.addTreeExpansionListener(this);
             subTree.addTreeSelectionListener(this);
@@ -2160,62 +2164,45 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
         @Override
         public void mousePressed(final MouseEvent e) {
             final SubTreePane pane = (SubTreePane)e.getSource();
+            final SlideableSubTree t = trees.get(panes.indexOf(pane));
+            final TreePath path = SlideableTree.this.getPathforOriginalTree(new TreePath(
+                        t.getModel().getRoot()));
             // liegen Koordianten innerhalb der Titlebar?
-            if ((e.getX() < pane.getWidth()) && (e.getY() < pane.getTitleBarHeight())) {
-                {
-                    if (!e.isPopupTrigger()) {
-                        final SlideableSubTree t = trees.get(panes.indexOf(pane));
-                        final TreePath subTreePath = new TreePath(t.getModel().getRoot());
-                        final TreePath path = SlideableTree.this.getPathforOriginalTree(subTreePath);
-                        // setze RootKnoten des SubTrees als Selektion
-                        SlideableTree.this.clearSelection();
-                        SlideableTree.this.setSelectionPath(path);
-
-                        if (!pane.isCollapsed()) {
-                            // pane soll geschlossen werden
-                            pane.setSelected(false);
-
-                            SlideableTree.this.fireTreeCollapsed(path);
-
-                            // setze Icon
-                            final TreeCellRenderer cellRenderer = t.getCellRenderer();
-                            if (cellRenderer instanceof DefaultTreeCellRenderer) {
-                                final DefaultTreeCellRenderer defaultRenderer = (DefaultTreeCellRenderer)cellRenderer;
-                                final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)t.getModel().getRoot();
-                                final JLabel l = (JLabel)defaultRenderer.getTreeCellRendererComponent(
-                                        SlideableTree.this,
-                                        rootNode,
-                                        false,
-                                        (pane.isCollapsed()),
-                                        rootNode.isLeaf(),
-                                        0,
-                                        false);
-                                pane.setIcon(l.getIcon());
-                            }
-                        } else {
-                            // pane soll geoeffnet werden
-                            pane.setSelected(true);
-
-                            SlideableTree.this.fireTreeExpanded(path);
-                            // setze icon neu
-                            final TreeCellRenderer cellRenderer = t.getCellRenderer();
-                            if (cellRenderer instanceof DefaultTreeCellRenderer) {
-                                final DefaultTreeCellRenderer defaultRenderer = (DefaultTreeCellRenderer)cellRenderer;
-                                final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)t.getModel().getRoot();
-                                final JLabel l = (JLabel)defaultRenderer.getTreeCellRendererComponent(
-                                        SlideableTree.this,
-                                        rootNode,
-                                        false,
-                                        (pane.isCollapsed()),
-                                        rootNode.isLeaf(),
-                                        0,
-                                        false);
-                                pane.setIcon(l.getIcon());
-                            }
-                        }
-                    }
-                }
-            }
+// if ((e.getX() < pane.getWidth()) && (e.getY() < pane.getTitleBarHeight())) {
+// {
+// if (!e.isPopupTrigger()) {
+// final SlideableSubTree t = trees.get(panes.indexOf(pane));
+// final TreePath path = SlideableTree.this.getPathforOriginalTree(new TreePath(
+// t.getModel().getRoot()));
+// // setze RootKnoten des SubTrees als Selektion
+// SlideableTree.this.clearSelection();
+// SlideableTree.this.setSelectionPath(path);
+//
+// // setze icon neu
+// final TreeCellRenderer cellRenderer = t.getCellRenderer();
+// final JLabel l = (JLabel)cellRenderer.getTreeCellRendererComponent(
+// SlideableTree.this,
+// (DefaultMutableTreeNode)t.getModel().getRoot(),
+// false,
+// (pane.isCollapsed()),
+// false,
+// 0,
+// false);
+// pane.setIcon(l.getIcon());
+//
+// if (!pane.isCollapsed()) {
+// // pane soll geschlossen werden
+// pane.setSelected(false);
+// SlideableTree.this.fireTreeCollapsed(path);
+// } else {
+// // pane soll geoeffnet werden
+// pane.setSelected(true);
+// SlideableTree.this.fireTreeExpanded(path);
+// }
+// }
+// }
+// }
+            SlideableTree.this.fireTreeExpanded(path);
         }
     }
 }

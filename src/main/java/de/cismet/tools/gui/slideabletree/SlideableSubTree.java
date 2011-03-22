@@ -83,6 +83,11 @@ public class SlideableSubTree extends JTree {
         }
     }
 
+    @Override
+    public void setEditable(final boolean flag) {
+        super.setEditable(false);
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -116,8 +121,6 @@ public class SlideableSubTree extends JTree {
 
                     @Override
                     public void mouseClicked(final MouseEvent e) {
-                        // SpecialTreeSelectionUI.super.createMouseListener().mousePressed(e);
-                        // System.out.println("mouseClicked");
                     }
 
                     @Override
@@ -132,30 +135,25 @@ public class SlideableSubTree extends JTree {
                             }
                         }
                         SpecialSelectionUI.super.createMouseListener().mousePressed(e);
-
-                        // System.out.println("mousePressed");
                     }
 
                     @Override
                     public void mouseReleased(final MouseEvent e) {
-                        if (releasedAction) {
+                        final TreePath clickPath = tree.getPathForLocation(e.getX(), e.getY());
+                        if (releasedAction && tree.getSelectionModel().isPathSelected(clickPath)) {
                             releasedAction = false;
                             SpecialSelectionUI.super.createMouseListener().mousePressed(e);
                         }
-
-                        // System.out.println("mouseReleased");
                     }
 
                     @Override
                     public void mouseEntered(final MouseEvent e) {
                         SpecialSelectionUI.super.createMouseListener().mouseEntered(e);
-                        // System.out.println("mouseEntered");
                     }
 
                     @Override
                     public void mouseExited(final MouseEvent e) {
                         SpecialSelectionUI.super.createMouseListener().mouseExited(e);
-                        // System.out.println("MouseExited");
                     }
                 };
         }

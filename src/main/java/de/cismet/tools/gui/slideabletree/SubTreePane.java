@@ -28,7 +28,7 @@ import org.jdesktop.swingx.JXTaskPane;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import javax.swing.UIManager;
+import javax.swing.Icon;
 
 /**
  * DOCUMENT ME!

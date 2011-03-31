@@ -30,6 +30,7 @@ public class SlideableSubTree extends JTree {
     //~ Instance fields --------------------------------------------------------
 
     private boolean specialSelection = false;
+    private boolean hasDragGestureRecognizer = false;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -81,6 +82,24 @@ public class SlideableSubTree extends JTree {
         } else {
             super.setUI(ui);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean hasDragGestureRecognizer() {
+        return hasDragGestureRecognizer;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  hasDragGestureRecognizer  DOCUMENT ME!
+     */
+    public void setHasDragGestureRecognizer(final boolean hasDragGestureRecognizer) {
+        this.hasDragGestureRecognizer = hasDragGestureRecognizer;
     }
 
     @Override

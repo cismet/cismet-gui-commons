@@ -40,7 +40,7 @@ import javax.swing.border.Border;
  * @author   dmeiers
  * @version  $Revision$, $Date$
  */
-public class MyTaskPaneUI extends BasicTaskPaneUI {
+public class SpecialTaskPanebackgroundUI extends BasicTaskPaneUI {
 
     //~ Methods ----------------------------------------------------------------
 

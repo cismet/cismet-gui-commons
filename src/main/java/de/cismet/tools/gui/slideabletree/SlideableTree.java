@@ -9,11 +9,8 @@ package de.cismet.tools.gui.slideabletree;
 
 import org.apache.log4j.Logger;
 
-import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.jdesktop.swingx.VerticalLayout;
-
-import org.openide.util.Exceptions;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,7 +26,6 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -1573,44 +1569,64 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
         for (int i = 0; i
                     < childCount; i++) {
             final Object child = model.getChild(root, i);
-            final TreeNode newRootNode = new DefaultMutableTreeNode(child);
-            // use specialSelection as default...
-            final SlideableSubTree subTree = new SlideableSubTree(newRootNode, true);
-            final DelegatingModel modelDelegate = new DelegatingModel(child, model);
-            subTree.setModel(modelDelegate);
-            subTree.setEditable(false);
-            subTree.setRootVisible(false);
-            subTree.addTreeExpansionListener(this);
-            subTree.addTreeSelectionListener(this);
-            subTree.addTreeWillExpandListener(this);
-            subTree.setBorder(new EmptyBorder(1, 1, 1, 1));
-            trees.add(subTree);
-            final SubTreePane tmpPane = new SubTreePane();
-            final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)subTree.getModel().getRoot();
-            final DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)trees.get(i).getCellRenderer();
-            Icon icon = null;
-            tmpPane.setCollapsed(true);
-
-            // icon aendert sich nicht, falls JXTaskpane collapsed/!(collapsed)
-            if (rootNode.isLeaf()) {
-                icon = renderer.getLeafIcon();
-            } else if (tmpPane.isCollapsed()) {
-                icon = renderer.getClosedIcon();
-            } else {
-                icon = renderer.getOpenIcon();
-            }
-            tmpPane.setIcon(icon);
-            final Border border = BorderFactory.createLineBorder(new Color(234, 234, 234));
-            ((JComponent)tmpPane.getContentPane()).setBorder(border);
-            tmpPane.getContentPane().setBackground(Color.white);
-            tmpPane.setTitle(newRootNode.toString());
-            tmpPane.addMouseListener(new ClickAndSelectListener());
-            // ((JComponent)tmpPane.getContentPane()).setBorder(new EmptyBorder(1, 16, 1, 1));
-            tmpPane.add(subTree);
-
-            panes.add(tmpPane);
+            createTreeNode(child);
             addToTreeContainer(panes);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  node  DOCUMENT ME!
+     */
+    private void createTreeNode(final Object node) {
+        final TreeNode newRootNode = new DefaultMutableTreeNode(node);
+        // use specialSelection as default...
+        final SlideableSubTree subTree = new SlideableSubTree(newRootNode, true);
+        final DelegatingModel modelDelegate = new DelegatingModel(node, this.getModel());
+        subTree.setModel(modelDelegate);
+        subTree.setEditable(false);
+        subTree.setRootVisible(false);
+        subTree.addTreeExpansionListener(this);
+        subTree.addTreeSelectionListener(this);
+        subTree.addTreeWillExpandListener(this);
+        subTree.setBorder(new EmptyBorder(1, 1, 1, 1));
+        trees.add(subTree);
+        final SubTreePane tmpPane = new SubTreePane();
+        tmpPane.setCollapsed(true);
+        final DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode)subTree.getModel().getRoot();
+        final TreeCellRenderer treeCellRenderer = subTree.getCellRenderer();
+        final JLabel l = (JLabel)treeCellRenderer.getTreeCellRendererComponent(
+                SlideableTree.this,
+                (DefaultMutableTreeNode)subTree.getModel().getRoot(),
+                false,
+                (tmpPane.isCollapsed()),
+                false,
+                0,
+                false);
+        tmpPane.setIcon(l.getIcon());
+//            final DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer)trees.get(i).getCellRenderer();
+//            Icon icon = null;
+//            tmpPane.setCollapsed(true);
+//
+//            // icon aendert sich nicht, falls JXTaskpane collapsed/!(collapsed)
+//            if (rootNode.isLeaf()) {
+//                icon = renderer.getLeafIcon();
+//            } else if (tmpPane.isCollapsed()) {
+//                icon = renderer.getClosedIcon();
+//            } else {
+//                icon = renderer.getOpenIcon();
+//            }
+//            tmpPane.setIcon(icon);
+        final Border border = BorderFactory.createLineBorder(new Color(234, 234, 234));
+        ((JComponent)tmpPane.getContentPane()).setBorder(border);
+        tmpPane.getContentPane().setBackground(Color.white);
+        tmpPane.setTitle(newRootNode.toString());
+        tmpPane.addMouseListener(new ClickAndSelectListener());
+        // ((JComponent)tmpPane.getContentPane()).setBorder(new EmptyBorder(1, 16, 1, 1));
+        tmpPane.add(subTree);
+
+        panes.add(tmpPane);
     }
 
     /**
@@ -1628,8 +1644,10 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      * @param  list  DOCUMENT ME!
      */
     private void addToTreeContainer(final ArrayList<SubTreePane> list) {
-        for (final JComponent c : list) {
-            container.add(c);
+        for (final SubTreePane p : list) {
+            p.setCollapsed(true);
+//            p.setSelected(false);
+            container.add(p);
         }
     }
 
@@ -1642,6 +1660,9 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
      * @return  DOCUMENT ME!
      */
     private SlideableSubTree getSubTreeForPath(final TreePath path) {
+        if (path == null) {
+            return null;
+        }
         final Object pathRoot = path.getPathComponent(0);
         // Der Pfad entaehlt nur einen Knoten, also die Wurzel
         if (path.getPathCount() <= 1) {
@@ -2119,9 +2140,46 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
                 if (t == null) {
                     if (tree.getModel().getRoot().equals(e.getTreePath().getLastPathComponent())) {
                         // ein Knoten dirket unterhalb des Root Knoten hat sich geaendert..
+                        final TreeNode treeRoot = (DefaultMutableTreeNode)tree.getModel().getRoot();
+                        final int childCount = treeRoot.getChildCount();
+                        if (childCount < panes.size()) {
+                            // nodes were removed...
+                            final int treesToRemove = panes.size() - childCount;
+                            for (int i = 0; i < treesToRemove; i++) {
+                                trees.remove((trees.size() - 1) - i);
+                                panes.remove((panes.size() - 1) - i);
+                            }
+                        } else if (childCount > panes.size()) {
+                            // nodes were added
+                            final int treesToAdd = childCount - panes.size();
+                            for (int i = 0; i < treesToAdd; i++) {
+                                createTreeNode(treeRoot.getChildAt((childCount - 1) - i));
+                            }
+                        }
+
+                        for (int i = 0; i < treeRoot.getChildCount(); i++) {
+                            final TreeNode child = treeRoot.getChildAt(i);
+                            final SlideableSubTree subTree = trees.get(i);
+                            final TreeNode subRoot;
+                            if (subTree != null) {
+                                subRoot = (TreeNode)subTree.getModel().getRoot();
+                                if (subRoot.equals(child)) {
+                                    // this node doesnt changed
+                                    continue;
+                                } else {
+                                    // node has changed, modify pane and subtree
+                                    final SubTreePane pane = panes.get(i);
+                                    pane.setTitle(child.toString());
+                                    pane.removeAll();
+                                    final TreeModel newModel = new DelegatingModel(child, tree.getModel());
+                                    subTree.setModel(newModel);
+                                    pane.add(subTree);
+                                }
+                            }
+                        }
                         tree.flushTreeContainer();
-                        tree.createSubTrees(tree.getModel());
-                        tree.addToTreeContainer(tree.getPanes());
+                        tree.addToTreeContainer(panes);
+                        tree.updateUI();
                     }
                 } else {
                     EventQueue.invokeLater(new Runnable() {
@@ -2164,45 +2222,41 @@ public class SlideableTree extends JTree implements TreeExpansionListener,
         @Override
         public void mousePressed(final MouseEvent e) {
             final SubTreePane pane = (SubTreePane)e.getSource();
-            final SlideableSubTree t = trees.get(panes.indexOf(pane));
-            final TreePath path = SlideableTree.this.getPathforOriginalTree(new TreePath(
-                        t.getModel().getRoot()));
             // liegen Koordianten innerhalb der Titlebar?
-// if ((e.getX() < pane.getWidth()) && (e.getY() < pane.getTitleBarHeight())) {
-// {
-// if (!e.isPopupTrigger()) {
-// final SlideableSubTree t = trees.get(panes.indexOf(pane));
-// final TreePath path = SlideableTree.this.getPathforOriginalTree(new TreePath(
-// t.getModel().getRoot()));
-// // setze RootKnoten des SubTrees als Selektion
-// SlideableTree.this.clearSelection();
-// SlideableTree.this.setSelectionPath(path);
-//
-// // setze icon neu
-// final TreeCellRenderer cellRenderer = t.getCellRenderer();
-// final JLabel l = (JLabel)cellRenderer.getTreeCellRendererComponent(
-// SlideableTree.this,
-// (DefaultMutableTreeNode)t.getModel().getRoot(),
-// false,
-// (pane.isCollapsed()),
-// false,
-// 0,
-// false);
-// pane.setIcon(l.getIcon());
-//
-// if (!pane.isCollapsed()) {
-// // pane soll geschlossen werden
-// pane.setSelected(false);
-// SlideableTree.this.fireTreeCollapsed(path);
-// } else {
-// // pane soll geoeffnet werden
-// pane.setSelected(true);
-// SlideableTree.this.fireTreeExpanded(path);
-// }
-// }
-// }
-// }
-            SlideableTree.this.fireTreeExpanded(path);
+            if ((e.getX() < pane.getWidth()) && (e.getY() < pane.getTitleBarHeight())) {
+                {
+                    if (!e.isPopupTrigger()) {
+                        final SlideableSubTree t = trees.get(panes.indexOf(pane));
+                        final TreePath path = SlideableTree.this.getPathforOriginalTree(new TreePath(
+                                    t.getModel().getRoot()));
+                        // setze RootKnoten des SubTrees als Selektion
+                        SlideableTree.this.clearSelection();
+                        SlideableTree.this.setSelectionPath(path);
+
+                        // setze icon neu
+                        final TreeCellRenderer cellRenderer = t.getCellRenderer();
+                        final JLabel l = (JLabel)cellRenderer.getTreeCellRendererComponent(
+                                SlideableTree.this,
+                                (DefaultMutableTreeNode)t.getModel().getRoot(),
+                                false,
+                                (pane.isCollapsed()),
+                                false,
+                                0,
+                                false);
+                        pane.setIcon(l.getIcon());
+
+                        if (!pane.isCollapsed()) {
+                            // pane soll geschlossen werden
+                            pane.setSelected(false);
+                            SlideableTree.this.fireTreeCollapsed(path);
+                        } else {
+                            // pane soll geoeffnet werden
+                            pane.setSelected(true);
+                            SlideableTree.this.fireTreeExpanded(path);
+                        }
+                    }
+                }
+            }
         }
     }
 }

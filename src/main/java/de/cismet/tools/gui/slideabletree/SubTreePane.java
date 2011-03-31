@@ -49,7 +49,7 @@ public class SubTreePane extends JXTaskPane {
      * Creates a new SubTreePane object.
      */
     public SubTreePane() {
-        this.setUI(new MyTaskPaneUI());
+        this.setUI(new SpecialTaskPanebackgroundUI());
         this.setForeground(defaultTitleColor);
 //        this.setAnimated(false);
     }

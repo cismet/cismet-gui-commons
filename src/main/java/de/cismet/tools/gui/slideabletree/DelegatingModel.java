@@ -20,9 +20,6 @@ import javax.swing.tree.TreePath;
  * DOCUMENT ME!
  *
  * @author   dmeiers
- *
- *           <p>Diese Klasse wird als Model fuer die einzelenen SlideableSubTrees des SlideableTrees benutzt. Dabei
- *           werden die anfragen lediglich an das Originalmodel des SlideableTree weitergeleitet.</p>
  * @version  $Revision$, $Date$
  */
 public class DelegatingModel implements TreeModel {
@@ -37,8 +34,8 @@ public class DelegatingModel implements TreeModel {
     /**
      * Creates a new DelegatingModel object.
      *
-     * @param  newRoot        DOCUMENT ME!
-     * @param  originalModel  DOCUMENT ME!
+     * @param  newRoot        the root node for the model
+     * @param  originalModel  the model to wich all request will be delegate
      */
     public DelegatingModel(final Object newRoot, final TreeModel originalModel) {
         root = newRoot;

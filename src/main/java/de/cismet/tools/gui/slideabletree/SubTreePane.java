@@ -31,7 +31,7 @@ import java.awt.Graphics;
 import javax.swing.Icon;
 
 /**
- * DOCUMENT ME!
+ * This class represents a TreeNode with an JXTaskPane. It paints the title in another Color if it is selected.
  *
  * @author   dmeiers
  * @version  $Revision$, $Date$

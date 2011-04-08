@@ -7,7 +7,6 @@
 ****************************************************/
 package de.cismet.tools.gui.slideabletree;
 
-import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -16,6 +15,7 @@ import java.util.Enumeration;
 import javax.swing.JTree;
 import javax.swing.plaf.TreeUI;
 import javax.swing.plaf.basic.BasicTreeUI;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
@@ -37,8 +37,8 @@ public class SlideableSubTree extends JTree {
     /**
      * Creates a new SlideableSubTree object.
      *
-     * @param  node                 DOCUMENT ME!
-     * @param  useSpecialSelection  DOCUMENT ME!
+     * @param  node                 the root node of the tree
+     * @param  useSpecialSelection  flag to use SpecialSelectionUI
      */
     SlideableSubTree(final TreeNode node, final boolean useSpecialSelection) {
         super(node);
@@ -107,10 +107,39 @@ public class SlideableSubTree extends JTree {
         super.setEditable(false);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   path  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isPathValid(final TreePath path) {
+        if (path != null) {
+            final TreeModel model = this.getModel();
+
+            if (path.getPathCount() == 0) {
+                // Pfad representiert Wurzel
+                return model.getRoot().equals(path.getPathComponent(0));
+            }
+
+            for (int i = 1; i < path.getPathCount(); i++) {
+                final int childIndex = model.getIndexOfChild(path.getPathComponent(i - 1),
+                        path.getPathComponent(i - 1));
+                if (childIndex == -1) {
+                    // parent oder childknoten null oder nicht vorhanden...
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
-     * DOCUMENT ME!
+     * This class is used for an improved selection behavior on muliple selections To remove an node from an mulitple
+     * selection, this class use the mouseRelease event instead the mousePressed event.
      *
      * @version  $Revision$, $Date$
      */
@@ -126,7 +155,7 @@ public class SlideableSubTree extends JTree {
         /**
          * Creates a new SpecialSelectionUI object.
          *
-         * @param  t  DOCUMENT ME!
+         * @param  t  a reference to a JTree
          */
         public SpecialSelectionUI(final JTree t) {
             tree = t;

@@ -35,7 +35,7 @@ import java.awt.RenderingHints;
 import javax.swing.border.Border;
 
 /**
- * DOCUMENT ME!
+ * Paints a specialized Border which goes well with the Navigator GUI.
  *
  * @author   dmeiers
  * @version  $Revision$, $Date$

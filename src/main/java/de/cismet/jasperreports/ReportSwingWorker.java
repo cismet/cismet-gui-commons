@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.jasperreports;
 
+import Sirius.navigator.plugin.PluginRegistry;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
@@ -39,6 +41,8 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.dynamics.CidsBean;
 
+import de.cismet.cismap.navigatorplugin.CismapPlugin;
+
 import de.cismet.tools.BrowserLauncher;
 
 /**
@@ -50,9 +54,12 @@ public class ReportSwingWorker extends SwingWorker<Void, Object> {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final String CISMAP_FOLDER = ".cismap";
-    private static String HOME_FOLDER = System.getProperty("user.home");
-    private static String FS = System.getProperty("file.separator");
+    private static final String CISMAP_FOLDER = ((CismapPlugin)PluginRegistry.getRegistry().getPlugin("cismap"))
+                .getConfigurationManager().getFolder();
+    private static String HOME_FOLDER = ((CismapPlugin)PluginRegistry.getRegistry().getPlugin("cismap"))
+                .getConfigurationManager().getHome();
+    private static String FS = ((CismapPlugin)PluginRegistry.getRegistry().getPlugin("cismap"))
+                .getConfigurationManager().getFileSeperator();
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ReportSwingWorker.class);
 
     //~ Instance fields --------------------------------------------------------

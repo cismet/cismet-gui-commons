@@ -24,6 +24,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -120,7 +121,8 @@ public class ReportSwingWorker extends SwingWorker<Void, Object> {
             concatPDFs(ins, out, true);
 
             // zusammengefügten pdfStream in Datei schreiben
-            final String file = HOME_FOLDER + FS + CISMAP_FOLDER + FS + "report.pdf";
+            final File file = new File(HOME_FOLDER + FS + CISMAP_FOLDER + FS + "report.pdf");
+            file.getParentFile().mkdirs();
             fos = new FileOutputStream(file);
             fos.write(out.toByteArray());
 

@@ -24,6 +24,8 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
+import java.awt.Frame;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,7 +38,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import de.cismet.cids.dynamics.CidsBean;
@@ -50,7 +55,7 @@ import de.cismet.tools.BrowserLauncher;
  *
  * @version  $Revision$, $Date$
  */
-public class ReportSwingWorker extends SwingWorker<Void, Object> {
+public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -66,8 +71,10 @@ public class ReportSwingWorker extends SwingWorker<Void, Object> {
 
 // private Collection<CidsBean> cidsBeans;
 // private String compiledReport;
-    private List<Collection<CidsBean>> cidsBeansList;
-    private List<String> compiledReportList;
+    private final List<Collection<CidsBean>> cidsBeansList;
+    private final List<String> compiledReportList;
+    private final ReportSwingWorkerDialog dialog;
+    private final boolean withDialog;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -78,8 +85,7 @@ public class ReportSwingWorker extends SwingWorker<Void, Object> {
      * @param  compiledReportList  DOCUMENT ME!
      */
     public ReportSwingWorker(final List<Collection<CidsBean>> cidsBeansList, final List<String> compiledReportList) {
-        this.cidsBeansList = cidsBeansList;
-        this.compiledReportList = compiledReportList;
+        this(cidsBeansList, compiledReportList, false, null);
     }
 
     /**
@@ -89,16 +95,93 @@ public class ReportSwingWorker extends SwingWorker<Void, Object> {
      * @param  compiledReport  DOCUMENT ME!
      */
     public ReportSwingWorker(final Collection<CidsBean> cidsBeans, final String compiledReport) {
+        this(cidsBeans, compiledReport, false, null);
+    }
+
+    /**
+     * Creates a new ReportSwingWorker object.
+     *
+     * @param  cidsBeansList       DOCUMENT ME!
+     * @param  compiledReportList  DOCUMENT ME!
+     * @param  parent              DOCUMENT ME!
+     */
+    public ReportSwingWorker(final List<Collection<CidsBean>> cidsBeansList,
+            final List<String> compiledReportList,
+            final Frame parent) {
+        this(cidsBeansList, compiledReportList, true, parent);
+    }
+
+    /**
+     * Creates a new ReportSwingWorker object.
+     *
+     * @param  cidsBeans       DOCUMENT ME!
+     * @param  compiledReport  DOCUMENT ME!
+     * @param  parent          DOCUMENT ME!
+     */
+    public ReportSwingWorker(final Collection<CidsBean> cidsBeans, final String compiledReport, final Frame parent) {
+        this(cidsBeans, compiledReport, true, parent);
+    }
+
+    /**
+     * Creates a new ReportSwingWorker object.
+     *
+     * @param  cidsBeansList       DOCUMENT ME!
+     * @param  compiledReportList  DOCUMENT ME!
+     * @param  withDialog          DOCUMENT ME!
+     * @param  parent              DOCUMENT ME!
+     */
+    public ReportSwingWorker(final List<Collection<CidsBean>> cidsBeansList,
+            final List<String> compiledReportList,
+            final boolean withDialog,
+            final Frame parent) {
+        this.cidsBeansList = cidsBeansList;
+        this.compiledReportList = compiledReportList;
+        this.withDialog = withDialog;
+        if (withDialog) {
+            dialog = new ReportSwingWorkerDialog(parent, true);
+        } else {
+            dialog = null;
+        }
+    }
+
+    /**
+     * Creates a new ReportSwingWorker object.
+     *
+     * @param  cidsBeans       DOCUMENT ME!
+     * @param  compiledReport  DOCUMENT ME!
+     * @param  withDialog      DOCUMENT ME!
+     * @param  parent          DOCUMENT ME!
+     */
+    public ReportSwingWorker(final Collection<CidsBean> cidsBeans,
+            final String compiledReport,
+            final boolean withDialog,
+            final Frame parent) {
         this.cidsBeansList = new ArrayList<Collection<CidsBean>>();
         this.cidsBeansList.add(cidsBeans);
         this.compiledReportList = new ArrayList<String>();
         this.compiledReportList.add(compiledReport);
+        this.withDialog = withDialog;
+        if (withDialog) {
+            dialog = new ReportSwingWorkerDialog(parent, true);
+        } else {
+            dialog = null;
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    protected Void doInBackground() throws Exception {
+    protected Boolean doInBackground() throws Exception {
+        if (withDialog) {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        dialog.setLocationRelativeTo(dialog.getParent());
+                        dialog.setVisible(true);
+                    }
+                });
+        }
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         FileOutputStream fos = null;
@@ -135,6 +218,7 @@ public class ReportSwingWorker extends SwingWorker<Void, Object> {
 
             // Datei über Browser öffnen
             BrowserLauncher.openURL("file:///" + file);
+            return true;
         } catch (IOException ex) {
             LOG.error("Export to PDF-Stream failed.", ex);
         } catch (JRException ex) {
@@ -152,11 +236,30 @@ public class ReportSwingWorker extends SwingWorker<Void, Object> {
             }
         }
 
-        return null;
+        return false;
     }
 
     @Override
     protected void done() {
+        boolean error = false;
+        try {
+            error = !get();
+        } catch (InterruptedException ex) {
+            // unterbrochen, nichts tun
+        } catch (ExecutionException ex) {
+            error = true;
+            LOG.error("error while generating report", ex);
+        }
+        if (withDialog) {
+            dialog.setVisible(false);
+        }
+        if (error) {
+            JOptionPane.showMessageDialog(
+                dialog.getParent(),
+                "Beim Generieren des Reports ist ein Fehler aufgetreten.",
+                "Fehler!",
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**

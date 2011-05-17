@@ -134,7 +134,7 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler {
                 if (log.isDebugEnabled()) {
                     log.debug("bad httpstatuscode");                                             // NOI18N
                 }
-                throw new BadHttpStatusCodeException("Statuscode: " + statuscode);               // NOI18N
+                throw new BadHttpStatusCodeException("Statuscode: " + statuscode, statuscode);   // NOI18N
             }
         }
     }

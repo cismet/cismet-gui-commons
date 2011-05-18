@@ -43,8 +43,9 @@ public class BadHttpStatusCodeException extends Exception {
     /**
      * Creates a new BadHttpStatusCodeException object.
      *
-     * @deprecated Please use constructor BadHttpStatusCodeException(String, int).
-     * @param  message  DOCUMENT ME!
+     * @param       message  DOCUMENT ME!
+     *
+     * @deprecated  Please use constructor BadHttpStatusCodeException(String, int).
      */
     public BadHttpStatusCodeException(final String message) {
         super(message);

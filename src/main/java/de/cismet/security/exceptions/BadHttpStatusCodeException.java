@@ -15,10 +15,6 @@
  */
 package de.cismet.security.exceptions;
 
-import java.awt.EventQueue;
-
-import javax.swing.SwingUtilities;
-
 /**
  * DOCUMENT ME!
  *

@@ -94,7 +94,7 @@ public class Download extends Observable implements Runnable, Comparable {
             status = RUNNING;
         } else {
             status = ERROR;
-            caughtException = new Exception("DownloadManager is disabled.");
+            caughtException = new Exception("DownloadManager is disabled. Cancelling download.");
         }
     }
 
@@ -121,7 +121,7 @@ public class Download extends Observable implements Runnable, Comparable {
             status = RUNNING;
         } else {
             status = ERROR;
-            caughtException = new Exception("DownloadManager is disabled.");
+            caughtException = new Exception("DownloadManager is disabled. Cancelling download.");
         }
     }
 
@@ -287,11 +287,14 @@ public class Download extends Observable implements Runnable, Comparable {
     }
 
     /**
-     * DOCUMENT ME!
+     * Determines the destination file for this download. There exist given parameters like a download destination and a
+     * pattern for the file name. It's possible that a previous download with equal parameters still exists physically,
+     * therefore this method adds a counter (2..999) which is appended to the filename.
      *
-     * @param  filename   DOCUMENT ME!
-     * @param  extension  DOCUMENT ME!
-     * @param  url        DOCUMENT ME!
+     * @param  filename   The file name for this download.
+     * @param  extension  The extension for the downloaded file.
+     * @param  url        The url is needed for logging purposes if it's not possible to determine a download file. It
+     *                    mustn't be null.
      */
     private void determineDestinationFile(final String filename,
             final String extension,

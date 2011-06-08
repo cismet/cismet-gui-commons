@@ -11,7 +11,6 @@ import Sirius.navigator.resource.PropertyManager;
 
 import org.apache.log4j.Logger;
 
-import org.jdom.Element;
 
 import java.io.File;
 
@@ -22,8 +21,6 @@ import java.util.Observer;
 
 import javax.swing.event.EventListenerList;
 
-import de.cismet.tools.configuration.Configurable;
-import de.cismet.tools.configuration.NoWriteError;
 
 /**
  * The download manager manages all current downloads. New downloads are added to a collection, completed downloads are
@@ -39,9 +36,6 @@ public class DownloadManager implements Observer /*, Configurable*/ {
 
     private static final Logger LOG = Logger.getLogger(DownloadManager.class);
     private static DownloadManager instance = null;
-
-    private static final String XML_CONF_ROOT = "downloadManager";
-    private static final String XML_DESTINATION_DIRECTORY = "destinationDirectory";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -201,18 +195,18 @@ public class DownloadManager implements Observer /*, Configurable*/ {
     }
 
     /**
-     * DOCUMENT ME!
+     * Returns the destination directory.
      *
-     * @return  DOCUMENT ME!
+     * @return  The destination directory for downloads.
      */
     public File getDestinationDirectory() {
         return destinationDirectory;
     }
 
     /**
-     * DOCUMENT ME!
+     * Returns a flag which tells whether download manager is enabled or not.
      *
-     * @return  DOCUMENT ME!
+     * @return  The flag whether the download manager is enabled or not.
      */
     public boolean isEnabled() {
         return enabled;
@@ -277,23 +271,4 @@ public class DownloadManager implements Observer /*, Configurable*/ {
             listener.downloadListChanged(event);
         }
     }
-
-    /*@Override
-     * public void configure(Element parent) { }
-     *
-     * @Override public void masterConfigure(Element parent) { String calculatedDestinationDirectory =
-     * System.getProperty("user.home"); final Element downloadManager = parent.getChild(XML_CONF_ROOT); Element
-     * destinationDirectory = null;  if (downloadManager == null) {     LOG.warn("The download manager isn't configured.
-     * The download manager will use the home directory for downloads."); } else {     destinationDirectory =
-     * downloadManager.getChild(XML_DESTINATION_DIRECTORY);     if (destinationDirectory == null) {
-     * LOG.warn("The destination directory isn't configured. The download manager will use the home directory for
-     * downloads.");     } }  if(destinationDirectory != null) {     String configuredDestinationDirectory =
-     * destinationDirectory.getText();     if(configuredDestinationDirectory != null &&
-     * configuredDestinationDirectory.trim().length() > 0) {         calculatedDestinationDirectory =
-     * configuredDestinationDirectory;     } }  this.destinationDirectory = new File(calculatedDestinationDirectory);
-     * if(!this.destinationDirectory.isDirectory() || !this.destinationDirectory.canWrite()) {     LOG.error("The
-     * download manager can't use the directory '" + calculatedDestinationDirectory + "'. The download manager will be
-     * disabled.");     enabled = false; } else {     enabled = true; } }
-     *
-     * @Override public Element getConfiguration() throws NoWriteError { return null;}*/
 }

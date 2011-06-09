@@ -210,20 +210,20 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      *
      * @param  evt  The event object.
      */
-    private void btnClearListActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearListActionPerformed
+    private void btnClearListActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnClearListActionPerformed
         closeAfterLastDownload = false;
         DownloadManager.instance().removeObsoleteDownloads();
-    }//GEN-LAST:event_btnClearListActionPerformed
+    }                                                                                //GEN-LAST:event_btnClearListActionPerformed
 
     /**
      * Opens a file manager pointing to the destination directory for downloads.
      *
      * @param  evt  The event object.
      */
-    private void btnOpenDestinationDirectoryActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenDestinationDirectoryActionPerformed
+    private void btnOpenDestinationDirectoryActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenDestinationDirectoryActionPerformed
         closeAfterLastDownload = false;
         BrowserLauncher.openURLorFile(DownloadManager.instance().getDestinationDirectory().getAbsolutePath());
-    }//GEN-LAST:event_btnOpenDestinationDirectoryActionPerformed
+    }                                                                                               //GEN-LAST:event_btnOpenDestinationDirectoryActionPerformed
 
     @Override
     public void downloadListChanged(final DownloadListChangedEvent event) {

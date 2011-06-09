@@ -11,7 +11,6 @@ import Sirius.navigator.resource.PropertyManager;
 
 import org.apache.log4j.Logger;
 
-
 import java.io.File;
 
 import java.util.Collection;
@@ -20,7 +19,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.event.EventListenerList;
-
 
 /**
  * The download manager manages all current downloads. New downloads are added to a collection, completed downloads are

@@ -68,6 +68,7 @@ public class Download extends Observable implements Runnable, Comparable {
 
     private URL url;
     private String request;
+    private String directory;
     private File fileToSaveTo;
     private int status;
     private String title;
@@ -81,12 +82,18 @@ public class Download extends Observable implements Runnable, Comparable {
      *
      * @param  url           The URL of the server to download from.
      * @param  request       The request to send.
+     * @param  directory     DOCUMENT ME!
      * @param  title         The title of the download.
      * @param  fileToSaveTo  A file object pointing to the download location.
      */
-    public Download(final URL url, final String request, final String title, final File fileToSaveTo) {
+    public Download(final URL url,
+            final String request,
+            final String directory,
+            final String title,
+            final File fileToSaveTo) {
         this.url = url;
         this.request = request;
+        this.directory = directory;
         this.title = title;
         this.fileToSaveTo = fileToSaveTo;
 
@@ -103,17 +110,20 @@ public class Download extends Observable implements Runnable, Comparable {
      *
      * @param  url        The URL of the server to download from.
      * @param  request    The request to send.
+     * @param  directory  DOCUMENT ME!
      * @param  title      The title of the download.
      * @param  filename   A String containing the filename.
      * @param  extension  A String containing the file extension.
      */
     public Download(final URL url,
             final String request,
+            final String directory,
             final String title,
             final String filename,
             final String extension) {
         this.url = url;
         this.request = request;
+        this.directory = directory;
         this.title = title;
 
         if (DownloadManager.instance().isEnabled()) {
@@ -299,15 +309,29 @@ public class Download extends Observable implements Runnable, Comparable {
     private void determineDestinationFile(final String filename,
             final String extension,
             final URL url) {
-        final File directory = DownloadManager.instance().getDestinationDirectory();
-        this.fileToSaveTo = new File(directory, filename + extension);
+        File directoryToSaveTo = null;
+        if ((directory != null) && (directory.trim().length() > 0)) {
+            directoryToSaveTo = new File(DownloadManager.instance().getDestinationDirectory(), directory);
+        } else {
+            directoryToSaveTo = DownloadManager.instance().getDestinationDirectory();
+        }
 
+        if (!directoryToSaveTo.exists()) {
+            if (!directoryToSaveTo.mkdirs()) {
+                error(new Exception(
+                        "Couldn't create destination directory '"
+                                + directoryToSaveTo.getAbsolutePath()
+                                + "'. Cancelling download."));
+            }
+        }
+
+        fileToSaveTo = new File(directoryToSaveTo, filename + extension);
         boolean fileFound = false;
         int counter = 2;
 
         while (!fileFound) {
             while (fileToSaveTo.exists() && (counter < 1000)) {
-                fileToSaveTo = new File(directory, filename + counter + extension);
+                fileToSaveTo = new File(directoryToSaveTo, filename + counter + extension);
                 counter++;
             }
 
@@ -322,15 +346,11 @@ public class Download extends Observable implements Runnable, Comparable {
             }
 
             if ((counter >= 1000) && !fileFound) {
-                LOG.error("Could not create a file for the download '" + url.toExternalForm()
-                            + "'. The tested path is '" + directory.getAbsolutePath() + File.separatorChar
-                            + filename + "<1.." + 999 + ">." + extension
-                            + ".");
                 error(new FileNotFoundException(
                         "Could not create a file for the download '"
                                 + url.toExternalForm()
                                 + "'. The tested path is '"
-                                + directory.getAbsolutePath()
+                                + directoryToSaveTo.getAbsolutePath()
                                 + File.separatorChar
                                 + filename
                                 + "<1.."

@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.jasperreports;
 
-import Sirius.navigator.plugin.PluginRegistry;
-
 import com.lowagie.text.Document;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
@@ -46,8 +44,6 @@ import javax.swing.SwingWorker;
 
 import de.cismet.cids.dynamics.CidsBean;
 
-import de.cismet.cismap.navigatorplugin.CismapPlugin;
-
 import de.cismet.tools.BrowserLauncher;
 
 /**
@@ -59,12 +55,6 @@ public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final String CISMAP_FOLDER = ((CismapPlugin)PluginRegistry.getRegistry().getPlugin("cismap"))
-                .getConfigurationManager().getFolder();
-    private static String HOME_FOLDER = ((CismapPlugin)PluginRegistry.getRegistry().getPlugin("cismap"))
-                .getConfigurationManager().getHome();
-    private static String FS = ((CismapPlugin)PluginRegistry.getRegistry().getPlugin("cismap"))
-                .getConfigurationManager().getFileSeperator();
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ReportSwingWorker.class);
 
     //~ Instance fields --------------------------------------------------------
@@ -75,6 +65,7 @@ public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
     private final List<String> compiledReportList;
     private final ReportSwingWorkerDialog dialog;
     private final boolean withDialog;
+    private String directory;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -83,9 +74,12 @@ public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
      *
      * @param  cidsBeansList       map DOCUMENT ME!
      * @param  compiledReportList  DOCUMENT ME!
+     * @param  directory           DOCUMENT ME!
      */
-    public ReportSwingWorker(final List<Collection<CidsBean>> cidsBeansList, final List<String> compiledReportList) {
-        this(cidsBeansList, compiledReportList, false, null);
+    public ReportSwingWorker(final List<Collection<CidsBean>> cidsBeansList,
+            final List<String> compiledReportList,
+            final String directory) {
+        this(cidsBeansList, compiledReportList, false, null, directory);
     }
 
     /**
@@ -93,9 +87,12 @@ public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
      *
      * @param  cidsBeans       DOCUMENT ME!
      * @param  compiledReport  DOCUMENT ME!
+     * @param  directory       DOCUMENT ME!
      */
-    public ReportSwingWorker(final Collection<CidsBean> cidsBeans, final String compiledReport) {
-        this(cidsBeans, compiledReport, false, null);
+    public ReportSwingWorker(final Collection<CidsBean> cidsBeans,
+            final String compiledReport,
+            final String directory) {
+        this(cidsBeans, compiledReport, false, null, directory);
     }
 
     /**
@@ -104,11 +101,13 @@ public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
      * @param  cidsBeansList       DOCUMENT ME!
      * @param  compiledReportList  DOCUMENT ME!
      * @param  parent              DOCUMENT ME!
+     * @param  directory           DOCUMENT ME!
      */
     public ReportSwingWorker(final List<Collection<CidsBean>> cidsBeansList,
             final List<String> compiledReportList,
-            final Frame parent) {
-        this(cidsBeansList, compiledReportList, true, parent);
+            final Frame parent,
+            final String directory) {
+        this(cidsBeansList, compiledReportList, true, parent, directory);
     }
 
     /**
@@ -117,9 +116,13 @@ public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
      * @param  cidsBeans       DOCUMENT ME!
      * @param  compiledReport  DOCUMENT ME!
      * @param  parent          DOCUMENT ME!
+     * @param  directory       DOCUMENT ME!
      */
-    public ReportSwingWorker(final Collection<CidsBean> cidsBeans, final String compiledReport, final Frame parent) {
-        this(cidsBeans, compiledReport, true, parent);
+    public ReportSwingWorker(final Collection<CidsBean> cidsBeans,
+            final String compiledReport,
+            final Frame parent,
+            final String directory) {
+        this(cidsBeans, compiledReport, true, parent, directory);
     }
 
     /**
@@ -129,14 +132,17 @@ public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
      * @param  compiledReportList  DOCUMENT ME!
      * @param  withDialog          DOCUMENT ME!
      * @param  parent              DOCUMENT ME!
+     * @param  directory           DOCUMENT ME!
      */
     public ReportSwingWorker(final List<Collection<CidsBean>> cidsBeansList,
             final List<String> compiledReportList,
             final boolean withDialog,
-            final Frame parent) {
+            final Frame parent,
+            final String directory) {
         this.cidsBeansList = cidsBeansList;
         this.compiledReportList = compiledReportList;
         this.withDialog = withDialog;
+        this.directory = directory;
         if (withDialog) {
             dialog = new ReportSwingWorkerDialog(parent, true);
         } else {
@@ -151,16 +157,19 @@ public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
      * @param  compiledReport  DOCUMENT ME!
      * @param  withDialog      DOCUMENT ME!
      * @param  parent          DOCUMENT ME!
+     * @param  directory       DOCUMENT ME!
      */
     public ReportSwingWorker(final Collection<CidsBean> cidsBeans,
             final String compiledReport,
             final boolean withDialog,
-            final Frame parent) {
+            final Frame parent,
+            final String directory) {
         this.cidsBeansList = new ArrayList<Collection<CidsBean>>();
         this.cidsBeansList.add(cidsBeans);
         this.compiledReportList = new ArrayList<String>();
         this.compiledReportList.add(compiledReport);
         this.withDialog = withDialog;
+        this.directory = directory;
         if (withDialog) {
             dialog = new ReportSwingWorkerDialog(parent, true);
         } else {
@@ -211,7 +220,7 @@ public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
             concatPDFs(ins, out, true);
 
             // zusammengefügten pdfStream in Datei schreiben
-            final File file = new File(HOME_FOLDER + FS + CISMAP_FOLDER + FS + "report.pdf");
+            final File file = new File(directory, "report.pdf");
             file.getParentFile().mkdirs();
             fos = new FileOutputStream(file);
             fos.write(out.toByteArray());

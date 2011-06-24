@@ -82,9 +82,35 @@ public class DownloadManager implements Observer /*, Configurable*/ {
     /**
      * This method is used to add new downloads to the download list.
      *
+     * @param  download  wfss A collection of downloads to add.
+     */
+    public synchronized void add(final Download download) {
+        if (download == null) {
+            return;
+        }
+
+        this.downloads.add(download);
+        countDownloadsTotal++;
+
+        download.addObserver(this);
+        download.startDownload();
+
+        notifyDownloadListChanged(new DownloadListChangedEvent(
+                this,
+                download,
+                DownloadListChangedEvent.Action.ADDED));
+        notifyDownloadListChanged(new DownloadListChangedEvent(
+                this,
+                download,
+                DownloadListChangedEvent.Action.CHANGED_COUNTERS));
+    }
+
+    /**
+     * This method is used to add new downloads to the download list.
+     *
      * @param  downloads  wfss A collection of downloads to add.
      */
-    public void add(final Collection<Download> downloads) {
+    public synchronized void add(final Collection<Download> downloads) {
         if ((downloads == null) || (downloads.size() <= 0)) {
             return;
         }

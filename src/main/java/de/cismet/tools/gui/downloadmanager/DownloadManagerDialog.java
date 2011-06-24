@@ -19,6 +19,9 @@ import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import de.cismet.tools.BrowserLauncher;
 
 /**
@@ -65,7 +68,11 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         initComponents();
 
         DownloadManager.instance().addDownloadListChangedListener(pnlDownloadManagerPanel);
-        pnlDownloadManagerPanel.add(DownloadManager.instance().getDownloads());
+        final List<Download> reversedDownloads = new LinkedList<Download>();
+        for (final Download download : DownloadManager.instance().getDownloads()) {
+            reversedDownloads.add(0, download);
+        }
+        pnlDownloadManagerPanel.add(reversedDownloads);
 
         final int countDownloadsErraneous = DownloadManager.instance().getCountDownloadsErraneous();
         final int countDownloadsCompleted = DownloadManager.instance().getCountDownloadsCompleted();
@@ -90,11 +97,24 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
             DownloadManager.instance().addDownloadListChangedListener(instance);
 
             instance.addWindowListener(instance);
-            instance.setPreferredSize(new Dimension(650, 300));
+            instance.setPreferredSize(new Dimension(450, 500));
             instance.setLocationRelativeTo(parent);
         }
 
         return instance;
+    }
+
+    /**
+     * If no download manager dialog exists, this method will instantiate and display a download manager dialog.
+     *
+     * @param  parent  The parent frame of this dialog.
+     */
+    public static void show(final Frame parent) {
+        if (instance == null) {
+            final DownloadManagerDialog dialog = instance(parent);
+            dialog.setVisible(true);
+            dialog.pack();
+        }
     }
 
     /**
@@ -120,7 +140,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.title")); // NOI18N
-        setMinimumSize(new java.awt.Dimension(426, 300));
+        setMinimumSize(new java.awt.Dimension(423, 300));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         scpDownloadManagerPanel.setBorder(null);
@@ -256,8 +276,10 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
 
     @Override
     public void windowClosing(final WindowEvent e) {
-        instance = null;
+        removeWindowListener(instance);
         DownloadManager.instance().removeDownloadListChangedListener(pnlDownloadManagerPanel);
+        DownloadManager.instance().removeDownloadListChangedListener(instance);
+        instance = null;
     }
 
     @Override

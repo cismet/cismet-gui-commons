@@ -7,7 +7,7 @@
       <ResourceString bundle="de/cismet/tools/gui/downloadmanager/Bundle.properties" key="DownloadManagerDialog.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[426, 300]"/>
+      <Dimension value="[423, 300]"/>
     </Property>
   </Properties>
   <SyntheticProperties>

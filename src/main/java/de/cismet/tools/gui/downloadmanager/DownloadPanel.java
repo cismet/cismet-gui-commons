@@ -24,6 +24,8 @@ import javax.swing.JOptionPane;
 
 import de.cismet.security.exceptions.BadHttpStatusCodeException;
 
+import de.cismet.tools.BrowserLauncher;
+
 /**
  * A panel which represents a download. In order to visualize the different states of a Download object, each
  * DownloadPanel object registers as observer on its download.
@@ -137,12 +139,16 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
      * @param  evt  The event object.
      */
     private void formMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_formMouseClicked
-        if ((evt.getClickCount() > 1) && (download.getCaughtException() != null)) {
-            JOptionPane.showMessageDialog(
-                this,
-                download.getCaughtException().getMessage(),
-                NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.formMouseClicked.error.title"),
-                JOptionPane.ERROR_MESSAGE);
+        if (evt.getClickCount() > 1) {
+            if (download.getCaughtException() != null) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    download.getCaughtException().getMessage(),
+                    NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.formMouseClicked.error.title"),
+                    JOptionPane.ERROR_MESSAGE);
+            } else if (download.getStatus() == Download.COMPLETED) {
+                BrowserLauncher.openURLorFile(download.getFileToSaveTo().getAbsolutePath());
+            }
         }
     }                                                                    //GEN-LAST:event_formMouseClicked
 

@@ -238,11 +238,16 @@ public class Download extends Observable implements Runnable, Comparable {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Sending request \n" + request + "\n to '" + url.toExternalForm() + "'.");
             }
-            resp = WebAccessManager.getInstance()
-                        .doRequest(
-                                url,
-                                new StringReader(request),
-                                ACCESS_METHODS.POST_REQUEST);
+
+            if ((request == null) || (request.trim().length() <= 0)) {
+                resp = WebAccessManager.getInstance().doRequest(url);
+            } else {
+                resp = WebAccessManager.getInstance()
+                            .doRequest(
+                                    url,
+                                    new StringReader(request),
+                                    ACCESS_METHODS.POST_REQUEST);
+            }
 
             out = new FileOutputStream(fileToSaveTo);
             boolean downloading = true;

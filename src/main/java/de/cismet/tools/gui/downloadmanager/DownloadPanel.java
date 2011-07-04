@@ -15,7 +15,14 @@ package de.cismet.tools.gui.downloadmanager;
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.SystemColor;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import java.io.File;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -138,7 +145,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
      *
      * @param  evt  The event object.
      */
-    private void formMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_formMouseClicked
+    private void formMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (evt.getClickCount() > 1) {
             if (download.getCaughtException() != null) {
                 JOptionPane.showMessageDialog(
@@ -150,7 +157,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
                 BrowserLauncher.openURLorFile(download.getFileToSaveTo().getAbsolutePath());
             }
         }
-    }                                                                    //GEN-LAST:event_formMouseClicked
+    }//GEN-LAST:event_formMouseClicked
 
     @Override
     public void update(final Observable o, final Object arg) {
@@ -179,8 +186,12 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
                 prbProgress.setVisible(false);
                 lblMessage.setVisible(true);
                 lblTitle.setForeground(SystemColor.textInactiveText);
-                lblMessage.setForeground(SystemColor.textInactiveText);
+                lblMessage.setForeground(Color.blue);
                 lblMessage.setText(download.getFileToSaveTo().getAbsolutePath());
+                final OpenDirectoryListener listener = new OpenDirectoryListener((download.getFileToSaveTo()
+                                    .getParentFile()));
+                lblMessage.addMouseListener(listener);
+                lblMessage.addKeyListener(listener);
                 break;
             }
             case Download.ERROR: {
@@ -204,6 +215,76 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
                 setBackground(Color.pink);
                 break;
             }
+        }
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * A listener which changes the cursor over the corresponding component to a hand. Opens the file manager on a given
+     * directory if the user clicks on the component. The directory is specified in the constructor.
+     *
+     * @version  $Revision$, $Date$
+     */
+    private class OpenDirectoryListener implements MouseListener, KeyListener {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private File directory;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new OpenDirectoryListener object.
+         *
+         * @param  directory  The directory to open in a file manager.
+         */
+        public OpenDirectoryListener(final File directory) {
+            this.directory = directory;
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void mouseClicked(final MouseEvent e) {
+            BrowserLauncher.openURLorFile(directory.getAbsolutePath());
+        }
+
+        @Override
+        public void mousePressed(final MouseEvent e) {
+            // NOP
+        }
+
+        @Override
+        public void mouseReleased(final MouseEvent e) {
+            // NOP
+        }
+
+        @Override
+        public void mouseEntered(final MouseEvent e) {
+            e.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+
+        @Override
+        public void mouseExited(final MouseEvent e) {
+            e.getComponent().setCursor(Cursor.getDefaultCursor());
+        }
+
+        @Override
+        public void keyTyped(final KeyEvent e) {
+            if (e.isActionKey()) {
+                BrowserLauncher.openURLorFile(directory.getAbsolutePath());
+            }
+        }
+
+        @Override
+        public void keyPressed(final KeyEvent e) {
+            // NOP
+        }
+
+        @Override
+        public void keyReleased(final KeyEvent e) {
+            // NOP
         }
     }
 }

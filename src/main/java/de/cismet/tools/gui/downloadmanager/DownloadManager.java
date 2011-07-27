@@ -42,6 +42,7 @@ public class DownloadManager implements Observer, Configurable {
     private static final String XML_CONF_DIRECTORY = "directory";
     private static final String XML_CONF_DIALOG = "dialog";
     private static final String XML_CONF_DIALOG_AKSFORTITLE = "askForTitle";
+    private static final String XML_CONF_DIALOG_OPENAUTOMATICALLY = "openAutomatically";
     private static final String XML_CONF_DIALOG_USERTITLE = "userTitle";
     private static DownloadManager instance = null;
 
@@ -408,6 +409,20 @@ public class DownloadManager implements Observer, Configurable {
             }
         }
 
+        final Element openAutomatically = downloads.getChild(XML_CONF_DIALOG_OPENAUTOMATICALLY);
+        if ((openAutomatically == null) || (openAutomatically.getTextTrim() == null)) {
+            LOG.warn(
+                "There is no configuration whether to open downloads automatically or not. Using default value 'true'.");
+            DownloadManagerDialog.setOpenAutomatically(true);
+        } else {
+            final String value = openAutomatically.getTextTrim();
+            if ("1".equals(value) || "true".equalsIgnoreCase(value)) {
+                DownloadManagerDialog.setOpenAutomatically(true);
+            } else {
+                DownloadManagerDialog.setOpenAutomatically(false);
+            }
+        }
+
         final Element userTitle = downloads.getChild(XML_CONF_DIALOG_USERTITLE);
         if ((userTitle == null) || (userTitle.getTextTrim() == null)) {
             LOG.warn("There is no user title for downloads configured. Using default value 'cidsDownload'.");
@@ -430,10 +445,14 @@ public class DownloadManager implements Observer, Configurable {
         final Element askForTitle = new Element(XML_CONF_DIALOG_AKSFORTITLE);
         askForTitle.addContent(DownloadManagerDialog.isAskForJobname() ? "true" : "false");
 
+        final Element openAutomatically = new Element(XML_CONF_DIALOG_OPENAUTOMATICALLY);
+        askForTitle.addContent(DownloadManagerDialog.isOpenAutomatically() ? "true" : "false");
+
         final Element userTitle = new Element(XML_CONF_DIALOG_USERTITLE);
         userTitle.addContent(DownloadManagerDialog.getJobname());
 
         dialog.addContent(askForTitle);
+        dialog.addContent(openAutomatically);
         dialog.addContent(userTitle);
 
         root.addContent(directory);

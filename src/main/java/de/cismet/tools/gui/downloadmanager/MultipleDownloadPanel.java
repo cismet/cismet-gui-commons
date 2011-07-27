@@ -303,6 +303,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
                         download.getDownloadsTotal(),
                         download.getDownloadsErraneous()));
                 prbProgress.setValue(download.getDownloadsCompleted());
+                prbProgress.setBackground(Color.pink);
                 setBackground(Color.pink);
                 break;
             }

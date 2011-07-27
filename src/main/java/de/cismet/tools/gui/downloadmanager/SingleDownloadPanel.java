@@ -311,7 +311,7 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
      *
      * @param  evt  The event object.
      */
-    private void formMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+    private void formMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_formMouseClicked
         if (evt.getClickCount() > 1) {
             if (download.getCaughtException() != null) {
                 JOptionPane.showMessageDialog(
@@ -323,43 +323,43 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
                 BrowserLauncher.openURLorFile(download.getFileToSaveTo().getParentFile().getAbsolutePath());
             }
         }
-    }//GEN-LAST:event_formMouseClicked
+    }                                                                    //GEN-LAST:event_formMouseClicked
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void jxlOpenFileActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlOpenFileActionPerformed
+    private void jxlOpenFileActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlOpenFileActionPerformed
         BrowserLauncher.openURLorFile(download.getFileToSaveTo().getAbsolutePath());
-    }//GEN-LAST:event_jxlOpenFileActionPerformed
+    }                                                                               //GEN-LAST:event_jxlOpenFileActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void mniOpenFileActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniOpenFileActionPerformed
+    private void mniOpenFileActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniOpenFileActionPerformed
         BrowserLauncher.openURLorFile(download.getFileToSaveTo().getAbsolutePath());
-    }//GEN-LAST:event_mniOpenFileActionPerformed
+    }                                                                               //GEN-LAST:event_mniOpenFileActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void mniOpenDirectoryActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniOpenDirectoryActionPerformed
+    private void mniOpenDirectoryActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniOpenDirectoryActionPerformed
         BrowserLauncher.openURLorFile(download.getFileToSaveTo().getParentFile().getAbsolutePath());
-    }//GEN-LAST:event_mniOpenDirectoryActionPerformed
+    }                                                                                    //GEN-LAST:event_mniOpenDirectoryActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void mniRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniRemoveActionPerformed
+    private void mniRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniRemoveActionPerformed
         DownloadManager.instance().removeDownload(download);
-    }//GEN-LAST:event_mniRemoveActionPerformed
+    }                                                                             //GEN-LAST:event_mniRemoveActionPerformed
 
     /**
      * Initiates the icon. According to the file extension of the download, an appropriate icon will be shown.

@@ -62,7 +62,9 @@ public class DownloadListChangedEvent extends EventObject {
      * @param  downloads  The changed downloads.
      * @param  action     The change aciton.
      */
-    public DownloadListChangedEvent(final Object source, final Collection<Download> downloads, final Action action) {
+    public DownloadListChangedEvent(final Object source,
+            final Collection<Download> downloads,
+            final Action action) {
         super(source);
         this.downloads = downloads;
         this.action = action;

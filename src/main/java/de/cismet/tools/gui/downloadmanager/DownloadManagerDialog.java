@@ -19,10 +19,20 @@ import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import java.io.File;
+
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+
 import de.cismet.tools.BrowserLauncher;
+
+import de.cismet.tools.gui.downloadmanager.Download.State;
 
 /**
  * This dialog contains a DownloadManagerPanel to visualise the list of current downloads. Additionally there are
@@ -38,21 +48,36 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     private static Logger LOG = Logger.getLogger(DownloadManagerDialog.class);
 
     private static DownloadManagerDialog instance;
+    private static boolean askForJobname = true;
+    private static String jobname = "";
+    private static boolean isJobnameConfirmed = true;
 
     //~ Instance fields --------------------------------------------------------
 
-    private boolean closeAfterLastDownload = true;
+    private int downloadsAdded;
+    private Download downloadToOpen;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnClearList;
-    private javax.swing.JButton btnOpenDestinationDirectory;
+    private javax.swing.JButton btnOK;
+    private javax.swing.JCheckBox chkEditTitle;
+    private javax.swing.JDialog dlgJobname;
     private javax.swing.Box.Filler horizontalGlue;
+    private javax.swing.JLabel lblDestinationDirectory;
     private javax.swing.JLabel lblDownloadsTotalKey;
     private javax.swing.JLabel lblDownloadsTotalValue;
+    private javax.swing.JLabel lblJobname;
+    private javax.swing.JLabel lblUserDirectory;
+    private javax.swing.JLabel lblUserDirectoryLabel;
     private javax.swing.JPanel pnlControls;
     private de.cismet.tools.gui.downloadmanager.DownloadManagerPanel pnlDownloadManagerPanel;
+    private javax.swing.JPanel pnlJobnameControls;
     private javax.swing.JScrollPane scpDownloadManagerPanel;
     private javax.swing.JSeparator sepControls;
+    private javax.swing.JSeparator sepJobnameControls;
+    private javax.swing.JTextField txtJobname;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -66,6 +91,12 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         super(parent, false);
 
         initComponents();
+
+        bindingGroup.unbind();
+        if (txtJobname.getDocument() instanceof AbstractDocument) {
+            ((AbstractDocument)txtJobname.getDocument()).setDocumentFilter(new UserDirectoryFilter());
+        }
+        bindingGroup.bind();
 
         DownloadManager.instance().addDownloadListChangedListener(pnlDownloadManagerPanel);
         final List<Download> reversedDownloads = new LinkedList<Download>();
@@ -118,6 +149,81 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     }
 
     /**
+     * Displays the DownloadManagerDialog and asks - if user wants to - for a jobname.
+     *
+     * @param   parent  The parent frame.
+     *
+     * @return  The jobname specified by the user.
+     */
+    public static boolean showAskingForUserTitle(final Frame parent) {
+        show(parent);
+
+        if (askForJobname) {
+            instance.txtJobname.setText(jobname);
+            instance.dlgJobname.setPreferredSize(instance.dlgJobname.getMinimumSize());
+            instance.dlgJobname.setLocationRelativeTo(parent);
+            instance.dlgJobname.setVisible(true);
+            instance.dlgJobname.pack();
+
+            if (!isJobnameConfirmed) {
+                closeIfPossible();
+            }
+        }
+
+        return isJobnameConfirmed;
+    }
+
+    /**
+     * Closes the DownloadManagerDialog if all downloads are completed.
+     */
+    public static void closeIfPossible() {
+        if (DownloadManager.instance().getCountDownloadsCompleted()
+                    == DownloadManager.instance().getCountDownloadsTotal()) {
+            instance.dispatchEvent(new WindowEvent(instance, WindowEvent.WINDOW_CLOSING));
+        }
+    }
+
+    /**
+     * Returns the jobname.
+     *
+     * @return  The jobname.
+     */
+    public static String getJobname() {
+        return jobname;
+    }
+
+    /**
+     * Sets the jobname. Should only be used by xome configuring component.
+     *
+     * @param  jobname  The jobname.
+     */
+    public static void setJobname(final String jobname) {
+        DownloadManagerDialog.jobname = jobname;
+    }
+
+    /**
+     * If the user wants to be asked for a jobname.
+     *
+     * @return  A flag indicating whether the user wants to be asked for a jobname.
+     */
+    public static boolean isAskForJobname() {
+        return askForJobname;
+    }
+
+    /**
+     * Sets the flag whether the user wants to be asked for a jobname.
+     *
+     * @param  askForJobname  The flag whether the user wants to be asked for a jobname.
+     */
+    public static void setAskForJobname(final boolean askForJobname) {
+        DownloadManagerDialog.askForJobname = askForJobname;
+
+        if (instance.chkEditTitle != null) {
+            instance.chkEditTitle.setSelected(askForJobname);
+        }
+    }
+
+    /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
      * content of this method is always regenerated by the Form Editor.
      */
@@ -125,18 +231,160 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        dlgJobname = new javax.swing.JDialog();
+        lblJobname = new javax.swing.JLabel();
+        txtJobname = new javax.swing.JTextField();
+        pnlJobnameControls = new javax.swing.JPanel();
+        btnOK = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        sepJobnameControls = new javax.swing.JSeparator();
+        lblDestinationDirectory = new javax.swing.JLabel();
+        lblUserDirectory = new javax.swing.JLabel();
+        lblUserDirectoryLabel = new javax.swing.JLabel();
         scpDownloadManagerPanel = new javax.swing.JScrollPane();
         pnlDownloadManagerPanel = new de.cismet.tools.gui.downloadmanager.DownloadManagerPanel();
         sepControls = new javax.swing.JSeparator();
         pnlControls = new javax.swing.JPanel();
-        btnOpenDestinationDirectory = new javax.swing.JButton();
         btnClearList = new javax.swing.JButton();
         horizontalGlue = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(32767, 0));
         lblDownloadsTotalKey = new javax.swing.JLabel();
         lblDownloadsTotalValue = new javax.swing.JLabel();
+        chkEditTitle = new javax.swing.JCheckBox();
+
+        dlgJobname.setTitle(org.openide.util.NbBundle.getMessage(
+                DownloadManagerDialog.class,
+                "DownloadManagerDialog.dlgJobname.title")); // NOI18N
+        dlgJobname.setMinimumSize(new java.awt.Dimension(400, 180));
+        dlgJobname.setModal(true);
+        dlgJobname.getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        lblJobname.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerDialog.class,
+                "DownloadManagerDialog.lblJobname.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+        dlgJobname.getContentPane().add(lblJobname, gridBagConstraints);
+
+        txtJobname.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerDialog.class,
+                "DownloadManagerDialog.txtJobname.text")); // NOI18N
+        txtJobname.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    txtJobnameActionPerformed(evt);
+                }
+            });
+        txtJobname.addKeyListener(new java.awt.event.KeyAdapter() {
+
+                @Override
+                public void keyTyped(final java.awt.event.KeyEvent evt) {
+                    txtJobnameKeyTyped(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        dlgJobname.getContentPane().add(txtJobname, gridBagConstraints);
+
+        pnlJobnameControls.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.TRAILING));
+
+        btnOK.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerDialog.class,
+                "DownloadManagerDialog.btnOK.text")); // NOI18N
+        btnOK.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnOKActionPerformed(evt);
+                }
+            });
+        pnlJobnameControls.add(btnOK);
+
+        btnCancel.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerDialog.class,
+                "DownloadManagerDialog.btnCancel.text")); // NOI18N
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnCancelActionPerformed(evt);
+                }
+            });
+        pnlJobnameControls.add(btnCancel);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.weightx = 1.0;
+        dlgJobname.getContentPane().add(pnlJobnameControls, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        dlgJobname.getContentPane().add(sepJobnameControls, gridBagConstraints);
+
+        lblDestinationDirectory.setText(DownloadManager.instance().getDestinationDirectory().getAbsolutePath()
+                    + File.separator);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
+        dlgJobname.getContentPane().add(lblDestinationDirectory, gridBagConstraints);
+
+        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+                txtJobname,
+                org.jdesktop.beansbinding.ELProperty.create("${text}"),
+                lblUserDirectory,
+                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceNullValue("Nothing entered");
+        binding.setSourceUnreadableValue("Unreadable");
+        bindingGroup.addBinding(binding);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        dlgJobname.getContentPane().add(lblUserDirectory, gridBagConstraints);
+
+        lblUserDirectoryLabel.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerDialog.class,
+                "DownloadManagerDialog.lblUserDirectoryLabel.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        dlgJobname.getContentPane().add(lblUserDirectoryLabel, gridBagConstraints);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.title")); // NOI18N
@@ -144,6 +392,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         scpDownloadManagerPanel.setBorder(null);
+        scpDownloadManagerPanel.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scpDownloadManagerPanel.setViewportView(pnlDownloadManagerPanel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -160,23 +409,6 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         getContentPane().add(sepControls, gridBagConstraints);
 
         pnlControls.setLayout(new java.awt.GridBagLayout());
-
-        btnOpenDestinationDirectory.setMnemonic(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.btnOpenDestinationDirectory.mnemonic").charAt(0));
-        btnOpenDestinationDirectory.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.btnOpenDestinationDirectory.text")); // NOI18N
-        btnOpenDestinationDirectory.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnOpenDestinationDirectoryActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlControls.add(btnOpenDestinationDirectory, gridBagConstraints);
 
         btnClearList.setMnemonic(org.openide.util.NbBundle.getMessage(
                 DownloadManagerDialog.class,
@@ -196,6 +428,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControls.add(btnClearList, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         pnlControls.add(horizontalGlue, gridBagConstraints);
@@ -204,6 +437,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                 DownloadManagerDialog.class,
                 "DownloadManagerDialog.lblDownloadsTotalKey.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControls.add(lblDownloadsTotalKey, gridBagConstraints);
 
@@ -212,15 +446,35 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                 DownloadManagerDialog.class,
                 "DownloadManagerDialog.lblDownloadsTotalValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControls.add(lblDownloadsTotalValue, gridBagConstraints);
+
+        chkEditTitle.setSelected(askForJobname);
+        chkEditTitle.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerDialog.class,
+                "DownloadManagerDialog.chkEditTitle.text")); // NOI18N
+        chkEditTitle.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    chkEditTitleActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        pnlControls.add(chkEditTitle, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         getContentPane().add(pnlControls, gridBagConstraints);
+
+        bindingGroup.bind();
 
         pack();
     } // </editor-fold>//GEN-END:initComponents
@@ -230,21 +484,65 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      *
      * @param  evt  The event object.
      */
-    private void btnClearListActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnClearListActionPerformed
-        closeAfterLastDownload = false;
+    private void btnClearListActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearListActionPerformed
         DownloadManager.instance().removeObsoleteDownloads();
-    }                                                                                //GEN-LAST:event_btnClearListActionPerformed
+    }//GEN-LAST:event_btnClearListActionPerformed
+
+    /**
+     * An action listener.
+     *
+     * @param  evt  The event.
+     */
+    private void chkEditTitleActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEditTitleActionPerformed
+        askForJobname = chkEditTitle.isSelected();
+    }//GEN-LAST:event_chkEditTitleActionPerformed
+
+    /**
+     * An action listener.
+     *
+     * @param  evt  The event.
+     */
+    private void btnOKActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
+        jobname = txtJobname.getText();
+        isJobnameConfirmed = true;
+        dlgJobname.dispose();
+    }//GEN-LAST:event_btnOKActionPerformed
+
+    /**
+     * An action listener.
+     *
+     * @param  evt  The event.
+     */
+    private void txtJobnameActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtJobnameActionPerformed
+        jobname = txtJobname.getText();
+        isJobnameConfirmed = true;
+        dlgJobname.dispose();
+    }//GEN-LAST:event_txtJobnameActionPerformed
+
+    /**
+     * An action listener.
+     *
+     * @param  evt  The event.
+     */
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        isJobnameConfirmed = false;
+        dlgJobname.dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    /**
+     * An action listener.
+     *
+     * @param  evt  The event.
+     */
+    private void txtJobnameKeyTyped(final java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtJobnameKeyTyped
+        LOG.fatal("userDirectory: " + lblUserDirectory.getText());
+    }//GEN-LAST:event_txtJobnameKeyTyped
 
     /**
      * Opens a file manager pointing to the destination directory for downloads.
      *
-     * @param  evt  The event object.
+     * @param  event  The event object.
      */
-    private void btnOpenDestinationDirectoryActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOpenDestinationDirectoryActionPerformed
-        closeAfterLastDownload = false;
-        BrowserLauncher.openURLorFile(DownloadManager.instance().getDestinationDirectory().getAbsolutePath());
-    }                                                                                               //GEN-LAST:event_btnOpenDestinationDirectoryActionPerformed
-
     @Override
     public void downloadListChanged(final DownloadListChangedEvent event) {
         if (event == null) {
@@ -252,20 +550,32 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         }
 
         switch (event.getAction()) {
+            case ADDED: {
+                final Collection<Download> downloads = event.getDownloads();
+                downloadsAdded += downloads.size();
+
+                if (downloadsAdded == 1) {
+                    downloadToOpen = downloads.iterator().next();
+                } else {
+                    downloadToOpen = null;
+                }
+            }
             case CHANGED_COUNTERS: {
                 final int countDownloadsErraneous = DownloadManager.instance().getCountDownloadsErraneous();
                 final int countDownloadsCompleted = DownloadManager.instance().getCountDownloadsCompleted();
                 final int countDownloadsTotal = DownloadManager.instance().getCountDownloadsTotal();
 
                 lblDownloadsTotalValue.setText(String.valueOf(countDownloadsTotal));
-
-                // Don't close window if at least one download is erraneous
-                closeAfterLastDownload &= countDownloadsErraneous == 0;
-                if (closeAfterLastDownload && (countDownloadsCompleted == countDownloadsTotal)) {
-                    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-                }
-
                 btnClearList.setEnabled((countDownloadsCompleted + countDownloadsErraneous) > 0);
+
+                if ((countDownloadsCompleted == countDownloadsTotal) && (downloadToOpen != null)
+                            && (downloadToOpen.getFileToSaveTo() != null)
+                            && (downloadToOpen.getStatus() == State.COMPLETED)) {
+                    BrowserLauncher.openURLorFile(downloadToOpen.getFileToSaveTo().getAbsolutePath());
+
+                    downloadToOpen = null;
+                    closeIfPossible();
+                }
             }
         }
     }
@@ -301,4 +611,37 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     @Override
     public void windowDeactivated(final WindowEvent e) {
     }
+
+    //J-
+    private class UserDirectoryFilter extends DocumentFilter {
+        /*
+         * Most filesystems allow all characters (except NUL) for filenames.
+         * NTFS doesn't allow NUL \ / : * ? " < > |
+         */
+        private static final String FILTER = "[^\u0000\\\\/:*?\"<>|]*";
+
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+            if(string != null && string.length() > 0) {
+                if(!string.matches(FILTER)) {
+                    return;
+                }
+            }
+
+            super.insertString(fb, offset, string, attr);
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+            if(text != null && text.length() > 0) {
+                if(!text.matches(FILTER)) {
+                    return;
+                }
+            }
+
+            super.replace(fb, offset, length, text, attrs);
+        }
+
+    }
+    //J+
 }

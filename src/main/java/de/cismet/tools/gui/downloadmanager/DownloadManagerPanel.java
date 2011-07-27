@@ -36,8 +36,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Observer;
 
 import javax.swing.Box;
+import javax.swing.JPanel;
 
 /**
  * Visualizes the download list of DownloadManager. New downloads are dynamically added, completed ones are removed.
@@ -55,7 +57,7 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
 
     //~ Instance fields --------------------------------------------------------
 
-    private Map<Download, DownloadPanel> panels = new HashMap<Download, DownloadPanel>();
+    private Map<Download, JPanel> panels = new HashMap<Download, JPanel>();
     private Component verticalGlue = Box.createVerticalGlue();
 
     //~ Constructors -----------------------------------------------------------
@@ -93,23 +95,32 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
             return;
         }
 
-        final LinkedList<DownloadPanel> oldPanels = new LinkedList<DownloadPanel>();
+        final LinkedList<JPanel> oldPanels = new LinkedList<JPanel>();
         for (final Component component : getComponents()) {
-            if (component instanceof DownloadPanel) {
-                oldPanels.add((DownloadPanel)component);
+            if ((component instanceof SingleDownloadPanel) || (component instanceof MultipleDownloadPanel)) {
+                oldPanels.add((JPanel)component);
             }
         }
 
         removeAll();
 
         for (final Download download : downloads) {
-            final DownloadPanel pnlDownload = new DownloadPanel(download);
-            add(pnlDownload);
+            if (download instanceof SingleDownload) {
+                final SingleDownloadPanel pnlDownload = new SingleDownloadPanel((SingleDownload)download);
 
-            panels.put(download, pnlDownload);
+                download.addObserver(pnlDownload);
+                add(pnlDownload);
+                panels.put(download, pnlDownload);
+            } else if (download instanceof MultipleDownload) {
+                final MultipleDownloadPanel pnlDownload = new MultipleDownloadPanel((MultipleDownload)download);
+
+                download.addObserver(pnlDownload);
+                add(pnlDownload);
+                panels.put(download, pnlDownload);
+            }
         }
 
-        for (final DownloadPanel pnlDownload : oldPanels) {
+        for (final JPanel pnlDownload : oldPanels) {
             add(pnlDownload);
         }
 
@@ -132,7 +143,11 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
         remove(verticalGlue);
 
         for (final Download download : downloads) {
-            final DownloadPanel pnlDownload = panels.get(download);
+            final JPanel pnlDownload = panels.get(download);
+
+            if (pnlDownload instanceof Observer) {
+                download.deleteObserver((Observer)pnlDownload);
+            }
 
             remove(pnlDownload);
             panels.remove(download);

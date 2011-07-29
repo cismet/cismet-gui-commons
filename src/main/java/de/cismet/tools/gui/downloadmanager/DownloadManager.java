@@ -434,7 +434,6 @@ public class DownloadManager implements Observer, Configurable {
 
     @Override
     public Element getConfiguration() throws NoWriteError {
-        LOG.fatal("getConfiguration() called.");
         final Element root = new Element(XML_CONF_ROOT);
 
         final Element directory = new Element(XML_CONF_DIRECTORY);

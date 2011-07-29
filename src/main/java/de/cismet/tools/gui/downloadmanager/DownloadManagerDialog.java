@@ -163,8 +163,8 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
             instance.txtJobname.setText(jobname);
             instance.dlgJobname.setPreferredSize(instance.dlgJobname.getMinimumSize());
             instance.dlgJobname.setLocationRelativeTo(parent);
-            instance.dlgJobname.setVisible(true);
             instance.dlgJobname.pack();
+            instance.dlgJobname.setVisible(true);
 
             if (!isJobnameConfirmed) {
                 closeIfPossible();
@@ -276,16 +276,12 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         chkEditTitle = new javax.swing.JCheckBox();
         chkOpenAutomatically = new javax.swing.JCheckBox();
 
-        dlgJobname.setTitle(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.dlgJobname.title")); // NOI18N
+        dlgJobname.setTitle(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.dlgJobname.title")); // NOI18N
         dlgJobname.setMinimumSize(new java.awt.Dimension(400, 180));
         dlgJobname.setModal(true);
         dlgJobname.getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        lblJobname.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.lblJobname.text")); // NOI18N
+        lblJobname.setText(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.lblJobname.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -295,23 +291,12 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         dlgJobname.getContentPane().add(lblJobname, gridBagConstraints);
 
-        txtJobname.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.txtJobname.text")); // NOI18N
+        txtJobname.setText(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.txtJobname.text")); // NOI18N
         txtJobname.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    txtJobnameActionPerformed(evt);
-                }
-            });
-        txtJobname.addKeyListener(new java.awt.event.KeyAdapter() {
-
-                @Override
-                public void keyTyped(final java.awt.event.KeyEvent evt) {
-                    txtJobnameKeyTyped(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtJobnameActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -324,28 +309,20 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
 
         pnlJobnameControls.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.TRAILING));
 
-        btnOK.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.btnOK.text")); // NOI18N
+        btnOK.setText(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.btnOK.text")); // NOI18N
         btnOK.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnOKActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOKActionPerformed(evt);
+            }
+        });
         pnlJobnameControls.add(btnOK);
 
-        btnCancel.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.btnCancel.text")); // NOI18N
+        btnCancel.setText(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.btnCancel.text")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnCancelActionPerformed(evt);
-                }
-            });
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
         pnlJobnameControls.add(btnCancel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -366,8 +343,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         dlgJobname.getContentPane().add(sepJobnameControls, gridBagConstraints);
 
-        lblDestinationDirectory.setText(DownloadManager.instance().getDestinationDirectory().getAbsolutePath()
-                    + File.separator);
+        lblDestinationDirectory.setText(DownloadManager.instance().getDestinationDirectory().getAbsolutePath() + File.separator);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -376,12 +352,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
         dlgJobname.getContentPane().add(lblDestinationDirectory, gridBagConstraints);
 
-        final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                txtJobname,
-                org.jdesktop.beansbinding.ELProperty.create("${text}"),
-                lblUserDirectory,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, txtJobname, org.jdesktop.beansbinding.ELProperty.create("${text}"), lblUserDirectory, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("Nothing entered");
         binding.setSourceUnreadableValue("Unreadable");
         bindingGroup.addBinding(binding);
@@ -395,9 +366,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         dlgJobname.getContentPane().add(lblUserDirectory, gridBagConstraints);
 
-        lblUserDirectoryLabel.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.lblUserDirectoryLabel.text")); // NOI18N
+        lblUserDirectoryLabel.setText(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.lblUserDirectoryLabel.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -432,167 +401,142 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         pnlControls.setLayout(new java.awt.GridBagLayout());
 
         btnClearList.setMnemonic(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.btnClearList.mnemonic").charAt(0));
-        btnClearList.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.btnClearList.text")); // NOI18N
-        btnClearList.setEnabled(false);
-        btnClearList.setFocusPainted(false);
-        btnClearList.addActionListener(new java.awt.event.ActionListener() {
+            DownloadManagerDialog.class,
+            "DownloadManagerDialog.btnClearList.mnemonic").charAt(0));
+    btnClearList.setText(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.btnClearList.text")); // NOI18N
+    btnClearList.setEnabled(false);
+    btnClearList.setFocusPainted(false);
+    btnClearList.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnClearListActionPerformed(evt);
+        }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridheight = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+    gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+    pnlControls.add(btnClearList, gridBagConstraints);
 
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    btnClearListActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlControls.add(btnClearList, gridBagConstraints);
+    lblDownloadsTotalKey.setText(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.lblDownloadsTotalKey.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridheight = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+    gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+    pnlControls.add(lblDownloadsTotalKey, gridBagConstraints);
 
-        lblDownloadsTotalKey.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.lblDownloadsTotalKey.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlControls.add(lblDownloadsTotalKey, gridBagConstraints);
+    lblDownloadsTotalValue.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+    lblDownloadsTotalValue.setText(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.lblDownloadsTotalValue.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridheight = 2;
+    gridBagConstraints.ipadx = 20;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+    gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+    pnlControls.add(lblDownloadsTotalValue, gridBagConstraints);
 
-        lblDownloadsTotalValue.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        lblDownloadsTotalValue.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.lblDownloadsTotalValue.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlControls.add(lblDownloadsTotalValue, gridBagConstraints);
+    chkEditTitle.setSelected(askForJobname);
+    chkEditTitle.setText(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.chkEditTitle.text")); // NOI18N
+    chkEditTitle.setFocusPainted(false);
+    chkEditTitle.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            chkEditTitleActionPerformed(evt);
+        }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+    pnlControls.add(chkEditTitle, gridBagConstraints);
 
-        chkEditTitle.setSelected(askForJobname);
-        chkEditTitle.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.chkEditTitle.text")); // NOI18N
-        chkEditTitle.setFocusPainted(false);
-        chkEditTitle.addActionListener(new java.awt.event.ActionListener() {
+    chkOpenAutomatically.setSelected(openAutomatically);
+    chkOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.chkOpenAutomatically.text")); // NOI18N
+    chkOpenAutomatically.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            chkOpenAutomaticallyActionPerformed(evt);
+        }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+    pnlControls.add(chkOpenAutomatically, gridBagConstraints);
 
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    chkEditTitleActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
-        pnlControls.add(chkEditTitle, gridBagConstraints);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    getContentPane().add(pnlControls, gridBagConstraints);
 
-        chkOpenAutomatically.setSelected(openAutomatically);
-        chkOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.chkOpenAutomatically.text")); // NOI18N
-        chkOpenAutomatically.addActionListener(new java.awt.event.ActionListener() {
+    bindingGroup.bind();
 
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    chkOpenAutomaticallyActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlControls.add(chkOpenAutomatically, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        getContentPane().add(pnlControls, gridBagConstraints);
-
-        bindingGroup.bind();
-
-        pack();
-    } // </editor-fold>//GEN-END:initComponents
+    pack();
+    }// </editor-fold>//GEN-END:initComponents
 
     /**
      * Notifies the DownloadManager singleton that all obsolete downloads should be removed.
      *
      * @param  evt  The event object.
      */
-    private void btnClearListActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnClearListActionPerformed
+    private void btnClearListActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearListActionPerformed
         DownloadManager.instance().removeObsoleteDownloads();
-    }                                                                                //GEN-LAST:event_btnClearListActionPerformed
+    }//GEN-LAST:event_btnClearListActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void chkEditTitleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkEditTitleActionPerformed
+    private void chkEditTitleActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEditTitleActionPerformed
         askForJobname = chkEditTitle.isSelected();
-    }                                                                                //GEN-LAST:event_chkEditTitleActionPerformed
+    }//GEN-LAST:event_chkEditTitleActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void btnOKActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOKActionPerformed
+    private void btnOKActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         jobname = txtJobname.getText();
         isJobnameConfirmed = true;
         dlgJobname.dispose();
-    }                                                                         //GEN-LAST:event_btnOKActionPerformed
+    }//GEN-LAST:event_btnOKActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void txtJobnameActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtJobnameActionPerformed
+    private void txtJobnameActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtJobnameActionPerformed
         jobname = txtJobname.getText();
         isJobnameConfirmed = true;
         dlgJobname.dispose();
-    }                                                                              //GEN-LAST:event_txtJobnameActionPerformed
+    }//GEN-LAST:event_txtJobnameActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         isJobnameConfirmed = false;
         dlgJobname.dispose();
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void txtJobnameKeyTyped(final java.awt.event.KeyEvent evt) { //GEN-FIRST:event_txtJobnameKeyTyped
-        LOG.fatal("userDirectory: " + lblUserDirectory.getText());
-    }                                                                    //GEN-LAST:event_txtJobnameKeyTyped
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void chkOpenAutomaticallyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkOpenAutomaticallyActionPerformed
+    private void chkOpenAutomaticallyActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOpenAutomaticallyActionPerformed
         openAutomatically = chkOpenAutomatically.isSelected();
-    }                                                                                        //GEN-LAST:event_chkOpenAutomaticallyActionPerformed
+    }//GEN-LAST:event_chkOpenAutomaticallyActionPerformed
 
     /**
      * Opens a file manager pointing to the destination directory for downloads.

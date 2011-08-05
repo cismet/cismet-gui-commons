@@ -30,6 +30,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
@@ -124,10 +125,10 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         setLayout(new java.awt.GridBagLayout());
 
         lblIcon.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/fallback_multiple.png"))); // NOI18N
+                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/multiple_closed.png"))); // NOI18N
         lblIcon.setText(org.openide.util.NbBundle.getMessage(
                 MultipleDownloadPanel.class,
-                "MultipleDownloadPanel.lblIcon.text"));                                                               // NOI18N
+                "MultipleDownloadPanel.lblIcon.text"));                                                             // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -226,10 +227,8 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
     private void formMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_formMouseClicked
         if (evt.getClickCount() > 1) {
             if (isSingleDownloadsPanelShown) {
-                tbtDownloads.setSelected(false);
                 hideSingleDownloads();
             } else {
-                tbtDownloads.setSelected(true);
                 showSingleDownloads();
             }
         }
@@ -385,6 +384,10 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
             return;
         }
 
+        tbtDownloads.setSelected(true);
+        lblIcon.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/fallback_multiple.png")));
+
         remove(sepDownloadPanels);
 
         final GridBagConstraints constraints = new GridBagConstraints();
@@ -429,6 +432,10 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         if (!isSingleDownloadsPanelShown) {
             return;
         }
+
+        tbtDownloads.setSelected(false);
+        lblIcon.setIcon(new ImageIcon(
+                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/multiple_closed.png")));
 
         remove(sepDownloadPanels);
         remove(sepSingleDownloadsPanel);

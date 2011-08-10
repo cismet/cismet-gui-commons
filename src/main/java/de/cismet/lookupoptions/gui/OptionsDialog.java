@@ -15,6 +15,8 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import java.util.Hashtable;
 
@@ -43,7 +45,7 @@ import de.cismet.lookupoptions.OptionsPanelController;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class OptionsDialog extends javax.swing.JDialog {
+public class OptionsDialog extends javax.swing.JDialog implements WindowListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -376,5 +378,34 @@ public class OptionsDialog extends javax.swing.JDialog {
                     dialog.setVisible(true);
                 }
             });
+    }
+
+    @Override
+    public void windowOpened(final WindowEvent e) {
+    }
+
+    @Override
+    public void windowClosing(final WindowEvent e) {
+    }
+
+    @Override
+    public void windowClosed(final WindowEvent e) {
+    }
+
+    @Override
+    public void windowIconified(final WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeiconified(final WindowEvent e) {
+    }
+
+    @Override
+    public void windowActivated(final WindowEvent e) {
+        optionsClient.update(selectedCategory.getClass());
+    }
+
+    @Override
+    public void windowDeactivated(final WindowEvent e) {
     }
 }

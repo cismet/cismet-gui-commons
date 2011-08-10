@@ -48,8 +48,8 @@ public class DownloadManager implements Observer, Configurable {
 
     //~ Instance fields --------------------------------------------------------
 
-    private boolean enabled;
-    private File destinationDirectory;
+    private boolean enabled = true;
+    private File destinationDirectory = new File(System.getProperty("user.home"));
     private LinkedList<Download> downloads = new LinkedList<Download>();
     private EventListenerList listeners = new EventListenerList();
     private int countDownloadsTotal = 0;
@@ -63,16 +63,6 @@ public class DownloadManager implements Observer, Configurable {
      * Creates a new DownloadManager object.
      */
     private DownloadManager() {
-        if (PropertyManager.getManager().getDownloadDestination() != null) {
-            destinationDirectory = PropertyManager.getManager().getDownloadDestination();
-            if (!destinationDirectory.isDirectory() || !destinationDirectory.canWrite()) {
-                LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath()
-                            + "'. The download manager will be disabled.");
-                enabled = false;
-            } else {
-                enabled = true;
-            }
-        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -276,6 +266,24 @@ public class DownloadManager implements Observer, Configurable {
     }
 
     /**
+     * Sets the destination directory for downloads. Setting this does only affect new downloads. If the given download
+     * location is invalid, the DownloadManager will be disabled.
+     *
+     * @param  destinationDirectory  The new destination directory for downloads.
+     */
+    public void setDestinationDirectory(final File destinationDirectory) {
+        this.destinationDirectory = destinationDirectory;
+
+        if (!destinationDirectory.isDirectory() || !destinationDirectory.canWrite()) {
+            LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath()
+                        + "'. The download manager will be disabled.");
+            enabled = false;
+        } else {
+            enabled = true;
+        }
+    }
+
+    /**
      * Returns a flag which tells whether download manager is enabled or not.
      *
      * @return  The flag whether the download manager is enabled or not.
@@ -346,19 +354,15 @@ public class DownloadManager implements Observer, Configurable {
 
     @Override
     public void configure(final Element parent) {
-        // NOP
-    }
+        DownloadManagerDialog.setAskForJobname(true);
+        DownloadManagerDialog.setJobname("cidsDownload");
+        DownloadManagerDialog.setOpenAutomatically(true);
 
-    @Override
-    public void masterConfigure(final Element parent) {
+        destinationDirectory = new File(System.getProperty("user.home"));
+
         final Element downloads = parent.getChild(XML_CONF_ROOT);
         if (downloads == null) {
             LOG.warn("The download manager isn't configured. Using default values.");
-
-            DownloadManagerDialog.setAskForJobname(true);
-            DownloadManagerDialog.setJobname("cidsDownloads");
-
-            destinationDirectory = new File(System.getProperty("user.home"));
 
             if (!destinationDirectory.isDirectory() || !destinationDirectory.canWrite()) {
                 LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath()
@@ -375,7 +379,6 @@ public class DownloadManager implements Observer, Configurable {
         if ((directory == null) || (directory.getTextTrim() == null)) {
             LOG.warn("There is no destination directory configured for downloads. Using default destination directory '"
                         + System.getProperty("user.home") + "'.");
-            destinationDirectory = new File(System.getProperty("user.home"));
         } else {
             destinationDirectory = new File(directory.getTextTrim());
         }
@@ -390,46 +393,38 @@ public class DownloadManager implements Observer, Configurable {
         final Element dialog = downloads.getChild(XML_CONF_DIALOG);
         if (dialog == null) {
             LOG.warn("The download dialog isn't configured. Using default values.");
-            DownloadManagerDialog.setAskForJobname(true);
-            DownloadManagerDialog.setJobname("cidsDownloads");
             return;
         }
 
-        final Element askForTitle = downloads.getChild(XML_CONF_DIALOG_AKSFORTITLE);
+        final Element askForTitle = dialog.getChild(XML_CONF_DIALOG_AKSFORTITLE);
         if ((askForTitle == null) || (askForTitle.getTextTrim() == null)) {
             LOG.warn(
                 "There is no configuration whether to ask for download titles or not. Using default value 'true'.");
-            DownloadManagerDialog.setAskForJobname(true);
         } else {
             final String value = askForTitle.getTextTrim();
-            if ("1".equals(value) || "true".equalsIgnoreCase(value)) {
-                DownloadManagerDialog.setAskForJobname(true);
-            } else {
-                DownloadManagerDialog.setAskForJobname(false);
-            }
+            DownloadManagerDialog.setAskForJobname("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
-        final Element openAutomatically = downloads.getChild(XML_CONF_DIALOG_OPENAUTOMATICALLY);
+        final Element openAutomatically = dialog.getChild(XML_CONF_DIALOG_OPENAUTOMATICALLY);
         if ((openAutomatically == null) || (openAutomatically.getTextTrim() == null)) {
             LOG.warn(
                 "There is no configuration whether to open downloads automatically or not. Using default value 'true'.");
-            DownloadManagerDialog.setOpenAutomatically(true);
         } else {
             final String value = openAutomatically.getTextTrim();
-            if ("1".equals(value) || "true".equalsIgnoreCase(value)) {
-                DownloadManagerDialog.setOpenAutomatically(true);
-            } else {
-                DownloadManagerDialog.setOpenAutomatically(false);
-            }
+            DownloadManagerDialog.setOpenAutomatically("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
-        final Element userTitle = downloads.getChild(XML_CONF_DIALOG_USERTITLE);
+        final Element userTitle = dialog.getChild(XML_CONF_DIALOG_USERTITLE);
         if ((userTitle == null) || (userTitle.getTextTrim() == null)) {
             LOG.warn("There is no user title for downloads configured. Using default value 'cidsDownload'.");
-            DownloadManagerDialog.setJobname("cidsDownload");
         } else {
             DownloadManagerDialog.setJobname(userTitle.getTextTrim());
         }
+    }
+
+    @Override
+    public void masterConfigure(final Element parent) {
+        // NOP
     }
 
     @Override
@@ -445,7 +440,7 @@ public class DownloadManager implements Observer, Configurable {
         askForTitle.addContent(DownloadManagerDialog.isAskForJobname() ? "true" : "false");
 
         final Element openAutomatically = new Element(XML_CONF_DIALOG_OPENAUTOMATICALLY);
-        askForTitle.addContent(DownloadManagerDialog.isOpenAutomatically() ? "true" : "false");
+        openAutomatically.addContent(DownloadManagerDialog.isOpenAutomatically() ? "true" : "false");
 
         final Element userTitle = new Element(XML_CONF_DIALOG_USERTITLE);
         userTitle.addContent(DownloadManagerDialog.getJobname());

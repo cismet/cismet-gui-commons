@@ -50,7 +50,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     private static DownloadManagerDialog instance;
     private static boolean askForJobname = true;
     private static boolean openAutomatically = true;
-    private static String jobname = "";
+    private static String jobname = "cidsDownload";
     private static boolean isJobnameConfirmed = true;
 
     //~ Instance fields --------------------------------------------------------
@@ -62,9 +62,8 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnClearList;
     private javax.swing.JButton btnOK;
-    private javax.swing.JCheckBox chkEditTitle;
-    private javax.swing.JCheckBox chkOpenAutomatically;
     private javax.swing.JDialog dlgJobname;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel lblDestinationDirectory;
     private javax.swing.JLabel lblDownloadsTotalKey;
     private javax.swing.JLabel lblDownloadsTotalValue;
@@ -218,10 +217,6 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      */
     public static void setAskForJobname(final boolean askForJobname) {
         DownloadManagerDialog.askForJobname = askForJobname;
-
-        if (instance.chkEditTitle != null) {
-            instance.chkEditTitle.setSelected(askForJobname);
-        }
     }
 
     /**
@@ -240,10 +235,6 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      */
     public static void setOpenAutomatically(final boolean openAutomatically) {
         DownloadManagerDialog.openAutomatically = openAutomatically;
-
-        if (instance.chkOpenAutomatically != null) {
-            instance.chkOpenAutomatically.setSelected(openAutomatically);
-        }
     }
 
     /**
@@ -273,8 +264,9 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         btnClearList = new javax.swing.JButton();
         lblDownloadsTotalKey = new javax.swing.JLabel();
         lblDownloadsTotalValue = new javax.swing.JLabel();
-        chkEditTitle = new javax.swing.JCheckBox();
-        chkOpenAutomatically = new javax.swing.JCheckBox();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
 
         dlgJobname.setTitle(org.openide.util.NbBundle.getMessage(
                 DownloadManagerDialog.class,
@@ -466,47 +458,12 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControls.add(lblDownloadsTotalValue, gridBagConstraints);
-
-        chkEditTitle.setSelected(askForJobname);
-        chkEditTitle.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.chkEditTitle.text")); // NOI18N
-        chkEditTitle.setFocusPainted(false);
-        chkEditTitle.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    chkEditTitleActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
-        pnlControls.add(chkEditTitle, gridBagConstraints);
-
-        chkOpenAutomatically.setSelected(openAutomatically);
-        chkOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.chkOpenAutomatically.text")); // NOI18N
-        chkOpenAutomatically.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    chkOpenAutomaticallyActionPerformed(evt);
-                }
-            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-        pnlControls.add(chkOpenAutomatically, gridBagConstraints);
+        pnlControls.add(filler1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -533,10 +490,6 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      *
      * @param  evt  The event.
      */
-    private void chkEditTitleActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkEditTitleActionPerformed
-        askForJobname = chkEditTitle.isSelected();
-    }                                                                                //GEN-LAST:event_chkEditTitleActionPerformed
-
     /**
      * An action listener.
      *
@@ -572,12 +525,8 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     /**
      * An action listener.
      *
-     * @param  evt  The event.
+     * @param  event  The event.
      */
-    private void chkOpenAutomaticallyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkOpenAutomaticallyActionPerformed
-        openAutomatically = chkOpenAutomatically.isSelected();
-    }                                                                                        //GEN-LAST:event_chkOpenAutomaticallyActionPerformed
-
     /**
      * Opens a file manager pointing to the destination directory for downloads.
      *

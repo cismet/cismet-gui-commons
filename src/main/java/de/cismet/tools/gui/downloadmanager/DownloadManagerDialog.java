@@ -50,7 +50,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     private static DownloadManagerDialog instance;
     private static boolean askForJobname = true;
     private static boolean openAutomatically = true;
-    private static String jobname = "cidsDownload";
+    private static String jobname = "";
     private static boolean isJobnameConfirmed = true;
 
     //~ Instance fields --------------------------------------------------------
@@ -432,7 +432,6 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                 }
             });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControls.add(btnClearList, gridBagConstraints);
@@ -442,8 +441,6 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                 "DownloadManagerDialog.lblDownloadsTotalKey.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControls.add(lblDownloadsTotalKey, gridBagConstraints);
 
@@ -453,14 +450,11 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                 "DownloadManagerDialog.lblDownloadsTotalValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControls.add(lblDownloadsTotalValue, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         pnlControls.add(filler1, gridBagConstraints);

@@ -103,18 +103,26 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         txtJobname = new javax.swing.JTextField();
         chkAskForJobname = new javax.swing.JCheckBox();
         lblOpenAutomatically = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767));
         pnlOpenAutomatically = new javax.swing.JPanel();
         rdoDoNothing = new javax.swing.JRadioButton();
         rdoOpenAutomatically = new javax.swing.JRadioButton();
 
-        fileChooser.setDialogTitle(org.openide.util.NbBundle.getMessage(DownloadManagerOptionsPanel.class, "DownloadManagerOptionsPanel.fileChooser.dialogTitle")); // NOI18N
+        fileChooser.setDialogTitle(org.openide.util.NbBundle.getMessage(
+                DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.fileChooser.dialogTitle")); // NOI18N
         fileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         setLayout(new java.awt.GridBagLayout());
 
-        lblDestinationDirectory.setText(org.openide.util.NbBundle.getMessage(DownloadManagerOptionsPanel.class, "DownloadManagerOptionsPanel.lblDestinationDirectory.text")); // NOI18N
+        lblDestinationDirectory.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.lblDestinationDirectory.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -122,12 +130,16 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(8, 3, 8, 10);
         add(lblDestinationDirectory, gridBagConstraints);
 
-        jhlDownloadDestination.setText(org.openide.util.NbBundle.getMessage(DownloadManagerOptionsPanel.class, "DownloadManagerOptionsPanel.jhlDownloadDestination.text")); // NOI18N
+        jhlDownloadDestination.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.jhlDownloadDestination.text")); // NOI18N
         jhlDownloadDestination.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jhlDownloadDestinationActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jhlDownloadDestinationActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -136,18 +148,24 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(8, 4, 8, 3);
         add(jhlDownloadDestination, gridBagConstraints);
 
-        btnChangeDownloadDestination.setText(org.openide.util.NbBundle.getMessage(DownloadManagerOptionsPanel.class, "DownloadManagerOptionsPanel.btnChangeDownloadDestination.text")); // NOI18N
+        btnChangeDownloadDestination.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.btnChangeDownloadDestination.text")); // NOI18N
         btnChangeDownloadDestination.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChangeDownloadDestinationActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnChangeDownloadDestinationActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         add(btnChangeDownloadDestination, gridBagConstraints);
 
-        lblJobname.setText(org.openide.util.NbBundle.getMessage(DownloadManagerOptionsPanel.class, "DownloadManagerOptionsPanel.lblJobname.text")); // NOI18N
+        lblJobname.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.lblJobname.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -155,7 +173,9 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(8, 3, 8, 10);
         add(lblJobname, gridBagConstraints);
 
-        txtJobname.setText(org.openide.util.NbBundle.getMessage(DownloadManagerOptionsPanel.class, "DownloadManagerOptionsPanel.txtJobname.text")); // NOI18N
+        txtJobname.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.txtJobname.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -166,7 +186,9 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         add(txtJobname, gridBagConstraints);
 
         chkAskForJobname.setSelected(true);
-        chkAskForJobname.setText(org.openide.util.NbBundle.getMessage(DownloadManagerOptionsPanel.class, "DownloadManagerOptionsPanel.chkAskForJobname.text")); // NOI18N
+        chkAskForJobname.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.chkAskForJobname.text")); // NOI18N
         chkAskForJobname.setFocusPainted(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -178,7 +200,9 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(3, 0, 8, 3);
         add(chkAskForJobname, gridBagConstraints);
 
-        lblOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(DownloadManagerOptionsPanel.class, "DownloadManagerOptionsPanel.lblOpenAutomatically.text")); // NOI18N
+        lblOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.lblOpenAutomatically.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -204,7 +228,9 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         pnlOpenAutomatically.setLayout(new java.awt.GridBagLayout());
 
         rgrOpenAutomatically.add(rdoDoNothing);
-        rdoDoNothing.setText(org.openide.util.NbBundle.getMessage(DownloadManagerOptionsPanel.class, "DownloadManagerOptionsPanel.rdoDoNothing.text")); // NOI18N
+        rdoDoNothing.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.rdoDoNothing.text")); // NOI18N
         rdoDoNothing.setFocusPainted(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -217,7 +243,9 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
 
         rgrOpenAutomatically.add(rdoOpenAutomatically);
         rdoOpenAutomatically.setSelected(true);
-        rdoOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(DownloadManagerOptionsPanel.class, "DownloadManagerOptionsPanel.rdoOpenAutomatically.text")); // NOI18N
+        rdoOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.rdoOpenAutomatically.text")); // NOI18N
         rdoOpenAutomatically.setFocusPainted(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -233,14 +261,14 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 3);
         add(pnlOpenAutomatically, gridBagConstraints);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * An event handler.
      *
      * @param  evt  The event.
      */
-    private void btnChangeDownloadDestinationActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeDownloadDestinationActionPerformed
+    private void btnChangeDownloadDestinationActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnChangeDownloadDestinationActionPerformed
         final int returnValue = fileChooser.showOpenDialog(this);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -248,16 +276,16 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
             downloadDestinationChanged = true;
             jhlDownloadDestination.setText(downloadDestination.getAbsolutePath());
         }
-    }//GEN-LAST:event_btnChangeDownloadDestinationActionPerformed
+    } //GEN-LAST:event_btnChangeDownloadDestinationActionPerformed
 
     /**
      * An event handler.
      *
      * @param  evt  The event.
      */
-    private void jhlDownloadDestinationActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jhlDownloadDestinationActionPerformed
+    private void jhlDownloadDestinationActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jhlDownloadDestinationActionPerformed
         BrowserLauncher.openURLorFile(jhlDownloadDestination.getText());
-    }//GEN-LAST:event_jhlDownloadDestinationActionPerformed
+    }                                                                                          //GEN-LAST:event_jhlDownloadDestinationActionPerformed
 
     @Override
     public void update() {

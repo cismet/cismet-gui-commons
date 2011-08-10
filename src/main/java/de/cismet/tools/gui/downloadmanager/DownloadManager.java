@@ -49,7 +49,8 @@ public class DownloadManager implements Observer, Configurable {
     //~ Instance fields --------------------------------------------------------
 
     private boolean enabled = true;
-    private File destinationDirectory = new File(System.getProperty("user.home"));
+    private File destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
+                    + "cidsDownload");
     private LinkedList<Download> downloads = new LinkedList<Download>();
     private EventListenerList listeners = new EventListenerList();
     private int countDownloadsTotal = 0;
@@ -355,10 +356,11 @@ public class DownloadManager implements Observer, Configurable {
     @Override
     public void configure(final Element parent) {
         DownloadManagerDialog.setAskForJobname(true);
-        DownloadManagerDialog.setJobname("cidsDownload");
+        DownloadManagerDialog.setJobname("");
         DownloadManagerDialog.setOpenAutomatically(true);
 
-        destinationDirectory = new File(System.getProperty("user.home"));
+        destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
+                        + "cidsDownload");
 
         final Element downloads = parent.getChild(XML_CONF_ROOT);
         if (downloads == null) {
@@ -378,7 +380,7 @@ public class DownloadManager implements Observer, Configurable {
         final Element directory = downloads.getChild(XML_CONF_DIRECTORY);
         if ((directory == null) || (directory.getTextTrim() == null)) {
             LOG.warn("There is no destination directory configured for downloads. Using default destination directory '"
-                        + System.getProperty("user.home") + "'.");
+                        + System.getProperty("user.home") + System.getProperty("file.separator") + "cidsDownload'.");
         } else {
             destinationDirectory = new File(directory.getTextTrim());
         }

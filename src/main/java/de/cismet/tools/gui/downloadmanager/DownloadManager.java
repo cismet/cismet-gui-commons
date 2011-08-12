@@ -226,15 +226,20 @@ public class DownloadManager implements Observer, Configurable {
     private synchronized void startDownloads() {
         int downloadsRunning = countDownloadsRunning;
         final Iterator<SingleDownload> downloadToStartIter = downloadsToStart.iterator();
+        final List<SingleDownload> downloadsToStart = new LinkedList<SingleDownload>();
 
         while (downloadToStartIter.hasNext() && (downloadsRunning < parallelDownloads)) {
             final SingleDownload downloadToStart = downloadToStartIter.next();
 
             if (downloadToStart.getStatus().equals(Download.State.WAITING)) {
-                downloadToStart.startDownload();
+                downloadsToStart.add(downloadToStart);
                 downloadsRunning++;
                 downloadToStartIter.remove();
             }
+        }
+
+        for (final SingleDownload downloadToStart : downloadsToStart) {
+            downloadToStart.startDownload();
         }
     }
 

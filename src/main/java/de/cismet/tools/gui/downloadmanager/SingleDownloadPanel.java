@@ -243,6 +243,9 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
         add(lblTitle, gridBagConstraints);
 
         lblMessage.setBackground(new java.awt.Color(255, 102, 0));
+        lblMessage.setText(org.openide.util.NbBundle.getMessage(
+                SingleDownloadPanel.class,
+                "SingleDownloadPanel.lblMessage.text")); // NOI18N
         lblMessage.setMaximumSize(new java.awt.Dimension(32767, 15));
         lblMessage.setMinimumSize(new java.awt.Dimension(10, 15));
         lblMessage.setPreferredSize(new java.awt.Dimension(8, 15));
@@ -399,6 +402,16 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
      */
     private void updateComponents() {
         switch (download.getStatus()) {
+            case WAITING: {
+                prbProgress.setVisible(false);
+                lblMessage.setVisible(true);
+                jxlOpenFile.setVisible(false);
+                mniOpenFile.setEnabled(false);
+                mniOpenDirectory.setEnabled(true);
+                mniRemove.setEnabled(true);
+
+                break;
+            }
             case RUNNING: {
                 prbProgress.setVisible(true);
                 lblMessage.setVisible(false);

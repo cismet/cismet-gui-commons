@@ -266,6 +266,13 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
      */
     private void updateComponents() {
         switch (download.getStatus()) {
+            case WAITING: {
+                prbProgress.setVisible(false);
+                lblMessage.setVisible(true);
+                mniRemove.setEnabled(true);
+
+                break;
+            }
             case RUNNING: {
                 lblMessage.setVisible(false);
                 mniRemove.setEnabled(false);
@@ -276,8 +283,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
                     prbProgress.setIndeterminate(true);
                     prbProgress.setString(NbBundle.getMessage(
                             MultipleDownloadPanel.class,
-                            "MultipleDownloadPanel.prbProgress.string.running.allRunning",
-                            download.getDownloadsTotal()));
+                            "MultipleDownloadPanel.prbProgress.string.running.allRunning"));
                 } else {
                     prbProgress.setIndeterminate(false);
                     prbProgress.setString(NbBundle.getMessage(

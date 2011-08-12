@@ -21,7 +21,7 @@ import java.util.Observer;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class MultipleDownload extends Observable implements Download, Runnable, Observer {
+public class MultipleDownload extends Observable implements Download, Observer {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -30,7 +30,6 @@ public class MultipleDownload extends Observable implements Download, Runnable, 
     //~ Instance fields --------------------------------------------------------
 
     private Collection<SingleDownload> downloads;
-    private Thread downloadThread;
     private String title;
     private State status;
     private int downloadsCompleted;
@@ -61,7 +60,7 @@ public class MultipleDownload extends Observable implements Download, Runnable, 
                 }
             }
 
-            status = State.RUNNING;
+            status = State.WAITING;
         } else {
             status = State.COMPLETED_WITH_ERROR;
         }
@@ -71,10 +70,7 @@ public class MultipleDownload extends Observable implements Download, Runnable, 
 
     @Override
     public void startDownload() {
-        if (downloadThread == null) {
-            downloadThread = new Thread(this);
-            downloadThread.start();
-        }
+        // NOP
     }
 
     @Override
@@ -121,25 +117,15 @@ public class MultipleDownload extends Observable implements Download, Runnable, 
     }
 
     @Override
-    public void run() {
-        if ((status != State.RUNNING) || (downloads == null)) {
-            return;
-        }
-
-        for (final SingleDownload download : downloads) {
-            download.addObserver(this);
-            download.startDownload();
-        }
-    }
-
-    @Override
     public synchronized void update(final Observable o, final Object arg) {
         if (!(o instanceof SingleDownload)) {
             return;
         }
 
         final SingleDownload download = (SingleDownload)o;
-        if (download.getStatus() == State.COMPLETED) {
+        if ((download.getStatus() == State.RUNNING) && (status == State.WAITING)) {
+            status = State.RUNNING;
+        } else if (download.getStatus() == State.COMPLETED) {
             downloadsCompleted++;
         } else if (download.getStatus() == State.COMPLETED_WITH_ERROR) {
             downloadsCompleted++;

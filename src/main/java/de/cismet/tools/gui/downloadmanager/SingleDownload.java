@@ -97,7 +97,7 @@ public class SingleDownload extends Observable implements Download, Runnable, Co
 
         if (DownloadManager.instance().isEnabled()) {
             determineDestinationFile(filename, extension, url);
-            status = State.RUNNING;
+            status = State.WAITING;
         } else {
             status = State.COMPLETED_WITH_ERROR;
             caughtException = new Exception("DownloadManager is disabled. Cancelling download.");
@@ -193,9 +193,11 @@ public class SingleDownload extends Observable implements Download, Runnable, Co
 
     @Override
     public void run() {
-        if (status != State.RUNNING) {
+        if (status != State.WAITING) {
             return;
         }
+
+        status = State.RUNNING;
 
         FileOutputStream out = null;
         InputStream resp = null;

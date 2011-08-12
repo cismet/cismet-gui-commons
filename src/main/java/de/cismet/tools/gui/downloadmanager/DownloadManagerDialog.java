@@ -22,6 +22,7 @@ import java.awt.event.WindowListener;
 import java.io.File;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,13 +51,13 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     private static DownloadManagerDialog instance;
     private static boolean askForJobname = true;
     private static boolean openAutomatically = true;
+    private static boolean closeAutomatically = true;
     private static String jobname = "";
     private static boolean isJobnameConfirmed = true;
 
     //~ Instance fields --------------------------------------------------------
 
-    private int downloadsAdded;
-    private Download downloadToOpen;
+    private Collection<Download> downloadsToOpen = new LinkedList<Download>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -166,7 +167,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
             instance.dlgJobname.setVisible(true);
 
             if (!isJobnameConfirmed) {
-                closeIfPossible();
+                closeIfPossible(true);
             }
         }
 
@@ -175,10 +176,13 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
 
     /**
      * Closes the DownloadManagerDialog if all downloads are completed.
+     *
+     * @param  forceClosing  DOCUMENT ME!
      */
-    public static void closeIfPossible() {
-        if (DownloadManager.instance().getCountDownloadsCompleted()
-                    == DownloadManager.instance().getCountDownloadsTotal()) {
+    public static void closeIfPossible(final boolean forceClosing) {
+        if ((closeAutomatically || forceClosing)
+                    && (DownloadManager.instance().getCountDownloadsCompleted()
+                        == DownloadManager.instance().getCountDownloadsTotal())) {
             instance.dispatchEvent(new WindowEvent(instance, WindowEvent.WINDOW_CLOSING));
         }
     }
@@ -235,6 +239,24 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      */
     public static void setOpenAutomatically(final boolean openAutomatically) {
         DownloadManagerDialog.openAutomatically = openAutomatically;
+    }
+
+    /**
+     * If the user the DownloadManagerDialog to close automatically.
+     *
+     * @return  A flag indicating whether the user wants the DownloadManagerDialog to close automatically.
+     */
+    public static boolean isCloseAutomatically() {
+        return closeAutomatically;
+    }
+
+    /**
+     * Sets the flag whether the user wants the DownloadManagerDialog to close automatically.
+     *
+     * @param  closeAutomatically  The flag whether the user wants the DownloadManagerDialog to close automatically.
+     */
+    public static void setCloseAutomatically(final boolean closeAutomatically) {
+        DownloadManagerDialog.closeAutomatically = closeAutomatically;
     }
 
     /**
@@ -535,12 +557,8 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         switch (event.getAction()) {
             case ADDED: {
                 final Collection<Download> downloads = event.getDownloads();
-                downloadsAdded += downloads.size();
-
-                if (downloadsAdded == 1) {
-                    downloadToOpen = downloads.iterator().next();
-                } else {
-                    downloadToOpen = null;
+                if (openAutomatically) {
+                    downloadsToOpen.addAll(downloads);
                 }
             }
             case CHANGED_COUNTERS: {
@@ -551,16 +569,21 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                 lblDownloadsTotalValue.setText(String.valueOf(countDownloadsTotal));
                 btnClearList.setEnabled((countDownloadsCompleted + countDownloadsErraneous) > 0);
 
-                if (openAutomatically
-                            && (countDownloadsCompleted == countDownloadsTotal)
-                            && (downloadToOpen != null)
-                            && (downloadToOpen.getFileToSaveTo() != null)
-                            && (downloadToOpen.getStatus() == State.COMPLETED)) {
-                    BrowserLauncher.openURLorFile(downloadToOpen.getFileToSaveTo().getAbsolutePath());
+                if (openAutomatically) {
+                    final Iterator<Download> downloadToOpenIter = downloadsToOpen.iterator();
+                    while (downloadToOpenIter.hasNext()) {
+                        final Download downloadToOpen = downloadToOpenIter.next();
 
-                    downloadToOpen = null;
-                    closeIfPossible();
+                        if ((downloadToOpen != null)
+                                    && (downloadToOpen.getFileToSaveTo() != null)
+                                    && (downloadToOpen.getStatus() == State.COMPLETED)) {
+                            BrowserLauncher.openURLorFile(downloadToOpen.getFileToSaveTo().getAbsolutePath());
+                            downloadToOpenIter.remove();
+                        }
+                    }
                 }
+
+                closeIfPossible(false);
             }
         }
     }

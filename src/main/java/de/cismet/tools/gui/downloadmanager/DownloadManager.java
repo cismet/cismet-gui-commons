@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
-import Sirius.navigator.resource.PropertyManager;
-
 import org.apache.log4j.Logger;
 
 import org.jdom.Element;
@@ -16,7 +14,9 @@ import org.jdom.Element;
 import java.io.File;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -40,9 +40,11 @@ public class DownloadManager implements Observer, Configurable {
     private static final Logger LOG = Logger.getLogger(DownloadManager.class);
     private static final String XML_CONF_ROOT = "downloads";
     private static final String XML_CONF_DIRECTORY = "directory";
+    private static final String XML_CONF_PARALLEL_DOWNLOADS = "parallelDownloads";
     private static final String XML_CONF_DIALOG = "dialog";
     private static final String XML_CONF_DIALOG_AKSFORTITLE = "askForTitle";
     private static final String XML_CONF_DIALOG_OPENAUTOMATICALLY = "openAutomatically";
+    private static final String XML_CONF_DIALOG_CLOSEAUTOMATICALLY = "closeAutomatically";
     private static final String XML_CONF_DIALOG_USERTITLE = "userTitle";
     private static DownloadManager instance = null;
 
@@ -51,10 +53,12 @@ public class DownloadManager implements Observer, Configurable {
     private boolean enabled = true;
     private File destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
                     + "cidsDownload");
+    private int parallelDownloads = 2;
     private LinkedList<Download> downloads = new LinkedList<Download>();
+    private List<SingleDownload> downloadsToStart = new LinkedList<SingleDownload>();
     private EventListenerList listeners = new EventListenerList();
     private int countDownloadsTotal = 0;
-    private int countDownloadsRunning = 0;
+    private volatile int countDownloadsRunning = 0;
     private int countDownloadsErraneous = 0;
     private int countDownloadsCompleted = 0;
 
@@ -93,9 +97,21 @@ public class DownloadManager implements Observer, Configurable {
 
         this.downloads.add(download);
         countDownloadsTotal++;
-
         download.addObserver(this);
 
+        if (download instanceof MultipleDownload) {
+            final MultipleDownload multipleDownload = (MultipleDownload)download;
+
+            for (final SingleDownload singleDownload : multipleDownload.getDownloads()) {
+                singleDownload.addObserver(this);
+                singleDownload.addObserver(multipleDownload);
+
+                downloadsToStart.add(singleDownload);
+            }
+        } else if (download instanceof SingleDownload) {
+            downloadsToStart.add((SingleDownload)download);
+        }
+
         notifyDownloadListChanged(new DownloadListChangedEvent(
                 this,
                 download,
@@ -105,42 +121,11 @@ public class DownloadManager implements Observer, Configurable {
                 download,
                 DownloadListChangedEvent.Action.CHANGED_COUNTERS));
 
-        download.startDownload();
+        startDownloads();
     }
 
     /**
-     * This method is used to add new downloads to the download list.
-     *
-     * @param  downloads  wfss A collection of downloads to add.
-     */
-    public synchronized void add(final Collection<Download> downloads) {
-        if ((downloads == null) || (downloads.size() <= 0)) {
-            return;
-        }
-
-        this.downloads.addAll(0, downloads);
-        countDownloadsTotal += downloads.size();
-
-        for (final Download download : downloads) {
-            download.addObserver(this);
-        }
-
-        notifyDownloadListChanged(new DownloadListChangedEvent(
-                this,
-                downloads,
-                DownloadListChangedEvent.Action.ADDED));
-        notifyDownloadListChanged(new DownloadListChangedEvent(
-                this,
-                downloads,
-                DownloadListChangedEvent.Action.CHANGED_COUNTERS));
-
-        for (final Download download : downloads) {
-            download.startDownload();
-        }
-    }
-
-    /**
-     * Removes oboslete downloads. Only running downloads aren't obsolote.
+     * Removes obsolete downloads. Only completed downloads are obsolete.
      */
     public synchronized void removeObsoleteDownloads() {
         final Collection<Download> downloadsRemoved = new LinkedList<Download>();
@@ -152,33 +137,44 @@ public class DownloadManager implements Observer, Configurable {
             }
         }
 
-        if (downloadsRemoved.size() > 0) {
-            for (final Download download : downloadsRemoved) {
-                downloads.remove(download);
-                countDownloadsTotal--;
+        if (downloadsRemoved.size() <= 0) {
+            return;
+        }
 
-                switch (download.getStatus()) {
-                    case COMPLETED_WITH_ERROR: {
-                        countDownloadsErraneous--;
-                        break;
-                    }
-                    case COMPLETED: {
-                        countDownloadsCompleted--;
-                        break;
-                    }
+        for (final Download download : downloadsRemoved) {
+            downloads.remove(download);
+            countDownloadsTotal--;
+
+            switch (download.getStatus()) {
+                case COMPLETED_WITH_ERROR: {
+                    countDownloadsErraneous--;
+                    break;
                 }
-                download.deleteObserver(this);
+                case COMPLETED: {
+                    countDownloadsCompleted--;
+                    break;
+                }
             }
 
-            notifyDownloadListChanged(new DownloadListChangedEvent(
-                    this,
-                    downloadsRemoved,
-                    DownloadListChangedEvent.Action.REMOVED));
-            notifyDownloadListChanged(new DownloadListChangedEvent(
-                    this,
-                    downloadsRemoved,
-                    DownloadListChangedEvent.Action.CHANGED_COUNTERS));
+            download.deleteObserver(this);
+            if (download instanceof MultipleDownload) {
+                final MultipleDownload multipleDownload = (MultipleDownload)download;
+
+                for (final SingleDownload singleDownload : multipleDownload.getDownloads()) {
+                    singleDownload.deleteObserver(this);
+                    singleDownload.deleteObserver(multipleDownload);
+                }
+            }
         }
+
+        notifyDownloadListChanged(new DownloadListChangedEvent(
+                this,
+                downloadsRemoved,
+                DownloadListChangedEvent.Action.REMOVED));
+        notifyDownloadListChanged(new DownloadListChangedEvent(
+                this,
+                downloadsRemoved,
+                DownloadListChangedEvent.Action.CHANGED_COUNTERS));
     }
 
     /**
@@ -188,8 +184,21 @@ public class DownloadManager implements Observer, Configurable {
      */
     public synchronized void removeDownload(final Download download) {
         downloads.remove(download);
-        countDownloadsTotal--;
+        download.deleteObserver(this);
 
+        if (download instanceof SingleDownload) {
+            downloadsToStart.remove((SingleDownload)download);
+        } else if (download instanceof MultipleDownload) {
+            final MultipleDownload multipleDownload = (MultipleDownload)download;
+
+            for (final SingleDownload singleDownload : multipleDownload.getDownloads()) {
+                singleDownload.deleteObserver(this);
+                singleDownload.deleteObserver(multipleDownload);
+                downloadsToStart.remove(singleDownload);
+            }
+        }
+
+        countDownloadsTotal--;
         switch (download.getStatus()) {
             case COMPLETED_WITH_ERROR: {
                 countDownloadsErraneous--;
@@ -200,7 +209,6 @@ public class DownloadManager implements Observer, Configurable {
                 break;
             }
         }
-        download.deleteObserver(this);
 
         notifyDownloadListChanged(new DownloadListChangedEvent(
                 this,
@@ -210,6 +218,24 @@ public class DownloadManager implements Observer, Configurable {
                 this,
                 download,
                 DownloadListChangedEvent.Action.CHANGED_COUNTERS));
+    }
+
+    /**
+     * Starts pending downloads.
+     */
+    private synchronized void startDownloads() {
+        int downloadsRunning = countDownloadsRunning;
+        final Iterator<SingleDownload> downloadToStartIter = downloadsToStart.iterator();
+
+        while (downloadToStartIter.hasNext() && (downloadsRunning < parallelDownloads)) {
+            final SingleDownload downloadToStart = downloadToStartIter.next();
+
+            if (downloadToStart.getStatus().equals(Download.State.WAITING)) {
+                downloadToStart.startDownload();
+                downloadsRunning++;
+                downloadToStartIter.remove();
+            }
+        }
     }
 
     /**
@@ -231,15 +257,6 @@ public class DownloadManager implements Observer, Configurable {
     }
 
     /**
-     * Returns the count of running downloads.
-     *
-     * @return  The count of running downloads.
-     */
-    public int getCountDownloadsRunning() {
-        return countDownloadsRunning;
-    }
-
-    /**
      * Returns the count of completed downloads.
      *
      * @return  The count of completed downloads.
@@ -255,6 +272,24 @@ public class DownloadManager implements Observer, Configurable {
      */
     public int getCountDownloadsTotal() {
         return countDownloadsTotal;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getParallelDownloads() {
+        return parallelDownloads;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parallelDownloads  DOCUMENT ME!
+     */
+    public void setParallelDownloads(final int parallelDownloads) {
+        this.parallelDownloads = parallelDownloads;
     }
 
     /**
@@ -303,17 +338,36 @@ public class DownloadManager implements Observer, Configurable {
 
         switch (download.getStatus()) {
             case COMPLETED: {
-                countDownloadsRunning--;
-                countDownloadsCompleted++;
+                if (download instanceof SingleDownload) {
+                    countDownloadsRunning--;
+                }
+
+                if (downloads.contains(download)) {
+                    countDownloadsCompleted++;
+                }
+
+                startDownloads();
+
                 break;
             }
             case COMPLETED_WITH_ERROR: {
-                countDownloadsRunning--;
-                countDownloadsErraneous++;
+                if (download instanceof SingleDownload) {
+                    countDownloadsRunning--;
+                }
+
+                if (downloads.contains(download)) {
+                    countDownloadsErraneous++;
+                }
+
+                startDownloads();
+
                 break;
             }
             case RUNNING: {
-                countDownloadsRunning++;
+                if (download instanceof SingleDownload) {
+                    countDownloadsRunning++;
+                }
+
                 break;
             }
         }
@@ -362,7 +416,13 @@ public class DownloadManager implements Observer, Configurable {
         destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
                         + "cidsDownload");
 
-        final Element downloads = parent.getChild(XML_CONF_ROOT);
+        Element downloads = null;
+        if (parent == null) {
+            LOG.warn("The download manager isn't configured. Using default values.");
+        } else {
+            downloads = parent.getChild(XML_CONF_ROOT);
+        }
+
         if (downloads == null) {
             LOG.warn("The download manager isn't configured. Using default values.");
 
@@ -392,6 +452,18 @@ public class DownloadManager implements Observer, Configurable {
             enabled = true;
         }
 
+        final Element parallelDownloads = downloads.getChild(XML_CONF_PARALLEL_DOWNLOADS);
+        if ((parallelDownloads == null) || (parallelDownloads.getTextTrim() == null)) {
+            LOG.warn("There is no limit for parallel downloads configured. Using default limit '2'.");
+        } else {
+            try {
+                this.parallelDownloads = Integer.parseInt(parallelDownloads.getText());
+            } catch (NumberFormatException e) {
+                LOG.warn("Configuration for limit of parallel downloads is invalid. Using default value of '2'", e);
+                this.parallelDownloads = 2;
+            }
+        }
+
         final Element dialog = downloads.getChild(XML_CONF_DIALOG);
         if (dialog == null) {
             LOG.warn("The download dialog isn't configured. Using default values.");
@@ -416,6 +488,15 @@ public class DownloadManager implements Observer, Configurable {
             DownloadManagerDialog.setOpenAutomatically("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
+        final Element closeAutomatically = dialog.getChild(XML_CONF_DIALOG_CLOSEAUTOMATICALLY);
+        if ((closeAutomatically == null) || (closeAutomatically.getTextTrim() == null)) {
+            LOG.warn(
+                "There is no configuration whether to close the download manager dialog automatically or not. Using default value 'true'.");
+        } else {
+            final String value = closeAutomatically.getTextTrim();
+            DownloadManagerDialog.setCloseAutomatically("1".equals(value) || "true".equalsIgnoreCase(value));
+        }
+
         final Element userTitle = dialog.getChild(XML_CONF_DIALOG_USERTITLE);
         if ((userTitle == null) || (userTitle.getTextTrim() == null)) {
             LOG.warn("There is no user title for downloads configured. Using default value 'cidsDownload'.");
@@ -438,20 +519,28 @@ public class DownloadManager implements Observer, Configurable {
 
         final Element dialog = new Element(XML_CONF_DIALOG);
 
+        final Element parallelDownloads = new Element(XML_CONF_PARALLEL_DOWNLOADS);
+        parallelDownloads.addContent(String.valueOf(this.parallelDownloads));
+
         final Element askForTitle = new Element(XML_CONF_DIALOG_AKSFORTITLE);
         askForTitle.addContent(DownloadManagerDialog.isAskForJobname() ? "true" : "false");
 
         final Element openAutomatically = new Element(XML_CONF_DIALOG_OPENAUTOMATICALLY);
         openAutomatically.addContent(DownloadManagerDialog.isOpenAutomatically() ? "true" : "false");
 
+        final Element closeAutomatically = new Element(XML_CONF_DIALOG_CLOSEAUTOMATICALLY);
+        closeAutomatically.addContent(DownloadManagerDialog.isCloseAutomatically() ? "true" : "false");
+
         final Element userTitle = new Element(XML_CONF_DIALOG_USERTITLE);
         userTitle.addContent(DownloadManagerDialog.getJobname());
 
         dialog.addContent(askForTitle);
         dialog.addContent(openAutomatically);
+        dialog.addContent(closeAutomatically);
         dialog.addContent(userTitle);
 
         root.addContent(directory);
+        root.addContent(parallelDownloads);
         root.addContent(dialog);
 
         return root;

@@ -42,7 +42,6 @@ public class DownloadManagerAction extends AbstractAction implements WindowListe
         super();
 
         this.parent = parent;
-        setEnabled(DownloadManager.instance().isEnabled());
 
         putValue(
             SMALL_ICON,

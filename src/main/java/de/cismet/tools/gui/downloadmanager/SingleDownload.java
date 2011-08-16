@@ -26,6 +26,7 @@ package de.cismet.tools.gui.downloadmanager;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -205,18 +206,22 @@ public class SingleDownload extends Observable implements Download, Runnable, Co
         stateChanged();
 
         try {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Sending request \n" + request + "\n to '" + url.toExternalForm() + "'.");
-            }
-
-            if ((request == null) || (request.trim().length() <= 0)) {
-                resp = WebAccessManager.getInstance().doRequest(url);
+            if ("file".equals(url.getProtocol())) {
+                resp = new FileInputStream(new File(url.toURI()));
             } else {
-                resp = WebAccessManager.getInstance()
-                            .doRequest(
-                                    url,
-                                    new StringReader(request),
-                                    ACCESS_METHODS.POST_REQUEST);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Sending request \n" + request + "\n to '" + url.toExternalForm() + "'.");
+                }
+
+                if ((request == null) || (request.trim().length() <= 0)) {
+                    resp = WebAccessManager.getInstance().doRequest(url);
+                } else {
+                    resp = WebAccessManager.getInstance()
+                                .doRequest(
+                                        url,
+                                        new StringReader(request),
+                                        ACCESS_METHODS.POST_REQUEST);
+                }
             }
 
             out = new FileOutputStream(fileToSaveTo);

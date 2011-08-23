@@ -143,7 +143,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(8, 3, 8, 10);
+        gridBagConstraints.insets = new java.awt.Insets(8, 5, 3, 10);
         add(lblDestinationDirectory, gridBagConstraints);
 
         jhlDownloadDestination.setText(org.openide.util.NbBundle.getMessage(
@@ -161,7 +161,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(8, 4, 8, 3);
+        gridBagConstraints.insets = new java.awt.Insets(8, 3, 3, 5);
         add(jhlDownloadDestination, gridBagConstraints);
 
         btnChangeDownloadDestination.setText(org.openide.util.NbBundle.getMessage(
@@ -177,6 +177,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 3, 5);
         add(btnChangeDownloadDestination, gridBagConstraints);
 
         lblJobname.setText(org.openide.util.NbBundle.getMessage(
@@ -186,7 +187,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(8, 3, 8, 10);
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
         add(lblJobname, gridBagConstraints);
 
         txtJobname.setText(org.openide.util.NbBundle.getMessage(
@@ -198,7 +199,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(8, 4, 3, 3);
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(txtJobname, gridBagConstraints);
 
         chkAskForJobname.setSelected(true);
@@ -213,7 +214,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 0, 8, 3);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 3, 5);
         add(chkAskForJobname, gridBagConstraints);
 
         lblOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(
@@ -223,7 +224,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(8, 3, 8, 10);
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
         add(lblOpenAutomatically, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -275,7 +276,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 3);
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(pnlOpenAutomatically, gridBagConstraints);
 
         lblCloseAutomatically.setText(org.openide.util.NbBundle.getMessage(
@@ -285,7 +286,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(8, 3, 8, 10);
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
         add(lblCloseAutomatically, gridBagConstraints);
 
         lblParallelDownloads.setText(org.openide.util.NbBundle.getMessage(
@@ -294,7 +295,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(8, 3, 8, 10);
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
         add(lblParallelDownloads, gridBagConstraints);
 
         spnParallelDownloads.setModel(new javax.swing.SpinnerNumberModel(2, 1, 50, 1));
@@ -303,7 +304,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(8, 4, 3, 3);
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(spnParallelDownloads, gridBagConstraints);
 
         pnlCloseAutomatically.setLayout(new java.awt.GridBagLayout());
@@ -338,7 +339,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(8, 0, 8, 3);
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(pnlCloseAutomatically, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 

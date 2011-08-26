@@ -55,11 +55,11 @@ public class DownloadManager implements Observer, Configurable {
                     + "cidsDownload");
     private int parallelDownloads = 2;
     private LinkedList<Download> downloads = new LinkedList<Download>();
-    private List<SingleDownload> downloadsToStart = new LinkedList<SingleDownload>();
+    private List<Download> downloadsToStart = new LinkedList<Download>();
     private EventListenerList listeners = new EventListenerList();
     private int countDownloadsTotal = 0;
     private volatile int countDownloadsRunning = 0;
-    private int countDownloadsErraneous = 0;
+    private int countDownloadsErroneous = 0;
     private int countDownloadsCompleted = 0;
 
     //~ Constructors -----------------------------------------------------------
@@ -86,16 +86,16 @@ public class DownloadManager implements Observer, Configurable {
     }
 
     /**
-     * This method is used to add new downloads to the download list.
+     * This method is used to add a download to the download list.
      *
-     * @param  download  wfss A collection of downloads to add.
+     * @param  download  A new download to add.
      */
     public synchronized void add(final Download download) {
-        if (download == null) {
+        if ((download == null) || downloads.contains(download)) {
             return;
         }
 
-        this.downloads.add(download);
+        downloads.add(download);
         countDownloadsTotal++;
         download.addObserver(this);
 
@@ -108,8 +108,8 @@ public class DownloadManager implements Observer, Configurable {
 
                 downloadsToStart.add(singleDownload);
             }
-        } else if (download instanceof SingleDownload) {
-            downloadsToStart.add((SingleDownload)download);
+        } else {
+            downloadsToStart.add(download);
         }
 
         notifyDownloadListChanged(new DownloadListChangedEvent(
@@ -147,7 +147,7 @@ public class DownloadManager implements Observer, Configurable {
 
             switch (download.getStatus()) {
                 case COMPLETED_WITH_ERROR: {
-                    countDownloadsErraneous--;
+                    countDownloadsErroneous--;
                     break;
                 }
                 case COMPLETED: {
@@ -186,9 +186,7 @@ public class DownloadManager implements Observer, Configurable {
         downloads.remove(download);
         download.deleteObserver(this);
 
-        if (download instanceof SingleDownload) {
-            downloadsToStart.remove((SingleDownload)download);
-        } else if (download instanceof MultipleDownload) {
+        if (download instanceof MultipleDownload) {
             final MultipleDownload multipleDownload = (MultipleDownload)download;
 
             for (final SingleDownload singleDownload : multipleDownload.getDownloads()) {
@@ -196,12 +194,14 @@ public class DownloadManager implements Observer, Configurable {
                 singleDownload.deleteObserver(multipleDownload);
                 downloadsToStart.remove(singleDownload);
             }
+        } else {
+            downloadsToStart.remove(download);
         }
 
         countDownloadsTotal--;
         switch (download.getStatus()) {
             case COMPLETED_WITH_ERROR: {
-                countDownloadsErraneous--;
+                countDownloadsErroneous--;
                 break;
             }
             case COMPLETED: {
@@ -225,11 +225,11 @@ public class DownloadManager implements Observer, Configurable {
      */
     private synchronized void startDownloads() {
         int downloadsRunning = countDownloadsRunning;
-        final Iterator<SingleDownload> downloadToStartIter = downloadsToStart.iterator();
-        final List<SingleDownload> startableDownloads = new LinkedList<SingleDownload>();
+        final Iterator<Download> downloadToStartIter = downloadsToStart.iterator();
+        final List<Download> startableDownloads = new LinkedList<Download>();
 
         while (downloadToStartIter.hasNext() && (downloadsRunning < parallelDownloads)) {
-            final SingleDownload downloadToStart = downloadToStartIter.next();
+            final Download downloadToStart = downloadToStartIter.next();
 
             if (downloadToStart.getStatus().equals(Download.State.WAITING)) {
                 startableDownloads.add(downloadToStart);
@@ -238,7 +238,7 @@ public class DownloadManager implements Observer, Configurable {
             }
         }
 
-        for (final SingleDownload downloadToStart : startableDownloads) {
+        for (final Download downloadToStart : startableDownloads) {
             downloadToStart.startDownload();
         }
     }
@@ -253,12 +253,12 @@ public class DownloadManager implements Observer, Configurable {
     }
 
     /**
-     * Returns the count of erraneous downloads.
+     * Returns the count of erroneous downloads.
      *
-     * @return  The count of erraneous downloads.
+     * @return  The count of erroneous downloads.
      */
-    public int getCountDownloadsErraneous() {
-        return countDownloadsErraneous;
+    public int getCountDownloadsErroneous() {
+        return countDownloadsErroneous;
     }
 
     /**
@@ -330,7 +330,7 @@ public class DownloadManager implements Observer, Configurable {
      * @return  The flag whether the download manager is enabled or not.
      */
     public boolean isEnabled() {
-        return enabled;
+        return true;
     }
 
     @Override
@@ -343,7 +343,7 @@ public class DownloadManager implements Observer, Configurable {
 
         switch (download.getStatus()) {
             case COMPLETED: {
-                if (download instanceof SingleDownload) {
+                if (!(download instanceof MultipleDownload)) {
                     countDownloadsRunning--;
                 }
 
@@ -356,12 +356,12 @@ public class DownloadManager implements Observer, Configurable {
                 break;
             }
             case COMPLETED_WITH_ERROR: {
-                if (download instanceof SingleDownload) {
+                if (!(download instanceof MultipleDownload)) {
                     countDownloadsRunning--;
                 }
 
                 if (downloads.contains(download)) {
-                    countDownloadsErraneous++;
+                    countDownloadsErroneous++;
                 }
 
                 startDownloads();
@@ -369,7 +369,7 @@ public class DownloadManager implements Observer, Configurable {
                 break;
             }
             case RUNNING: {
-                if (download instanceof SingleDownload) {
+                if (!(download instanceof MultipleDownload)) {
                     countDownloadsRunning++;
                 }
 

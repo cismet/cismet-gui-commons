@@ -97,7 +97,7 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
 
         final LinkedList<JPanel> oldPanels = new LinkedList<JPanel>();
         for (final Component component : getComponents()) {
-            if ((component instanceof SingleDownloadPanel) || (component instanceof MultipleDownloadPanel)) {
+            if ((component instanceof DownloadPanel) || (component instanceof MultipleDownloadPanel)) {
                 oldPanels.add((JPanel)component);
             }
         }
@@ -105,14 +105,14 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
         removeAll();
 
         for (final Download download : downloads) {
-            if (download instanceof SingleDownload) {
-                final SingleDownloadPanel pnlDownload = new SingleDownloadPanel((SingleDownload)download);
+            if (download instanceof MultipleDownload) {
+                final MultipleDownloadPanel pnlDownload = new MultipleDownloadPanel((MultipleDownload)download);
 
                 download.addObserver(pnlDownload);
                 add(pnlDownload);
                 panels.put(download, pnlDownload);
-            } else if (download instanceof MultipleDownload) {
-                final MultipleDownloadPanel pnlDownload = new MultipleDownloadPanel((MultipleDownload)download);
+            } else {
+                final DownloadPanel pnlDownload = new DownloadPanel(download);
 
                 download.addObserver(pnlDownload);
                 add(pnlDownload);

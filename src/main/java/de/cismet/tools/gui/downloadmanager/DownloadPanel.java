@@ -43,15 +43,15 @@ import de.cismet.tools.BrowserLauncher;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class SingleDownloadPanel extends javax.swing.JPanel implements Observer {
+public class DownloadPanel extends javax.swing.JPanel implements Observer {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final Logger LOG = Logger.getLogger(SingleDownloadPanel.class);
+    private static final Logger LOG = Logger.getLogger(DownloadPanel.class);
 
     //~ Instance fields --------------------------------------------------------
 
-    private SingleDownload download;
+    private Download download;
     private boolean small;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXHyperlink jxlOpenFile;
@@ -71,11 +71,11 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new SingleDownloadPanel object.
+     * Creates a new DownloadPanel object.
      *
-     * @param  download  DOCUMENT ME!
+     * @param  download  The download to visualize;
      */
-    public SingleDownloadPanel(final SingleDownload download) {
+    public DownloadPanel(final Download download) {
         this(download, false, false);
     }
 
@@ -86,7 +86,7 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
      * @param  small          A flag indicating whether this panel is to be displayed small or not.
      * @param  hideSeparator  A flag indicating whether this panel should hide the separator at the bottom or not.
      */
-    public SingleDownloadPanel(final SingleDownload download, final boolean small, final boolean hideSeparator) {
+    public DownloadPanel(final Download download, final boolean small, final boolean hideSeparator) {
         this.download = download;
         this.small = small;
 
@@ -179,8 +179,8 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
         jxlOpenFile = new org.jdesktop.swingx.JXHyperlink();
 
         mniOpenFile.setText(org.openide.util.NbBundle.getMessage(
-                SingleDownloadPanel.class,
-                "SingleDownloadPanel.mniOpenFile.text")); // NOI18N
+                DownloadPanel.class,
+                "DownloadPanel.mniOpenFile.text")); // NOI18N
         mniOpenFile.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -191,8 +191,8 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
         popContextMenu.add(mniOpenFile);
 
         mniOpenDirectory.setText(org.openide.util.NbBundle.getMessage(
-                SingleDownloadPanel.class,
-                "SingleDownloadPanel.mniOpenDirectory.text")); // NOI18N
+                DownloadPanel.class,
+                "DownloadPanel.mniOpenDirectory.text")); // NOI18N
         mniOpenDirectory.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -203,9 +203,7 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
         popContextMenu.add(mniOpenDirectory);
         popContextMenu.add(sepContextMenuOpenRemove);
 
-        mniRemove.setText(org.openide.util.NbBundle.getMessage(
-                SingleDownloadPanel.class,
-                "SingleDownloadPanel.mniRemove.text")); // NOI18N
+        mniRemove.setText(org.openide.util.NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.mniRemove.text")); // NOI18N
         mniRemove.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -243,9 +241,7 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
         add(lblTitle, gridBagConstraints);
 
         lblMessage.setBackground(new java.awt.Color(255, 102, 0));
-        lblMessage.setText(org.openide.util.NbBundle.getMessage(
-                SingleDownloadPanel.class,
-                "SingleDownloadPanel.lblMessage.text")); // NOI18N
+        lblMessage.setText(org.openide.util.NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.lblMessage.text")); // NOI18N
         lblMessage.setMaximumSize(new java.awt.Dimension(32767, 15));
         lblMessage.setMinimumSize(new java.awt.Dimension(10, 15));
         lblMessage.setPreferredSize(new java.awt.Dimension(8, 15));
@@ -272,8 +268,8 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
         prbProgress.setMinimumSize(new java.awt.Dimension(10, 15));
         prbProgress.setPreferredSize(new java.awt.Dimension(146, 15));
         prbProgress.setString(org.openide.util.NbBundle.getMessage(
-                SingleDownloadPanel.class,
-                "SingleDownloadPanel.prbProgress.string")); // NOI18N
+                DownloadPanel.class,
+                "DownloadPanel.prbProgress.string")); // NOI18N
         prbProgress.setStringPainted(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -291,7 +287,7 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTime, gridBagConstraints);
 
-        jxlOpenFile.setText(download.getFileToSaveTo().getAbsolutePath());
+        jxlOpenFile.setText((download.getFileToSaveTo() != null) ? download.getFileToSaveTo().getAbsolutePath() : "");
         jxlOpenFile.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -320,7 +316,7 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
                 JOptionPane.showMessageDialog(
                     this,
                     download.getCaughtException().getMessage(),
-                    NbBundle.getMessage(SingleDownloadPanel.class, "DownloadPanel.formMouseClicked.error.title"),
+                    NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.formMouseClicked.error.title"),
                     JOptionPane.ERROR_MESSAGE);
             } else if (download.getStatus() == Download.State.COMPLETED) {
                 BrowserLauncher.openURLorFile(download.getFileToSaveTo().getParentFile().getAbsolutePath());
@@ -368,6 +364,10 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
      * Initiates the icon. According to the file extension of the download, an appropriate icon will be shown.
      */
     private void initIcon() {
+        if (download.getFileToSaveTo() == null) {
+            return;
+        }
+
         String extensionOfDownload = download.getFileToSaveTo().getName().trim();
         final String extensionOfIcon = small ? "_16.png" : "_32.png";
 
@@ -451,17 +451,17 @@ public class SingleDownloadPanel extends javax.swing.JPanel implements Observer 
                         download.getCaughtException();
                     if (exception.getHttpStatuscode() == 204) {
                         lblMessage.setText(NbBundle.getMessage(
-                                SingleDownloadPanel.class,
+                                DownloadPanel.class,
                                 "DownloadPanel.lblMessage.noData",
                                 download.getTitle()));
                     } else {
                         lblMessage.setText(NbBundle.getMessage(
-                                SingleDownloadPanel.class,
+                                DownloadPanel.class,
                                 "DownloadPanel.lblMessage.error"));
                     }
                 } else {
                     lblMessage.setText(NbBundle.getMessage(
-                            SingleDownloadPanel.class,
+                            DownloadPanel.class,
                             "DownloadPanel.lblMessage.error"));
                 }
                 break;

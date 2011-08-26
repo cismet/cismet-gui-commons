@@ -33,7 +33,7 @@ public class MultipleDownload extends Observable implements Download, Observer {
     private String title;
     private State status;
     private int downloadsCompleted;
-    private int downloadsErraneous;
+    private int downloadsErroneous;
     private File fileToSaveTo;
 
     //~ Constructors -----------------------------------------------------------
@@ -50,6 +50,9 @@ public class MultipleDownload extends Observable implements Download, Observer {
 
         if (DownloadManager.instance().isEnabled()) {
             for (final SingleDownload download : this.downloads) {
+                if (download.getFileToSaveTo() == null) {
+                    continue;
+                }
                 if (fileToSaveTo == null) {
                     fileToSaveTo = download.getFileToSaveTo().getParentFile();
                 } else {
@@ -89,8 +92,8 @@ public class MultipleDownload extends Observable implements Download, Observer {
     }
 
     @Override
-    public int getDownloadsErraneous() {
-        return downloadsErraneous;
+    public int getDownloadsErroneous() {
+        return downloadsErroneous;
     }
 
     @Override
@@ -98,11 +101,12 @@ public class MultipleDownload extends Observable implements Download, Observer {
         return fileToSaveTo;
     }
 
-    /**
-     * Getter for the title attribute.
-     *
-     * @return  The title of this multiple download.
-     */
+    @Override
+    public Throwable getCaughtException() {
+        return null;
+    }
+
+    @Override
     public String getTitle() {
         return title;
     }
@@ -117,27 +121,30 @@ public class MultipleDownload extends Observable implements Download, Observer {
     }
 
     @Override
-    public synchronized void update(final Observable o, final Object arg) {
+    public void update(final Observable o, final Object arg) {
         if (!(o instanceof SingleDownload)) {
             return;
         }
 
         final SingleDownload download = (SingleDownload)o;
-        if ((download.getStatus() == State.RUNNING) && (status == State.WAITING)) {
-            status = State.RUNNING;
-        } else if (download.getStatus() == State.COMPLETED) {
-            downloadsCompleted++;
-        } else if (download.getStatus() == State.COMPLETED_WITH_ERROR) {
-            downloadsCompleted++;
-            downloadsErraneous++;
-            status = State.RUNNING_WITH_ERROR;
-        }
 
-        if (downloadsCompleted == downloads.size()) {
-            if (status == State.RUNNING) {
-                status = State.COMPLETED;
-            } else {
-                status = State.COMPLETED_WITH_ERROR;
+        synchronized (this) {
+            if ((download.getStatus() == State.RUNNING) && (status == State.WAITING)) {
+                status = State.RUNNING;
+            } else if (download.getStatus() == State.COMPLETED) {
+                downloadsCompleted++;
+            } else if (download.getStatus() == State.COMPLETED_WITH_ERROR) {
+                downloadsCompleted++;
+                downloadsErroneous++;
+                status = State.RUNNING_WITH_ERROR;
+            }
+
+            if (downloadsCompleted == downloads.size()) {
+                if (status == State.RUNNING) {
+                    status = State.COMPLETED;
+                } else {
+                    status = State.COMPLETED_WITH_ERROR;
+                }
             }
         }
 

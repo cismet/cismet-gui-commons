@@ -112,6 +112,7 @@ public class SingleDownload extends Observable implements Download, Runnable, Co
      *
      * @return  The title.
      */
+    @Override
     public String getTitle() {
         return title;
     }
@@ -141,7 +142,8 @@ public class SingleDownload extends Observable implements Download, Runnable, Co
      *
      * @return  The caught exception.
      */
-    public Exception getCaughtException() {
+    @Override
+    public Throwable getCaughtException() {
         return caughtException;
     }
 
@@ -160,7 +162,7 @@ public class SingleDownload extends Observable implements Download, Runnable, Co
     }
 
     @Override
-    public int getDownloadsErraneous() {
+    public int getDownloadsErroneous() {
         if (status == State.COMPLETED_WITH_ERROR) {
             return 1;
         }
@@ -298,6 +300,9 @@ public class SingleDownload extends Observable implements Download, Runnable, Co
 
         if (!directoryToSaveTo.exists()) {
             if (!directoryToSaveTo.mkdirs()) {
+                LOG.error("Couldn't create destination directory '"
+                            + directoryToSaveTo.getAbsolutePath()
+                            + "'. Cancelling download.");
                 error(new Exception(
                         "Couldn't create destination directory '"
                                 + directoryToSaveTo.getAbsolutePath()
@@ -326,6 +331,17 @@ public class SingleDownload extends Observable implements Download, Runnable, Co
             }
 
             if ((counter >= 1000) && !fileFound) {
+                LOG.error("Could not create a file for the download '"
+                            + url.toExternalForm()
+                            + "'. The tested path is '"
+                            + directoryToSaveTo.getAbsolutePath()
+                            + File.separatorChar
+                            + filename
+                            + "<1.."
+                            + 999
+                            + ">."
+                            + extension
+                            + ".");
                 error(new FileNotFoundException(
                         "Could not create a file for the download '"
                                 + url.toExternalForm()

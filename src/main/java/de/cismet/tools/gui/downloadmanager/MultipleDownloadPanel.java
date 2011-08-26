@@ -306,7 +306,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
                         "MultipleDownloadPanel.prbProgress.string.running_with_error",
                         download.getDownloadsCompleted(),
                         download.getDownloadsTotal(),
-                        download.getDownloadsErraneous()));
+                        download.getDownloadsErroneous()));
                 prbProgress.setValue(download.getDownloadsCompleted());
                 prbProgress.setBackground(Color.pink);
                 setBackground(Color.pink);
@@ -337,7 +337,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
                         MultipleDownloadPanel.class,
                         "MultipleDownloadPanel.lblMessage.text.completed_with_error",
                         download.getDownloadsCompleted(),
-                        download.getDownloadsErraneous()));
+                        download.getDownloadsErroneous()));
                 break;
             }
         }
@@ -359,7 +359,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         for (int i = 0; iterDownloads.hasNext(); i++) {
             final SingleDownload singleDownload = iterDownloads.next();
 
-            final SingleDownloadPanel pnlSingleDownloadPanel = new SingleDownloadPanel(
+            final DownloadPanel pnlSingleDownloadPanel = new DownloadPanel(
                     singleDownload,
                     true,
                     !iterDownloads.hasNext());

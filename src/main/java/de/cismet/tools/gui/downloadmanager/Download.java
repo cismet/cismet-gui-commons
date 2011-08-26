@@ -83,7 +83,7 @@ public interface Download {
      *
      * @return  Count of erraneous downloads.
      */
-    int getDownloadsErraneous();
+    int getDownloadsErroneous();
 
     /**
      * Returns the File object pointing to the destination download location.
@@ -91,4 +91,19 @@ public interface Download {
      * @return  Destination download location.
      */
     File getFileToSaveTo();
+
+    /**
+     * Returns the exception occurred while running this download. Should only be invoked if the status of this download
+     * equals an erroneous status.
+     *
+     * @return  The exception that was caught while downloading.
+     */
+    Throwable getCaughtException();
+
+    /**
+     * Returns the title of the Download.
+     *
+     * @return  The title of this download.
+     */
+    String getTitle();
 }

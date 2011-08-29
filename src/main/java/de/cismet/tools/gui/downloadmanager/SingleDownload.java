@@ -143,7 +143,7 @@ public class SingleDownload extends Observable implements Download, Runnable, Co
      * @return  The caught exception.
      */
     @Override
-    public Throwable getCaughtException() {
+    public Exception getCaughtException() {
         return caughtException;
     }
 

@@ -96,9 +96,12 @@ public interface Download {
      * Returns the exception occurred while running this download. Should only be invoked if the status of this download
      * equals an erroneous status.
      *
+     * <p>Should be changed in future releases to Map<Download, Exception> getCaughtExceptions() for Download
+     * implementations which encapsulate multiple downloads.</p>
+     *
      * @return  The exception that was caught while downloading.
      */
-    Throwable getCaughtException();
+    Exception getCaughtException();
 
     /**
      * Returns the title of the Download.

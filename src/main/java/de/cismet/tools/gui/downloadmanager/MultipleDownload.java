@@ -102,7 +102,7 @@ public class MultipleDownload extends Observable implements Download, Observer {
     }
 
     @Override
-    public Throwable getCaughtException() {
+    public Exception getCaughtException() {
         return null;
     }
 

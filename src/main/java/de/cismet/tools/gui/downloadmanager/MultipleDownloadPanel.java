@@ -354,10 +354,10 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         pnlSingleDownloads = new JPanel();
         pnlSingleDownloads.setLayout(new BoxLayout(pnlSingleDownloads, BoxLayout.PAGE_AXIS));
 
-        final Iterator<SingleDownload> iterDownloads = download.getDownloads().iterator();
+        final Iterator<? extends AbstractDownload> iterDownloads = download.getDownloads().iterator();
         Branch.Position position = null;
         for (int i = 0; iterDownloads.hasNext(); i++) {
-            final SingleDownload singleDownload = iterDownloads.next();
+            final AbstractDownload singleDownload = iterDownloads.next();
 
             final DownloadPanel pnlSingleDownloadPanel = new DownloadPanel(
                     singleDownload,

@@ -29,7 +29,7 @@ public class MultipleDownload extends Observable implements Download, Observer {
 
     //~ Instance fields --------------------------------------------------------
 
-    private Collection<SingleDownload> downloads;
+    private Collection<? extends AbstractDownload> downloads;
     private String title;
     private State status;
     private int downloadsCompleted;
@@ -41,15 +41,15 @@ public class MultipleDownload extends Observable implements Download, Observer {
     /**
      * Creates a new MultipleDownload object.
      *
-     * @param  downloads  A collection of SingleDownloads which are to be downloaded by this multiple download.
+     * @param  downloads  A collection of AbstractDownloads which are to be downloaded by this multiple download.
      * @param  title      The title of the multiple download.
      */
-    public MultipleDownload(final Collection<SingleDownload> downloads, final String title) {
+    public MultipleDownload(final Collection<? extends AbstractDownload> downloads, final String title) {
         this.downloads = downloads;
         this.title = title;
 
         if (DownloadManager.instance().isEnabled()) {
-            for (final SingleDownload download : this.downloads) {
+            for (final AbstractDownload download : this.downloads) {
                 if (download.getFileToSaveTo() == null) {
                     continue;
                 }
@@ -112,21 +112,21 @@ public class MultipleDownload extends Observable implements Download, Observer {
     }
 
     /**
-     * Getter for the collection of SingleDownload objects.
+     * Getter for the collection of AbstractDownload objects.
      *
-     * @return  The single downloads encapsulated by this multiple download.
+     * @return  The abstract single downloads encapsulated by this multiple download.
      */
-    public Collection<SingleDownload> getDownloads() {
+    public Collection<? extends AbstractDownload> getDownloads() {
         return downloads;
     }
 
     @Override
     public void update(final Observable o, final Object arg) {
-        if (!(o instanceof SingleDownload)) {
+        if (!(o instanceof AbstractDownload)) {
             return;
         }
 
-        final SingleDownload download = (SingleDownload)o;
+        final AbstractDownload download = (AbstractDownload)o;
 
         synchronized (this) {
             if ((download.getStatus() == State.RUNNING) && (status == State.WAITING)) {

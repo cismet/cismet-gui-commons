@@ -35,8 +35,7 @@ import de.cismet.tools.CismetThreadPool;
 
 /**
  * The objects of this class represent downloads. This class encompasses several default methods which should be the
- * same for most download which care about single files. The 'log' field has to be instantiated in the constructor of a
- * subclass.
+ * same for most download which care about single files.
  *
  * @author   jweintraut
  * @version  $Revision$, $Date$
@@ -51,7 +50,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
     protected String title;
     protected boolean started = false;
     protected Exception caughtException;
-    protected Logger log;
+    protected final Logger log = Logger.getLogger(this.getClass());
 
     //~ Methods ----------------------------------------------------------------
 

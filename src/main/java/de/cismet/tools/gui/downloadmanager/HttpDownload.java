@@ -78,7 +78,6 @@ public class HttpDownload extends AbstractDownload {
             final String title,
             final String filename,
             final String extension) {
-        this.log = Logger.getLogger(HttpDownload.class);
         this.url = url;
         this.request = request;
         this.directory = directory;

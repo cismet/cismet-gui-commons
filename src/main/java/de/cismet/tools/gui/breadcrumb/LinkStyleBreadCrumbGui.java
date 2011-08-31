@@ -5,15 +5,6 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-/*
- * LinkStyleBreadCrumbGui.java
- *
- * Created on 09.11.2009, 11:45:16
- */
 package de.cismet.tools.gui.breadcrumb;
 
 import org.jdesktop.swingx.JXHyperlink;
@@ -29,17 +20,15 @@ import javax.swing.JLabel;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class LinkStyleBreadCrumbGui extends javax.swing.JPanel {
+public final class LinkStyleBreadCrumbGui extends javax.swing.JPanel {
 
     //~ Instance fields --------------------------------------------------------
 
-    JXHyperlink first = null;
+    private final transient ImageIcon arrow;
 
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    private BreadCrumbModel breadCrumbModel = new DefaultBreadCrumbModel();
-    private ImageIcon arrow = new javax.swing.ImageIcon(getClass().getResource(
-                "/de/cismet/tools/gui/res/arrowRight.png")); // NOI18N
-    private boolean showFirstCrumbAlone = false;
+    private transient JXHyperlink first;
+    private transient BreadCrumbModel breadCrumbModel;
+    private transient boolean showFirstCrumbAlone;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -47,7 +36,7 @@ public class LinkStyleBreadCrumbGui extends javax.swing.JPanel {
      * Creates new form LinkStyleBreadCrumbGui.
      */
     public LinkStyleBreadCrumbGui() {
-        initComponents();
+        this(new DefaultBreadCrumbModel());
     }
 
     /**
@@ -56,7 +45,12 @@ public class LinkStyleBreadCrumbGui extends javax.swing.JPanel {
      * @param  breadCrumbModel  DOCUMENT ME!
      */
     public LinkStyleBreadCrumbGui(final BreadCrumbModel breadCrumbModel) {
-        this();
+        initComponents();
+
+        arrow = new ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/arrowRight.png")); // NOI18N
+        showFirstCrumbAlone = false;
+        first = null;
+
         setBreadCrumbModel(breadCrumbModel);
     }
 

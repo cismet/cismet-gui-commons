@@ -5,16 +5,14 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.cismet.tools.gui.breadcrumb;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.util.Vector;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -29,7 +27,7 @@ public abstract class BreadCrumb extends AbstractAction {
 
     //~ Instance fields --------------------------------------------------------
 
-    private Vector<ActionListener> listeners = new Vector<ActionListener>();
+    private final transient Set<ActionListener> listeners;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -39,7 +37,7 @@ public abstract class BreadCrumb extends AbstractAction {
      * @param  name  DOCUMENT ME!
      */
     public BreadCrumb(final String name) {
-        super(name);
+        this(name, null);
     }
 
     /**
@@ -50,6 +48,8 @@ public abstract class BreadCrumb extends AbstractAction {
      */
     public BreadCrumb(final String name, final Icon icon) {
         super(name, icon);
+
+        listeners = new HashSet<ActionListener>();
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -87,7 +87,9 @@ public abstract class BreadCrumb extends AbstractAction {
      * @param  al  DOCUMENT ME!
      */
     public void addActionListener(final ActionListener al) {
-        listeners.add(al);
+        synchronized (listeners) {
+            listeners.add(al);
+        }
     }
     /**
      * DOCUMENT ME!
@@ -95,7 +97,9 @@ public abstract class BreadCrumb extends AbstractAction {
      * @param  al  DOCUMENT ME!
      */
     public void removeActionListener(final ActionListener al) {
-        listeners.remove(al);
+        synchronized (listeners) {
+            listeners.remove(al);
+        }
     }
     /**
      * DOCUMENT ME!
@@ -103,8 +107,13 @@ public abstract class BreadCrumb extends AbstractAction {
      * @param  e  DOCUMENT ME!
      */
     public void fireActionPerformed(final ActionEvent e) {
-        for (final ActionListener al : listeners) {
-            al.actionPerformed(e);
+        final Iterator<ActionListener> it;
+        synchronized (listeners) {
+            it = new HashSet<ActionListener>(listeners).iterator();
+        }
+
+        while (it.hasNext()) {
+            it.next().actionPerformed(e);
         }
     }
 }

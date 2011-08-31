@@ -5,17 +5,16 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.cismet.tools.gui.breadcrumb;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+import java.util.Set;
 
 /**
  * DOCUMENT ME!
@@ -27,15 +26,20 @@ public class DefaultBreadCrumbModel implements BreadCrumbModel {
 
     //~ Instance fields --------------------------------------------------------
 
-    private Vector<BreadCrumbModelListener> listeners = new Vector<BreadCrumbModelListener>();
-    private Vector<BreadCrumb> data = new Vector<BreadCrumb>();
+    private final transient Set<BreadCrumbModelListener> listeners;
+    private final transient List<BreadCrumb> data;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new DefaultBreadCrumbModel object.
+     */
+    public DefaultBreadCrumbModel() {
+        listeners = new HashSet<BreadCrumbModelListener>();
+        data = new ArrayList<BreadCrumb>();
+    }
 
     //~ Methods ----------------------------------------------------------------
-
-    @Override
-    public void addBreadCrumbModelListener(final BreadCrumbModelListener bcListener) {
-        listeners.add(bcListener);
-    }
 
     @Override
     public void appendCrumb(final BreadCrumb bc) {
@@ -62,7 +66,7 @@ public class DefaultBreadCrumbModel implements BreadCrumbModel {
 
     @Override
     public List<BreadCrumb> getAllCrumbs() {
-        return new Vector<BreadCrumb>(data);
+        return new ArrayList<BreadCrumb>(data);
     }
 
     @Override
@@ -82,22 +86,17 @@ public class DefaultBreadCrumbModel implements BreadCrumbModel {
 
     @Override
     public BreadCrumb getLastCrumb() {
-        return data.lastElement();
+        return data.get(data.size() - 1);
     }
 
     @Override
     public BreadCrumb getFirstCrumb() {
-        return data.firstElement();
+        return data.get(0);
     }
 
     @Override
     public void clear() {
         data.clear();
-    }
-
-    @Override
-    public void removeBreadCrumbModelListener(final BreadCrumbModelListener bcListener) {
-        listeners.remove(bcListener);
     }
 
     @Override
@@ -113,9 +112,23 @@ public class DefaultBreadCrumbModel implements BreadCrumbModel {
 
     @Override
     public void startWithNewCrumb(final BreadCrumb bc) {
-        data = new Vector<BreadCrumb>();
+        data.clear();
         appendCrumbSilently(bc);
         fireBreadCrumbModelChanged(new BreadCrumbEvent(this));
+    }
+
+    @Override
+    public void addBreadCrumbModelListener(final BreadCrumbModelListener bcListener) {
+        synchronized (listeners) {
+            listeners.add(bcListener);
+        }
+    }
+
+    @Override
+    public void removeBreadCrumbModelListener(final BreadCrumbModelListener bcListener) {
+        synchronized (listeners) {
+            listeners.remove(bcListener);
+        }
     }
 
     /**
@@ -124,8 +137,13 @@ public class DefaultBreadCrumbModel implements BreadCrumbModel {
      * @param  bce  DOCUMENT ME!
      */
     public void fireBreadCrumbModelChanged(final BreadCrumbEvent bce) {
-        for (final BreadCrumbModelListener listener : new Vector<BreadCrumbModelListener>(listeners)) {
-            listener.breadCrumbModelChanged(bce);
+        final Iterator<BreadCrumbModelListener> it;
+        synchronized (listeners) {
+            it = new HashSet<BreadCrumbModelListener>(listeners).iterator();
+        }
+
+        while (it.hasNext()) {
+            it.next().breadCrumbModelChanged(bce);
         }
     }
 
@@ -135,8 +153,13 @@ public class DefaultBreadCrumbModel implements BreadCrumbModel {
      * @param  bce  DOCUMENT ME!
      */
     public void fireBreadCrumbAdded(final BreadCrumbEvent bce) {
-        for (final BreadCrumbModelListener listener : new Vector<BreadCrumbModelListener>(listeners)) {
-            listener.breadCrumbAdded(bce);
+        final Iterator<BreadCrumbModelListener> it;
+        synchronized (listeners) {
+            it = new HashSet<BreadCrumbModelListener>(listeners).iterator();
+        }
+
+        while (it.hasNext()) {
+            it.next().breadCrumbAdded(bce);
         }
     }
 
@@ -146,8 +169,13 @@ public class DefaultBreadCrumbModel implements BreadCrumbModel {
      * @param  bce  DOCUMENT ME!
      */
     public void fireBreadCrumbActionPerformed(final BreadCrumbEvent bce) {
-        for (final BreadCrumbModelListener listener : new Vector<BreadCrumbModelListener>(listeners)) {
-            listener.breadCrumbActionPerformed(bce);
+        final Iterator<BreadCrumbModelListener> it;
+        synchronized (listeners) {
+            it = new HashSet<BreadCrumbModelListener>(listeners).iterator();
+        }
+
+        while (it.hasNext()) {
+            it.next().breadCrumbActionPerformed(bce);
         }
     }
 }

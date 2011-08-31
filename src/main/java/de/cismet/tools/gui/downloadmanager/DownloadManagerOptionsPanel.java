@@ -364,8 +364,14 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
      * @param  evt  The event.
      */
     private void jhlDownloadDestinationActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jhlDownloadDestinationActionPerformed
+        final File directory = new File(jhlDownloadDestination.getText());
+
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
         BrowserLauncher.openURLorFile(jhlDownloadDestination.getText());
-    }                                                                                          //GEN-LAST:event_jhlDownloadDestinationActionPerformed
+    } //GEN-LAST:event_jhlDownloadDestinationActionPerformed
 
     @Override
     public void update() {

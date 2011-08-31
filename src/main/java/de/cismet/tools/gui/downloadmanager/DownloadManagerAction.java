@@ -48,6 +48,9 @@ public class DownloadManagerAction extends AbstractAction {
         putValue(
             SHORT_DESCRIPTION,
             NbBundle.getMessage(DownloadManagerAction.class, "DownloadManagerAction.tooltiptext"));
+        putValue(
+            ACTION_COMMAND_KEY,
+            NbBundle.getMessage(DownloadManagerAction.class, "DownloadManagerAction.actionCommandKey"));
         putValue(NAME, NbBundle.getMessage(DownloadManagerAction.class, "DownloadManagerAction.name"));
     }
 

@@ -53,9 +53,10 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     private static boolean openAutomatically = true;
     private static boolean closeAutomatically = true;
     private static String jobname = "";
-    private static boolean isJobnameConfirmed = true;
 
     //~ Instance fields --------------------------------------------------------
+
+    private boolean isJobnameConfirmed = true;
 
     private Collection<Download> downloadsToOpen = new LinkedList<Download>();
 
@@ -159,20 +160,24 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     public static boolean showAskingForUserTitle(final Frame parent) {
         final boolean close = (instance == null);
         show(parent);
+        boolean result = instance.isJobnameConfirmed;
 
         if (askForJobname) {
             instance.txtJobname.setText(jobname);
+            instance.txtJobname.setCaretPosition(jobname.length());
             instance.dlgJobname.setPreferredSize(instance.dlgJobname.getMinimumSize());
             instance.dlgJobname.setLocationRelativeTo(parent);
             instance.dlgJobname.pack();
             instance.dlgJobname.setVisible(true);
 
-            if (!isJobnameConfirmed && close) {
+            result = instance.isJobnameConfirmed;
+
+            if (!instance.isJobnameConfirmed && close) {
                 close();
             }
         }
 
-        return isJobnameConfirmed;
+        return result;
     }
 
     /**

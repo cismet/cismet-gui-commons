@@ -78,7 +78,6 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
     private javax.swing.ButtonGroup rgrCloseAutomatically;
     private javax.swing.ButtonGroup rgrOpenAutomatically;
     private javax.swing.JSpinner spnParallelDownloads;
-    private javax.swing.JTextField txtJobname;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -110,7 +109,6 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         jhlDownloadDestination = new org.jdesktop.swingx.JXHyperlink();
         btnChangeDownloadDestination = new javax.swing.JButton();
         lblJobname = new javax.swing.JLabel();
-        txtJobname = new javax.swing.JTextField();
         chkAskForJobname = new javax.swing.JCheckBox();
         lblOpenAutomatically = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
@@ -190,18 +188,6 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
         add(lblJobname, gridBagConstraints);
 
-        txtJobname.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.txtJobname.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
-        add(txtJobname, gridBagConstraints);
-
         chkAskForJobname.setSelected(true);
         chkAskForJobname.setText(org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
@@ -209,12 +195,12 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         chkAskForJobname.setFocusPainted(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 3, 5);
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(chkAskForJobname, gridBagConstraints);
 
         lblOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(
@@ -222,20 +208,20 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
                 "DownloadManagerOptionsPanel.lblOpenAutomatically.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
         add(lblOpenAutomatically, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 7;
+        gridBagConstraints.gridheight = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
         add(filler1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -273,7 +259,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
@@ -284,7 +270,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
                 "DownloadManagerOptionsPanel.lblCloseAutomatically.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
         add(lblCloseAutomatically, gridBagConstraints);
@@ -294,14 +280,14 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
                 "DownloadManagerOptionsPanel.lblParallelDownloads.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
         add(lblParallelDownloads, gridBagConstraints);
 
         spnParallelDownloads.setModel(new javax.swing.SpinnerNumberModel(2, 1, 50, 1));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
@@ -336,7 +322,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
@@ -384,7 +370,6 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         parallelDownloads = DownloadManager.instance().getParallelDownloads();
 
         jhlDownloadDestination.setText(downloadDestination.getAbsolutePath());
-        txtJobname.setText(jobname);
         chkAskForJobname.setSelected(askForJobtitle);
         rdoOpenAutomatically.setSelected(openAutomatically);
         rdoCloseAutomatically.setSelected(closeAutomatically);
@@ -395,11 +380,14 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
     @Override
     public void applyChanges() {
         downloadDestinationChanged = false;
-        jobname = txtJobname.getText();
         askForJobtitle = chkAskForJobname.isSelected();
         openAutomatically = rdoOpenAutomatically.isSelected();
         closeAutomatically = rdoCloseAutomatically.isSelected();
         parallelDownloads = (Integer)spnParallelDownloads.getValue();
+
+        if (!askForJobtitle) {
+            jobname = "";
+        }
 
         DownloadManager.instance().setDestinationDirectory(downloadDestination);
         DownloadManagerDialog.setJobname(jobname);
@@ -415,7 +403,6 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
 
         if (jobname != null) {
             result = downloadDestinationChanged
-                        || (!jobname.equals(txtJobname.getText()))
                         || (!askForJobtitle == chkAskForJobname.isSelected())
                         || (!openAutomatically == rdoOpenAutomatically.isSelected())
                         || (!closeAutomatically == rdoCloseAutomatically.isSelected())

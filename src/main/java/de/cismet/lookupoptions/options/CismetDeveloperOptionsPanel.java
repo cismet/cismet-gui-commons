@@ -105,6 +105,13 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
         jPasswordField1.setText(org.openide.util.NbBundle.getMessage(
                 CismetDeveloperOptionsPanel.class,
                 "CismetDeveloperOptionsPanel.jPasswordField1.text")); // NOI18N
+        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jPasswordField1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -189,4 +196,13 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
         final Console console = new Console();
         console.run();
     }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jPasswordField1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jPasswordField1ActionPerformed
+// TODO add your handling code here:
+    } //GEN-LAST:event_jPasswordField1ActionPerformed
 }

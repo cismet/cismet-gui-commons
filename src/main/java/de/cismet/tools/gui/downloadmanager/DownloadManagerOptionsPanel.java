@@ -371,8 +371,9 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
 
         jhlDownloadDestination.setText(downloadDestination.getAbsolutePath());
         chkAskForJobname.setSelected(askForJobtitle);
-        rdoOpenAutomatically.setSelected(openAutomatically);
         rdoCloseAutomatically.setSelected(closeAutomatically);
+        rdoDontCloseAutomatically.setSelected(!closeAutomatically);
+        rdoOpenAutomatically.setSelected(openAutomatically);
         rdoDontOpenAutomatically.setSelected(!openAutomatically);
         spnParallelDownloads.setValue(parallelDownloads);
     }

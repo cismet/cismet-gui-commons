@@ -14,9 +14,14 @@ package de.cismet.lookupoptions.options;
 
 import groovy.ui.Console;
 
+import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.awt.CardLayout;
+
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
@@ -37,9 +42,14 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
     private static final String OPTION_NAME = org.openide.util.NbBundle.getMessage(
             ProxyOptionsPanel.class,
             "CismetDeveloperOptionsPanel.OptionController.name");
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField1;
@@ -76,6 +86,7 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
         panUnlocked = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setLayout(new java.awt.CardLayout());
 
@@ -146,22 +157,43 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
                 }
             });
 
+        jButton3.setText(org.openide.util.NbBundle.getMessage(
+                CismetDeveloperOptionsPanel.class,
+                "CismetDeveloperOptionsPanel.jButton3.text")); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
+
         final org.jdesktop.layout.GroupLayout panUnlockedLayout = new org.jdesktop.layout.GroupLayout(panUnlocked);
         panUnlocked.setLayout(panUnlockedLayout);
         panUnlockedLayout.setHorizontalGroup(
             panUnlockedLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
                 org.jdesktop.layout.GroupLayout.TRAILING,
-                panUnlockedLayout.createSequentialGroup().addContainerGap(232, Short.MAX_VALUE).add(jButton1)
+                panUnlockedLayout.createSequentialGroup().addContainerGap(339, Short.MAX_VALUE).add(jButton1)
                             .addContainerGap()).add(
-                panUnlockedLayout.createSequentialGroup().addContainerGap().add(jButton2).addContainerGap(
-                    168,
-                    Short.MAX_VALUE)));
+                panUnlockedLayout.createSequentialGroup().addContainerGap().add(
+                    panUnlockedLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false).add(
+                        org.jdesktop.layout.GroupLayout.LEADING,
+                        jButton3,
+                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                        Short.MAX_VALUE).add(
+                        org.jdesktop.layout.GroupLayout.LEADING,
+                        jButton2,
+                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                        Short.MAX_VALUE)).addContainerGap(275, Short.MAX_VALUE)));
         panUnlockedLayout.setVerticalGroup(
             panUnlockedLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
                 org.jdesktop.layout.GroupLayout.TRAILING,
                 panUnlockedLayout.createSequentialGroup().addContainerGap().add(jButton2).addPreferredGap(
+                    org.jdesktop.layout.LayoutStyle.RELATED).add(jButton3).addPreferredGap(
                     org.jdesktop.layout.LayoutStyle.RELATED,
-                    284,
+                    251,
                     Short.MAX_VALUE).add(jButton1).addContainerGap()));
 
         add(panUnlocked, "Unlocked");
@@ -194,8 +226,14 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
      */
     private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         final Console console = new Console();
-        console.run();
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+        new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    console.run();
+                }
+            }).start();
+    } //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -205,4 +243,13 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
     private void jPasswordField1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jPasswordField1ActionPerformed
 // TODO add your handling code here:
     } //GEN-LAST:event_jPasswordField1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+        de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig.getSingletonInstance().setVisible(true);
+    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 }

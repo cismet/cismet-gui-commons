@@ -129,7 +129,7 @@ public class WebAccessManagerUserAgent extends NaiveUserAgent {
      */
     private Reader resolveAndOpenEncodedStream(final String uri) {
         Reader result = null;
-        String encoding = "UTF-8";
+        String encoding = null;
         final BufferedReader reader = new BufferedReader(new InputStreamReader(resolveAndOpenStream(uri)));
         Matcher matcher = null;
         String line = null;
@@ -161,15 +161,6 @@ public class WebAccessManagerUserAgent extends NaiveUserAgent {
             LOG.error("Error opening a reader on URI '" + uri + "' with unsupported encoding '" + encoding + "'.", ex);
         }
 
-        return result;
-    }
-
-    @Override
-    public byte[] getBinaryResource(final String uri) {
-        final long before = System.currentTimeMillis();
-        final byte[] result = super.getBinaryResource(uri);
-        final long after = System.currentTimeMillis();
-        System.out.println("load time for binary resource ('" + uri + "'): " + (after - before));
         return result;
     }
 }

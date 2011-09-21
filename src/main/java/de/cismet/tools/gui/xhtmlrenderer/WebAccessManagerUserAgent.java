@@ -23,8 +23,6 @@
  */
 package de.cismet.tools.gui.xhtmlrenderer;
 
-import org.xhtmlrenderer.resource.CSSResource;
-import org.xhtmlrenderer.resource.ImageResource;
 import org.xhtmlrenderer.resource.XMLResource;
 import org.xhtmlrenderer.swing.NaiveUserAgent;
 
@@ -172,24 +170,6 @@ public class WebAccessManagerUserAgent extends NaiveUserAgent {
         final byte[] result = super.getBinaryResource(uri);
         final long after = System.currentTimeMillis();
         System.out.println("load time for binary resource ('" + uri + "'): " + (after - before));
-        return result;
-    }
-
-    @Override
-    public CSSResource getCSSResource(final String uri) {
-        final long before = System.currentTimeMillis();
-        final CSSResource result = super.getCSSResource(uri);
-        final long after = System.currentTimeMillis();
-        System.out.println("load time for css resource ('" + uri + "'): " + (after - before));
-        return result;
-    }
-
-    @Override
-    public ImageResource getImageResource(final String uri) {
-        final long before = System.currentTimeMillis();
-        final ImageResource result = super.getImageResource(uri);
-        final long after = System.currentTimeMillis();
-        System.out.println("load time for image resource ('" + uri + "'): " + (after - before));
         return result;
     }
 }

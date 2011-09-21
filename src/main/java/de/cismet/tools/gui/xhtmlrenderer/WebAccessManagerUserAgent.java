@@ -23,6 +23,8 @@
  */
 package de.cismet.tools.gui.xhtmlrenderer;
 
+import org.xhtmlrenderer.resource.CSSResource;
+import org.xhtmlrenderer.resource.ImageResource;
 import org.xhtmlrenderer.resource.XMLResource;
 import org.xhtmlrenderer.swing.NaiveUserAgent;
 
@@ -129,7 +131,7 @@ public class WebAccessManagerUserAgent extends NaiveUserAgent {
      */
     private Reader resolveAndOpenEncodedStream(final String uri) {
         Reader result = null;
-        String encoding = null;
+        String encoding = "UTF-8";
         final BufferedReader reader = new BufferedReader(new InputStreamReader(resolveAndOpenStream(uri)));
         Matcher matcher = null;
         String line = null;
@@ -161,6 +163,33 @@ public class WebAccessManagerUserAgent extends NaiveUserAgent {
             LOG.error("Error opening a reader on URI '" + uri + "' with unsupported encoding '" + encoding + "'.", ex);
         }
 
+        return result;
+    }
+
+    @Override
+    public byte[] getBinaryResource(final String uri) {
+        final long before = System.currentTimeMillis();
+        final byte[] result = super.getBinaryResource(uri);
+        final long after = System.currentTimeMillis();
+        System.out.println("load time for binary resource ('" + uri + "'): " + (after - before));
+        return result;
+    }
+
+    @Override
+    public CSSResource getCSSResource(final String uri) {
+        final long before = System.currentTimeMillis();
+        final CSSResource result = super.getCSSResource(uri);
+        final long after = System.currentTimeMillis();
+        System.out.println("load time for css resource ('" + uri + "'): " + (after - before));
+        return result;
+    }
+
+    @Override
+    public ImageResource getImageResource(final String uri) {
+        final long before = System.currentTimeMillis();
+        final ImageResource result = super.getImageResource(uri);
+        final long after = System.currentTimeMillis();
+        System.out.println("load time for image resource ('" + uri + "'): " + (after - before));
         return result;
     }
 }

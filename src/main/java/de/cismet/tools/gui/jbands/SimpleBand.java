@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import de.cismet.tools.gui.jbands.interfaces.Band;
 import de.cismet.tools.gui.jbands.interfaces.BandMember;
 import de.cismet.tools.gui.jbands.interfaces.BandPrefixProvider;
+import de.cismet.tools.gui.jbands.interfaces.BandWeightProvider;
 
 /**
  * DOCUMENT ME!
@@ -22,7 +23,7 @@ import de.cismet.tools.gui.jbands.interfaces.BandPrefixProvider;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class SimpleBand implements Band, BandPrefixProvider {
+public class SimpleBand implements Band, BandPrefixProvider, BandWeightProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -36,6 +37,7 @@ public class SimpleBand implements Band, BandPrefixProvider {
     JLabel prefix = new JLabel();
     private Double min = null;
     private Double max = null;
+    private float bandWeight;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -98,5 +100,19 @@ public class SimpleBand implements Band, BandPrefixProvider {
     public JComponent getPrefixComponent() {
         prefix.setText("SimpleBand: " + getMin() + " --> " + getMax());
         return prefix;
+    }
+
+    @Override
+    public float getBandWeight() {
+        return bandWeight;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bandweight  DOCUMENT ME!
+     */
+    public void setBandWeight(final float bandweight) {
+        this.bandWeight = bandweight;
     }
 }

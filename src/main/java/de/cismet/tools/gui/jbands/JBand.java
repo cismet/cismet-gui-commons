@@ -677,6 +677,10 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         private boolean measurementEnabled = false;
         private int measurementx = 0;
 
+        private Color MIDDLE=new Color(50, 50, 50, 150);
+        private Color SIDE=new Color(250,250,250, 150);
+        private Color SIDER=new Color(220,220,220, 50);
+        
         //~ Constructors -------------------------------------------------------
 
         /**
@@ -763,6 +767,13 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             super.paintChildren(g);
             if (measurementEnabled) {
                 final Graphics2D g2d = (Graphics2D)g;
+                g.setColor(SIDER);
+                g.drawLine(measurementx-2, 0, measurementx-2, getHeight());
+                g.drawLine(measurementx+2, 0, measurementx+2, getHeight());
+                g.setColor(SIDE);
+                g.drawLine(measurementx-1, 0, measurementx-1, getHeight());
+                g.drawLine(measurementx+1, 0, measurementx+1, getHeight());
+                g.setColor(MIDDLE);
                 g.drawLine(measurementx, 0, measurementx, getHeight());
             }
         }

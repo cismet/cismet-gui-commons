@@ -17,6 +17,8 @@ import groovy.inspect.swingui.ObjectBrowser;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
+import groovy.ui.Console;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
@@ -29,7 +31,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 
-import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.javakit.JavaContext;
 import de.cismet.tools.gui.javakit.JavaEditorKit;
 import de.cismet.tools.gui.javakit.Token;
@@ -98,8 +99,8 @@ public class GroovierConsole extends javax.swing.JPanel {
         System.setOut(gsOut);
         System.setErr(gsErr);
         shell = new GroovyShell(binding);
-        StaticSwingTools.setNiftyScrollBars(scpOutput);
-        StaticSwingTools.setNiftyScrollBars(scpEditor);
+//        StaticSwingTools.setNiftyScrollBars(scpOutput);
+//        StaticSwingTools.setNiftyScrollBars(scpEditor);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -182,6 +183,7 @@ public class GroovierConsole extends javax.swing.JPanel {
                 422,
                 Short.MAX_VALUE));
     } // </editor-fold>//GEN-END:initComponents
+
     /**
      * DOCUMENT ME!
      *
@@ -218,6 +220,22 @@ public class GroovierConsole extends javax.swing.JPanel {
      */
     public void setVariable(final String key, final Object variable) {
         binding.setVariable(key, variable);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  args  DOCUMENT ME!
+     */
+    public static void main(final String[] args) {
+        try {
+            final Console console = new Console();
+            console.setVariable("var1", 99);
+            console.setVariable("var2", "Hühnersuppe");
+            console.run();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
     }
 
     //~ Inner Classes ----------------------------------------------------------

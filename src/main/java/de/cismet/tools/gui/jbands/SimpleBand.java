@@ -23,7 +23,7 @@ import de.cismet.tools.gui.jbands.interfaces.BandWeightProvider;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class SimpleBand implements Band, BandPrefixProvider, BandWeightProvider {
+public class SimpleBand implements Band, BandPrefixProvider {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -102,17 +102,17 @@ public class SimpleBand implements Band, BandPrefixProvider, BandWeightProvider 
         return prefix;
     }
 
-    @Override
-    public float getBandWeight() {
-        return bandWeight;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  bandweight  DOCUMENT ME!
-     */
-    public void setBandWeight(final float bandweight) {
-        this.bandWeight = bandweight;
-    }
+//    @Override
+//    public float getBandWeight() {
+//        return bandWeight;
+//    }
+//
+//    /**
+//     * DOCUMENT ME!
+//     *
+//     * @param  bandweight  DOCUMENT ME!
+//     */
+//    public void setBandWeight(final float bandweight) {
+//        this.bandWeight = bandweight;
+//    }
 }

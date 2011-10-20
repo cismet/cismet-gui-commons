@@ -9,7 +9,10 @@ package de.cismet.tools.gui.jbands;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,11 +33,13 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.cismet.tools.gui.jbands.interfaces.Band;
+import de.cismet.tools.gui.jbands.interfaces.BandAbsoluteHeightProvider;
 import de.cismet.tools.gui.jbands.interfaces.BandMember;
 import de.cismet.tools.gui.jbands.interfaces.BandMemberActionProvider;
 import de.cismet.tools.gui.jbands.interfaces.BandMemberMouseListeningComponent;
 import de.cismet.tools.gui.jbands.interfaces.BandMemberSelectable;
 import de.cismet.tools.gui.jbands.interfaces.BandModel;
+import de.cismet.tools.gui.jbands.interfaces.BandModelListener;
 import de.cismet.tools.gui.jbands.interfaces.BandPrefixProvider;
 import de.cismet.tools.gui.jbands.interfaces.BandWeightProvider;
 import de.cismet.tools.gui.jbands.interfaces.Section;
@@ -46,7 +51,7 @@ import de.cismet.tools.gui.jbands.interfaces.Spot;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class JBand extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
+public class JBand extends JPanel implements ActionListener, MouseListener, MouseMotionListener, BandModelListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -56,30 +61,10 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
 
     HashMap<JComponent, BandMember> bandMembersViaComponents = new HashMap<JComponent, BandMember>();
     HashMap<BandMember, JComponent> componentsViaBandMembers = new HashMap<BandMember, JComponent>();
-    private int maxPreferredPrefixWidth = 0;
-    JPanel bandsPanel = new JPanel(null) {
-
-            @Override
-            public Dimension getPreferredSize() {
-                final Dimension d = super.getPreferredSize();
-                return new Dimension((int)(scrollPane.getWidth() * 0.9 * zoomFactor), d.height);
-            }
-
-            @Override
-            public void setSize(final int width, final int height) {
-                super.setSize(width, height);
-                layoutBandMemberComponents();
-            }
-
-            @Override
-            public void setSize(final Dimension d) {
-                setSize(d.width, d.height);
-                layoutBandMemberComponents();
-            }
-        };
-
+    JBandsPanel bandsPanel = new JBandsPanel();
     ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
     BandMember selectedBandMember = null;
+    private int maxPreferredPrefixWidth = 0;
     private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private BandModel model;
     private double zoomFactor = 1.0;
@@ -101,6 +86,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         add(scrollPane, BorderLayout.CENTER);
         setOpaque(false);
         bandsPanel.setOpaque(false);
+        bandsPanel.addMouseMotionListener(this);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -173,6 +159,8 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             final Band b = model.getBand(zeile);
             if (b instanceof BandWeightProvider) {
                 heightWeights[zeile] = ((BandWeightProvider)b).getBandWeight();
+            } else if (b instanceof BandAbsoluteHeightProvider) {
+                heightWeights[zeile] = 0f;
             } else {
                 heightWeights[zeile] = 1f;
             }
@@ -192,6 +180,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
 
         layoutBandMemberComponents();
     }
+
     /**
      * DOCUMENT ME!
      */
@@ -202,10 +191,28 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
 
         int posy = 0;
 
+        int remainingBandsPanelHeight = bandsPanel.getHeight();
+
+        for (int zeile = 0; zeile < model.getNumberOfBands(); ++zeile) {
+            final Band rowBand = model.getBand(zeile);
+            if (rowBand instanceof BandAbsoluteHeightProvider) {
+                remainingBandsPanelHeight -= ((BandAbsoluteHeightProvider)rowBand).getAbsoluteHeight();
+            }
+            if (remainingBandsPanelHeight < 0) {
+                // TODO
+            }
+        }
+
         // prefixes
         for (int zeile = 0; zeile < model.getNumberOfBands(); ++zeile) {
             final Band rowBand = model.getBand(zeile);
-            final int memberHeight = (int)(((double)bandsPanel.getHeight()) * heightWeights[zeile] / heightsWeightSum);
+
+            int memberHeight;
+            if ((heightWeights[zeile] == 0) && (rowBand instanceof BandAbsoluteHeightProvider)) {
+                memberHeight = ((BandAbsoluteHeightProvider)rowBand).getAbsoluteHeight();
+            } else {
+                memberHeight = (int)(((double)remainingBandsPanelHeight) * heightWeights[zeile] / heightsWeightSum);
+            }
 
             if (rowBand instanceof BandPrefixProvider) {
                 final JComponent prefix = ((BandPrefixProvider)rowBand).getPrefixComponent();
@@ -218,19 +225,23 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         // BandMember
         posy = 0;
         for (int zeile = 0; zeile < model.getNumberOfBands(); ++zeile) {
-            final Band b = model.getBand(zeile);
-            int memberHeight = (int)(((double)bandsPanel.getHeight()) * heightWeights[zeile] / heightsWeightSum);
-
+            final Band rowBand = model.getBand(zeile);
+            int memberHeight;
+            if ((heightWeights[zeile] == 0) && (rowBand instanceof BandAbsoluteHeightProvider)) {
+                memberHeight = ((BandAbsoluteHeightProvider)rowBand).getAbsoluteHeight();
+            } else {
+                memberHeight = (int)(((double)remainingBandsPanelHeight) * heightWeights[zeile] / heightsWeightSum);
+            }
             final ArrayList<ArrayList<BandMember>> subBands = new ArrayList<ArrayList<BandMember>>();
             final ArrayList<BandMember> masterBand = new ArrayList<BandMember>();
-            for (int i = 0; i < b.getNumberOfMembers(); ++i) {
-                masterBand.add(b.getMember(i));
+            for (int i = 0; i < rowBand.getNumberOfMembers(); ++i) {
+                masterBand.add(rowBand.getMember(i));
             }
 
-            for (int i = 0; i < b.getNumberOfMembers(); ++i) {
-                for (int j = i; j < b.getNumberOfMembers(); ++j) {
-                    final BandMember bi = b.getMember(i);
-                    final BandMember bj = b.getMember(j);
+            for (int i = 0; i < rowBand.getNumberOfMembers(); ++i) {
+                for (int j = i; j < rowBand.getNumberOfMembers(); ++j) {
+                    final BandMember bi = rowBand.getMember(i);
+                    final BandMember bj = rowBand.getMember(j);
                     if ((i != j) && masterBand.contains(bi) && masterBand.contains(bj)) {
                         if (isColliding(bi, bj)) {
                             masterBand.remove(bj);
@@ -293,7 +304,9 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @return  DOCUMENT ME!
      */
     private boolean isColliding(final BandMember a, final BandMember b) {
-        if ((a instanceof Spot) || (b instanceof Spot)) {
+        if ((a instanceof Section) && (b instanceof Section)) {
+            return (!((a.getMax() <= b.getMin()) || (a.getMin() >= b.getMax())));
+        } else if ((a instanceof Spot) || (b instanceof Spot)) {
             // dummy werte
             final int memberHeight = 10;
             final int posy = 10;
@@ -304,8 +317,6 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             final int rjmax = rj.x + rj.width;
             final int rjmin = rj.x;
             return (!((rimax <= rjmin) || (rimin >= rjmax)));
-        } else if ((a instanceof Section) && (b instanceof Section)) {
-            return (!((a.getMax() <= b.getMin()) || (a.getMin() >= b.getMax())));
         }
         assert (false);
         return false;
@@ -455,6 +466,25 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
 
     @Override
     public void mouseMoved(final MouseEvent e) {
+        if (e.isShiftDown()) {
+            final Component source = e.getComponent();
+            int x = 0;
+            if (source == bandsPanel) {
+                x = e.getX();
+            } else {
+                x = (int)source.getBounds().getX() + e.getX();
+            }
+            if (!bandsPanel.isMeasurementEnabled()) {
+                bandsPanel.setMeasurementEnabled(true);
+            }
+            bandsPanel.setMeasurementx(x);
+
+//            System.out.println("x"+first.getBounds());
+        } else {
+            if (bandsPanel.isMeasurementEnabled()) {
+                bandsPanel.setMeasurementEnabled(false);
+            }
+        }
         if (e.getComponent() instanceof BandMemberMouseListeningComponent) {
             ((BandMemberMouseListeningComponent)e.getComponent()).mouseMoved(e);
         }
@@ -463,6 +493,11 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
     @Override
     public void actionPerformed(final ActionEvent e) {
         // reagieren auf ActionEvents von BandMembern
+    }
+
+    @Override
+    public void bandModelChanged(final BandModelEvent e) {
+        init();
     }
 
     /**
@@ -477,13 +512,13 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
 
         final JBand jbdTest = new JBand();
 
-        final SimpleBand sb0 = new SimpleBand();
+        final MinimumHeightBand sb0 = new MinimumHeightBand("Titel");
 
         sb0.addMember(new SimpleTextSection("OTOL-800", 0, 300, true, false));
         sb0.addMember(new SimpleTextSection("OTOL-8700", 300, 500, false, false));
         sb0.addMember(new SimpleTextSection("OTOL-900", 500, 1010, false, true));
 
-        final SimpleBand sb1 = new SimpleBand();
+        final DefaultBand sb1 = new DefaultBand("Das erste richtige");
         sb1.addMember(new SimpleSection(0, 10));
         int from = 10;
         int to = 20;
@@ -562,7 +597,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         sb3.addMember(new SimpleSection(0, 50));
         sb3.addMember(new SimpleSection(50, 300));
         sb3.addMember(new SimpleSection(300, 1010));
-        final SimpleBand sb4 = new SimpleBand();
+        final SimpleBand sb4 = new SimpleBand("Punkte .......");
 
         sb4.addMember(new SimpleSpot(100));
 
@@ -574,17 +609,32 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
 
         sb4.addMember(new SimpleSpot(500));
 
+        final SimpleBand sb4a = new SimpleBand("auch");
+
+        sb4a.addMember(new SimpleSection(100, 100));
+
+        sb4a.addMember(new SimpleSection(110, 110));
+
+        sb4a.addMember(new SimpleSection(300, 300));
+
+        sb4a.addMember(new SimpleSection(400, 400));
+
+        sb4a.addMember(new SimpleSection(500, 500));
+
         final SimpleBandModel sbm = new SimpleBandModel();
         sbm.addBand(sb0);
         sbm.addBand(sb1);
-        sbm.addBand(new SimpleBand());
+        // sbm.addBand(new EmptyWeightedBand(2f));
+        sbm.addBand(new EmptyAbsoluteHeightedBand(1));
         sbm.addBand(sb2);
-        sbm.addBand(new SimpleBand());
+        sbm.addBand(new EmptyAbsoluteHeightedBand(1));
+
         sbm.addBand(sb3);
         sbm.addBand(sb4);
+        sbm.addBand(sb4a);
 
         final SimpleBand sb5 = new SimpleBand();
-        sb5.addMember(new SimpleSection(0, 1010));
+        sb5.addMember(new SimpleSection(0, 1100));
         sb5.addMember(new SimpleSection(50, 500));
         sb5.addMember(new SimpleSection(400, 600));
         sbm.addBand(sb5);
@@ -611,5 +661,110 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         jf.setVisible(true);
         final java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         jf.setBounds((screenSize.width - 800) / 2, (screenSize.height - 222) / 2, 800, 222);
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class JBandsPanel extends JPanel {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private boolean measurementEnabled = false;
+        private int measurementx = 0;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new JBandsPanel object.
+         */
+        public JBandsPanel() {
+            super(null);
+            setForeground(new Color(50, 50, 50, 150));
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean isMeasurementEnabled() {
+            return measurementEnabled;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  measurementEnabled  DOCUMENT ME!
+         */
+        public void setMeasurementEnabled(final boolean measurementEnabled) {
+            this.measurementEnabled = measurementEnabled;
+            repaint();
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public int getMeasurementx() {
+            return measurementx;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  measurementx  DOCUMENT ME!
+         */
+        public void setMeasurementx(final int measurementx) {
+            if (measurementx < xoffset) {
+                this.measurementx = xoffset;
+            } else {
+                this.measurementx = measurementx;
+            }
+            if (measurementEnabled) {
+                repaint();
+            }
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            final Dimension d = super.getPreferredSize();
+            return new Dimension((int)(scrollPane.getWidth() * 0.9 * zoomFactor), d.height);
+        }
+
+        @Override
+        public void setSize(final int width, final int height) {
+            super.setSize(width, height);
+            layoutBandMemberComponents();
+        }
+
+        @Override
+        public void setSize(final Dimension d) {
+            setSize(d.width, d.height);
+            layoutBandMemberComponents();
+        }
+
+//        @Override
+//        protected void paintComponent(Graphics g) {
+//
+//            super.paintComponent(g);
+//
+//
+//        }
+        @Override
+        protected void paintChildren(final Graphics g) {
+            super.paintChildren(g);
+            if (measurementEnabled) {
+                final Graphics2D g2d = (Graphics2D)g;
+                g.drawLine(measurementx, 0, measurementx, getHeight());
+            }
+        }
     }
 }

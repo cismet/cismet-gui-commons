@@ -23,6 +23,7 @@ public interface BandModel {
      * @return  DOCUMENT ME!
      */
     int getNumberOfBands();
+
     /**
      * DOCUMENT ME!
      *
@@ -45,4 +46,18 @@ public interface BandModel {
      * @return  DOCUMENT ME!
      */
     double getMax();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bml  DOCUMENT ME!
+     */
+    void addBandModelListener(BandModelListener bml);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bml  DOCUMENT ME!
+     */
+    void removeBandModelListener(BandModelListener bml);
 }

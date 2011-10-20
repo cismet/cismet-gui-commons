@@ -19,8 +19,8 @@ public class SimpleTextSection extends SimpleSection {
 
     //~ Instance fields --------------------------------------------------------
 
-    String title;
-    TextSectionComponent comp;
+    protected String title;
+    protected TextSectionComponent comp;
 
     //~ Constructors -----------------------------------------------------------
 

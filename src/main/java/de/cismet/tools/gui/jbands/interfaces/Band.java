@@ -45,4 +45,11 @@ public interface Band {
      * @return  DOCUMENT ME!
      */
     double getMax();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    boolean isEnabled();
 }

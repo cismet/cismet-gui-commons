@@ -32,9 +32,17 @@ public class SimpleSectionPanel extends JPanel {
      * Creates new form SimpleSectionPanel.
      */
     public SimpleSectionPanel() {
+        this(Color.getHSBColor((float)Math.random(), 0.85f, 1.0f));
+    }
+
+    /**
+     * Creates a new SimpleSectionPanel object.
+     *
+     * @param  c  DOCUMENT ME!
+     */
+    public SimpleSectionPanel(final Color c) {
         initComponents();
-        setBackground(Color.getHSBColor((float)Math.random(), 0.85f, 1.0f));
-//        setBackground(Color.getHSBColor((float)Math.random(), 0.85f, 1.0f));
+        setBackground(c);
     }
 
     //~ Methods ----------------------------------------------------------------

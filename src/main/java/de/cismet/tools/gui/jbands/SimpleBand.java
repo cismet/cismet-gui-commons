@@ -9,6 +9,7 @@ package de.cismet.tools.gui.jbands;
 
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
@@ -34,10 +35,12 @@ public class SimpleBand implements Band, BandPrefixProvider {
      *
      * @return  DOCUMENT ME!
      */
-    JLabel prefix = new JLabel();
+    protected JLabel prefix = new JLabel();
     private Double min = null;
     private Double max = null;
     private float bandWeight;
+
+    private boolean enabled = true;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -45,7 +48,19 @@ public class SimpleBand implements Band, BandPrefixProvider {
      * Creates a new SimpleBand object.
      */
     public SimpleBand() {
+        this("");
+    }
+
+    /**
+     * Creates a new SimpleBand object.
+     *
+     * @param  title  DOCUMENT ME!
+     */
+    public SimpleBand(final String title) {
         prefix.setOpaque(false);
+        prefix.setText(title);
+        prefix.setHorizontalAlignment(JLabel.RIGHT);
+        prefix.setBorder(BorderFactory.createEmptyBorder(0, 6, 0, 6));
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -98,21 +113,19 @@ public class SimpleBand implements Band, BandPrefixProvider {
 
     @Override
     public JComponent getPrefixComponent() {
-        prefix.setText("SimpleBand: " + getMin() + " --> " + getMax());
         return prefix;
     }
 
-//    @Override
-//    public float getBandWeight() {
-//        return bandWeight;
-//    }
-//
-//    /**
-//     * DOCUMENT ME!
-//     *
-//     * @param  bandweight  DOCUMENT ME!
-//     */
-//    public void setBandWeight(final float bandweight) {
-//        this.bandWeight = bandweight;
-//    }
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  enabled  DOCUMENT ME!
+     */
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
+    }
 }

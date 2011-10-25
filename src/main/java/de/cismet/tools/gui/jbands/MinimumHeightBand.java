@@ -40,7 +40,7 @@ public class MinimumHeightBand extends SimpleBand implements BandAbsoluteHeightP
 
     @Override
     public int getAbsoluteHeight() {
-        int maxHeight = Integer.MIN_VALUE;
+        int maxHeight = 0;
         for (final BandMember bm : super.members) {
             final int compH = bm.getBandMemberComponent().getPreferredSize().height;
             maxHeight = (maxHeight < compH) ? compH : maxHeight;

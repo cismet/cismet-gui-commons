@@ -25,4 +25,18 @@ public interface BandModelListener {
      * @param  e  DOCUMENT ME!
      */
     void bandModelChanged(BandModelEvent e);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
+    void bandModelSelectionChanged(BandModelEvent e);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
+    void bandModelValuesChanged(BandModelEvent e);
 }

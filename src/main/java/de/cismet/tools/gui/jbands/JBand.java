@@ -320,6 +320,8 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @param   b  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  DOCUMENT ME!
      */
     private boolean isColliding(final BandMember a, final BandMember b) {
         if ((a instanceof Section) && (b instanceof Section)) {
@@ -336,8 +338,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             final int rjmin = rj.x;
             return (!((rimax <= rjmin) || (rimin >= rjmax)));
         }
-        assert (false);
-        return false;
+        throw new IllegalArgumentException("Possible Combinations are Section,Section and Spot,Spot");
     }
 
     /**

@@ -21,6 +21,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.swing.JCheckBox;
@@ -161,8 +162,14 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
                 bandsPanel.add(comp);
                 bandMembersViaComponents.put(comp, member);
                 componentsViaBandMembers.put(member, comp);
-                comp.addMouseListener(this);
-                comp.addMouseMotionListener(this);
+
+                if (!Arrays.asList(comp.getMouseListeners()).contains(this)) {
+                    comp.addMouseListener(this);
+                }
+
+                if (!Arrays.asList(comp.getMouseMotionListeners()).contains(this)) {
+                    comp.addMouseMotionListener(this);
+                }
             }
         }
 

@@ -30,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -825,6 +826,12 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             super.paintChildren(g);
             if (measurementEnabled) {
                 final Graphics2D g2d = (Graphics2D)g;
+                final double station = ((double)Math.round(
+                            realWidth
+                                    * (measurementx - xoffset)
+                                    / (bandsPanel.getWidth() - xoffset)
+                                    * 10)) / 10;
+
                 g.setColor(SIDER);
                 g.drawLine(measurementx - 2, 0, measurementx - 2, getHeight());
                 g.drawLine(measurementx + 2, 0, measurementx + 2, getHeight());
@@ -833,6 +840,15 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
                 g.drawLine(measurementx + 1, 0, measurementx + 1, getHeight());
                 g.setColor(MIDDLE);
                 g.drawLine(measurementx, 0, measurementx, getHeight());
+
+                final String s = String.valueOf(station);
+                final int sWidth = SwingUtilities.computeStringWidth(g.getFontMetrics(), s);
+                final int sPos = measurementx + 5;
+                if ((sPos + sWidth) <= (getWidth() - 10)) {
+                    g.drawString(s, measurementx + 5, getHeight() - 3);
+                } else {
+                    g.drawString(s, measurementx - sWidth - 5, getHeight() - 3);
+                }
             }
         }
     }

@@ -97,6 +97,7 @@ public class DefaultBreadCrumbModel implements BreadCrumbModel {
     @Override
     public void clear() {
         data.clear();
+        fireBreadCrumbModelChanged(new BreadCrumbEvent(this));
     }
 
     @Override

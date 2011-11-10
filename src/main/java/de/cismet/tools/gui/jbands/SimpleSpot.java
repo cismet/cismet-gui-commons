@@ -31,6 +31,7 @@ public class SimpleSpot implements Spot {
      */
     public SimpleSpot() {
         bmc = new SimpleSpotPanel();
+        bmc.setOpaque(false);
     }
 
     /**

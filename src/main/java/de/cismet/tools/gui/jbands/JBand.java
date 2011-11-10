@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -34,8 +35,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import de.cismet.tools.CurrentStackTrace;
 
 import de.cismet.tools.gui.jbands.interfaces.Band;
 import de.cismet.tools.gui.jbands.interfaces.BandAbsoluteHeightProvider;
@@ -532,6 +531,13 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
     @Override
     public void bandModelChanged(final BandModelEvent e) {
         init();
+        EventQueue.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    bandsPanel.repaint();
+                }
+            });
     }
 
     @Override

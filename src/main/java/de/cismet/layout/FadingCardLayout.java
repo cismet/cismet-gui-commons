@@ -73,12 +73,23 @@ public class FadingCardLayout extends CardLayout {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  name       DOCUMENT ME!
+     * @param  component  DOCUMENT ME!
+     */
     @Override
     public void addLayoutComponent(final String name, final Component component) {
         componentHashtable.put(name, component);
         super.addLayoutComponent(name, component);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  component  DOCUMENT ME!
+     */
     @Override
     public void removeLayoutComponent(final Component component) {
         final Enumeration<String> keys = componentHashtable.keys();
@@ -91,6 +102,11 @@ public class FadingCardLayout extends CardLayout {
         super.removeLayoutComponent(component);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parent  DOCUMENT ME!
+     */
     @Override
     public void next(final Container parent) {
         synchronized (parent.getTreeLock()) {
@@ -107,6 +123,11 @@ public class FadingCardLayout extends CardLayout {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parent  DOCUMENT ME!
+     */
     @Override
     public void previous(final Container parent) {
         synchronized (parent.getTreeLock()) {
@@ -123,6 +144,11 @@ public class FadingCardLayout extends CardLayout {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parent  DOCUMENT ME!
+     */
     @Override
     public void first(final Container parent) {
         synchronized (parent.getTreeLock()) {
@@ -135,6 +161,11 @@ public class FadingCardLayout extends CardLayout {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parent  DOCUMENT ME!
+     */
     @Override
     public void last(final Container parent) {
         synchronized (parent.getTreeLock()) {
@@ -147,6 +178,12 @@ public class FadingCardLayout extends CardLayout {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parent  DOCUMENT ME!
+     * @param  name    DOCUMENT ME!
+     */
     @Override
     public void show(final Container parent, final String name) {
         synchronized (parent.getTreeLock()) {

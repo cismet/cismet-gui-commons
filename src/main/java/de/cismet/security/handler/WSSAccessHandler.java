@@ -81,13 +81,14 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
 
     //~ Methods ----------------------------------------------------------------
 
-// public HTTPWSSAccessHandler(Component parentComponent, String subParent) {
-// super(parentComponent);
-// wssac = new WSSAccessorDeegree();
-// //ToDo check if url is valid;
-// wssac.setWSS(url.toString());
-// this.subParent = subParent;
-// }
+    /**
+     * public HTTPWSSAccessHandler(Component parentComponent, String subParent) { super(parentComponent); wssac = new
+     * WSSAccessorDeegree(); //ToDo check if url is valid; wssac.setWSS(url.toString()); this.subParent = subParent; }.
+     *
+     * @param   method  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean isAccessMethodSupported(final ACCESS_METHODS method) {
         for (final ACCESS_METHODS curMethod : SUPPORTED_ACCESS_METHODS) {
@@ -105,11 +106,28 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
         wssAccessorMapping.clear();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public ACCESS_HANDLER_TYPES getHandlerType() {
         return ACCESS_HANDLER_TYPE;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url               DOCUMENT ME!
+     * @param   requestParameter  DOCUMENT ME!
+     * @param   method            DOCUMENT ME!
+     * @param   options           DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
     @Override
     public InputStream doRequest(final URL url,
             final Reader requestParameter,
@@ -359,6 +377,17 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   name      DOCUMENT ME!
+         * @param   password  DOCUMENT ME!
+         * @param   server    DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         *
+         * @throws  Exception  DOCUMENT ME!
+         */
         @Override
         public boolean authenticate(final String name, final char[] password, final String server) throws Exception {
             if (log.isDebugEnabled()) {

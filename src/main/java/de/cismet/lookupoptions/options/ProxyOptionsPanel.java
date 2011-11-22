@@ -105,11 +105,19 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public int getOrder() {
         return 1;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void update() {
         // read proxy values
@@ -149,6 +157,9 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void applyChanges() {
         boolean useProxy;
@@ -176,6 +187,11 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         setProxy(useProxy, host, port, username, password, domain);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean isChanged() {
         int intPort;
@@ -195,6 +211,11 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
                         || !txtDomain.getText().equals(domain));
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTooltip() {
         return org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.getTooltip().text"); // NOI18N
@@ -288,6 +309,11 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         applyChanges();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parent  DOCUMENT ME!
+     */
     @Override
     public void configure(final Element parent) {
         final Proxy proxy = Proxy.fromPreferences();
@@ -371,6 +397,13 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         applyChanges();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  NoWriteError  DOCUMENT ME!
+     */
     @Override
     public Element getConfiguration() throws NoWriteError {
         if (LOG.isDebugEnabled()) {

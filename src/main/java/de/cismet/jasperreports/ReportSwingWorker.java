@@ -179,6 +179,13 @@ public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
     @Override
     protected Boolean doInBackground() throws Exception {
         if (withDialog) {
@@ -248,6 +255,9 @@ public class ReportSwingWorker extends SwingWorker<Boolean, Object> {
         return false;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     protected void done() {
         boolean error = false;

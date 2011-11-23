@@ -148,11 +148,21 @@ public class FadingPanel extends Component {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  graphics  DOCUMENT ME!
+     */
     @Override
     public void update(final Graphics graphics) {
         paint(graphics);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  graphics  DOCUMENT ME!
+     */
     @Override
     public synchronized void paint(final Graphics graphics) {
         // wenn keine Bilder

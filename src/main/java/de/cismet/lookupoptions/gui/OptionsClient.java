@@ -165,6 +165,11 @@ public class OptionsClient implements Configurable {
         return sortedPanels.toArray(new OptionsPanelController[0]);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parent  DOCUMENT ME!
+     */
     @Override
     public void configure(final Element parent) {
         final Element conf = parent.getChild(CONFIGURATION);
@@ -174,6 +179,11 @@ public class OptionsClient implements Configurable {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parent  DOCUMENT ME!
+     */
     @Override
     public void masterConfigure(final Element parent) {
         final Element conf = parent.getChild(CONFIGURATION);
@@ -183,6 +193,13 @@ public class OptionsClient implements Configurable {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  NoWriteError  DOCUMENT ME!
+     */
     @Override
     public Element getConfiguration() throws NoWriteError {
         if (log.isDebugEnabled()) {

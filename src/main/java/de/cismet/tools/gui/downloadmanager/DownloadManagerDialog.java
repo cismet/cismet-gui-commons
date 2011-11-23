@@ -592,10 +592,20 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowOpened(final WindowEvent e) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowClosing(final WindowEvent e) {
         removeWindowListener(instance);
@@ -604,22 +614,47 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         instance = null;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowClosed(final WindowEvent e) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowIconified(final WindowEvent e) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowDeiconified(final WindowEvent e) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowActivated(final WindowEvent e) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowDeactivated(final WindowEvent e) {
     }

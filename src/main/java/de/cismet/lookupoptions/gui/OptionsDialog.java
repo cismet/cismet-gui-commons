@@ -380,31 +380,66 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
             });
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowOpened(final WindowEvent e) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowClosing(final WindowEvent e) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowClosed(final WindowEvent e) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowIconified(final WindowEvent e) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowDeiconified(final WindowEvent e) {
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowActivated(final WindowEvent e) {
         optionsClient.update(selectedCategory.getClass());
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     @Override
     public void windowDeactivated(final WindowEvent e) {
     }

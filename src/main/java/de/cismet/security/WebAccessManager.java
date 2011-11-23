@@ -445,6 +445,22 @@ public class WebAccessManager implements AccessHandler {
         return doRequest(url, requestParameter, accessMethod, null);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url               DOCUMENT ME!
+     * @param   requestParameter  DOCUMENT ME!
+     * @param   accessMethod      DOCUMENT ME!
+     * @param   options           DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  MissingArgumentException             DOCUMENT ME!
+     * @throws  AccessMethodIsNotSupportedException  DOCUMENT ME!
+     * @throws  RequestFailedException               DOCUMENT ME!
+     * @throws  NoHandlerForURLException             DOCUMENT ME!
+     * @throws  Exception                            DOCUMENT ME!
+     */
     @Override
     public InputStream doRequest(final URL url,
             final Reader requestParameter,
@@ -560,14 +576,26 @@ public class WebAccessManager implements AccessHandler {
     public void setTopLevelComponent(final Component topLevelComponent) {
         this.topLevelComponent = topLevelComponent;
     }
-
-    // todo
+    /**
+     * todo.
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  UnsupportedOperationException  DOCUMENT ME!
+     */
     @Override
     public ACCESS_HANDLER_TYPES getHandlerType() {
         throw new UnsupportedOperationException("Not supported yet."); // NOI18N
     }
-
-    // todo
+    /**
+     * todo.
+     *
+     * @param   method  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  UnsupportedOperationException  DOCUMENT ME!
+     */
     @Override
     public boolean isAccessMethodSupported(final ACCESS_METHODS method) {
         throw new UnsupportedOperationException("Not supported yet."); // NOI18N

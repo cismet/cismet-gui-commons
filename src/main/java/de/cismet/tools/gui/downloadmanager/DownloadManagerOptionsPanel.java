@@ -359,6 +359,9 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         BrowserLauncher.openURLorFile(jhlDownloadDestination.getText());
     } //GEN-LAST:event_jhlDownloadDestinationActionPerformed
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void update() {
         downloadDestination = DownloadManager.instance().getDestinationDirectory();
@@ -378,6 +381,9 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         spnParallelDownloads.setValue(parallelDownloads);
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     @Override
     public void applyChanges() {
         downloadDestinationChanged = false;
@@ -398,6 +404,11 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         DownloadManager.instance().setParallelDownloads(parallelDownloads);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public boolean isChanged() {
         boolean result = false;
@@ -413,21 +424,43 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         return result;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public String getTooltip() {
         return "";
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  NoWriteError  DOCUMENT ME!
+     */
     @Override
     public Element getConfiguration() throws NoWriteError {
         return DownloadManager.instance().getConfiguration();
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parent  DOCUMENT ME!
+     */
     @Override
     public void configure(final Element parent) {
         DownloadManager.instance().configure(parent);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parent  DOCUMENT ME!
+     */
     @Override
     public void masterConfigure(final Element parent) {
         DownloadManager.instance().masterConfigure(parent);

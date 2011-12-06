@@ -7,10 +7,16 @@
 ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
+import org.apache.log4j.Logger;
+
 import org.openide.util.NbBundle;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+
+import java.net.URL;
+
+import java.util.MissingResourceException;
 
 import javax.swing.AbstractAction;
 import javax.swing.JDialog;
@@ -24,6 +30,10 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @version  $Revision$, $Date$
  */
 public class DownloadManagerAction extends AbstractAction {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final Logger LOG = Logger.getLogger(DownloadManagerAction.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -41,17 +51,30 @@ public class DownloadManagerAction extends AbstractAction {
 
         this.parent = parent;
 
-        putValue(
-            SMALL_ICON,
-            new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/downloadmanager.png")));
-        putValue(
-            SHORT_DESCRIPTION,
-            NbBundle.getMessage(DownloadManagerAction.class, "DownloadManagerAction.tooltiptext"));
-        putValue(
-            ACTION_COMMAND_KEY,
-            NbBundle.getMessage(DownloadManagerAction.class, "DownloadManagerAction.actionCommandKey"));
-        putValue(NAME, NbBundle.getMessage(DownloadManagerAction.class, "DownloadManagerAction.name"));
+        final URL icon = getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/downloadmanager.png");
+        String name = "Download-Manager";
+        String tooltiptext = "Zeigt die Downloads an";
+        String command = "cmdDownloads";
+
+        try {
+            name = NbBundle.getMessage(DownloadManagerAction.class, "DownloadManagerAction.name");
+            tooltiptext = NbBundle.getMessage(
+                    DownloadManagerAction.class,
+                    "DownloadManagerAction.tooltiptext");
+            command = NbBundle.getMessage(
+                    DownloadManagerAction.class,
+                    "DownloadManagerAction.actionCommandKey");
+        } catch (MissingResourceException e) {
+            LOG.error("Couldn't find resources. Using fallback settings.", e);
+        }
+
+        if (icon != null) {
+            putValue(SMALL_ICON, new javax.swing.ImageIcon(icon));
+        }
+
+        putValue(SHORT_DESCRIPTION, tooltiptext);
+        putValue(ACTION_COMMAND_KEY, command);
+        putValue(NAME, name);
     }
 
     //~ Methods ----------------------------------------------------------------

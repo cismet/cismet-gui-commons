@@ -21,7 +21,8 @@ import org.apache.log4j.Logger;
 
 import java.net.URL;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.cismet.netutil.Proxy;
 
@@ -42,7 +43,7 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final transient Hashtable<URL, GUICredentialsProvider> httpCredentialsForURLS;
+    private final transient Map<URL, GUICredentialsProvider> httpCredentialsForURLS;
     private transient Proxy proxy;
 
     //~ Constructors -----------------------------------------------------------
@@ -54,7 +55,7 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
         if (LOG.isDebugEnabled()) {
             LOG.debug("HTTPBasedAccessHandler"); // NOI18N
         }
-        httpCredentialsForURLS = new Hashtable<URL, GUICredentialsProvider>();
+        httpCredentialsForURLS = new HashMap<URL, GUICredentialsProvider>();
         proxy = Proxy.fromSystem();
     }
 
@@ -73,12 +74,16 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
         final HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
         if (proxy != null) {
             client.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
-            final AuthScope authscope = new AuthScope(proxy.getHost(), proxy.getPort());
-            final Credentials credentials = new NTCredentials(proxy.getUsername(),
-                    proxy.getPassword(),
-                    "", // NOI18N
-                    proxy.getDomain());
-            client.getState().setProxyCredentials(authscope, credentials);
+
+            // proxy needs authentication
+            if ((proxy.getUsername() != null) && (proxy.getPassword() != null)) {
+                final AuthScope authscope = new AuthScope(proxy.getHost(), proxy.getPort());
+                final Credentials credentials = new NTCredentials(proxy.getUsername(),
+                        proxy.getPassword(),
+                        "", // NOI18N
+                        (proxy.getDomain() == null) ? "" : proxy.getDomain());
+                client.getState().setProxyCredentials(authscope, credentials);
+            }
         }
 
         return client;

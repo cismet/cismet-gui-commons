@@ -103,6 +103,25 @@ public class RoundedPanel extends javax.swing.JPanel {
         this.alpha = alpha;
         alphaColor = new Color(getBackground().getRed(), getBackground().getGreen(), getBackground().getBlue(), alpha);
     }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getCurve() {
+        return this.curve;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  curve  DOCUMENT ME!
+     */
+    public void setCurve(final int curve) {
+        this.curve = curve;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

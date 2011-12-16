@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
+import java.awt.Color;
+
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
@@ -29,6 +31,14 @@ public class StayOpenCheckBoxMenuItem extends JCheckBoxMenuItem {
     //~ Static fields/initializers ---------------------------------------------
 
     private static MenuElement[] path;
+    private static JCheckBoxMenuItem bsp = new JCheckBoxMenuItem("white");
+
+    //~ Instance fields --------------------------------------------------------
+
+    private Color selectedBackgroundColor;
+    private Color selectedForegroundColor;
+    private Color normalBackgroundColor;
+    private Color normalForegroundColor;
 
     //~ Instance initializers --------------------------------------------------
 
@@ -89,6 +99,23 @@ public class StayOpenCheckBoxMenuItem extends JCheckBoxMenuItem {
     }
 
     /**
+     * Creates a new StayOpenCheckBoxMenuItem object.
+     *
+     * @param  action                   DOCUMENT ME!
+     * @param  selectedBackgroundColor  DOCUMENT ME!
+     * @param  selectedForegroundColor  DOCUMENT ME!
+     */
+    public StayOpenCheckBoxMenuItem(final Action action,
+            final Color selectedBackgroundColor,
+            final Color selectedForegroundColor) {
+        this(action);
+        this.selectedBackgroundColor = selectedBackgroundColor;
+        this.selectedForegroundColor = selectedForegroundColor;
+        normalBackgroundColor = bsp.getBackground();
+        normalForegroundColor = bsp.getForeground();
+    }
+
+    /**
      * @see  JCheckBoxMenuItem#JCheckBoxMenuItem(String, Icon, boolean)
      */
     public StayOpenCheckBoxMenuItem(final String text, final Icon icon, final boolean selected) {
@@ -112,5 +139,59 @@ public class StayOpenCheckBoxMenuItem extends JCheckBoxMenuItem {
         }
 
         MenuSelectionManager.defaultManager().setSelectedPath(path);
+    }
+
+    @Override
+    public Color getBackground() {
+        if (isSelected()) {
+            return selectedBackgroundColor;
+        } else {
+            return normalBackgroundColor;
+        }
+    }
+
+    @Override
+    public Color getForeground() {
+        if (isSelected()) {
+            return selectedForegroundColor;
+        } else {
+            return normalForegroundColor;
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Color getSelectedBackgroundColor() {
+        return selectedBackgroundColor;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  selectedBackgroundColor  DOCUMENT ME!
+     */
+    public void setSelectedBackgroundColor(final Color selectedBackgroundColor) {
+        this.selectedBackgroundColor = selectedBackgroundColor;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Color getSelectedForegroundColor() {
+        return selectedForegroundColor;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  selectedForegroundColor  DOCUMENT ME!
+     */
+    public void setSelectedForegroundColor(final Color selectedForegroundColor) {
+        this.selectedForegroundColor = selectedForegroundColor;
     }
 }

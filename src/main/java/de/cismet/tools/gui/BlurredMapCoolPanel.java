@@ -7,14 +7,9 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import Sirius.navigator.resource.PropertyManager;
-
 import com.vividsolutions.jts.geom.Geometry;
 
-import org.jdesktop.fuse.InjectedResource;
 import org.jdesktop.fuse.ResourceInjector;
-import org.jdesktop.swingx.graphics.GraphicsUtilities;
-import org.jdesktop.swingx.graphics.ShadowRenderer;
 import org.jdesktop.swingx.image.StackBlurFilter;
 
 import org.jdom.Document;
@@ -22,17 +17,14 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
 import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
@@ -105,7 +97,7 @@ public class BlurredMapCoolPanel extends PainterCoolPanel implements ComponentLi
 //        Ressourcen hierarchisch rekursiv nach oben einfuegen
         ResourceInjector.get("blurredmapcoolpanel.style").inject(true, this); //
         // NOI18N
-        usePainterCoolPanel = PropertyManager.getManager().isUsePainterCoolPanel();
+        usePainterCoolPanel = false;                                                                             // PropertyManager.getManager().isUsePainterCoolPanel();
         gradientColorTop = javax.swing.UIManager.getDefaults().getColor("Button.shadow");                        // NOI18N
         gradientColorBottom = javax.swing.UIManager.getDefaults().getColor("Button.background");                 // NOI18N
         mapBounds = null;

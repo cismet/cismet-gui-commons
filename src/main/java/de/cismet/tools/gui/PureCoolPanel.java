@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import Sirius.navigator.resource.PropertyManager;
-
 import org.jdesktop.fuse.InjectedResource;
 import org.jdesktop.fuse.ResourceInjector;
 import org.jdesktop.swingx.graphics.GraphicsUtilities;
@@ -107,7 +105,7 @@ public class PureCoolPanel extends PainterCoolPanel {
     private JPanel spinner;
     private JComponent panMap;
     private JComponent panContent;
-    private boolean usePainterCoolPanel;
+    private boolean usePainterCoolPanel = false;
     private ImageIcon icons;
     private BufferedImage cacheImage;
     private BufferedImage gradientImage;
@@ -123,7 +121,7 @@ public class PureCoolPanel extends PainterCoolPanel {
      * Kontruktor des CoolPanels. Erzeugt ein CoolPanel, damit es in einem Renderer verwendet werden kann.
      */
     public PureCoolPanel() {
-        usePainterCoolPanel = PropertyManager.getManager().isUsePainterCoolPanel();
+//        usePainterCoolPanel = PropertyManager.getManager().isUsePainterCoolPanel();
         // FUSE initialisieren
         FuseLoader.load();
 

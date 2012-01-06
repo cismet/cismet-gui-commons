@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import Sirius.navigator.resource.PropertyManager;
-
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.awt.BorderLayout;
@@ -53,9 +51,7 @@ public class BlurredMapWrapper extends JPanel implements WrappedComponent {
         pcpMain.setPanContent(panEdit);
         pcpMain.setPanTitle(panTitleAndIcon);
         pcpMain.setPanMap(panMap);
-        if (PropertyManager.getManager().isUsePainterCoolPanel()) {
-            pcpMain.setPanInter(panFooter);
-        }
+        pcpMain.setPanInter(panFooter);
     }
 
     //~ Methods ----------------------------------------------------------------

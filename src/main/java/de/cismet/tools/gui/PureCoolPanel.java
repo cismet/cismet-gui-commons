@@ -7,7 +7,6 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import Sirius.navigator.resource.PropertyManager;
 import org.jdesktop.fuse.InjectedResource;
 import org.jdesktop.fuse.ResourceInjector;
 import org.jdesktop.swingx.graphics.GraphicsUtilities;
@@ -24,6 +23,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.image.BufferedImage;
+
+import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -106,7 +107,7 @@ public class PureCoolPanel extends PainterCoolPanel {
     private JPanel spinner;
     private JComponent panMap;
     private JComponent panContent;
-    private boolean usePainterCoolPanel ;
+    private boolean usePainterCoolPanel = false;
     private ImageIcon icons;
     private BufferedImage cacheImage;
     private BufferedImage gradientImage;
@@ -122,12 +123,12 @@ public class PureCoolPanel extends PainterCoolPanel {
      * Kontruktor des CoolPanels. Erzeugt ein CoolPanel, damit es in einem Renderer verwendet werden kann.
      */
     public PureCoolPanel() {
-        usePainterCoolPanel = PropertyManager.getManager().isUsePainterCoolPanel();
         // FUSE initialisieren
         FuseLoader.load();
 
         // Ressourcen hierarchisch rekursiv nach oben einfuegen
         ResourceInjector.get("purecoolpanel.style").inject(true, this); // NOI18N
+
 //
         gradientColorTop = javax.swing.UIManager.getDefaults().getColor("Button.shadow");        // NOI18N
         gradientColorBottom = javax.swing.UIManager.getDefaults().getColor("Button.background"); // NOI18N

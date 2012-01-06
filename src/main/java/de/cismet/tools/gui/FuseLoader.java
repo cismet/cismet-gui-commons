@@ -34,16 +34,22 @@ public final class FuseLoader {
      */
     private FuseLoader() {
         instance = this;
-        ResourceInjector.addModule("org.jdesktop.fuse.swing.SwingModule");                               // NOI18N
+        ResourceInjector.addModule("org.jdesktop.fuse.swing.SwingModule");                                     // NOI18N
         try {
             ResourceInjector.get("coolpanel.style")
-                    .load(getClass().getResource("/coolobjectrenderer/style.properties"));               // NOI18N
+                    .load(getClass().getResource("/coolobjectrenderer/style.properties"));                     // NOI18N
         } catch (Exception e) {
         }
         try {
             ResourceInjector.get("purecoolpanel.style")
-                    .load(getClass().getResource("/de/cismet/tools/gui/purecoolpanelstyle.properties")); // NOI18N
+                    .load(getClass().getResource("/de/cismet/tools/gui/purecoolpanelstyle.properties"));       // NOI18N
         } catch (Exception e) {
+        }
+        try {
+            ResourceInjector.get("blurredmapobjectrenderer.style")
+                    .load(getClass().getResource("/de/cismet/tools/gui/blurredmapobjectrenderer.properties")); // NOI18N
+        } catch (Exception e) {
+            System.out.println("");
         }
     }
 

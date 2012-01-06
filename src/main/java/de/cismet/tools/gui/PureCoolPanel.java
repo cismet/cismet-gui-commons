@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
+import Sirius.navigator.resource.PropertyManager;
+
 import org.jdesktop.fuse.InjectedResource;
 import org.jdesktop.fuse.ResourceInjector;
 import org.jdesktop.swingx.graphics.GraphicsUtilities;
@@ -39,7 +41,7 @@ import javax.swing.JPanel;
  * @author   nhaffke
  * @version  $Revision$, $Date$
  */
-public class PureCoolPanel extends JPanel {
+public class PureCoolPanel extends PainterCoolPanel {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -102,14 +104,15 @@ public class PureCoolPanel extends JPanel {
     public Color gradientColorTop;
     @InjectedResource
     public Color gradientColorBottom;
+    private JPanel spinner;
+    private JComponent panMap;
+    private JComponent panContent;
+    private boolean usePainterCoolPanel;
     private ImageIcon icons;
     private BufferedImage cacheImage;
     private BufferedImage gradientImage;
-    private JPanel spinner;
     private JComponent panTitle;
-    private JComponent panMap;
     private JComponent panInter;
-    private JComponent panContent;
     private final Composite composite;
     private final ShadowRenderer shadowRenderer;
     private Dimension lastPaintSize;
@@ -120,6 +123,7 @@ public class PureCoolPanel extends JPanel {
      * Kontruktor des CoolPanels. Erzeugt ein CoolPanel, damit es in einem Renderer verwendet werden kann.
      */
     public PureCoolPanel() {
+        usePainterCoolPanel = PropertyManager.getManager().isUsePainterCoolPanel();
         // FUSE initialisieren
         FuseLoader.load();
 
@@ -137,147 +141,120 @@ public class PureCoolPanel extends JPanel {
 
     //~ Methods ----------------------------------------------------------------
 
-    /**
-     * Legt das Icon fest, die spaeter in die rechte obere Ecke des CoolPanels gezeichnet werden. Diese sollten das im
-     * Navigator angewaehlte Objekt beschreiben. Icons werden nur gezeichnet, falls sie vorhanden sind. Um mehrere Icons
-     * zu zeichnen, muessen diese mit der Methode Static2DTools.joinIcons() zusammengefuegt werden.
-     *
-     * @param  icon  das zu zeichnende Icon.
-     */
-    public void setImageRechtsOben(final ImageIcon icon) {
-        if (icon != null) {
-            try {
-//            ReflectionRenderer renderer2 = new ReflectionRenderer(0.5f,0.4f,true);
-                final ShadowRenderer renderer = new ShadowRenderer(3, 0.5f, Color.BLACK);
-
-                final BufferedImage temp = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
-                        IMAGE_TYPE);
-                final Graphics tg = temp.createGraphics();
-                tg.drawImage(icon.getImage(), 0, 0, null);
-                tg.dispose();
-
-                final BufferedImage shadow = renderer.createShadow(temp);
-
-                final BufferedImage result = new BufferedImage(icon.getIconWidth() + (2 * shadowLength),
-                        icon.getIconHeight()
-                                + (2 * shadowLength),
-                        IMAGE_TYPE);
-                final Graphics rg = result.createGraphics();
-                rg.drawImage(shadow, 0, 0, null);
-                rg.drawImage(temp, 0, 0, null);
-                rg.dispose();
-                shadow.flush();
-
-//            BufferedImage ref = renderer.appendReflection(tmp);
-                final ImageIcon newIcon = new ImageIcon(result);
-                this.icons = newIcon;
-            } catch (Exception e) {
-                this.icons = null;
-            }
-        }
-    }
-
-    /**
-     * ueberschreibt die Standard-Zeichenmethode eines JPanels. Zeichnet die "coolen" Effekte des CoolPanels.
-     *
-     * @param  g  Graphics-Objekt auf das gezeichnet wird
-     */
     @Override
     protected void paintComponent(final Graphics g) {
-        super.paintComponent(g);
-        final Graphics2D g2d = (Graphics2D)g;
-        if ((cacheImage == null) || !getSize().equals(lastPaintSize)) {
-            lastPaintSize = getSize();
-            // Image zum Zeichnen erstellen von dem wird spaeter der Schlagschatten erstellt wird
-            final BufferedImage box = new BufferedImage(getWidth() - offset, getHeight() - offset, IMAGE_TYPE);
+        if (usePainterCoolPanel) {
+            super.paintComponent(g);
+        } else {
+            // alter PureCoolPanel paint code....
+            final Graphics2D g2d = (Graphics2D)g;
+            if ((cacheImage == null) || !getSize().equals(lastPaintSize)) {
+                lastPaintSize = getSize();
+                // Image zum Zeichnen erstellen von dem wird spaeter der Schlagschatten erstellt wird
+                final BufferedImage box = new BufferedImage(getWidth() - offset, getHeight() - offset, IMAGE_TYPE);
 
-            // Graphics-Objekt der Box erzeugen
-            final Graphics2D boxGraphics = box.createGraphics();
+                // Graphics-Objekt der Box erzeugen
+                final Graphics2D boxGraphics = box.createGraphics();
 
-            // Standard-Zeichenmodus speichern
-            final Composite originalComposite = boxGraphics.getComposite();
+                // Standard-Zeichenmodus speichern
+                final Composite originalComposite = boxGraphics.getComposite();
 
-            if ((gradientImage == null) || (gradientImage.getHeight() != box.getHeight())) {
-                gradientImage = GraphicsUtilities.createCompatibleImage(1, box.getHeight());
-                final Graphics2D gradientGraphics2d = gradientImage.createGraphics();
-                gradientGraphics2d.setPaint(new GradientPaint(
-                        0,
-                        0,
-                        gradientColorTop,
-                        0,
-                        box.getHeight(),
-                        gradientColorBottom));
-                gradientGraphics2d.fillRect(0, 0, 1, box.getHeight());
-            }
+                if ((gradientImage == null) || (gradientImage.getHeight() != box.getHeight())) {
+                    gradientImage = GraphicsUtilities.createCompatibleImage(1, box.getHeight());
+                    final Graphics2D gradientGraphics2d = gradientImage.createGraphics();
+                    gradientGraphics2d.setPaint(new GradientPaint(
+                            0,
+                            0,
+                            gradientColorTop,
+                            0,
+                            box.getHeight(),
+                            gradientColorBottom));
+                    gradientGraphics2d.fillRect(0, 0, 1, box.getHeight());
+                }
 
-            // RoundedRectangle zeichnen und mit Gradient fuellen
-            boxGraphics.setColor(Color.BLACK);
-            boxGraphics.fillRoundRect(offset, 0, box.getWidth() - offset, box.getHeight(), arcSize, arcSize);
-            boxGraphics.setComposite(AlphaComposite.SrcAtop);
-            boxGraphics.drawImage(gradientImage, 0, 0, box.getWidth(), box.getHeight(), null);
-            boxGraphics.setComposite(originalComposite);
-            boxGraphics.setStroke(STROKE);
+                // RoundedRectangle zeichnen und mit Gradient fuellen
+                boxGraphics.setColor(Color.BLACK);
+                boxGraphics.fillRoundRect(offset, 0, box.getWidth() - offset, box.getHeight(), arcSize, arcSize);
+                boxGraphics.setComposite(AlphaComposite.SrcAtop);
+                boxGraphics.drawImage(gradientImage, 0, 0, box.getWidth(), box.getHeight(), null);
+                boxGraphics.setComposite(originalComposite);
+                boxGraphics.setStroke(STROKE);
 
-            // Falls TitlePanel existiert, speziell zeichnen
-            if (getPanTitle() != null) {
-                final Rectangle bounds = getPanTitle().getBounds();
-                boxGraphics.setComposite(AlphaComposite.SrcAtop.derive(titlePanelOpacity));
-                boxGraphics.setColor(colorTitle);
-                boxGraphics.fillRect(0, bounds.y, bounds.width + offset, bounds.height);
-                boxGraphics.setComposite(composite);
-                boxGraphics.setColor(colorDarkLine);
-                boxGraphics.drawLine(offset, bounds.height - 1, bounds.width + (3 * offset), bounds.height - 1);
-                boxGraphics.setColor(colorBrightLine);
-                boxGraphics.drawLine(offset, bounds.height, bounds.width + (3 * offset), bounds.height);
-            }
+                // Falls TitlePanel existiert, speziell zeichnen
+                if (getPanTitle() != null) {
+                    final Rectangle bounds = getPanTitle().getBounds();
+                    boxGraphics.setComposite(AlphaComposite.SrcAtop.derive(titlePanelOpacity));
+                    boxGraphics.setColor(colorTitle);
+                    boxGraphics.fillRect(0, bounds.y, bounds.width + offset, bounds.height);
+                    boxGraphics.setComposite(composite);
+                    boxGraphics.setColor(colorDarkLine);
+                    boxGraphics.drawLine(offset, bounds.height - 1, bounds.width + (3 * offset), bounds.height - 1);
+                    boxGraphics.setColor(colorBrightLine);
+                    boxGraphics.drawLine(offset, bounds.height, bounds.width + (3 * offset), bounds.height);
+                }
 
-            // Falls InteractionPanel existiert, speziell zeichnen
-            if (getPanInter() != null) {
-                final Rectangle bounds = getPanInter().getBounds();
-                boxGraphics.setComposite(AlphaComposite.SrcAtop.derive(interPanelOpacity));
-                boxGraphics.setPaint(new GradientPaint(
-                        0,
-                        bounds.y,
-                        new Color(0, 0, 0, 160),
-                        0,
-                        bounds.y
-                                + bounds.height,
-                        Color.BLACK));
-                boxGraphics.fillRect(0, bounds.y, bounds.width + offset, bounds.height);
-                boxGraphics.setComposite(AlphaComposite.SrcAtop.derive(interLinesOpacity));
-                boxGraphics.setColor(colorDarkLine);
-                boxGraphics.drawLine(offset, bounds.y - 1, bounds.width + (3 * offset), bounds.y - 1);
-                boxGraphics.setColor(colorBrightLine);
-                boxGraphics.drawLine(offset, bounds.y, bounds.width + (3 * offset), bounds.y);
-            }
+                // Falls InteractionPanel existiert, speziell zeichnen
+                if (getPanInter() != null) {
+                    final Rectangle bounds = getPanInter().getBounds();
+                    boxGraphics.setComposite(AlphaComposite.SrcAtop.derive(interPanelOpacity));
+                    boxGraphics.setPaint(new GradientPaint(
+                            0,
+                            bounds.y,
+                            new Color(0, 0, 0, 160),
+                            0,
+                            bounds.y
+                                    + bounds.height,
+                            Color.BLACK));
+                    boxGraphics.fillRect(0, bounds.y, bounds.width + offset, bounds.height);
+                    boxGraphics.setComposite(AlphaComposite.SrcAtop.derive(interLinesOpacity));
+                    boxGraphics.setColor(colorDarkLine);
+                    boxGraphics.drawLine(offset, bounds.y - 1, bounds.width + (3 * offset), bounds.y - 1);
+                    boxGraphics.setColor(colorBrightLine);
+                    boxGraphics.drawLine(offset, bounds.y, bounds.width + (3 * offset), bounds.y);
+                }
 
-            // Rahmen des RoundRectangel in der Box nachzeichnen
-            boxGraphics.setComposite(AlphaComposite.SrcOver.derive(0.7f));
-            boxGraphics.setColor(colorBorder);
-            boxGraphics.drawRoundRect(offset, 0, box.getWidth() - (offset + 1), box.getHeight() - 1, arcSize, arcSize);
+                // Rahmen des RoundRectangel in der Box nachzeichnen
+                boxGraphics.setComposite(AlphaComposite.SrcOver.derive(0.7f));
+                boxGraphics.setColor(colorBorder);
+                boxGraphics.drawRoundRect(
+                    offset,
+                    0,
+                    box.getWidth()
+                            - (offset + 1),
+                    box.getHeight()
+                            - 1,
+                    arcSize,
+                    arcSize);
 
-            // Weissen oberen Rand zeichnen
-            final BufferedImage glossy = new BufferedImage(box.getWidth(), box.getHeight(), IMAGE_TYPE);
-            final Graphics2D glossyGraphics2D = glossy.createGraphics();
+                // Weissen oberen Rand zeichnen
+                final BufferedImage glossy = new BufferedImage(box.getWidth(), box.getHeight(), IMAGE_TYPE);
+                final Graphics2D glossyGraphics2D = glossy.createGraphics();
 //            glossyGraphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            glossyGraphics2D.setStroke(STROKE);
+                glossyGraphics2D.setStroke(STROKE);
 
-            // Glossy-Effekt oben
-            glossyGraphics2D.setColor(colorGlossy);
+                // Glossy-Effekt oben
+                glossyGraphics2D.setColor(colorGlossy);
 //            if (noTitlePanel) {
-            glossyGraphics2D.drawRoundRect(offset + 1, 1, box.getWidth() - (offset + 3), 2 * arcSize, arcSize, arcSize);
-            glossyGraphics2D.setComposite(AlphaComposite.DstIn);
-            glossyGraphics2D.setPaint(new GradientPaint(
-                    0,
-                    0,
-                    new Color(255, 255, 255, 255),
-                    0,
-                    arcSize
-                            / 2,
-                    new Color(255, 255, 255, 0)));
-            glossyGraphics2D.fillRect(0, 0, box.getWidth(), arcSize);
-            glossyGraphics2D.setPaint(new Color(255, 255, 255, 0));
-            glossyGraphics2D.fillRect(0, arcSize / 2, box.getWidth(), 2 * arcSize);
+                glossyGraphics2D.drawRoundRect(offset + 1,
+                    1,
+                    box.getWidth()
+                            - (offset + 3),
+                    2
+                            * arcSize,
+                    arcSize,
+                    arcSize);
+                glossyGraphics2D.setComposite(AlphaComposite.DstIn);
+                glossyGraphics2D.setPaint(new GradientPaint(
+                        0,
+                        0,
+                        new Color(255, 255, 255, 255),
+                        0,
+                        arcSize
+                                / 2,
+                        new Color(255, 255, 255, 0)));
+                glossyGraphics2D.fillRect(0, 0, box.getWidth(), arcSize);
+                glossyGraphics2D.setPaint(new Color(255, 255, 255, 0));
+                glossyGraphics2D.fillRect(0, arcSize / 2, box.getWidth(), 2 * arcSize);
 //            } else {
 //                gg.fillRoundRect(offset+2,2, box.getWidth()-(offset+4), getPanTitle().getHeight(),arcSize-2,arcSize-2);
 //                gg.setComposite(AlphaComposite.DstIn);
@@ -287,56 +264,39 @@ public class PureCoolPanel extends JPanel {
 //                gg.fillRect(0,getPanTitle().getHeight()/2,box.getWidth(), getPanTitle().getHeight());
 //            }
 
-            // Drop Shadow rendern
-            final BufferedImage shadow = shadowRenderer.createShadow(box);
+                // Drop Shadow rendern
+                final BufferedImage shadow = shadowRenderer.createShadow(box);
 
-            // Fertige Box und ihren Schatten zeichnen.
-            cacheImage = new BufferedImage(shadow.getWidth(), shadow.getHeight(), IMAGE_TYPE);
-            final Graphics2D resultGraphics2D = cacheImage.createGraphics();
-            resultGraphics2D.drawImage(shadow, 0, 0, null);
-            resultGraphics2D.drawImage(box, 0, 0, null);
-            resultGraphics2D.setComposite(AlphaComposite.SrcOver.derive(glossyOpacity));
-            resultGraphics2D.drawImage(glossy, 0, 0, null);
-            resultGraphics2D.setComposite(originalComposite);
-            if (this.icons != null) {
+                // Fertige Box und ihren Schatten zeichnen.
+                cacheImage = new BufferedImage(shadow.getWidth(), shadow.getHeight(), IMAGE_TYPE);
+                final Graphics2D resultGraphics2D = cacheImage.createGraphics();
+                resultGraphics2D.drawImage(shadow, 0, 0, null);
+                resultGraphics2D.drawImage(box, 0, 0, null);
+                resultGraphics2D.setComposite(AlphaComposite.SrcOver.derive(glossyOpacity));
+                resultGraphics2D.drawImage(glossy, 0, 0, null);
+                resultGraphics2D.setComposite(originalComposite);
+                if (this.icons != null) {
 //                resultGraphics2D.drawImage(this.icons.getImage(), box.getWidth() - this.icons.getIconWidth() - offsetRight, offsetTop, null);
-                resultGraphics2D.drawImage(this.icons.getImage(),
-                    box.getWidth()
-                            - this.icons.getIconWidth()
-                            - offsetRight,
-                    (panTitle.getHeight() / 2)
-                            + 3
-                            - (this.icons.getIconHeight() / 2),
-                    null);
+                    resultGraphics2D.drawImage(this.icons.getImage(),
+                        box.getWidth()
+                                - this.icons.getIconWidth()
+                                - offsetRight,
+                        (panTitle.getHeight() / 2)
+                                + 3
+                                - (this.icons.getIconHeight() / 2),
+                        null);
+                }
+                boxGraphics.dispose();
+                glossyGraphics2D.dispose();
+                resultGraphics2D.dispose();
+                box.flush();
+                glossy.flush();
+                shadow.flush();
             }
-            boxGraphics.dispose();
-            glossyGraphics2D.dispose();
-            resultGraphics2D.dispose();
-            box.flush();
-            glossy.flush();
-            shadow.flush();
+
+            // Entgueltiges Bild in Panel zeichnen
+            g2d.drawImage(cacheImage, 0, 0, null);
         }
-
-        // Entgueltiges Bild in Panel zeichnen
-        g2d.drawImage(cacheImage, 0, 0, null);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public JComponent getPanTitle() {
-        return panTitle;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  panTitle  DOCUMENT ME!
-     */
-    public void setPanTitle(final JPanel panTitle) {
-        this.panTitle = panTitle;
     }
 
     /**
@@ -355,24 +315,6 @@ public class PureCoolPanel extends JPanel {
      */
     public void setPanMap(final JComponent panMap) {
         this.panMap = panMap;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public JComponent getPanInter() {
-        return panInter;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  panInter  DOCUMENT ME!
-     */
-    public void setPanInter(final JComponent panInter) {
-        this.panInter = panInter;
     }
 
     /**

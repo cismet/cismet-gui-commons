@@ -7,6 +7,7 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
+import Sirius.navigator.resource.PropertyManager;
 import com.vividsolutions.jts.geom.Geometry;
 
 import org.jdesktop.fuse.ResourceInjector;
@@ -97,7 +98,7 @@ public class BlurredMapCoolPanel extends PainterCoolPanel implements ComponentLi
 //        Ressourcen hierarchisch rekursiv nach oben einfuegen
         ResourceInjector.get("blurredmapcoolpanel.style").inject(true, this); //
         // NOI18N
-        usePainterCoolPanel = false;                                                                             // PropertyManager.getManager().isUsePainterCoolPanel();
+        usePainterCoolPanel =  PropertyManager.getManager().isUsePainterCoolPanel();
         gradientColorTop = javax.swing.UIManager.getDefaults().getColor("Button.shadow");                        // NOI18N
         gradientColorBottom = javax.swing.UIManager.getDefaults().getColor("Button.background");                 // NOI18N
         mapBounds = null;

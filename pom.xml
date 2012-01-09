@@ -134,11 +134,6 @@
             <version>2.1.1</version>
         </dependency>
         <dependency>
-            <groupId>de.cismet.cids</groupId>
-            <artifactId>cids-server</artifactId>
-            <version>1.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <version>3.5.2</version>

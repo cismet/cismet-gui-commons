@@ -104,10 +104,12 @@ public class PureCoolPanel extends PainterCoolPanel {
     public Color gradientColorTop;
     @InjectedResource
     public Color gradientColorBottom;
+    @InjectedResource
+    public boolean usePainterCoolPanel;
     private JPanel spinner;
     private JComponent panMap;
     private JComponent panContent;
-    private boolean usePainterCoolPanel = false;
+//    private boolean usePainterCoolPanel = false;
     private ImageIcon icons;
     private BufferedImage cacheImage;
     private BufferedImage gradientImage;

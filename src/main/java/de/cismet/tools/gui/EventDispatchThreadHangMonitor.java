@@ -29,18 +29,21 @@ import java.util.TimerTask;
  * @author   Elliott Hughes <enh@jessies.org>
  * @version  $Revision$, $Date$
  */
+
 public final class EventDispatchThreadHangMonitor extends EventQueue {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final EventQueue INSTANCE = new EventDispatchThreadHangMonitor();
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
+    private static final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
             EventDispatchThreadHangMonitor.class);
+
+    private static final EventQueue INSTANCE = new EventDispatchThreadHangMonitor();
+
     // Time to wait between checks that the event dispatch thread isn't hung.
     private static final long CHECK_INTERVAL_MS = 100;
 
     // Maximum time we won't warn about.
-    private static final long UNREASONABLE_DISPATCH_DURATION_MS = 500;
+    private static final long UNREASONABLE_DISPATCH_DURATION_MS = 350;
 
     // Used as the value of startedLastEventDispatchAt when we're not in
     // the middle of event dispatch.
@@ -74,7 +77,7 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
     private void initTimer() {
         final long initialDelayMs = 0;
         final boolean isDaemon = true;
-        final Timer timer = new Timer("EventDispatchThreadHangMonitor", isDaemon); // NOI18N
+        final Timer timer = new Timer("EventDispatchThreadHangMonitor", isDaemon);
         timer.schedule(new HangChecker(), initialDelayMs, CHECK_INTERVAL_MS);
     }
 
@@ -92,9 +95,6 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
      * Sets up hang detection for the event dispatch thread.
      */
     public static void initMonitoring() {
-        if (log.isInfoEnabled()) {
-            log.info("EventDispatchThreadHangMonitor inited"); // NOI18N
-        }
         Toolkit.getDefaultToolkit().getSystemEventQueue().push(INSTANCE);
     }
 
@@ -131,7 +131,8 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
      */
     private synchronized void postDispatchEvent() {
         if (reportedHang) {
-            log.fatal("--- event dispatch thread unstuck after " + timeSoFar() + " ms."); // NOI18N
+            System.out.println("--- event dispatch thread unstuck after " + timeSoFar() + " ms.");
+            log.fatal("--- event dispatch thread unstuck after " + timeSoFar() + " ms.");
         }
         startedLastEventDispatchAt = NO_CURRENT_EVENT;
     }
@@ -147,6 +148,9 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         */
         @Override
         public void run() {
             // Synchronize on the outer class, because that's where all
@@ -181,36 +185,31 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
             }
 
             reportedHang = true;
-
+            System.out.println("--- event dispatch thread stuck processing event for " + timeSoFar() + " ms:");
             final StackTraceElement[] stackTrace = eventDispatchThread.getStackTrace();
-            final Throwable customThrowable = new Throwable() {
-
-                    @Override
-                    public StackTraceElement[] getStackTrace() {
-                        return stackTrace;
-                    }
-                };
-            log.fatal("--- event dispatch thread stuck processing event for " + timeSoFar() + " ms:", customThrowable); // NOI18N
+            printStackTrace(System.out, stackTrace);
+            final Throwable t = new Throwable("event dispatch thread stuck");
+            t.setStackTrace(stackTrace);
+            log.fatal("--- event dispatch thread stuck processing event for " + timeSoFar() + " ms:", t);
         }
 
         /**
          * DOCUMENT ME!
          *
+         * @param  out         DOCUMENT ME!
          * @param  stackTrace  DOCUMENT ME!
          */
-        private void logStackTrace(final StackTraceElement[] stackTrace) {
+        private void printStackTrace(final PrintStream out, final StackTraceElement[] stackTrace) {
             // We know that it's not interesting to show any code above where
             // we get involved in event dispatch, so we stop printing the stack
             // trace when we get as far back as our code.
-            String s = "";                                 // NOI18N
             final String ourEventQueueClassName = EventDispatchThreadHangMonitor.class.getName();
             for (final StackTraceElement stackTraceElement : stackTrace) {
                 if (stackTraceElement.getClassName().equals(ourEventQueueClassName)) {
-                    break;
+                    return;
                 }
-                s += "    " + stackTraceElement + "\n\n "; // NOI18N
+                out.println("    " + stackTraceElement);
             }
-            log.fatal("Stacktrace\n\n" + s);               // NOI18N
         }
     }
 }

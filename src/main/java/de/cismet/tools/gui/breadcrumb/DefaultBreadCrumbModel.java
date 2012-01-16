@@ -86,12 +86,20 @@ public class DefaultBreadCrumbModel implements BreadCrumbModel {
 
     @Override
     public BreadCrumb getLastCrumb() {
-        return data.get(data.size() - 1);
+        if(data.isEmpty()){
+            return null;
+        } else {
+            return data.get(data.size() - 1);
+        }
     }
 
     @Override
     public BreadCrumb getFirstCrumb() {
-        return data.get(0);
+        if(data.isEmpty()){
+            return null;
+        } else {
+            return data.get(0);
+        }
     }
 
     @Override

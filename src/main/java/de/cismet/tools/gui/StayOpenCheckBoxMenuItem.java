@@ -141,6 +141,11 @@ public class StayOpenCheckBoxMenuItem extends JCheckBoxMenuItem {
         MenuSelectionManager.defaultManager().setSelectedPath(path);
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Color getBackground() {
         if (isSelected()) {
@@ -150,6 +155,11 @@ public class StayOpenCheckBoxMenuItem extends JCheckBoxMenuItem {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public Color getForeground() {
         if (isSelected()) {

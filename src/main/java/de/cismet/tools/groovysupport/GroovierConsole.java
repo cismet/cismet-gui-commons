@@ -276,6 +276,11 @@ public class GroovierConsole extends javax.swing.JPanel {
 
         //~ Methods ------------------------------------------------------------
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  s  DOCUMENT ME!
+         */
         @Override
         public void println(final String s) {
             if (logLastInput) {
@@ -306,6 +311,11 @@ public class GroovierConsole extends javax.swing.JPanel {
             return lastInput;
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  o  DOCUMENT ME!
+         */
         @Override
         public void println(final Object o) {
             if (o == null) {
@@ -315,6 +325,11 @@ public class GroovierConsole extends javax.swing.JPanel {
             }
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  s  DOCUMENT ME!
+         */
         @Override
         public void print(final String s) {
             if (logLastInput) {
@@ -336,41 +351,81 @@ public class GroovierConsole extends javax.swing.JPanel {
             EventQueue.invokeLater(update);
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  d  DOCUMENT ME!
+         */
         @Override
         public void print(final double d) {
             print(d + ""); // NOI18N
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  s  DOCUMENT ME!
+         */
         @Override
         public void print(final char[] s) {
             print(new String(s));
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  c  DOCUMENT ME!
+         */
         @Override
         public void print(final char c) {
             print(c + ""); // NOI18N
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  obj  DOCUMENT ME!
+         */
         @Override
         public void print(final Object obj) {
             print(obj.toString());
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  f  DOCUMENT ME!
+         */
         @Override
         public void print(final float f) {
             print(f + ""); // NOI18N
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  i  DOCUMENT ME!
+         */
         @Override
         public void print(final int i) {
             print(i + ""); // NOI18N
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  b  DOCUMENT ME!
+         */
         @Override
         public void print(final boolean b) {
             print(b + ""); // NOI18N
         }
 
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  l  DOCUMENT ME!
+         */
         @Override
         public void print(final long l) {
             print(l + ""); // NOI18N

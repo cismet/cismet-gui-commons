@@ -26,6 +26,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
 
+import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.StaticDebuggingTools;
 
 /**
@@ -226,6 +227,7 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
      */
     private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         final Console console = new Console();
+        console.getShell().evaluate("import de.cismet.cismap.commons.interaction.*;");
         new Thread(new Runnable() {
 
                 @Override
@@ -233,6 +235,11 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
                     console.run();
                 }
             }).start();
+        try {
+            BrowserLauncher.openURL("https://gist.github.com/gists/4ef6a11c7ad17e2390ed/");
+        } catch (Exception ex) {
+            log.error("Could not open Groovy GIST");
+        }
     } //GEN-LAST:event_jButton2ActionPerformed
 
     /**

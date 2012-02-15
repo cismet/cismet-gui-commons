@@ -236,7 +236,7 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
                 }
             }).start();
         try {
-            BrowserLauncher.openURL("https://gist.github.com/gists/4ef6a11c7ad17e2390ed/");
+            BrowserLauncher.openURL("https://gist.github.com/4ef6a11c7ad17e2390ed/");
         } catch (Exception ex) {
             log.error("Could not open Groovy GIST");
         }

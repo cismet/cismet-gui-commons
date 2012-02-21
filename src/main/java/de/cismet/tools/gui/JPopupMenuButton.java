@@ -11,11 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 /**
  * An implementation of a "popup menu button". See a short <a href="http://flexo.cismet.de/gadgets/JPopupMenuButton/">
@@ -49,8 +45,10 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
     Icon downArrow = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down.png"));   // NOI18N
     Icon downArrow2 = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down2.png")); // NOI18N
     Icon userDefinedIcon = null;
+    Icon userDefinedSelectedIcon = null;
 
     private int arrowXOffset = 0;
+    private int arrowSelectedXOffset = 0;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -77,12 +75,8 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
      * @return  DOCUMENT ME!
      */
     private boolean isOverMenuPopupArea(final int x, final int y) {
-        if ((x >= (getWidth() - getIcon().getIconWidth() + arrowXOffset - getInsets().right))
-                    && (x <= (getWidth() - 1))) {
-            return true;
-        } else {
-            return false;
-        }
+        return (x >= (getWidth() - getIcon().getIconWidth() + arrowXOffset - getInsets().right))
+                    && (x <= (getWidth() - 1));
     }
 
     /**
@@ -95,7 +89,7 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
         final boolean oldValue = mouseInPopupArea;
         mouseInPopupArea = isOverMenuPopupArea((int)e.getPoint().getX(), (int)e.getPoint().getY());
         if (oldValue != mouseInPopupArea) {
-            evaluateIcon();
+            evaluateIcon(isSelected());
         }
     }
 
@@ -139,7 +133,7 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
     @Override
     public void mouseExited(final java.awt.event.MouseEvent e) {
         mouseInPopupArea = false;
-        evaluateIcon();
+        evaluateIcon(isSelected());
     }
 
     /**
@@ -195,43 +189,62 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
     @Override
     public void setIcon(final javax.swing.Icon defaultIcon) {
         userDefinedIcon = defaultIcon;
-        evaluateIcon();
+        evaluateIcon(false);
+    }
+
+    @Override
+    public void setSelectedIcon(final javax.swing.Icon defaultSelectedIcon) {
+        userDefinedSelectedIcon = defaultSelectedIcon;
+        evaluateIcon(true);
     }
 
     /**
      * Sets the right down arrow icon.
+     *
+     * @param  isSelected  DOCUMENT ME!
      */
-    private void evaluateIcon() {
+    private void evaluateIcon(final boolean isSelected) {
         if (mouseInPopupArea && isEnabled()) {
-            evaluateIcon(downArrow2);
+            evaluateIcon(downArrow2, isSelected);
         } else {
-            evaluateIcon(downArrow);
+            evaluateIcon(downArrow, isSelected);
         }
     }
 
     /**
      * Sets the given Icon as down arrow.
      *
-     * @param  arrow  the icon used as the arrow
+     * @param  arrow       the icon used as the arrow
+     * @param  isSelected  DOCUMENT ME!
      */
-    private void evaluateIcon(final Icon arrow) {
-        if (userDefinedIcon != null) {
-            final int newWidth = userDefinedIcon.getIconWidth() + arrow.getIconWidth();
-            int newHeight = userDefinedIcon.getIconHeight();
-            int arrowYOffset = (userDefinedIcon.getIconHeight() - arrow.getIconHeight()) / 2;
-            arrowXOffset = userDefinedIcon.getIconWidth();
+    private void evaluateIcon(final Icon arrow, final boolean isSelected) {
+        final Icon icon = ((userDefinedSelectedIcon != null) && isSelected) ? userDefinedSelectedIcon : userDefinedIcon;
+
+        if (icon != null) {
+            final int newWidth = icon.getIconWidth() + arrow.getIconWidth();
+            int newHeight = icon.getIconHeight();
+            int arrowYOffset = (icon.getIconHeight() - arrow.getIconHeight()) / 2;
+            arrowXOffset = icon.getIconWidth();
             int iconYOffset = 0;
             if (arrow.getIconHeight() > newHeight) {
                 newHeight = arrow.getIconHeight();
                 arrowYOffset = 0;
-                iconYOffset = (arrow.getIconHeight() - userDefinedIcon.getIconHeight()) / 2;
+                iconYOffset = (arrow.getIconHeight() - icon.getIconHeight()) / 2;
             }
             final BufferedImage tmp = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-            userDefinedIcon.paintIcon(this, tmp.getGraphics(), 0, iconYOffset);
-            arrow.paintIcon(this, tmp.getGraphics(), userDefinedIcon.getIconWidth(), arrowYOffset);
-            super.setIcon(new ImageIcon(tmp));
+            icon.paintIcon(this, tmp.getGraphics(), 0, iconYOffset);
+            arrow.paintIcon(this, tmp.getGraphics(), icon.getIconWidth(), arrowYOffset);
+            if (isSelected) {
+                super.setSelectedIcon(new ImageIcon(tmp));
+            } else {
+                super.setIcon(new ImageIcon(tmp));
+            }
         } else {
-            super.setIcon(arrow);
+            if (isSelected) {
+                super.setSelectedIcon(arrow);
+            } else {
+                super.setIcon(arrow);
+            }
         }
     }
 

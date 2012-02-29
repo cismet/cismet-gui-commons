@@ -314,6 +314,71 @@ public class Static2DTools {
     }
 
     /**
+     * Rotates the given {@link BufferedImage} in the given angle around the icon's center point. Rotation is clock-wise
+     * if the given angle is positive or counter clock-wise if the given angle is negative. There is no necessity to
+     * stick to the bounds described for the <code>angle</code> parameter but there is no sense to rotate in an angle of
+     * e.g 765 degrees because in this case a rotation in an angle of 45 degrees is more senseful. However, this method
+     * will accept any double values as an angle. Special double values such as {@link Double#NaN}
+     * {@link Double#NEGATIVE_INFINITY} and {@link Double#POSITIVE_INFINITY} will be handle as if angle is <code>
+     * 0</code>.
+     *
+     * <p>This method uses {@link AffineTransform} to rotate the image, but without using any AffineTransform.rotate()
+     * method. It's not that easy to specify the rotation center of the given image, because you have to use whether
+     * (image.getHeight() / 2, image.getHeight() / 2) or (image.getWidth() / 2, image.getWidth() / 2) depending on the
+     * angle. It's easier to simulate the steps necessary to rotate the image. See
+     * http://stackoverflow.com/questions/2257141/problems-rotating-bufferedimage for further information.</p>
+     *
+     * @param   image            the <code>BufferedImage</code> to rotate
+     * @param   angle            the rotation angle, presumably a value between 0 and +/-PI if angle is in radian
+     *                           measure or 0 and +/-180 degrees.
+     * @param   radian           determines whether the given angle will be handles as an radian measure or not
+     * @param   backgroundColor  the color to be used as background
+     *
+     * @return  the rotated <code>BufferedImage</code>
+     *
+     * @throws  IllegalArgumentException  if the given image is <code>null</code>
+     */
+    public static BufferedImage rotate(final BufferedImage image,
+            final double angle,
+            final boolean radian,
+            final Color backgroundColor) {
+        if (image == null) {
+            throw new IllegalArgumentException("image must not be null"); // NOI18N
+        }
+
+        final BufferedImage bi = new BufferedImage(image.getHeight(),
+                image.getWidth(),
+                image.getType());
+
+        final Graphics2D g2 = (Graphics2D)bi.getGraphics();
+
+        if (backgroundColor != null) {
+            g2.setBackground(backgroundColor);
+        }
+
+        final double radianAngle;
+        if ((Double.isNaN(angle)) || (Double.isInfinite(angle))) {
+            radianAngle = 0;
+        } else {
+            if (radian) {
+                radianAngle = angle;
+            } else {
+                radianAngle = angle * Math.PI / 180d;
+            }
+        }
+
+        final AffineTransform rotateTransform = new AffineTransform();
+        rotateTransform.translate(0.5D * image.getHeight(), 0.5D * image.getWidth());
+        rotateTransform.rotate(radianAngle);
+        rotateTransform.translate(-0.5D * image.getWidth(), -0.5D * image.getHeight());
+
+        g2.drawImage(image, rotateTransform, null);
+        g2.dispose();
+
+        return bi;
+    }
+
+    /**
      * DOCUMENT ME!
      *
      * @param   icon    DOCUMENT ME!

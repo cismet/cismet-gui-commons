@@ -10,17 +10,30 @@ package de.cismet.tools.gui;
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageDecoder;
+import com.sun.media.jai.codec.MemoryCacheSeekableStream;
 import com.sun.media.jai.codec.SeekableStream;
+
+import org.openide.util.Exceptions;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.lang.ref.SoftReference;
 
+import java.net.URL;
+
 import javax.media.jai.RenderedImageAdapter;
+
+import de.cismet.security.WebAccessManager;
+
+import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
+import de.cismet.security.exceptions.MissingArgumentException;
+import de.cismet.security.exceptions.NoHandlerForURLException;
+import de.cismet.security.exceptions.RequestFailedException;
 
 /**
  * DOCUMENT ME!
@@ -71,6 +84,41 @@ public class MultiPagePictureReader {
         }
     }
 
+    /**
+     * Creates a new MultiPagePictureReader object.
+     *
+     * @param   imageURL  DOCUMENT ME!
+     *
+     * @throws  IOException               DOCUMENT ME!
+     * @throws  IllegalArgumentException  DOCUMENT ME!
+     */
+    public MultiPagePictureReader(final URL imageURL) throws IOException {
+        if (imageURL == null) {
+            throw new IllegalArgumentException("Cannot open a null URL.");
+        }
+
+        final String codec = getCodecString(imageURL.toExternalForm());
+
+        if (codec == null) {
+            throw new IOException("Unsupported filetype: '" + imageURL.toExternalForm()
+                        + "' doesn't point to a tiff or jpeg file!");
+        }
+
+        final SeekableStream stream;
+        try {
+            stream = new MemoryCacheSeekableStream(WebAccessManager.getInstance().doRequest(imageURL));
+        } catch (Exception ex) {
+            throw new IOException("Could not open '" + imageURL.toExternalForm() + "'.");
+        }
+
+        decoder = ImageCodec.createImageDecoder(codec, stream, null);
+        pageCount = decoder.getNumPages();
+        cache = new SoftReference[pageCount];
+        for (int i = 0; i < cache.length; ++i) {
+            cache[i] = new SoftReference<BufferedImage>(null);
+        }
+    }
+
     //~ Methods ----------------------------------------------------------------
 
     /**
@@ -100,6 +148,24 @@ public class MultiPagePictureReader {
      */
     private String getCodecString(final File imageFile) {
         final String filename = imageFile.getName().toLowerCase();
+        final String extension = filename.substring(filename.lastIndexOf(".") + 1); // NOI18N
+        if (extension.matches("(tiff|tif)")) {                                      // NOI18N
+            return CODEC_TIFF;
+        } else if (extension.matches("(jpg|jpeg)")) {                               // NOI18N
+            return CODEC_JPEG;
+        }
+        return null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   imagePath  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String getCodecString(final String imagePath) {
+        final String filename = imagePath.toLowerCase();
         final String extension = filename.substring(filename.lastIndexOf(".") + 1); // NOI18N
         if (extension.matches("(tiff|tif)")) {                                      // NOI18N
             return CODEC_TIFF;

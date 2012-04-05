@@ -21,6 +21,7 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -53,6 +54,9 @@ import de.cismet.security.handler.WSSAccessHandler;
 public class WebAccessManager implements AccessHandler {
 
     //~ Static fields/initializers ---------------------------------------------
+
+    public static final String HEADER_CONTENTTYPE_KEY = "Content-Type";
+    public static final String HEADER_CONTENTTYPE_VALUE_POST = "application/x-www-form-urlencoded";
 
     private static WebAccessManager instance = null;
     private static final ReentrantReadWriteLock reLock = new ReentrantReadWriteLock();

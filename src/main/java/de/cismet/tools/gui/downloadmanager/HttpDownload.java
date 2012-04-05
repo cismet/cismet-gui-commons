@@ -23,15 +23,16 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+
+import java.util.HashMap;
 
 import de.cismet.security.AccessHandler.ACCESS_METHODS;
 
@@ -58,6 +59,7 @@ public class HttpDownload extends AbstractDownload {
 
     private URL url;
     private String request;
+    private HashMap<String, String> headers;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -78,10 +80,33 @@ public class HttpDownload extends AbstractDownload {
             final String title,
             final String filename,
             final String extension) {
+        this(url, request, new HashMap<String, String>(), directory, title, filename, extension);
+    }
+
+    /**
+     * Constructor for Download.
+     *
+     * @param  url        The URL of the server to download from.
+     * @param  request    The request to send.
+     * @param  headers    A map containing key/value String pairs which are used as request headers.
+     * @param  directory  Specifies in which directory to save the file. This should be specified relative to the
+     *                    general download directory.
+     * @param  title      The title of the download.
+     * @param  filename   A String containing the filename.
+     * @param  extension  A String containing the file extension.
+     */
+    public HttpDownload(final URL url,
+            final String request,
+            final HashMap<String, String> headers,
+            final String directory,
+            final String title,
+            final String filename,
+            final String extension) {
         this.url = url;
         this.request = request;
         this.directory = directory;
         this.title = title;
+        this.headers = headers;
 
         if (DownloadManager.instance().isEnabled()) {
             determineDestinationFile(filename, extension);
@@ -122,7 +147,8 @@ public class HttpDownload extends AbstractDownload {
                                 .doRequest(
                                         url,
                                         new StringReader(request),
-                                        ACCESS_METHODS.POST_REQUEST);
+                                        ACCESS_METHODS.POST_REQUEST,
+                                        headers);
                 }
             }
 

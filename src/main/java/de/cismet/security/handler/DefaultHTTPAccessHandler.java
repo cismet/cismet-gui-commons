@@ -26,6 +26,7 @@ import java.io.Reader;
 import java.net.URL;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import de.cismet.security.AccessHandler.ACCESS_HANDLER_TYPES;
 import de.cismet.security.AccessHandler.ACCESS_METHODS;
@@ -115,6 +116,12 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler {
                 }
             }
         }
+
+        if ((options != null) && !options.isEmpty()) {
+            for (final Entry<String, String> option : options.entrySet()) {
+                httpMethod.addRequestHeader(option.getKey(), option.getValue());
+            }
+        }
         httpMethod.setDoAuthentication(true);
         final int statuscode = client.executeMethod(httpMethod);
         switch (statuscode) {
@@ -122,19 +129,19 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler {
                 if (log.isInfoEnabled()) {
                     log.info("Status Code from Server SC_UNAUTHORIZED: " + HttpStatus.SC_UNAUTHORIZED); // NOI18N
                 }
-                throw new CannotReadFromURLException("You are not authorised to access this URL."); // NOI18N
+                throw new CannotReadFromURLException("You are not authorised to access this URL.");     // NOI18N
             }
             case (HttpStatus.SC_OK): {
                 if (log.isDebugEnabled()) {
-                    log.debug("httpstatuscode ok");                                              // NOI18N
+                    log.debug("httpstatuscode ok");                                                     // NOI18N
                 }
                 return new BufferedInputStream(httpMethod.getResponseBodyAsStream());
             }
             default: {
                 if (log.isDebugEnabled()) {
-                    log.debug("bad httpstatuscode");                                             // NOI18N
+                    log.debug("bad httpstatuscode");                                                    // NOI18N
                 }
-                throw new BadHttpStatusCodeException("Statuscode: " + statuscode, statuscode);   // NOI18N
+                throw new BadHttpStatusCodeException("Statuscode: " + statuscode, statuscode);          // NOI18N
             }
         }
     }

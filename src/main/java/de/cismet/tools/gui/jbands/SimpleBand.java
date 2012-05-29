@@ -89,6 +89,15 @@ public class SimpleBand implements Band, BandPrefixProvider {
         max = null;
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    public void removeAllMember() {
+        members.clear();
+        min = null;
+        max = null;
+    }
+
     @Override
     public double getMax() {
         if (max == null) {

@@ -10,8 +10,10 @@ package de.cismet.tools.gui.jbands;
 import java.util.ArrayList;
 
 import de.cismet.tools.gui.jbands.interfaces.Band;
+import de.cismet.tools.gui.jbands.interfaces.BandListener;
 import de.cismet.tools.gui.jbands.interfaces.BandModel;
 import de.cismet.tools.gui.jbands.interfaces.BandModelListener;
+import de.cismet.tools.gui.jbands.interfaces.BandModificationProvider;
 
 /**
  * DOCUMENT ME!
@@ -19,12 +21,14 @@ import de.cismet.tools.gui.jbands.interfaces.BandModelListener;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public class SimpleBandModel implements BandModel {
+public class SimpleBandModel implements BandModel, BandListener {
 
     //~ Instance fields --------------------------------------------------------
 
-    ArrayList<Band> bands = new ArrayList<Band>();
-    ArrayList<BandModelListener> listeners = new ArrayList<BandModelListener>();
+    private ArrayList<Band> bands = new ArrayList<Band>();
+    private ArrayList<BandModelListener> listeners = new ArrayList<BandModelListener>();
+    private double min = -1;
+    private double max = -1;
 
     //~ Methods ----------------------------------------------------------------
 
@@ -47,6 +51,9 @@ public class SimpleBandModel implements BandModel {
      */
     public void addBand(final Band band) {
         assert (band != null);
+        if (band instanceof BandModificationProvider) {
+            ((BandModificationProvider)band).addBandListener(this);
+        }
         bands.add(band);
         fireBandModelChanged();
     }
@@ -74,6 +81,9 @@ public class SimpleBandModel implements BandModel {
         assert (band != null);
         assert (bands.contains(band));
         final int pos = bands.indexOf(band);
+        if (band instanceof BandModificationProvider) {
+            ((BandModificationProvider)band).removeBandListener(this);
+        }
         bands.remove(band);
         fireBandModelChanged();
         return pos;
@@ -81,20 +91,28 @@ public class SimpleBandModel implements BandModel {
 
     @Override
     public double getMax() {
-        double value = 0;
-        for (final Band b : bands) {
-            value = (b.getMax() > value) ? b.getMax() : value;
+        if (max > -1) {
+            return max;
+        } else {
+            double value = 0;
+            for (final Band b : bands) {
+                value = (b.getMax() > value) ? b.getMax() : value;
+            }
+            return value;
         }
-        return value;
     }
 
     @Override
     public double getMin() {
-        double value = 0;
-        for (final Band b : bands) {
-            value = (b.getMin() < value) ? b.getMin() : value;
+        if (min > -1) {
+            return min;
+        } else {
+            double value = 0;
+            for (final Band b : bands) {
+                value = (b.getMin() < value) ? b.getMin() : value;
+            }
+            return value;
         }
-        return value;
     }
 
     @Override
@@ -118,10 +136,32 @@ public class SimpleBandModel implements BandModel {
 
     /**
      * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
+    public void fireBandModelChanged(final BandModelEvent e) {
+        for (final BandModelListener bml : listeners) {
+            bml.bandModelChanged(e);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
      */
     public void fireBandModelSelectionChanged() {
         for (final BandModelListener bml : listeners) {
             bml.bandModelSelectionChanged(null);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
+    public void fireBandModelValuesChanged(final BandModelEvent e) {
+        for (final BandModelListener bml : listeners) {
+            bml.bandModelValuesChanged(e);
         }
     }
 
@@ -132,5 +172,43 @@ public class SimpleBandModel implements BandModel {
         for (final BandModelListener bml : listeners) {
             bml.bandModelValuesChanged(null);
         }
+    }
+
+    @Override
+    public void bandChanged(final BandEvent e) {
+        if (e.isSelectionLost()) {
+            final BandModelEvent bme = new BandModelEvent();
+            bme.setSelectionLost(true);
+            if ((e != null) && !e.isModelChanged()) {
+                fireBandModelValuesChanged(bme);
+            } else {
+                fireBandModelChanged(bme);
+            }
+            fireBandModelSelectionChanged();
+        } else {
+            if ((e != null) && !e.isModelChanged()) {
+                fireBandModelValuesChanged(null);
+            } else {
+                fireBandModelChanged(null);
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  min  the min to set
+     */
+    public void setMin(final double min) {
+        this.min = min;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  max  the max to set
+     */
+    public void setMax(final double max) {
+        this.max = max;
     }
 }

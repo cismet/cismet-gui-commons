@@ -15,6 +15,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 
@@ -142,6 +143,49 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler {
                     log.debug("bad httpstatuscode");                                                    // NOI18N
                 }
                 throw new BadHttpStatusCodeException("Statuscode: " + statuscode, statuscode);          // NOI18N
+            }
+        }
+    }
+
+    @Override
+    public InputStream doRequest(final URL url,
+            final InputStream requestParameter,
+            final HashMap<String, String> options) throws Exception {
+        final HttpClient client = getSecurityEnabledHttpClient(url);
+        final HttpMethod httpMethod = new PostMethod(url.toString());
+
+        ((PostMethod)httpMethod).setRequestEntity(new InputStreamRequestEntity(requestParameter));
+
+        if ((options != null) && !options.isEmpty()) {
+            for (final Entry<String, String> option : options.entrySet()) {
+                httpMethod.addRequestHeader(option.getKey(), option.getValue());
+            }
+        }
+
+        httpMethod.setDoAuthentication(true);
+
+        final int statuscode = client.executeMethod(httpMethod);
+        switch (statuscode) {
+            case (HttpStatus.SC_UNAUTHORIZED): {
+                if (log.isInfoEnabled()) {
+                    log.info("HTTP status code from server: UNAUTHORIZED - '" + HttpStatus.SC_UNAUTHORIZED + "'."); // NOI18N
+                }
+
+                throw new CannotReadFromURLException("You are not authorized to access this URL."); // NOI18N
+            }
+            case (HttpStatus.SC_OK): {
+                if (log.isDebugEnabled()) {
+                    log.debug("HTTP status code from server: OK - '" + HttpStatus.SC_OK + "'.");    // NOI18N
+                }
+
+                return new BufferedInputStream(httpMethod.getResponseBodyAsStream());
+            }
+            default: {
+                if (log.isDebugEnabled()) {
+                    log.debug("Unhandled HTTP status code '" + statuscode + "'."); // NOI18N
+                }
+
+                throw new BadHttpStatusCodeException("Unhandled HTTP status code '" + statuscode + "'.", statuscode); // NOI18N
             }
         }
     }

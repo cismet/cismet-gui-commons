@@ -21,7 +21,6 @@ import java.net.URL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -475,70 +474,122 @@ public class WebAccessManager implements AccessHandler {
         NoHandlerForURLException,
         Exception {
         readLock.lock();
-        final AccessHandler handler;
+
         if (url == null) {
-            // throw new MissingArgumentException("Es wurde keine URL gesetzt für das Request gesetzt");
-            throw new MissingArgumentException("URL parameter is empty");                 // NOI18N
+            throw new MissingArgumentException("URL is null.");                        // NOI18N
         } else if (accessMethod == null) {
-            log.warn("No Access Methode available calling Defaultmethod of the Handler"); // NOI18N
+            log.warn("No access method specified. Calling handler's default method."); // NOI18N
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("Request URL: " + url.toString());                // NOI18N
+            log.debug("Request URL: '" + url.toString() + "'."); // NOI18N
         }
+
+        final AccessHandler handler;
         try {
             handler = handlerMapping.get(url);
+
             if (handler != null) {
                 if (log.isDebugEnabled()) {
-                    log.debug("Handler for URL " + url + " available"); // NOI18N
+                    log.debug("Handler for URL '" + url + "' available."); // NOI18N
                 }
+
                 if (handler.isAccessMethodSupported(accessMethod)) {
                     if (log.isDebugEnabled()) {
-                        log.debug("Handler supports access method");    // NOI18N
+                        log.debug("Handler supports access method '" + accessMethod + "'."); // NOI18N
                     }
+
                     return handler.doRequest(url, requestParameter, accessMethod, options);
-//                    try {
-//                        return handler.doRequest(url, requestParameter, accessMethod, options);
-//                    } catch (Exception ex) {
-//                        //throw new RequestFailedException("Das Request konnte nicht ausgeführt werden", ex);
-//                        throw new RequestFailedException("The request cound not be performed: " + ex.getMessage(), ex);
-//                    }
                 } else {
-                    // throw new AccessMethodIsNotSupportedException("Die Accesss Methode: " + accessMethod + " ist vom
-                    // handler: " + handler.getClass() + " nicht unterstützt");
                     throw new AccessMethodIsNotSupportedException("The access method '" + accessMethod
                                 + "' is not supported by handler '" // NOI18N
-                                + handler.getClass() + "'");        // NOI18N
+                                + handler.getClass() + "'.");       // NOI18N
                 }
             } else {
                 // TODO Default handler
-                // throw new NoHandlerForURLException("Es ist kein Handler für die URL vorhanden");
                 if (log.isInfoEnabled()) {
-                    log.info("No URL Handler available --> using DefaultHandler"); // NOI18N
+                    log.info("No handler for URL available. Using DefaultHandler."); // NOI18N
                 }
+
                 if (defaultHandler != null) {
                     return defaultHandler.doRequest(url, requestParameter, accessMethod, options);
-//                    try {
-//                        return defaultHandler.doRequest(url, requestParameter, accessMethod, options);
-//                    } catch (Exception ex) {
-//                        //throw new RequestFailedException("Das Request konnte nicht ausgeführt werden :", ex);
-//                        throw new RequestFailedException("The request cound not be performed: " + ex.getMessage(), ex);
-//                    }
                 } else {
-                    // throw new NoHandlerForURLException("Es ist kein Defaulthandler vorhanden");
-                    throw new NoHandlerForURLException("No default handler available"); // NOI18N
+                    throw new NoHandlerForURLException("No default handler available."); // NOI18N
                 }
             }
         } catch (Exception ex) {
-            log.error("Error while doRequest: ", ex);                                   // NOI18N
+            log.error("Error while doRequest.", ex);                                     // NOI18N
 
             throw ex;
-            // throw new RequestFailedException("Das Request konnte nicht ausgeführt werden", ex);
-            // throw new RequestFailedException("The request cound not be performed: " + ex.getMessage(), ex);
         } finally {
             if (log.isDebugEnabled()) {
-                log.debug("releasing lock"); // NOI18N
+                log.debug("Releasing lock."); // NOI18N
             }
+
+            readLock.unlock();
+        }
+    }
+
+    @Override
+    public InputStream doRequest(final URL url,
+            final InputStream requestParameter,
+            final HashMap<String, String> options) throws MissingArgumentException,
+        AccessMethodIsNotSupportedException,
+        RequestFailedException,
+        NoHandlerForURLException,
+        Exception {
+        readLock.lock();
+
+        if (url == null) {
+            throw new MissingArgumentException("URL is null."); // NOI18N
+        }
+
+        if (log.isDebugEnabled()) {
+            log.debug("Request URL: '" + url.toString() + "'."); // NOI18N
+        }
+
+        final AccessHandler handler;
+        try {
+            handler = handlerMapping.get(url);
+
+            if (handler != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Handler for URL '" + url + "' available."); // NOI18N
+                }
+
+                if (handler.isAccessMethodSupported(ACCESS_METHODS.POST_REQUEST)) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Handler supports access method + '" + ACCESS_METHODS.POST_REQUEST + "'."); // NOI18N
+                    }
+
+                    return handler.doRequest(url, requestParameter, options);
+                } else {
+                    throw new AccessMethodIsNotSupportedException("The access method '" + ACCESS_METHODS.POST_REQUEST
+                                + "' is not supported by handler '" // NOI18N
+                                + handler.getClass() + "'.");       // NOI18N
+                }
+            } else {
+                // TODO Default handler
+
+                if (log.isInfoEnabled()) {
+                    log.info("No handler for URL available. Using default handler."); // NOI18N
+                }
+
+                if (defaultHandler != null) {
+                    return defaultHandler.doRequest(url, requestParameter, options);
+                } else {
+                    throw new NoHandlerForURLException("No default handler available."); // NOI18N
+                }
+            }
+        } catch (Exception ex) {
+            log.error("Error while doRequest.", ex);                                     // NOI18N
+
+            throw ex;
+        } finally {
+            if (log.isDebugEnabled()) {
+                log.debug("Releasing lock."); // NOI18N
+            }
+
             readLock.unlock();
         }
     }

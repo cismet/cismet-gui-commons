@@ -83,4 +83,18 @@ public interface AccessHandler {
             Reader requestParameter,
             AccessHandler.ACCESS_METHODS method,
             HashMap<String, String> options) throws Exception;
+
+    /**
+     * Send binary data in a POST request.
+     *
+     * @param   url               The URL where the data is sent to.
+     * @param   requestParameter  The payload.
+     * @param   options           The headers to add to the POST request.
+     *
+     * @return  The response.
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    InputStream doRequest(URL url,
+            InputStream requestParameter, HashMap<String, String> options) throws Exception;
 }

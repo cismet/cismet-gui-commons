@@ -5,10 +5,6 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.cismet.security.handler;
 
 import net.environmatics.acs.accessor.WSSAccessorDeegree;
@@ -32,7 +28,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import de.cismet.netutil.Proxy;
 
-import de.cismet.security.*;
+import de.cismet.security.PasswordDialog;
+import de.cismet.security.WebAccessManager;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -80,6 +77,13 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
     private ReentrantLock lock = new ReentrantLock();
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public InputStream doRequest(final URL url,
+            final InputStream requestParameter,
+            final HashMap<String, String> options) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     /**
      * public HTTPWSSAccessHandler(Component parentComponent, String subParent) { super(parentComponent); wssac = new

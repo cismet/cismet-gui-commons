@@ -210,15 +210,15 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             } else {
                 heightWeights[zeile] = 1f;
             }
-            if (b.getMax() > maxValue) {
-                maxValue = b.getMax();
+            if (b.getMax() > getMaxValue()) {
+                setMaxValue(b.getMax());
             }
-            if (b.getMin() < minValue) {
-                minValue = b.getMin();
+            if (b.getMin() < getMinValue()) {
+                setMinValue(b.getMin());
             }
         }
 
-        realWidth = maxValue - minValue;
+        realWidth = getMaxValue() - getMinValue();
 
         layoutBandMemberComponents();
     }
@@ -508,8 +508,8 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
                             ((BandModificationProvider)targetBand).addMember(
                                 station,
                                 null,
-                                minValue,
-                                maxValue,
+                                getMinValue(),
+                                getMaxValue(),
                                 subBands.get(n));
                         }
                     }
@@ -603,10 +603,10 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             double station = ((double)Math.round(realWidth * (x - xoffset)
                                 / (bandsPanel.getWidth() - xoffset)
                                 * 10)) / 10;
-            if (station < minValue) {
-                station = minValue;
-            } else if (station > maxValue) {
-                station = maxValue;
+            if (station < getMinValue()) {
+                station = getMinValue();
+            } else if (station > getMaxValue()) {
+                station = getMaxValue();
             }
 
             station = considerSnapping(station, e.getComponent());
@@ -625,7 +625,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      */
     private double considerSnapping(final double station, final Component c) {
         for (final SnappingPoint tmp : snappingPoints) {
-            if ((Math.abs(tmp.value - station) < ((maxValue - minValue) / 100)) && (tmp.c != c)) {
+            if ((Math.abs(tmp.value - station) < ((getMaxValue() - getMinValue()) / 100)) && (tmp.c != c)) {
                 return tmp.value;
             }
         }
@@ -900,6 +900,42 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         this.refreshAvoided = refreshAvoided;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the minValue
+     */
+    public double getMinValue() {
+        return minValue;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  minValue  the minValue to set
+     */
+    public void setMinValue(final double minValue) {
+        this.minValue = minValue;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the maxValue
+     */
+    public double getMaxValue() {
+        return maxValue;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  maxValue  the maxValue to set
+     */
+    public void setMaxValue(final double maxValue) {
+        this.maxValue = maxValue;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -933,7 +969,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         public int compareTo(final SnappingPoint other) {
             final double o = other.value;
 
-            if (Math.abs(value - o) < ((maxValue - minValue) / 100)) {
+            if (Math.abs(value - o) < ((getMaxValue() - getMinValue()) / 100)) {
                 return 0;
             } else {
                 return value.compareTo(o);

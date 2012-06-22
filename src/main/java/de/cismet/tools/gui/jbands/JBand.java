@@ -635,26 +635,26 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
 
     @Override
     public void mouseMoved(final MouseEvent e) {
-//        if (e.isShiftDown()) {
-//            final Component source = e.getComponent();
-//            int x = 0;
-//            if (source == bandsPanel) {
-//                x = e.getX();
-//            } else {
-//                x = (int)source.getBounds().getX()
-//                            + e.getX();
-//            }
-//            if (!bandsPanel.isMeasurementEnabled()) {
-//                bandsPanel.setMeasurementEnabled(true);
-//            }
-//            bandsPanel.setMeasurementx(x);
-//
-////            System.out.println("x"+first.getBounds());
-//        } else {
-//            if (bandsPanel.isMeasurementEnabled()) {
-//                bandsPanel.setMeasurementEnabled(false);
-//            }
-//        }
+        if (e.isControlDown()) {
+            final Component source = e.getComponent();
+            int x = 0;
+            if (source == bandsPanel) {
+                x = e.getX();
+            } else {
+                x = (int)source.getBounds().getX()
+                            + e.getX();
+            }
+            if (!bandsPanel.isMeasurementEnabled()) {
+                bandsPanel.setMeasurementEnabled(true);
+            }
+            bandsPanel.setMeasurementx(x);
+
+//            System.out.println("x"+first.getBounds());
+        } else {
+            if (bandsPanel.isMeasurementEnabled()) {
+                bandsPanel.setMeasurementEnabled(false);
+            }
+        }
         if (JBandCursorManager.getInstance().isLocked()) {
             JBandCursorManager.getInstance().setCursor(this);
         } else {

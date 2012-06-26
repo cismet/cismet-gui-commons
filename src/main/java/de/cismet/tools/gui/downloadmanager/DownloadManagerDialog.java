@@ -14,6 +14,7 @@ package de.cismet.tools.gui.downloadmanager;
 
 import org.apache.log4j.Logger;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.WindowEvent;
@@ -33,6 +34,7 @@ import javax.swing.text.DocumentFilter;
 
 import de.cismet.tools.BrowserLauncher;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.downloadmanager.Download.State;
 
 /**
@@ -120,9 +122,11 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     /**
      * Creates or returns the singleton object.
      *
-     * @param   parent  The parent frame of this dialog.
+     * @param       parent  The parent frame of this dialog.
      *
-     * @return  The singleton instance.
+     * @return      The singleton instance.
+     *
+     * @deprecated  Use instance(Component) instead.
      */
     public static DownloadManagerDialog instance(final Frame parent) {
         if (instance == null) {
@@ -138,9 +142,22 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     }
 
     /**
+     * Creates or returns the singleton object.
+     *
+     * @param   parent  The parent frame of this dialog.
+     *
+     * @return  The singleton instance.
+     */
+    public static DownloadManagerDialog instance(final Component parent) {
+        return instance((parent instanceof Frame) ? (Frame)parent : StaticSwingTools.getParentFrame(parent));
+    }
+
+    /**
      * If no download manager dialog exists, this method will instantiate and display a download manager dialog.
      *
-     * @param  parent  The parent frame of this dialog.
+     * @param       parent  The parent frame of this dialog.
+     *
+     * @deprecated  Use show(Component) instead.
      */
     public static void show(final Frame parent) {
         if (instance == null) {
@@ -151,11 +168,26 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     }
 
     /**
+     * If no download manager dialog exists, this method will instantiate and display a download manager dialog.
+     *
+     * @param  parent  The parent frame of this dialog.
+     */
+    public static void show(final Component parent) {
+        if (instance == null) {
+            final DownloadManagerDialog dialog = instance(parent);
+            dialog.setVisible(true);
+            dialog.pack();
+        }
+    }
+
+    /**
      * Displays the DownloadManagerDialog and asks - if user wants to - for a jobname.
      *
-     * @param   parent  The parent frame.
+     * @param       parent  The parent frame.
      *
-     * @return  The jobname specified by the user.
+     * @return      The jobname specified by the user.
+     *
+     * @deprecated  Use showAskingForUserTitle(Component) instead.
      */
     public static boolean showAskingForUserTitle(final Frame parent) {
         final boolean close = (instance == null);
@@ -165,6 +197,9 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         if (askForJobname) {
             instance.txtJobname.setText(jobname);
             instance.txtJobname.setCaretPosition(jobname.length());
+            if ((instance.dlgJobname.getOwner() != null) && (parent != null) && (parent.getIconImage() != null)) {
+                instance.dlgJobname.getOwner().setIconImage(parent.getIconImage());
+            }
             instance.dlgJobname.setPreferredSize(instance.dlgJobname.getMinimumSize());
             instance.dlgJobname.setLocationRelativeTo(parent);
             instance.dlgJobname.pack();
@@ -178,6 +213,17 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         }
 
         return result;
+    }
+
+    /**
+     * Displays the DownloadManagerDialog and asks - if user wants to - for a jobname.
+     *
+     * @param   parent  The parent frame.
+     *
+     * @return  The jobname specified by the user.
+     */
+    public static boolean showAskingForUserTitle(final Component parent) {
+        return showAskingForUserTitle(StaticSwingTools.getParentFrame(parent));
     }
 
     /**

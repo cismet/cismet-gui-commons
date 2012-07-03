@@ -107,7 +107,7 @@ public class SimpleBandModel implements BandModel, BandListener {
         if (min > -1) {
             return min;
         } else {
-            double value = 0;
+            double value = Double.MAX_VALUE;
             for (final Band b : bands) {
                 value = (b.getMin() < value) ? b.getMin() : value;
             }

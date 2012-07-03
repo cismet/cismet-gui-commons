@@ -43,6 +43,11 @@ public class EmptyAbsoluteHeightedBand implements Band, BandAbsoluteHeightProvid
 
     //~ Methods ----------------------------------------------------------------
 
+    /**
+     * this method should not have any effect on the max value of the JBand, that contains it.
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public double getMax() {
         return 0;
@@ -53,9 +58,14 @@ public class EmptyAbsoluteHeightedBand implements Band, BandAbsoluteHeightProvid
         throw new UnsupportedOperationException("not allowed in EmptyBand");
     }
 
+    /**
+     * this method should not have any effect on the min value of the JBand, that contains it.
+     *
+     * @return  DOCUMENT ME!
+     */
     @Override
     public double getMin() {
-        return 0;
+        return Double.MAX_VALUE;
     }
 
     @Override

@@ -158,6 +158,9 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @param  model  DOCUMENT ME!
      */
     public void setModel(final BandModel model) {
+        if (this.model != null) {
+            this.model.removeBandModelListener(this);
+        }
         this.model = model;
         model.addBandModelListener(this);
         init();
@@ -167,6 +170,8 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * DOCUMENT ME!
      */
     private void init() {
+        minValue = Double.MAX_VALUE;
+        maxValue = Double.MIN_VALUE;
         bandsPanel.removeAll();
         for (int row = 0; row < model.getNumberOfBands(); ++row) {
             final int cols = model.getBand(row).getNumberOfMembers();
@@ -413,11 +418,11 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         if (member instanceof Section) {
             memberRealWidth = member.getMax() - member.getMin();
             final int memberWidth = Math.max((int)((memberRealWidth * widthFactor) + 0.5d), 1);
-            final int posx = (int)((member.getMin() * widthFactor) + 0.5d) + xoffset;
+            final int posx = (int)(((member.getMin() - minValue) * widthFactor) + 0.5d) + xoffset;
             return new Rectangle(posx, posy, memberWidth, memberHeight);
         } else if (member instanceof Spot) {
             final int memberWidth = comp.getPreferredSize().width;
-            final int posx = (int)((member.getMin() * widthFactor) + 0.5d - (memberWidth / 2d)) + xoffset;
+            final int posx = (int)(((member.getMin() - minValue) * widthFactor) + 0.5d - (memberWidth / 2d)) + xoffset;
             return new Rectangle(posx, posy, memberWidth, memberHeight);
         }
         return null;
@@ -492,11 +497,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
 
                     if (targetBand != null) {
                         if (targetBand instanceof BandModificationProvider) {
-                            final double station = ((double)Math.round(
-                                        realWidth
-                                                * (e.getX() - xoffset)
-                                                / (bandsPanel.getWidth() - xoffset)
-                                                * 10)) / 10;
+                            final double station = getSationForXValue(e.getX());
                             final ArrayList<ArrayList<BandMember>> subBands = subBandMap.get(targetBand);
                             int n = (y - startY) / (bandHeight / subBands.size());
 
@@ -600,9 +601,8 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             } else {
                 x = (int)((Component)e.getSource()).getBounds().getX() + e.getX();
             }
-            double station = ((double)Math.round(realWidth * (x - xoffset)
-                                / (bandsPanel.getWidth() - xoffset)
-                                * 10)) / 10;
+            double station = getSationForXValue(x);
+
             if (station < getMinValue()) {
                 station = getMinValue();
             } else if (station > getMaxValue()) {
@@ -624,8 +624,12 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @return  DOCUMENT ME!
      */
     private double considerSnapping(final double station, final Component c) {
+        int dist = (int)((maxValue - minValue) / (100 * ((zoomFactor == 0) ? 1 : zoomFactor)));
+        if (dist < 1) {
+            dist = 1;
+        }
         for (final SnappingPoint tmp : snappingPoints) {
-            if ((Math.abs(tmp.value - station) < ((getMaxValue() - getMinValue()) / 100)) && (tmp.c != c)) {
+            if ((Math.abs(tmp.value - station) < (dist)) && (tmp.c != c)) {
                 return tmp.value;
             }
         }
@@ -936,6 +940,25 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         this.maxValue = maxValue;
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   x  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private double getSationForXValue(final int x) {
+        final double res = ((double)Math.round(
+                    ((realWidth * (x - xoffset) / (bandsPanel.getWidth() - xoffset)) + minValue)
+                            * 10.0)) / 10.0;
+        final double res2 = ((double)Math.round(realWidth * (x - xoffset) / (bandsPanel.getWidth() - xoffset)
+                            * 10.0)) / 10.0;
+        log.error("real " + realWidth + ":" + xoffset + " " + bandsPanel.getWidth() + " " + minValue);
+        log.error("res " + x + ":" + res + " " + res2);
+        return ((double)Math.round(((realWidth * (x - xoffset) / (bandsPanel.getWidth() - xoffset)) + minValue)
+                            * 10.0)) / 10.0;
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**
@@ -969,7 +992,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         public int compareTo(final SnappingPoint other) {
             final double o = other.value;
 
-            if (Math.abs(value - o) < ((getMaxValue() - getMinValue()) / 100)) {
+            if (Math.abs(value - o) < ((maxValue - minValue) / 100)) {
                 return 0;
             } else {
                 return value.compareTo(o);
@@ -1180,12 +1203,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             super.paintChildren(g);
             if (measurementEnabled) {
                 final Graphics2D g2d = (Graphics2D)g;
-                final double station = ((double)Math.round(
-                            realWidth
-                                    * (measurementx - xoffset)
-                                    / (bandsPanel.getWidth() - xoffset)
-                                    * 10))
-                            / 10;
+                final double station = getSationForXValue(measurementx);
 
                 g.setColor(SIDER);
                 g.drawLine(measurementx - 2, 0, measurementx - 2, getHeight());

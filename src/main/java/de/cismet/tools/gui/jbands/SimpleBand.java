@@ -112,7 +112,7 @@ public class SimpleBand implements Band, BandPrefixProvider {
     @Override
     public double getMin() {
         if (min == null) {
-            min = 0.0;
+            min = Double.MAX_VALUE;
             for (final BandMember bm : members) {
                 min = (min > bm.getMin()) ? bm.getMin() : min;
             }

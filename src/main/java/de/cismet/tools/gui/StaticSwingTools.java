@@ -29,15 +29,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
-import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
@@ -499,5 +491,32 @@ public class StaticSwingTools {
 
         r.setRect(minX, minY, maxX - minX, maxY - minY);
         return r;
+    }
+
+    /**
+     * Shows given dialog centered relative to the given parent.
+     *
+     * @param  parent                   dialog parent
+     * @param  dialog                   dialog
+     * @param  isRelativeToParentFrame  true if the dialog shall be centered relative to the parent frame (determined by
+     *                                  the given parent), false otherwise
+     */
+    public static void showDialog(final Component parent, final JDialog dialog, final boolean isRelativeToParentFrame) {
+        if (dialog.isVisible()) {
+            dialog.toFront();
+        } else {
+            if (isRelativeToParentFrame && (parent != null)) {
+                final Frame parentFrame = getParentFrame(parent);
+                if (parentFrame == null) {
+                    dialog.setLocationRelativeTo(parent);
+                } else {
+                    dialog.setLocationRelativeTo(parentFrame);
+                }
+            } else {
+                dialog.setLocationRelativeTo(parent);
+            }
+
+            dialog.setVisible(true);
+        }
     }
 }

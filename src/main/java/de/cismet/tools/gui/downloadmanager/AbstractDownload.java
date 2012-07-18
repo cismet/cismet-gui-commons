@@ -194,7 +194,9 @@ public abstract class AbstractDownload extends Observable implements Download, R
                     fileFound = true;
                 }
             } catch (IOException ex) {
-                log.warn("IOEXception while trying to create destination file '" + fileToSaveTo.getAbsolutePath() + "'.", ex);
+                log.warn("IOEXception while trying to create destination file '" + fileToSaveTo.getAbsolutePath()
+                            + "'.",
+                    ex);
                 fileToSaveTo.deleteOnExit();
             }
 

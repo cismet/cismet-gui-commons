@@ -82,13 +82,7 @@ public class DownloadManagerAction extends AbstractAction {
     @Override
     public void actionPerformed(final ActionEvent e) {
         final JDialog downloadManager = DownloadManagerDialog.instance(parent);
-        if (!downloadManager.isVisible()) {
-            downloadManager.setLocationRelativeTo(StaticSwingTools.getParentFrame(
-                    parent));
-            downloadManager.setVisible(true);
-            downloadManager.pack();
-        } else {
-            downloadManager.toFront();
-        }
+        downloadManager.pack();
+        StaticSwingTools.showDialog(parent, downloadManager, true);
     }
 }

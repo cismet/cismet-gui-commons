@@ -29,7 +29,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.HashMap;
@@ -108,13 +107,9 @@ public class HttpDownload extends AbstractDownload {
         this.title = title;
         this.headers = headers;
 
-        if (DownloadManager.instance().isEnabled()) {
-            determineDestinationFile(filename, extension);
-            status = State.WAITING;
-        } else {
-            status = State.COMPLETED_WITH_ERROR;
-            caughtException = new Exception("DownloadManager is disabled. Cancelling download.");
-        }
+        status = State.WAITING;
+
+        determineDestinationFile(filename, extension);
     }
 
     //~ Methods ----------------------------------------------------------------

@@ -48,25 +48,21 @@ public class MultipleDownload extends Observable implements Download, Observer {
         this.downloads = downloads;
         this.title = title;
 
-        if (DownloadManager.instance().isEnabled()) {
-            for (final AbstractDownload download : this.downloads) {
-                if (download.getFileToSaveTo() == null) {
-                    continue;
-                }
-                if (fileToSaveTo == null) {
-                    fileToSaveTo = download.getFileToSaveTo().getParentFile();
-                } else {
-                    if (!fileToSaveTo.equals(download.getFileToSaveTo().getParentFile())) {
-                        fileToSaveTo = null;
-                        break;
-                    }
+        for (final AbstractDownload download : this.downloads) {
+            if (download.getFileToSaveTo() == null) {
+                continue;
+            }
+            if (fileToSaveTo == null) {
+                fileToSaveTo = download.getFileToSaveTo().getParentFile();
+            } else {
+                if (!fileToSaveTo.equals(download.getFileToSaveTo().getParentFile())) {
+                    fileToSaveTo = null;
+                    break;
                 }
             }
-
-            status = State.WAITING;
-        } else {
-            status = State.COMPLETED_WITH_ERROR;
         }
+
+        status = State.WAITING;
     }
 
     //~ Methods ----------------------------------------------------------------

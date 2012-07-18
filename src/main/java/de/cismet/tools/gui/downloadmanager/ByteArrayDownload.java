@@ -43,13 +43,9 @@ public class ByteArrayDownload extends AbstractDownload {
         this.title = title;
         this.directory = directory;
 
-        if (DownloadManager.instance().isEnabled()) {
-            determineDestinationFile(filename, extension);
-            status = State.WAITING;
-        } else {
-            status = State.COMPLETED_WITH_ERROR;
-            caughtException = new Exception("DownloadManager is disabled. Cancelling download.");
-        }
+        status = State.WAITING;
+
+        determineDestinationFile(filename, extension);
     }
 
     //~ Methods ----------------------------------------------------------------

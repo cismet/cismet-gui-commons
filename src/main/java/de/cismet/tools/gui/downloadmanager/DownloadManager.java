@@ -50,7 +50,6 @@ public class DownloadManager implements Observer, Configurable {
 
     //~ Instance fields --------------------------------------------------------
 
-    private boolean enabled = true;
     private File destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
                     + "cidsDownload");
     private int parallelDownloads = 2;
@@ -316,18 +315,16 @@ public class DownloadManager implements Observer, Configurable {
         this.destinationDirectory = destinationDirectory;
 
         if (!destinationDirectory.isDirectory() || !destinationDirectory.canWrite()) {
-            LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath()
-                        + "'. The download manager will be disabled.");
-            enabled = false;
-        } else {
-            enabled = true;
+            LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath() + "'.");
         }
     }
 
     /**
      * Returns a flag which tells whether download manager is enabled or not.
      *
-     * @return  The flag whether the download manager is enabled or not.
+     * @return      The flag whether the download manager is enabled or not.
+     *
+     * @deprecated  DOCUMENT ME!
      */
     public boolean isEnabled() {
         return true;
@@ -433,10 +430,7 @@ public class DownloadManager implements Observer, Configurable {
 
             if (!destinationDirectory.isDirectory() || !destinationDirectory.canWrite()) {
                 LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath()
-                            + "'. The download manager will be disabled.");
-                enabled = false;
-            } else {
-                enabled = true;
+                            + "'.");
             }
 
             return;
@@ -450,11 +444,7 @@ public class DownloadManager implements Observer, Configurable {
             destinationDirectory = new File(directory.getTextTrim());
         }
         if (!destinationDirectory.isDirectory() || !destinationDirectory.canWrite()) {
-            LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath()
-                        + "'. The download manager will be disabled.");
-            enabled = false;
-        } else {
-            enabled = true;
+            LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath() + "'.");
         }
 
         final Element parallelDownloads = downloads.getChild(XML_CONF_PARALLEL_DOWNLOADS);

@@ -12,11 +12,6 @@ import java.io.InputStream;
 
 import de.cismet.security.WebDavClient;
 
-import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
-import de.cismet.security.exceptions.MissingArgumentException;
-import de.cismet.security.exceptions.NoHandlerForURLException;
-import de.cismet.security.exceptions.RequestFailedException;
-
 /**
  * DOCUMENT ME!
  *
@@ -61,13 +56,9 @@ public class WebDavDownload extends AbstractDownload {
         this.filename = filename;
         this.extension = extension;
 
-        if (DownloadManager.instance().isEnabled()) {
-            determineDestinationFile(filename, extension);
-            status = State.WAITING;
-        } else {
-            status = State.COMPLETED_WITH_ERROR;
-            caughtException = new Exception("DownloadManager is disabled. Cancelling download.");
-        }
+        status = State.WAITING;
+
+        determineDestinationFile(filename, extension);
     }
 
     //~ Methods ----------------------------------------------------------------

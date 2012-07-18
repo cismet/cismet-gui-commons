@@ -154,11 +154,14 @@ public abstract class AbstractDownload extends Observable implements Download, R
      */
     protected void determineDestinationFile(final String filename,
             final String extension) {
-        File directoryToSaveTo = null;
+        final File directoryToSaveTo;
         if ((directory != null) && (directory.trim().length() > 0)) {
             directoryToSaveTo = new File(DownloadManager.instance().getDestinationDirectory(), directory);
         } else {
             directoryToSaveTo = DownloadManager.instance().getDestinationDirectory();
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("Determined path '" + directoryToSaveTo + "' for file '" + filename + extension + "'.");
         }
 
         if (!directoryToSaveTo.exists()) {
@@ -170,6 +173,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
                         "Couldn't create destination directory '"
                                 + directoryToSaveTo.getAbsolutePath()
                                 + "'. Cancelling download."));
+                return;
             }
         }
 
@@ -190,7 +194,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
                     fileFound = true;
                 }
             } catch (IOException ex) {
-                log.warn("IOEXception while trying to determine destination file.", ex);
+                log.warn("IOEXception while trying to create destination file '" + fileToSaveTo.getAbsolutePath() + "'.", ex);
                 fileToSaveTo.deleteOnExit();
             }
 
@@ -214,6 +218,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
                                 + ">."
                                 + extension
                                 + "."));
+                return;
             }
         }
     }

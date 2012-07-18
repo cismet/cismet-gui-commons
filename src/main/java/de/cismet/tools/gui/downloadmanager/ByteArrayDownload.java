@@ -11,8 +11,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * A ByteArrayDownload writes a given byte array to the file system. Using the DownloadManager this class can be used
- * to create the impression of a real download.
+ * A ByteArrayDownload writes a given byte array to the file system. Using the DownloadManager this class can be used to
+ * create the impression of a real download.
  *
  * @author   jweintraut
  * @version  $Revision$, $Date$

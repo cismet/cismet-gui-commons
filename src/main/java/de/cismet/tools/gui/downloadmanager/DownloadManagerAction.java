@@ -83,6 +83,6 @@ public class DownloadManagerAction extends AbstractAction {
     public void actionPerformed(final ActionEvent e) {
         final JDialog downloadManager = DownloadManagerDialog.instance(parent);
         downloadManager.pack();
-        StaticSwingTools.showDialog(parent, downloadManager, true);
+        StaticSwingTools.showDialog(downloadManager);
     }
 }

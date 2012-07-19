@@ -7,28 +7,17 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTargetDropEvent;
-
 import java.io.File;
 import java.io.IOException;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import java.util.Iterator;
 import java.util.List;
-
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -501,7 +490,9 @@ public class StaticSwingTools {
      * @param  isRelativeToParentFrame  true if the dialog shall be centered relative to the parent frame (determined by
      *                                  the given parent), false otherwise
      */
-    public static void showDialog(final Component parent, final JDialog dialog, final boolean isRelativeToParentFrame) {
+    public static void showDialog(final Component parent,
+            final JDialog dialog,
+            final boolean isRelativeToParentFrame) {
         if (dialog.isVisible()) {
             dialog.toFront();
         } else {
@@ -518,5 +509,25 @@ public class StaticSwingTools {
 
             dialog.setVisible(true);
         }
+    }
+
+    /**
+     * Shows given dialog centered relative to its parent frame
+     * 
+     * @param  dialog                   dialog
+     */
+    public static void showDialog(final JDialog dialog) {
+        showDialog(dialog.getParent(), dialog, true);
+    }
+
+    /**
+     * Shows given dialog centered relative to its parent frame
+     * 
+     * @param  dialog                   dialog
+     * @param  isRelativeToParentFrame  true if the dialog shall be centered relative to the parent frame (determined by
+     *                                  the given parent), false if it shall be centered relative to its parent
+     */
+    public static void showDialog(final JDialog dialog, final boolean isRelativeToParentFrame) {
+        showDialog(dialog.getParent(), dialog, isRelativeToParentFrame);
     }
 }

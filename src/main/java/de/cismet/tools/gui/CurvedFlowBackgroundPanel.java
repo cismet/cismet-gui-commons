@@ -7,11 +7,7 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import java.awt.AlphaComposite;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -61,7 +57,8 @@ public class CurvedFlowBackgroundPanel extends JPanel {
                 public void mouseClicked(final MouseEvent e) {
                     super.mouseClicked(e);
                     if ((e.getClickCount() == 2) && isDesignMode()) {
-                        final JDialog jd = new JDialog();
+                        final Frame parentFrame = StaticSwingTools.getParentFrame(CurvedFlowBackgroundPanel.this);
+                        final JDialog jd = new JDialog(parentFrame);
                         jd.setTitle(CurvedFlowBackgroundPanel.this.getClass().getName() + " Designer");
                         jd.getContentPane().setLayout(new BorderLayout());
                         jd.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -111,8 +108,8 @@ public class CurvedFlowBackgroundPanel extends JPanel {
                         sliOben.setValue((int)((double)getOben() / (double)getHeight() * 100));
                         sliUnten.setValue((int)((double)getUnten() / (double)getHeight() * 100));
 
-                        jd.setVisible(true);
                         jd.pack();
+                        StaticSwingTools.showDialog(jd);
                     }
                 }
             });

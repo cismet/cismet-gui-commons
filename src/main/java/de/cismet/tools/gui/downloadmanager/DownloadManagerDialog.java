@@ -163,7 +163,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         if (instance == null) {
             final DownloadManagerDialog dialog = instance(parent);
             dialog.pack();
-            StaticSwingTools.showDialog(parent, dialog, false);
+            StaticSwingTools.showDialog(dialog);
         }
     }
 
@@ -203,7 +203,8 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
             instance.dlgJobname.setPreferredSize(instance.dlgJobname.getMinimumSize());
             instance.dlgJobname.setLocationRelativeTo(parent);
             instance.dlgJobname.pack();
-            instance.dlgJobname.setVisible(true);
+
+            StaticSwingTools.showDialog(instance, instance.dlgJobname, true);
 
             result = instance.isJobnameConfirmed;
 
@@ -543,9 +544,9 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      *
      * @param  evt  The event object.
      */
-    private void btnClearListActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearListActionPerformed
+    private void btnClearListActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnClearListActionPerformed
         DownloadManager.instance().removeObsoleteDownloads();
-    }//GEN-LAST:event_btnClearListActionPerformed
+    }                                                                                //GEN-LAST:event_btnClearListActionPerformed
 
     /**
      * An action listener.
@@ -557,32 +558,32 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      *
      * @param  evt  The event.
      */
-    private void btnOKActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
+    private void btnOKActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOKActionPerformed
         jobname = txtJobname.getText();
         isJobnameConfirmed = true;
         dlgJobname.dispose();
-    }//GEN-LAST:event_btnOKActionPerformed
+    }                                                                         //GEN-LAST:event_btnOKActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void txtJobnameActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtJobnameActionPerformed
+    private void txtJobnameActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtJobnameActionPerformed
         jobname = txtJobname.getText();
         isJobnameConfirmed = true;
         dlgJobname.dispose();
-    }//GEN-LAST:event_txtJobnameActionPerformed
+    }                                                                              //GEN-LAST:event_txtJobnameActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         isJobnameConfirmed = false;
         dlgJobname.dispose();
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * An action listener.

@@ -34,6 +34,8 @@ import javax.swing.event.ChangeListener;
 import de.cismet.lookupoptions.OptionsCategory;
 import de.cismet.lookupoptions.OptionsPanelController;
 
+import de.cismet.tools.gui.StaticSwingTools;
+
 /*
  * OptionsDialog.java
  *
@@ -349,7 +351,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         final String help = controller.getHelp();
         final HelpDialog dialog = new HelpDialog((JFrame)getParent(), true);
         dialog.setContent(help);
-        dialog.setVisible(true);
+        StaticSwingTools.showDialog(dialog);
     }                                                                           //GEN-LAST:event_btnHelpActionPerformed
 
     /**

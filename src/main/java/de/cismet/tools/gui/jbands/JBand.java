@@ -948,13 +948,6 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @return  DOCUMENT ME!
      */
     private double getSationForXValue(final int x) {
-        final double res = ((double)Math.round(
-                    ((realWidth * (x - xoffset) / (bandsPanel.getWidth() - xoffset)) + minValue)
-                            * 10.0)) / 10.0;
-        final double res2 = ((double)Math.round(realWidth * (x - xoffset) / (bandsPanel.getWidth() - xoffset)
-                            * 10.0)) / 10.0;
-        log.error("real " + realWidth + ":" + xoffset + " " + bandsPanel.getWidth() + " " + minValue);
-        log.error("res " + x + ":" + res + " " + res2);
         return ((double)Math.round(((realWidth * (x - xoffset) / (bandsPanel.getWidth() - xoffset)) + minValue)
                             * 10.0)) / 10.0;
     }

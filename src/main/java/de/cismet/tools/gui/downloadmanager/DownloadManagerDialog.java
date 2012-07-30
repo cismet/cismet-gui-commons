@@ -14,6 +14,9 @@ package de.cismet.tools.gui.downloadmanager;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.NbBundle;
+
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -27,6 +30,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -65,7 +70,9 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnClearList;
+    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnOK;
+    private javax.swing.JDialog dlgExceptionDialog;
     private javax.swing.JDialog dlgJobname;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel lblDestinationDirectory;
@@ -76,9 +83,11 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     private javax.swing.JLabel lblUserDirectoryLabel;
     private javax.swing.JPanel pnlControls;
     private de.cismet.tools.gui.downloadmanager.DownloadManagerPanel pnlDownloadManagerPanel;
+    private javax.swing.JPanel pnlExceptionDialogContainer;
     private javax.swing.JPanel pnlJobnameControls;
     private javax.swing.JScrollPane scpDownloadManagerPanel;
     private javax.swing.JSeparator sepControls;
+    private javax.swing.JSeparator sepExceptionDialogControls;
     private javax.swing.JSeparator sepJobnameControls;
     private javax.swing.JTextField txtJobname;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
@@ -228,6 +237,43 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     }
 
     /**
+     * Shows an exception dialog which visualizes the exception provided by download.getCaughtException().
+     *
+     * @param  download  The erroneous download.
+     */
+    public static void showExceptionDialog(final Download download) {
+        if (download.getCaughtException() == null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("There is no exception to visualize.");
+            }
+            return;
+        }
+
+        final Frame parent = StaticSwingTools.getParentFrame(instance);
+        if ((instance.dlgExceptionDialog.getOwner() != null) && (parent != null) && (parent.getIconImage() != null)) {
+            instance.dlgJobname.getOwner().setIconImage(parent.getIconImage());
+        }
+
+        final JPanel exceptionPanel = download.getExceptionPanel(download.getCaughtException());
+
+        if (exceptionPanel != null) {
+            instance.pnlExceptionDialogContainer.removeAll();
+            instance.pnlExceptionDialogContainer.add(exceptionPanel, BorderLayout.CENTER);
+            instance.dlgExceptionDialog.invalidate();
+            instance.dlgExceptionDialog.pack();
+            StaticSwingTools.showDialog(instance, instance.dlgExceptionDialog, true);
+        } else {
+            JOptionPane.showMessageDialog(
+                instance,
+                download.getCaughtException().getMessage(),
+                NbBundle.getMessage(
+                    DownloadPanel.class,
+                    "DownloadManagerDialog.showExceptionDialog(Download).error.title"),
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
      * Closes the DownloadManagerDialog.
      */
     public static void close() {
@@ -326,6 +372,10 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         lblDestinationDirectory = new javax.swing.JLabel();
         lblUserDirectory = new javax.swing.JLabel();
         lblUserDirectoryLabel = new javax.swing.JLabel();
+        dlgExceptionDialog = new javax.swing.JDialog();
+        sepExceptionDialogControls = new javax.swing.JSeparator();
+        pnlExceptionDialogContainer = new javax.swing.JPanel();
+        btnClose = new javax.swing.JButton();
         scpDownloadManagerPanel = new javax.swing.JScrollPane();
         pnlDownloadManagerPanel = new de.cismet.tools.gui.downloadmanager.DownloadManagerPanel();
         sepControls = new javax.swing.JSeparator();
@@ -461,6 +511,45 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         dlgJobname.getContentPane().add(lblUserDirectoryLabel, gridBagConstraints);
 
+        dlgExceptionDialog.setTitle(org.openide.util.NbBundle.getMessage(
+                DownloadManagerDialog.class,
+                "DownloadManagerDialog.dlgExceptionDialog.title")); // NOI18N
+        dlgExceptionDialog.setModal(true);
+        dlgExceptionDialog.getContentPane().setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        dlgExceptionDialog.getContentPane().add(sepExceptionDialogControls, gridBagConstraints);
+
+        pnlExceptionDialogContainer.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        pnlExceptionDialogContainer.setLayout(new java.awt.BorderLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        dlgExceptionDialog.getContentPane().add(pnlExceptionDialogContainer, gridBagConstraints);
+
+        btnClose.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerDialog.class,
+                "DownloadManagerDialog.btnClose.text")); // NOI18N
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnCloseActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        dlgExceptionDialog.getContentPane().add(btnClose, gridBagConstraints);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.title")); // NOI18N
         setMinimumSize(new java.awt.Dimension(423, 300));
@@ -584,6 +673,15 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         isJobnameConfirmed = false;
         dlgJobname.dispose();
     }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCloseActionPerformed
+        dlgExceptionDialog.setVisible(false);
+    }                                                                            //GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * An action listener.

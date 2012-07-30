@@ -31,6 +31,8 @@ import java.io.IOException;
 
 import java.util.Observable;
 
+import javax.swing.JPanel;
+
 import de.cismet.tools.CismetThreadPool;
 
 /**
@@ -139,6 +141,11 @@ public abstract class AbstractDownload extends Observable implements Download, R
             started = true;
             CismetThreadPool.execute(this);
         }
+    }
+
+    @Override
+    public JPanel getExceptionPanel(final Exception exception) {
+        return null;
     }
 
     @Override

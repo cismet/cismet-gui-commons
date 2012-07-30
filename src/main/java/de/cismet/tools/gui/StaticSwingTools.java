@@ -7,18 +7,38 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTargetDropEvent;
+
 import java.io.File;
 import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.*;
+
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
@@ -512,22 +532,39 @@ public class StaticSwingTools {
     }
 
     /**
-     * Shows given dialog centered relative to its parent frame
-     * 
-     * @param  dialog                   dialog
+     * Shows given dialog centered relative to its parent frame.
+     *
+     * @param  dialog  dialog
      */
     public static void showDialog(final JDialog dialog) {
         showDialog(dialog.getParent(), dialog, true);
     }
 
     /**
-     * Shows given dialog centered relative to its parent frame
-     * 
+     * Shows given dialog centered relative to its parent frame.
+     *
      * @param  dialog                   dialog
      * @param  isRelativeToParentFrame  true if the dialog shall be centered relative to the parent frame (determined by
      *                                  the given parent), false if it shall be centered relative to its parent
      */
     public static void showDialog(final JDialog dialog, final boolean isRelativeToParentFrame) {
         showDialog(dialog.getParent(), dialog, isRelativeToParentFrame);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  component  DOCUMENT ME!
+     */
+    public static void tryPackingMyParentDialog(final Component component) {
+        Component parent = component;
+
+        while (!(parent instanceof JDialog) && (parent != null)) {
+            parent = parent.getParent();
+        }
+
+        if (parent instanceof JDialog) {
+            ((JDialog)parent).pack();
+        }
     }
 }

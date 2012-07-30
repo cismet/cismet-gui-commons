@@ -30,7 +30,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 import de.cismet.security.exceptions.BadHttpStatusCodeException;
 
@@ -232,7 +231,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblIcon, gridBagConstraints);
 
-        lblTitle.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblTitle.setText(download.getTitle());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
@@ -313,11 +312,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
     private void formMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_formMouseClicked
         if (evt.getClickCount() > 1) {
             if (download.getCaughtException() != null) {
-                JOptionPane.showMessageDialog(
-                    this,
-                    download.getCaughtException().getMessage(),
-                    NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.formMouseClicked.error.title"),
-                    JOptionPane.ERROR_MESSAGE);
+                DownloadManagerDialog.showExceptionDialog(download);
             } else if ((download.getStatus() == Download.State.COMPLETED) && (download.getFileToSaveTo() != null)) {
                 BrowserLauncher.openURLorFile(download.getFileToSaveTo().getParentFile().getAbsolutePath());
             }
@@ -449,7 +444,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
                 if (download.getCaughtException() instanceof BadHttpStatusCodeException) {
                     final BadHttpStatusCodeException exception = (BadHttpStatusCodeException)
                         download.getCaughtException();
-                    if (exception.getHttpStatuscode() == 204) {
+                    if (exception.getStatuscode() == 204) {
                         lblMessage.setText(NbBundle.getMessage(
                                 DownloadPanel.class,
                                 "DownloadPanel.lblMessage.noData",

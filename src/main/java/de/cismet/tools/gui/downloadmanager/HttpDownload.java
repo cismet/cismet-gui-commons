@@ -33,11 +33,15 @@ import java.net.URL;
 
 import java.util.HashMap;
 
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+
 import de.cismet.security.AccessHandler.ACCESS_METHODS;
 
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
+import de.cismet.security.exceptions.BadHttpStatusCodeException;
 import de.cismet.security.exceptions.MissingArgumentException;
 import de.cismet.security.exceptions.NoHandlerForURLException;
 import de.cismet.security.exceptions.RequestFailedException;
@@ -197,6 +201,15 @@ public class HttpDownload extends AbstractDownload {
             status = State.COMPLETED;
             stateChanged();
         }
+    }
+
+    @Override
+    public JPanel getExceptionPanel(final Exception exception) {
+        if (exception instanceof BadHttpStatusCodeException) {
+            return new BadHttpStatusCodeExceptionPanel((BadHttpStatusCodeException)exception);
+        }
+
+        return super.getExceptionPanel(exception);
     }
 
     @Override

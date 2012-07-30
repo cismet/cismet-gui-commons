@@ -11,6 +11,8 @@ import java.io.File;
 
 import java.util.Observer;
 
+import javax.swing.JPanel;
+
 /**
  * Download provides an enum and some methods which are to be implemented by any download implementation. A Download
  * encapsulates all information to download files.
@@ -109,4 +111,13 @@ public interface Download {
      * @return  The title of this download.
      */
     String getTitle();
+
+    /**
+     * Returns a JPanel which visualizes the given exception.
+     *
+     * @param   exception  The exception to visualize.
+     *
+     * @return  A JPanel visualizing the given exception.
+     */
+    JPanel getExceptionPanel(final Exception exception);
 }

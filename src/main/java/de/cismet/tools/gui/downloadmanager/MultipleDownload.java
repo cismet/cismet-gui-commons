@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.JPanel;
+
 /**
  * A multiple download comprises of several SingleDownloads.
  *
@@ -105,6 +107,11 @@ public class MultipleDownload extends Observable implements Download, Observer {
     @Override
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public JPanel getExceptionPanel(final Exception exception) {
+        return null;
     }
 
     /**

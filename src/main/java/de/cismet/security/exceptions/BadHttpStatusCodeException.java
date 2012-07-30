@@ -5,14 +5,6 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- * BadHttpStatusCodeException.java
- *
- * Created on 19. Oktober 2006, 10:06
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
 package de.cismet.security.exceptions;
 
 /**
@@ -25,7 +17,9 @@ public class BadHttpStatusCodeException extends Exception {
 
     //~ Instance fields --------------------------------------------------------
 
-    int statuscode;
+    private final String requestedURI;
+    private final int statuscode;
+    private final String response;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -34,28 +28,29 @@ public class BadHttpStatusCodeException extends Exception {
      */
     public BadHttpStatusCodeException() {
         super();
+
+        requestedURI = "";
+        statuscode = Integer.MIN_VALUE;
+        response = "";
     }
 
     /**
      * Creates a new BadHttpStatusCodeException object.
      *
-     * @param       message  DOCUMENT ME!
-     *
-     * @deprecated  Please use constructor BadHttpStatusCodeException(String, int).
+     * @param  requestedURI  DOCUMENT ME!
+     * @param  statuscode    DOCUMENT ME!
+     * @param  message       DOCUMENT ME!
+     * @param  response      DOCUMENT ME!
      */
-    public BadHttpStatusCodeException(final String message) {
-        super(message);
-    }
+    public BadHttpStatusCodeException(final String requestedURI,
+            final int statuscode,
+            final String message,
+            final String response) {
+        super(message + "(" + statuscode + ")");
 
-    /**
-     * Creates a new BadHttpStatusCodeException object.
-     *
-     * @param  message     DOCUMENT ME!
-     * @param  statuscode  DOCUMENT ME!
-     */
-    public BadHttpStatusCodeException(final String message, final int statuscode) {
-        super(message);
+        this.requestedURI = requestedURI;
         this.statuscode = statuscode;
+        this.response = response;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -65,7 +60,25 @@ public class BadHttpStatusCodeException extends Exception {
      *
      * @return  DOCUMENT ME!
      */
-    public int getHttpStatuscode() {
+    public String getRequestedURI() {
+        return requestedURI;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getStatuscode() {
         return statuscode;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getResponse() {
+        return response;
     }
 }

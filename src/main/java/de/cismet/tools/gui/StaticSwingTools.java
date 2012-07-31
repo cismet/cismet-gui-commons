@@ -579,7 +579,7 @@ public class StaticSwingTools {
 
     /**
      * Adds a change listener to the given slider which ensures that the current value of the slider is permanently
-     * shown in the tooltip.
+     * shown in the tooltip. Found here: http://www.jroller.com/santhosh/entry/tooltips_can_say_more
      *
      * @param  slider  The slider to modify.
      * @param  format  The format to be used to print the value (e. g. "Percentage: {0,number,#0.0}%").

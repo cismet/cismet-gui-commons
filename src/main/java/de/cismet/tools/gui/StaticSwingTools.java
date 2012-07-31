@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Point;
@@ -19,6 +20,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ActionEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,19 +28,26 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.text.MessageFormat;
+import java.text.NumberFormat;
+
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
@@ -552,9 +561,9 @@ public class StaticSwingTools {
     }
 
     /**
-     * DOCUMENT ME!
+     * Calls pack() on a parent JDialog if available. Very useful to resize JDialogs from an embedded JPanel.
      *
-     * @param  component  DOCUMENT ME!
+     * @param  component  The component from which a parent JDialog is searched.
      */
     public static void tryPackingMyParentDialog(final Component component) {
         Component parent = component;
@@ -566,5 +575,88 @@ public class StaticSwingTools {
         if (parent instanceof JDialog) {
             ((JDialog)parent).pack();
         }
+    }
+
+    /**
+     * Adds a change listener to the given slider which ensures that the current value of the slider is permanently
+     * shown in the tooltip.
+     *
+     * @param  slider  The slider to modify.
+     * @param  format  The format to be used to print the value (e. g. "Percentage: {0,number,#0.0}%").
+     * @param  factor  A factor for the value. E. g. if the slider allows sliding between 0 and 1000 but we want to show
+     *                 the percentage, we have to multiply the value by 0.1D. Set to Double.NaN if it shouldn't be used.
+     */
+    public static void enableSliderToolTips(final JSlider slider,
+            final MessageFormat format,
+            final double factor) {
+        slider.addChangeListener(new ChangeListener() {
+
+                private boolean adjusting = false;
+                private String oldTooltip;
+
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    if (slider.getModel().getValueIsAdjusting()) {
+                        if (!adjusting) {
+                            oldTooltip = slider.getToolTipText();
+                            adjusting = true;
+                        }
+
+                        final double value = slider.getValue() * (Double.isNaN(factor) ? 1D : factor);
+                        slider.setToolTipText(
+                            (format != null) ? format.format(new Object[] { value }) : Double.toString(value));
+
+                        hideToolTip(slider); // to avoid flickering
+                        postToolTip(slider);
+                    } else {
+                        hideToolTip(slider);
+                        slider.setToolTipText(oldTooltip);
+                        adjusting = false;
+                        oldTooltip = null;
+                    }
+                }
+            });
+    }
+
+    /**
+     * Shows a component's tooltip.
+     *
+     * @param  comp  The component whose tooltip shall appear.
+     */
+    public static void postToolTip(final JComponent comp) {
+        final Action action = comp.getActionMap().get("postTip");
+        if (action == null) {
+            // no tooltip
+            return;
+        }
+
+        final ActionEvent actionEvent = new ActionEvent(
+                comp,
+                ActionEvent.ACTION_PERFORMED,
+                "postTip",
+                EventQueue.getMostRecentEventTime(),
+                0);
+        action.actionPerformed(actionEvent);
+    }
+
+    /**
+     * Hides a component's tooltip.
+     *
+     * @param  comp  The component whose tooltip shall disappear.
+     */
+    public static void hideToolTip(final JComponent comp) {
+        final Action action = comp.getActionMap().get("hideTip");
+        if (action == null) {
+            // no tooltip
+            return;
+        }
+
+        final ActionEvent actionEvent = new ActionEvent(
+                comp,
+                ActionEvent.ACTION_PERFORMED,
+                "hideTip",
+                EventQueue.getMostRecentEventTime(),
+                0);
+        action.actionPerformed(actionEvent);
     }
 }

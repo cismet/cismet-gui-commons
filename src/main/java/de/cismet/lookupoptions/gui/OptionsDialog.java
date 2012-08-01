@@ -105,6 +105,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
             // Icon und Name der Category für den Button
             final Icon categoryIcon = category.getIcon();
             final String categoryName = category.getName();
+            final String categoryTooltip = category.getTooltip();
             // Klassen-Name als eindeutiger Bezeichner für die einzelnen Cards im CardLayout
             final String categoryCardName = categoryClass.getCanonicalName();
 
@@ -123,6 +124,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
                 button.setLayout(new BorderLayout());
                 button.add(new JLabel(categoryIcon), BorderLayout.CENTER);
                 button.add(new JLabel(categoryName, JLabel.CENTER), BorderLayout.SOUTH);
+                button.setToolTipText(categoryTooltip);
 
                 // Verhalten wenn eine Kategorie gewählt wird wird
                 button.addActionListener(new ActionListener() {
@@ -217,6 +219,9 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         panCategory.setLayout(new java.awt.CardLayout());
 
         btnClose.setText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnClose.text")); // NOI18N
+        btnClose.setToolTipText(org.openide.util.NbBundle.getMessage(
+                OptionsDialog.class,
+                "OptionsDialog.btnClose.tooltip"));                                                                 // NOI18N
         btnClose.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -229,7 +234,8 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         panCategories.setMinimumSize(new java.awt.Dimension(10, 90));
         panCategories.setLayout(new java.awt.BorderLayout());
 
-        btnOk.setText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnOk.text")); // NOI18N
+        btnOk.setText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnOk.text"));           // NOI18N
+        btnOk.setToolTipText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnOk.tooltip")); // NOI18N
         btnOk.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -239,6 +245,9 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
             });
 
         btnHelp.setText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnHelp.text")); // NOI18N
+        btnHelp.setToolTipText(org.openide.util.NbBundle.getMessage(
+                OptionsDialog.class,
+                "OptionsDialog.btnHelp.tooltip"));                                                                // NOI18N
         btnHelp.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override

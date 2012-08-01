@@ -51,4 +51,11 @@ public class DownloadManagerOptionsCategory extends AbstractOptionsCategory {
     public int getOrder() {
         return 10;
     }
+
+    @Override
+    public String getTooltip() {
+        return NbBundle.getMessage(
+                DownloadManagerOptionsCategory.class,
+                "DownloadManagerOptionsCategory.tooltip");
+    }
 }

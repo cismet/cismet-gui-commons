@@ -48,4 +48,9 @@ public class NetworkOptionsCategory extends AbstractOptionsCategory {
     public int getOrder() {
         return 1;
     }
+
+    @Override
+    public String getTooltip() {
+        return org.openide.util.NbBundle.getMessage(NetworkOptionsCategory.class, "NetworkOptionsCategory.tooltip"); // NOI18N
+    }
 }

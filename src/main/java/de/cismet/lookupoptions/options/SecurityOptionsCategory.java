@@ -48,4 +48,9 @@ public class SecurityOptionsCategory extends AbstractOptionsCategory {
     public int getOrder() {
         return 1;
     }
+
+    @Override
+    public String getTooltip() {
+        return org.openide.util.NbBundle.getMessage(SecurityOptionsCategory.class, "SecurityOptionsCategory.tooltip"); // NOI18N
+    }
 }

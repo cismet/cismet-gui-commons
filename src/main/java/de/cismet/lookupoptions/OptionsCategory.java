@@ -34,9 +34,16 @@ public interface OptionsCategory extends Comparable<OptionsCategory> {
     String getName();
 
     /**
-     * Return the relative order of category in the Options Dialog.
+     * Returns the relative order of category in the Options Dialog.
      *
      * @return  relative order
      */
     int getOrder();
+
+    /**
+     * Returns text for tooltip describing the category.
+     *
+     * @return  tooltip text
+     */
+    String getTooltip();
 }

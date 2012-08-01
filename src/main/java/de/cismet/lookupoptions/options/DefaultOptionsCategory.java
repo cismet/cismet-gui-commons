@@ -42,4 +42,9 @@ public class DefaultOptionsCategory extends AbstractOptionsCategory {
             return null;
         }
     }
+
+    @Override
+    public String getTooltip() {
+        return org.openide.util.NbBundle.getMessage(DefaultOptionsCategory.class, "DefaultOptionsCategory.tooltip"); // NOI18N
+    }
 }

@@ -49,4 +49,12 @@ public abstract class AbstractOptionsCategory implements OptionsCategory {
             return orderCompare;
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTooltip() {
+        return null;
+    }
 }

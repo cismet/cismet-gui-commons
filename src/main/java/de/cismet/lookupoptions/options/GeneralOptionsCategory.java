@@ -47,4 +47,9 @@ public class GeneralOptionsCategory extends AbstractOptionsCategory {
     public int getOrder() {
         return 0;
     }
+
+    @Override
+    public String getTooltip() {
+        return org.openide.util.NbBundle.getMessage(GeneralOptionsCategory.class, "GeneralOptionsCategory.tooltip"); // NOI18N
+    }
 }

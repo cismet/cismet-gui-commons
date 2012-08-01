@@ -108,4 +108,11 @@ public class CredentialsOptionsPanel extends AbstractOptionsPanel implements Opt
     public int getOrder() {
         return 2;
     }
+
+    @Override
+    public String getTooltip() {
+        return org.openide.util.NbBundle.getMessage(
+                CredentialsOptionsPanel.class,
+                "CredentialsOptionsPanel.OptionController.tooltip");
+    }
 }

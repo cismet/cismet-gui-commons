@@ -18,7 +18,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
  * <p>Note that RangeSlider makes use of the default BoundedRangeModel, which supports an inner range defined by a value
  * and an extent. The upper value returned by RangeSlider is simply the lower value plus the extent.</p>
  *
- * See https://ernienotes.wordpress.com/2010/12/27/creating-a-java-swing-range-slider/ for more details.
+ * <p>See https://ernienotes.wordpress.com/2010/12/27/creating-a-java-swing-range-slider/ for more details.</p>
  *
  * @version  $Revision$, $Date$
  */

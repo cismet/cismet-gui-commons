@@ -48,4 +48,9 @@ public class CismetDeveloperCategory extends AbstractOptionsCategory {
     public int getOrder() {
         return 99;
     }
+
+    @Override
+    public String getTooltip() {
+        return org.openide.util.NbBundle.getMessage(CismetDeveloperCategory.class, "CismetDeveloperCategory.tooltip"); // NOI18N
+    }
 }

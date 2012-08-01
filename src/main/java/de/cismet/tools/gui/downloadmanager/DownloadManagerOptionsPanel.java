@@ -431,7 +431,8 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
      */
     @Override
     public String getTooltip() {
-        return "";
+        return NbBundle.getMessage(DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.tooltip");
     }
 
     /**

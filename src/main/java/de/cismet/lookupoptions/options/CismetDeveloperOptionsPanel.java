@@ -14,14 +14,9 @@ package de.cismet.lookupoptions.options;
 
 import groovy.ui.Console;
 
-import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.awt.CardLayout;
-
-import javax.swing.LookAndFeel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
@@ -259,4 +254,14 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
     private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig.getSingletonInstance().setVisible(true);
     }                                                                            //GEN-LAST:event_jButton3ActionPerformed
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTooltip() {
+        return org.openide.util.NbBundle.getMessage(
+                ProxyOptionsPanel.class,
+                "CismetDeveloperOptionsPanel.OptionController.tooltip");
+    }
 }

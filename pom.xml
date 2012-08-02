@@ -5,33 +5,54 @@
     <parent>
         <groupId>de.cismet.cids</groupId>
         <artifactId>cids-parent</artifactId>
-        <version>1.0.5</version>
+        <version>2.0-SNAPSHOT</version>
     </parent>
 
     <groupId>de.cismet.commons</groupId>
     <artifactId>cismet-gui-commons</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>cismet GUI Commons</name>
     <description>!!! description pending !!!</description>
 
+    <prerequisites>
+        <maven>3</maven>
+    </prerequisites>
+
     <scm>
-        <connection>scm:svn:svn+ssh://repositories/svn/repositories/central/de/cismet/commons/cismet-gui-commons/trunk</connection>
-        <developerConnection>scm:svn:svn+ssh://repositories/svn/repositories/central/de/cismet/commons/cismet-gui-commons/trunk</developerConnection>
-        <url>http://repositories:8082/central/browse/de/cismet/commons/cismet-gui-commons/trunk</url>
+        <connection>https://github.com/cismet/cismet-gui-commons.git</connection>
+        <developerConnection>scm:git:git@github.com:cismet/cismet-gui-commons.git</developerConnection>
+        <url>https://github.com/cismet/cismet-gui-commons</url>
     </scm>
+
+    <repositories>
+        <repository>
+            <id>cismet-repo</id>
+            <url>https://repo.cismet.de/repo</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+                <updatePolicy>interval:60</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>de.cismet.commons</groupId>
             <artifactId>cismet-commons</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.cismet.commons</groupId>
             <artifactId>wss-bean</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.swinglabs</groupId>
@@ -58,17 +79,11 @@
             <artifactId>pdf-renderer</artifactId>
             <version>unknown</version>
         </dependency>
-       
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>1.8.5</version>
         </dependency>
-       
-       
-       
-       
-       
         <!-- groovy unmodelled dependencies end -->
         <!--Swingx transitiv dependency from cismetCommons-->
         <!--Commons transitiv dependency from WSSBean-->
@@ -138,6 +153,13 @@
     </dependencies>
 
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12</version>
+            </plugin>
+        </plugins>
         <finalName>cismetGuiCommons</finalName>
     </build>
 

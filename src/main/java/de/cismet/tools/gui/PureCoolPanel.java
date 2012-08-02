@@ -24,6 +24,7 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -124,7 +125,8 @@ public class PureCoolPanel extends JPanel {
         FuseLoader.load();
 
         // Ressourcen hierarchisch rekursiv nach oben einfuegen
-        ResourceInjector.get("purecoolpanel.style").inject(true, this); // NOI18N
+        ResourceInjector.get("purecoolpanel.style").inject(true, new Object[] {this}); // NOI18N
+
 //
         gradientColorTop = javax.swing.UIManager.getDefaults().getColor("Button.shadow");        // NOI18N
         gradientColorBottom = javax.swing.UIManager.getDefaults().getColor("Button.background"); // NOI18N

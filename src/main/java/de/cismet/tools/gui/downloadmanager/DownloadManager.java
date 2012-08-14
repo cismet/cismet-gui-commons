@@ -101,7 +101,7 @@ public class DownloadManager implements Observer, Configurable {
         if (download instanceof MultipleDownload) {
             final MultipleDownload multipleDownload = (MultipleDownload)download;
 
-            for (final AbstractDownload singleDownload : multipleDownload.getDownloads()) {
+            for (final Download singleDownload : multipleDownload.getDownloads()) {
                 singleDownload.addObserver(this);
                 singleDownload.addObserver(multipleDownload);
 
@@ -159,7 +159,7 @@ public class DownloadManager implements Observer, Configurable {
             if (download instanceof MultipleDownload) {
                 final MultipleDownload multipleDownload = (MultipleDownload)download;
 
-                for (final AbstractDownload singleDownload : multipleDownload.getDownloads()) {
+                for (final Download singleDownload : multipleDownload.getDownloads()) {
                     singleDownload.deleteObserver(this);
                     singleDownload.deleteObserver(multipleDownload);
                 }
@@ -188,7 +188,7 @@ public class DownloadManager implements Observer, Configurable {
         if (download instanceof MultipleDownload) {
             final MultipleDownload multipleDownload = (MultipleDownload)download;
 
-            for (final AbstractDownload singleDownload : multipleDownload.getDownloads()) {
+            for (final Download singleDownload : multipleDownload.getDownloads()) {
                 singleDownload.deleteObserver(this);
                 singleDownload.deleteObserver(multipleDownload);
                 downloadsToStart.remove(singleDownload);

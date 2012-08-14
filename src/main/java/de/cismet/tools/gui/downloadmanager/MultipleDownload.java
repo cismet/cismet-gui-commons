@@ -31,7 +31,7 @@ public class MultipleDownload extends Observable implements Download, Observer {
 
     //~ Instance fields --------------------------------------------------------
 
-    private Collection<? extends AbstractDownload> downloads;
+    private Collection<? extends Download> downloads;
     private String title;
     private State status;
     private int downloadsCompleted;
@@ -46,11 +46,11 @@ public class MultipleDownload extends Observable implements Download, Observer {
      * @param  downloads  A collection of AbstractDownloads which are to be downloaded by this multiple download.
      * @param  title      The title of the multiple download.
      */
-    public MultipleDownload(final Collection<? extends AbstractDownload> downloads, final String title) {
+    public MultipleDownload(final Collection<? extends Download> downloads, final String title) {
         this.downloads = downloads;
         this.title = title;
 
-        for (final AbstractDownload download : this.downloads) {
+        for (final Download download : this.downloads) {
             if (download.getFileToSaveTo() == null) {
                 continue;
             }
@@ -119,7 +119,7 @@ public class MultipleDownload extends Observable implements Download, Observer {
      *
      * @return  The abstract single downloads encapsulated by this multiple download.
      */
-    public Collection<? extends AbstractDownload> getDownloads() {
+    public Collection<? extends Download> getDownloads() {
         return downloads;
     }
 

@@ -201,6 +201,12 @@ public class SimpleBandModel implements BandModel, BandListener {
      */
     public void setMin(final double min) {
         this.min = min;
+
+        for (final Band tmp : bands) {
+            if (tmp instanceof BandModificationProvider) {
+                ((BandModificationProvider)tmp).setMin(min);
+            }
+        }
     }
 
     /**
@@ -210,5 +216,11 @@ public class SimpleBandModel implements BandModel, BandListener {
      */
     public void setMax(final double max) {
         this.max = max;
+
+        for (final Band tmp : bands) {
+            if (tmp instanceof BandModificationProvider) {
+                ((BandModificationProvider)tmp).setMax(max);
+            }
+        }
     }
 }

@@ -43,4 +43,18 @@ public interface BandModificationProvider {
      * @param  listener  DOCUMENT ME!
      */
     void removeBandListener(BandListener listener);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  min  DOCUMENT ME!
+     */
+    void setMin(Double min);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  max  DOCUMENT ME!
+     */
+    void setMax(Double max);
 }

@@ -476,6 +476,22 @@ public class StaticSwingTools {
     }
 
     /**
+     * Returns the parent frame of the given component or the given component if there is no parent frame.
+     *
+     * @param   c  component whose parent frame shall be determined
+     *
+     * @return  parent frame or c if there is no parent frame
+     */
+    public static Component getParentFrameIfNotNull(final Component c) {
+        final Component parent = getParentFrame(c);
+        if (parent == null) {
+            return c;
+        }
+
+        return parent;
+    }
+
+    /**
      * DOCUMENT ME!
      *
      * @param   components  DOCUMENT ME!

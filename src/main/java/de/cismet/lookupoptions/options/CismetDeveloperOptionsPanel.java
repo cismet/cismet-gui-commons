@@ -17,12 +17,15 @@ import groovy.ui.Console;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.awt.CardLayout;
+import java.awt.Dialog;
 
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
 
 import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.StaticDebuggingTools;
+
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
  * DOCUMENT ME!
@@ -252,7 +255,9 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
      * @param  evt  DOCUMENT ME!
      */
     private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
-        de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig.getSingletonInstance().setVisible(true);
+        final Log4JQuickConfig dialogFrame = Log4JQuickConfig.getSingletonInstance();
+        dialogFrame.setLocationRelativeTo(this);
+        dialogFrame.setVisible(true);
     }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**

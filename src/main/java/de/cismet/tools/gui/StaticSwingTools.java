@@ -476,9 +476,7 @@ public class StaticSwingTools {
     }
 
     /**
-     * Returns the parent frame of the given component or the given component
-     * if there is no parent frame
-     * 
+     * Returns the parent frame of the given component or the given component if there is no parent frame.
      *
      * @param   c  component whose parent frame shall be determined
      *

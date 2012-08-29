@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.text.AbstractDocument;
@@ -210,10 +211,9 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                 instance.dlgJobname.getOwner().setIconImage(parent.getIconImage());
             }
             instance.dlgJobname.setPreferredSize(instance.dlgJobname.getMinimumSize());
-            instance.dlgJobname.setLocationRelativeTo(parent);
             instance.dlgJobname.pack();
 
-            StaticSwingTools.showDialog(instance, instance.dlgJobname, true);
+            StaticSwingTools.showDialog(instance.dlgJobname);
 
             result = instance.isJobnameConfirmed;
 
@@ -261,10 +261,10 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
             instance.pnlExceptionDialogContainer.add(exceptionPanel, BorderLayout.CENTER);
             instance.dlgExceptionDialog.invalidate();
             instance.dlgExceptionDialog.pack();
-            StaticSwingTools.showDialog(instance, instance.dlgExceptionDialog, true);
+            StaticSwingTools.showDialog(instance.dlgExceptionDialog);
         } else {
             JOptionPane.showMessageDialog(
-                instance,
+                StaticSwingTools.getParentFrameIfNotNull(instance),
                 download.getCaughtException().getMessage(),
                 NbBundle.getMessage(
                     DownloadPanel.class,
@@ -362,7 +362,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        dlgJobname = new javax.swing.JDialog();
+        dlgJobname = new JDialog(this);
         lblJobname = new javax.swing.JLabel();
         txtJobname = new javax.swing.JTextField();
         pnlJobnameControls = new javax.swing.JPanel();
@@ -372,7 +372,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         lblDestinationDirectory = new javax.swing.JLabel();
         lblUserDirectory = new javax.swing.JLabel();
         lblUserDirectoryLabel = new javax.swing.JLabel();
-        dlgExceptionDialog = new javax.swing.JDialog();
+        dlgExceptionDialog = new JDialog(this);
         sepExceptionDialogControls = new javax.swing.JSeparator();
         pnlExceptionDialogContainer = new javax.swing.JPanel();
         btnClose = new javax.swing.JButton();
@@ -633,9 +633,9 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      *
      * @param  evt  The event object.
      */
-    private void btnClearListActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnClearListActionPerformed
+    private void btnClearListActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearListActionPerformed
         DownloadManager.instance().removeObsoleteDownloads();
-    }                                                                                //GEN-LAST:event_btnClearListActionPerformed
+    }//GEN-LAST:event_btnClearListActionPerformed
 
     /**
      * An action listener.
@@ -647,41 +647,41 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      *
      * @param  evt  The event.
      */
-    private void btnOKActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOKActionPerformed
+    private void btnOKActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         jobname = txtJobname.getText();
         isJobnameConfirmed = true;
         dlgJobname.dispose();
-    }                                                                         //GEN-LAST:event_btnOKActionPerformed
+    }//GEN-LAST:event_btnOKActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void txtJobnameActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtJobnameActionPerformed
+    private void txtJobnameActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtJobnameActionPerformed
         jobname = txtJobname.getText();
         isJobnameConfirmed = true;
         dlgJobname.dispose();
-    }                                                                              //GEN-LAST:event_txtJobnameActionPerformed
+    }//GEN-LAST:event_txtJobnameActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         isJobnameConfirmed = false;
         dlgJobname.dispose();
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCloseActionPerformed
+    private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         dlgExceptionDialog.setVisible(false);
-    }                                                                            //GEN-LAST:event_btnCloseActionPerformed
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * An action listener.

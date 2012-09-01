@@ -97,6 +97,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         buttonbar.setUI(new BlueishButtonBarUI());
         final ButtonGroup buttonGroup = new ButtonGroup();
 
+        int buttonCount = 0;
         // Kategorien holen
         final OptionsCategory[] categories = optionsClient.getCategories();
         // für jede Kategorie
@@ -142,6 +143,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
 
                 buttonGroup.add(button);
                 buttonbar.add(button);
+                buttonCount++;
 
                 if (selectedCategory == null) {
                     selectedCategory = category;
@@ -198,6 +200,10 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
             buttonGroup.setSelected(firstButton.getModel(), true);
         }
         selectedPanelChanged();
+
+        // only an ugly winning solution
+        setPreferredSize(new Dimension(buttonCount * (CATEGORYBUTTON_DIMENSION.width + 5), getPreferredSize().height));
+        pack();
     }
 
     /**
@@ -321,7 +327,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCloseActionPerformed
+    private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         try {
             optionsClient.cancelAll();
         } catch (Throwable t) {
@@ -331,14 +337,14 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         } finally {
             dispose();
         }
-    }                                                                            //GEN-LAST:event_btnCloseActionPerformed
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         try {
             optionsClient.applyAll();
         } catch (Throwable t) {
@@ -348,20 +354,20 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         } finally {
             dispose();
         }
-    }                                                                         //GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHelpActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHelpActionPerformed
+    private void btnHelpActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHelpActionPerformed
         final OptionsPanelController controller = selectedControllerPerCategory.get(selectedCategory);
         final String help = controller.getHelp();
         final HelpDialog dialog = new HelpDialog((JFrame)getParent(), true);
         dialog.setContent(help);
         StaticSwingTools.showDialog(dialog);
-    }                                                                           //GEN-LAST:event_btnHelpActionPerformed
+    }//GEN-LAST:event_btnHelpActionPerformed
 
     /**
      * DOCUMENT ME!

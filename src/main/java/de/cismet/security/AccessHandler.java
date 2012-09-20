@@ -29,7 +29,7 @@ public interface AccessHandler {
     //~ Enums ------------------------------------------------------------------
 
     /**
-     * DOCUMENT ME! 
+     * DOCUMENT ME!
      *
      * @version  $Revision$, $Date$
      */

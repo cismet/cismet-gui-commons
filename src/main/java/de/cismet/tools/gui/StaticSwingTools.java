@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -21,6 +23,8 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,20 +38,10 @@ import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
-import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
@@ -476,6 +470,22 @@ public class StaticSwingTools {
     }
 
     /**
+     * Returns the parent frame of the given component or the given component if there is no parent frame.
+     *
+     * @param   c  component whose parent frame shall be determined
+     *
+     * @return  parent frame or c if there is no parent frame
+     */
+    public static Component getParentFrameIfNotNull(final Component c) {
+        final Component parent = getParentFrame(c);
+        if (parent == null) {
+            return c;
+        }
+
+        return parent;
+    }
+
+    /**
      * DOCUMENT ME!
      *
      * @param   components  DOCUMENT ME!
@@ -658,5 +668,30 @@ public class StaticSwingTools {
                 EventQueue.getMostRecentEventTime(),
                 0);
         action.actionPerformed(actionEvent);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cbo  DOCUMENT ME!
+     */
+    public static void decorateWithFixedAutoCompleteDecorator(final JComboBox cbo) {
+        AutoCompleteDecorator.decorate(cbo);
+        final JList pop = ((ComboPopup)cbo.getUI().getAccessibleChild(cbo, 0)).getList();
+        final JTextField txt = (JTextField)cbo.getEditor().getEditorComponent();
+
+        txt.addKeyListener(new KeyAdapter() {
+
+                @Override
+                public void keyReleased(final KeyEvent event) {
+                    if ((event.getKeyCode() == KeyEvent.VK_DOWN) || (event.getKeyCode() == KeyEvent.VK_UP)) {
+                        final Object selectedValue = pop.getSelectedValue();
+                        if (selectedValue != null) {
+                            txt.setText(String.valueOf(selectedValue));
+                        }
+                        txt.selectAll();
+                    }
+                }
+            });
     }
 }

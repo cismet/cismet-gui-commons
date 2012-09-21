@@ -33,7 +33,6 @@ import java.net.URL;
 
 import java.util.HashMap;
 
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import de.cismet.security.AccessHandler.ACCESS_METHODS;

@@ -8,8 +8,16 @@
 package de.cismet.tools.gui.log4jquickconfig;
 
 import java.awt.Color;
+import java.awt.Frame;
 
 import java.util.Properties;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+
+import de.cismet.lookupoptions.options.CismetDeveloperOptionsPanel;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -17,7 +25,7 @@ import java.util.Properties;
  * @author   thorsten.hell@cismet.de
  * @version  $Revision$, $Date$
  */
-public class Log4JQuickConfig extends javax.swing.JFrame {
+public class Log4JQuickConfig extends JDialog {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -62,6 +70,7 @@ public class Log4JQuickConfig extends javax.swing.JFrame {
      * Creates new form Log4JQuickConfig.
      */
     public Log4JQuickConfig() {
+        super((Frame)null, true);
         initComponents();
         gpnTitle.setLeftColor(new Color(49, 66, 122));
         gpnTitle.setRightColor(Color.white);

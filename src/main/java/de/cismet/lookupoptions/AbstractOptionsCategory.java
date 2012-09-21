@@ -42,7 +42,7 @@ public abstract class AbstractOptionsCategory implements OptionsCategory {
      */
     @Override
     public int compareTo(final OptionsCategory o) {
-        final int orderCompare = getOrder() - o.getOrder();
+        final int orderCompare = new Integer(getOrder()).compareTo(o.getOrder());
         if (orderCompare == 0) {
             return getName().compareTo(o.getName());
         } else {

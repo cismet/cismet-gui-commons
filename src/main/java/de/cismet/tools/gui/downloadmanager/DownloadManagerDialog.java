@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.text.AbstractDocument;
@@ -210,10 +211,9 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                 instance.dlgJobname.getOwner().setIconImage(parent.getIconImage());
             }
             instance.dlgJobname.setPreferredSize(instance.dlgJobname.getMinimumSize());
-            instance.dlgJobname.setLocationRelativeTo(parent);
             instance.dlgJobname.pack();
 
-            StaticSwingTools.showDialog(instance, instance.dlgJobname, true);
+            StaticSwingTools.showDialog(instance.dlgJobname);
 
             result = instance.isJobnameConfirmed;
 
@@ -261,10 +261,10 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
             instance.pnlExceptionDialogContainer.add(exceptionPanel, BorderLayout.CENTER);
             instance.dlgExceptionDialog.invalidate();
             instance.dlgExceptionDialog.pack();
-            StaticSwingTools.showDialog(instance, instance.dlgExceptionDialog, true);
+            StaticSwingTools.showDialog(instance.dlgExceptionDialog);
         } else {
             JOptionPane.showMessageDialog(
-                instance,
+                StaticSwingTools.getParentFrameIfNotNull(instance),
                 download.getCaughtException().getMessage(),
                 NbBundle.getMessage(
                     DownloadPanel.class,
@@ -362,7 +362,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         java.awt.GridBagConstraints gridBagConstraints;
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        dlgJobname = new javax.swing.JDialog();
+        dlgJobname = new JDialog(this);
         lblJobname = new javax.swing.JLabel();
         txtJobname = new javax.swing.JTextField();
         pnlJobnameControls = new javax.swing.JPanel();
@@ -372,7 +372,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         lblDestinationDirectory = new javax.swing.JLabel();
         lblUserDirectory = new javax.swing.JLabel();
         lblUserDirectoryLabel = new javax.swing.JLabel();
-        dlgExceptionDialog = new javax.swing.JDialog();
+        dlgExceptionDialog = new JDialog(this);
         sepExceptionDialogControls = new javax.swing.JSeparator();
         pnlExceptionDialogContainer = new javax.swing.JPanel();
         btnClose = new javax.swing.JButton();

@@ -295,7 +295,7 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
                         ex);
                 }
                 JOptionPane.showMessageDialog(
-                    this,
+                    StaticSwingTools.getParentFrameIfNotNull(this),
                     NbBundle.getMessage(
                         BadHttpStatusCodeExceptionPanel.class,
                         "BadHttpStatusCodeExceptionPanel.btnSaveResponseActionPerformed.JOptionPane.errorWhileSaving.message",

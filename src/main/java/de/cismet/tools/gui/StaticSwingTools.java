@@ -9,15 +9,7 @@ package de.cismet.tools.gui;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Frame;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -538,16 +530,45 @@ public class StaticSwingTools {
             if (isRelativeToParentFrame && (parent != null)) {
                 final Frame parentFrame = getParentFrame(parent);
                 if (parentFrame == null) {
-                    dialog.setLocationRelativeTo(parent);
+                    centerWindowOnScreen(dialog);
                 } else {
                     dialog.setLocationRelativeTo(parentFrame);
+                    dialog.setVisible(true);
                 }
             } else {
-                dialog.setLocationRelativeTo(parent);
+                centerWindowOnScreen(dialog);
             }
-
-            dialog.setVisible(true);
         }
+    }
+
+    /**
+     * Centers a Window instance on the screen on which the mouse pointer is located.
+     *
+     * @param  w  window instance to be centered
+     */
+    public static void centerWindowOnScreen(final Window w) {
+        final PointerInfo pInfo = MouseInfo.getPointerInfo();
+        final Point pointerLocation = pInfo.getLocation();
+
+        // determine screen boundaries w.r.t. the current mouse position
+        final GraphicsConfiguration[] cfgArr = pInfo.getDevice().getConfigurations();
+
+        Rectangle bounds = null;
+        for (int i = 0; i < cfgArr.length; i++) {
+            bounds = cfgArr[i].getBounds();
+
+            if (pointerLocation.x <= bounds.x) {
+                break;
+            }
+        }
+
+        // determine coordinates in the center of the current mouse location
+        final int x = bounds.x + ((bounds.width - w.getWidth()) / 2);
+        final int y = bounds.y + ((bounds.height - w.getHeight()) / 2);
+
+        // show window
+        w.setLocation(x, y);
+        w.setVisible(true);
     }
 
     /**

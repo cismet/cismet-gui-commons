@@ -125,7 +125,7 @@ public abstract class AbstractOptionsPanel extends JPanel implements OptionsPane
      */
     @Override
     public int compareTo(final OptionsPanelController o) {
-        final int orderCompare = getOrder() - o.getOrder();
+        final int orderCompare = new Integer(getOrder()).compareTo(o.getOrder());
         if (orderCompare == 0) {
             return getName().compareTo(o.getName());
         } else {

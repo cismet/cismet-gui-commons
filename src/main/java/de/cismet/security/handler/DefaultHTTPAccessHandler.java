@@ -84,8 +84,6 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
             log.debug("Access method: '" + method + "'."); // NOI18N
         }
 
-//        log.fatal("request1" + url + ":::" + parameter, new Exception());
-
         if ((tunnel != null) && ((method == ACCESS_METHODS.GET_REQUEST) || (method == ACCESS_METHODS.POST_REQUEST))
                     && tunnel.isResponsible(method, url.toString())) {
             return tunnel.doRequest(url, new StringReader(parameter.toString()), method, options);

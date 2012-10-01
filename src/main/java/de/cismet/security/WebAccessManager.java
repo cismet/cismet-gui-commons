@@ -20,6 +20,7 @@ import java.io.StringReader;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
@@ -50,13 +51,12 @@ import de.cismet.security.handler.WSSAccessHandler;
 //ToDo Multithreading
 //Problematik wenn unter der url mehrere services z.B. wms wfs wss sind
 //Todo url leichen weil statisch --> wenn versucht wird eine schon vorhandene URL hinzuzufügen --> wir im Moment  überschrieben
-public class WebAccessManager implements AccessHandler {
+public class WebAccessManager implements AccessHandler, TunnelStore {
 
     //~ Static fields/initializers ---------------------------------------------
 
     public static final String HEADER_CONTENTTYPE_KEY = "Content-Type";
     public static final String HEADER_CONTENTTYPE_VALUE_POST = "application/x-www-form-urlencoded";
-
     private static WebAccessManager instance = null;
     private static final ReentrantReadWriteLock reLock = new ReentrantReadWriteLock();
     private static final Lock readLock = reLock.readLock();
@@ -72,6 +72,7 @@ public class WebAccessManager implements AccessHandler {
     private AccessHandler defaultHandler;
     private Properties serverAliasProps = new Properties();
     private Component topLevelComponent = null;
+    private Tunnel tunnel = null;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -154,6 +155,7 @@ public class WebAccessManager implements AccessHandler {
             }
         }
     }
+
     /**
      * ToDO make configurable.
      */
@@ -216,6 +218,7 @@ public class WebAccessManager implements AccessHandler {
             instance = new WebAccessManager();
         }
     }
+
     /**
      * overwrites at the moment.
      *
@@ -593,6 +596,7 @@ public class WebAccessManager implements AccessHandler {
             readLock.unlock();
         }
     }
+
     /**
      * TODO keine Funktionalität --> nur dummies zur kompatibilität.
      *
@@ -631,6 +635,7 @@ public class WebAccessManager implements AccessHandler {
     public void setTopLevelComponent(final Component topLevelComponent) {
         this.topLevelComponent = topLevelComponent;
     }
+
     /**
      * todo.
      *
@@ -642,6 +647,7 @@ public class WebAccessManager implements AccessHandler {
     public ACCESS_HANDLER_TYPES getHandlerType() {
         throw new UnsupportedOperationException("Not supported yet."); // NOI18N
     }
+
     /**
      * todo.
      *
@@ -654,5 +660,26 @@ public class WebAccessManager implements AccessHandler {
     @Override
     public boolean isAccessMethodSupported(final ACCESS_METHODS method) {
         throw new UnsupportedOperationException("Not supported yet."); // NOI18N
+    }
+
+    @Override
+    public Tunnel getTunnel() {
+        return tunnel;
+    }
+
+    @Override
+    public void setTunnel(final Tunnel tunnel) {
+        this.tunnel = tunnel;
+        final Collection<AccessHandler> c = allHandlers.values();
+        for (final AccessHandler a : c) {
+            if (a instanceof TunnelStore) {
+                ((TunnelStore)a).setTunnel(tunnel);
+            }
+        }
+        if (!c.contains(defaultHandler)) {
+            if (defaultHandler instanceof TunnelStore) {
+                ((TunnelStore)defaultHandler).setTunnel(tunnel);
+            }
+        }
     }
 }

@@ -64,8 +64,19 @@ public class WaitDialog extends javax.swing.JDialog {
      * @param  n  DOCUMENT ME!
      */
     public void setMax(final int n) {
+        jProgressBar2.setIndeterminate(false);
+        jProgressBar2.setStringPainted(true);
         jProgressBar2.setMinimum(0);
         jProgressBar2.setMaximum(n);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  text  DOCUMENT ME!
+     */
+    public void setText(final String text) {
+        labText.setText(text);
     }
 
     /**

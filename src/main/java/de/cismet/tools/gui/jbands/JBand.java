@@ -414,11 +414,10 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             final int posy) {
         final JComponent comp = member.getBandMemberComponent();
         final double widthFactor = ((double)bandsPanel.getWidth() - xoffset) / realWidth;
-        double memberRealWidth = 0;
         if (member instanceof Section) {
-            memberRealWidth = member.getMax() - member.getMin();
-            final int memberWidth = Math.max((int)((memberRealWidth * widthFactor) + 0.5d), 1);
             final int posx = (int)(((member.getMin() - minValue) * widthFactor) + 0.5d) + xoffset;
+            final int lastPosX = (int)(((member.getMax() - minValue) * widthFactor) + 0.5d) + xoffset;
+            final int memberWidth = Math.max(lastPosX - posx, 1);
             return new Rectangle(posx, posy, memberWidth, memberHeight);
         } else if (member instanceof Spot) {
             final int memberWidth = comp.getPreferredSize().width;
@@ -545,7 +544,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
                 }
             }
         }
-        if (!readOnly && (e.getComponent() instanceof BandMemberMouseListeningComponent)) {
+        if ((e.getComponent() instanceof BandMemberMouseListeningComponent)) {
             ((BandMemberMouseListeningComponent)e.getComponent()).mouseClicked(e);
         }
     }

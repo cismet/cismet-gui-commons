@@ -14,6 +14,7 @@
  */
 package de.cismet.security;
 
+import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -40,6 +41,8 @@ import java.net.URL;
 import java.util.prefs.Preferences;
 
 import javax.swing.JFrame;
+
+import de.cismet.netutil.Proxy;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -288,9 +291,9 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
      */
     public boolean testConnection(final UsernamePasswordCredentials creds) {
         final HttpClient client = new HttpClient();
-        final String proxySet = System.getProperty("proxySet"); // NOI18N
+        final Proxy proxy = WebAccessManager.getInstance().getHttpProxy();
 
-        if ((proxySet != null) && proxySet.equals("true")) {                    // NOI18N
+        if ((proxy != null) && proxy.isEnabled()) {                             // NOI18N
             if (log.isDebugEnabled()) {
                 log.debug("proxyIs Set");                                       // NOI18N
                 log.debug("ProxyHost:" + System.getProperty("http.proxyHost")); // NOI18N
@@ -300,9 +303,18 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
             }
 
             try {
-                client.getHostConfiguration()
-                        .setProxy(System.getProperty("http.proxyHost"), // NOI18N
-                            Integer.parseInt(System.getProperty("http.proxyPort"))); // NOI18N
+                client.getHostConfiguration().setProxy(proxy.getHost(), // NOI18N
+                    proxy.getPort()); // NOI18N
+                if ((proxy.getUsername() != null) && (proxy.getPassword() != null)) {
+                    final AuthScope authscope = new AuthScope(proxy.getHost(), proxy.getPort());
+                    final Credentials credentials = new NTCredentials(proxy.getUsername(),
+                            proxy.getPassword(),
+                            "", // NOI18N
+                            (proxy.getDomain() == null) ? "" : proxy.getDomain());
+                    client.getState().setProxyCredentials(
+                        authscope,
+                        credentials);
+                }
             } catch (Exception e) {
                 log.error("Problem while setting proxy", e); // NOI18N
             }

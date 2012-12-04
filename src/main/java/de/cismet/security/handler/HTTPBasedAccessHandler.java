@@ -43,7 +43,9 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final transient Map<URL, GUICredentialsProvider> httpCredentialsForURLS;
+    // do not use the url as key, because similar urls will did not be differentiated in the HashMap implementation
+    // use the string representation of the urls instead.
+    private final transient Map<String, GUICredentialsProvider> httpCredentialsForURLS;
     private transient Proxy proxy;
 
     //~ Constructors -----------------------------------------------------------
@@ -55,7 +57,7 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
         if (LOG.isDebugEnabled()) {
             LOG.debug("HTTPBasedAccessHandler"); // NOI18N
         }
-        httpCredentialsForURLS = new HashMap<URL, GUICredentialsProvider>();
+        httpCredentialsForURLS = new HashMap<String, GUICredentialsProvider>();
         proxy = Proxy.fromSystem();
     }
 
@@ -159,7 +161,9 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
      * @return  DOCUMENT ME!
      */
     public GUICredentialsProvider getHttpCredentialProviderURL(final URL url) {
-        return httpCredentialsForURLS.get(url);
+        final GUICredentialsProvider cp = httpCredentialsForURLS.get(url.toString());
+
+        return cp;
     }
 
     /**
@@ -174,13 +178,13 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
             LOG.debug("Credential Provider should be created synchronously"); // NOI18N
         }
 
-        GUICredentialsProvider cp = httpCredentialsForURLS.get(url);
+        GUICredentialsProvider cp = httpCredentialsForURLS.get(url.toString());
         if (cp == null) {
             cp = new GUICredentialsProvider(url, WebAccessManager.getInstance().getTopLevelComponent());
             if (LOG.isDebugEnabled()) {
                 LOG.debug("A new Credential Provider instance was created for: " + url.toString()); // NOI18N
             }
-            httpCredentialsForURLS.put(url, cp);
+            httpCredentialsForURLS.put(url.toString(), cp);
         } else {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Credential Provider was already available: " + url.toString());          // NOI18N

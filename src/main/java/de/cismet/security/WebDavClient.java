@@ -52,6 +52,7 @@ public class WebDavClient {
     private HttpClient client = null;
     private String currentHost = null;
     private Proxy proxy = null;
+    private boolean useNTAuth;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -63,9 +64,22 @@ public class WebDavClient {
      * @param  password  can be null, if no authentication is required
      */
     public WebDavClient(final Proxy proxy, final String username, final String password) {
+        this(proxy, username, password, false);
+    }
+
+    /**
+     * Creates a new WebDavClient object.
+     *
+     * @param  proxy      DOCUMENT ME!
+     * @param  username   DOCUMENT ME!
+     * @param  password   DOCUMENT ME!
+     * @param  useNTAuth  DOCUMENT ME!
+     */
+    public WebDavClient(final Proxy proxy, final String username, final String password, final boolean useNTAuth) {
         this.username = username;
         this.password = password;
         this.proxy = proxy;
+        this.useNTAuth = useNTAuth;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -89,8 +103,16 @@ public class WebDavClient {
         client.setHostConfiguration(hostConfig);
 
         if ((username != null) && (password != null)) {
-            final Credentials creds = new UsernamePasswordCredentials(username, password);
-            client.getState().setCredentials(AuthScope.ANY, creds);
+            if (useNTAuth) {
+                final Credentials credentials = new NTCredentials(username,
+                        password,
+                        "",
+                        "");
+                client.getState().setCredentials(AuthScope.ANY, credentials);
+            } else {
+                final Credentials creds = new UsernamePasswordCredentials(username, password);
+                client.getState().setCredentials(AuthScope.ANY, creds);
+            }
         }
 
         if ((proxy != null) && proxy.isEnabled()) {

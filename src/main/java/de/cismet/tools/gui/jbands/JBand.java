@@ -452,6 +452,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @param  zoomFactor  DOCUMENT ME!
      */
     public void setZoomFactor(final double zoomFactor) {
+        log.fatal("zoom" + zoomFactor);
         final double myZoomFactor = zoomFactor / this.zoomFactor;
         this.zoomFactor = zoomFactor;
         setRefreshAvoided(true);
@@ -470,9 +471,8 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
                         - currentAbsTargetViewPosition;
 
             final Rectangle r = scrollPane.getViewportBorderBounds();
-            final Point newPosition = new Point((int)(newOffset + 0.5d), (int)r.getY());
+            final Point newPosition = new Point((int)(newOffset), (int)r.getY());
             scrollPane.getViewport().setViewPosition(newPosition);
-            log.error(scrollPane.isDoubleBuffered());
         }
         setRefreshAvoided(false);
         scrollPane.getViewport().revalidate();

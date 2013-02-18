@@ -452,7 +452,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @param  zoomFactor  DOCUMENT ME!
      */
     public void setZoomFactor(final double zoomFactor) {
-        final double myZoomFactor = 0.9 * zoomFactor / (this.zoomFactor * 0.9);
+        final double myZoomFactor = zoomFactor / this.zoomFactor;
         this.zoomFactor = zoomFactor;
         setRefreshAvoided(true);
         final RepaintManager rm = RepaintManager.currentManager(bandsPanel);
@@ -462,19 +462,15 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
 
         if (selectedBandMember != null) {
             final double relTargetPosition = (selectedBandMember.getMin() / (maxValue - minValue));
-            // relTargetPosition = 0.25d;
             final double newJBandWidth = scrollPane.getWidth() * 0.9 * zoomFactor; //
-                                                                                   // scrollPane.getViewport().getViewSize().getWidth()
-                                                                                   // * myZoomFactor;
             final double absTargetPosition = newJBandWidth / myZoomFactor * relTargetPosition;
             final double currentXOffset = scrollPane.getViewport().getViewPosition().getX();
             final double currentAbsTargetViewPosition = absTargetPosition - currentXOffset;
-
             final double newOffset = ((currentAbsTargetViewPosition + currentXOffset) * myZoomFactor)
                         - currentAbsTargetViewPosition;
 
             final Rectangle r = scrollPane.getViewportBorderBounds();
-            final Point newPosition = new Point((int)newOffset, (int)r.getY());
+            final Point newPosition = new Point((int)(newOffset + 0.5d), (int)r.getY());
             scrollPane.getViewport().setViewPosition(newPosition);
             log.error(scrollPane.isDoubleBuffered());
         }

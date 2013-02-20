@@ -472,7 +472,6 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             final Rectangle r = scrollPane.getViewportBorderBounds();
             final Point newPosition = new Point((int)(newOffset + 0.5d), (int)r.getY());
             scrollPane.getViewport().setViewPosition(newPosition);
-            log.error(scrollPane.isDoubleBuffered());
         }
         setRefreshAvoided(false);
         scrollPane.getViewport().revalidate();
@@ -761,7 +760,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         sb0.addMember(new SimpleTextSection("OTOL-8700", 300, 500, false, false));
         sb0.addMember(new SimpleTextSection("OTOL-900", 500, 1000, false, true));
 
-        final DefaultBand sb1 = new DefaultBand();
+        final DefaultBand sb1 = new DefaultBand("Selektierbar");
 
         sb1.addMember(new SelectableSectionPanel(250, 1000));
 
@@ -803,19 +802,19 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         sbm.addBand(sb0);
         sbm.addBand(sb1);
         // sbm.addBand(new EmptyWeightedBand(2f));
-// sbm.addBand(new EmptyAbsoluteHeightedBand(1));
-// sbm.addBand(sb2);
-// sbm.addBand(new EmptyAbsoluteHeightedBand(1));
-//
-// sbm.addBand(sb3);
-// sbm.addBand(sb4);
-// sbm.addBand(sb4a);
-//
-// final SimpleBand sb5 = new SimpleBand();
-// sb5.addMember(new SimpleSection(0, 1100));
-// sb5.addMember(new SimpleSection(50, 500));
-// sb5.addMember(new SimpleSection(400, 600));
-// sbm.addBand(sb5);
+        sbm.addBand(new EmptyAbsoluteHeightedBand(1));
+        sbm.addBand(sb2);
+        sbm.addBand(new EmptyAbsoluteHeightedBand(1));
+
+        sbm.addBand(sb3);
+        sbm.addBand(sb4);
+        sbm.addBand(sb4a);
+
+        final SimpleBand sb5 = new SimpleBand();
+        sb5.addMember(new SimpleSection(0, 1100));
+        sb5.addMember(new SimpleSection(50, 500));
+        sb5.addMember(new SimpleSection(400, 600));
+        sbm.addBand(sb5);
 
         jbdTest.setModel(sbm);
         // jbdTest.setZoomFactor(2);

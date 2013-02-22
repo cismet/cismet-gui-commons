@@ -178,6 +178,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * DOCUMENT ME!
      */
     private void init() {
+        final double prefWidth = legendPanel.getPreferredSize().getWidth();
         minValue = Double.MAX_VALUE;
         maxValue = Double.MIN_VALUE;
         bandsPanel.removeAll();
@@ -237,6 +238,10 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         realWidth = getMaxValue() - getMinValue();
 
         layoutBandMemberComponents();
+
+        if (legendPanel.getPreferredSize().getWidth() != prefWidth) {
+            updateUI();
+        }
     }
 
     /**
@@ -1222,9 +1227,9 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         @Override
         public Dimension getPreferredSize() {
             final Dimension d = super.getPreferredSize();
-            double maxWidth = 0;
+            double maxWidth = 100;
             for (int i = 0; i < getComponentCount(); ++i) {
-                final int tmp = getComponent(i).getWidth();
+                final int tmp = (int)getComponent(i).getPreferredSize().getWidth();
                 if (tmp > maxWidth) {
                     maxWidth = tmp;
                 }

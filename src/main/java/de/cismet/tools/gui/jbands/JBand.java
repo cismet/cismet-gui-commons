@@ -452,7 +452,6 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @param  zoomFactor  DOCUMENT ME!
      */
     public void setZoomFactor(final double zoomFactor) {
-        log.fatal("zoom" + zoomFactor);
         final double myZoomFactor = zoomFactor / this.zoomFactor;
         this.zoomFactor = zoomFactor;
         setRefreshAvoided(true);

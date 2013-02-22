@@ -15,13 +15,12 @@ import org.apache.log4j.Logger;
 
 import java.awt.EventQueue;
 
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.Icon;
 
 /**
- * DOCUMENT ME!
+ * Executes a task in the background and shows a WaitingDialog until the end of the task
  *
  * @author   therter
  * @version  $Revision$, $Date$
@@ -49,11 +48,11 @@ public abstract class WaitingDialogThread<T> implements Runnable {
     /**
      * Creates a new WaitingDialogThread object.
      *
-     * @param  parent  DOCUMENT ME!
-     * @param  modal   DOCUMENT ME!
-     * @param  text    DOCUMENT ME!
-     * @param  icon    DOCUMENT ME!
-     * @param  delay   DOCUMENT ME!
+     * @param  parent  paretn frame
+     * @param  modal   true, if the dialog should be modal
+     * @param  text    the text that should be shown in the dialog
+     * @param  icon    the icon of the dialog
+     * @param  delay   after this delay, the dialog should be shown
      */
     public WaitingDialogThread(final java.awt.Frame parent,
             final boolean modal,
@@ -79,26 +78,26 @@ public abstract class WaitingDialogThread<T> implements Runnable {
     }
 
     /**
-     * DOCUMENT ME!
+     * The task that should be executed is implemented in this method
      *
-     * @return  DOCUMENT ME!
+     * @return  the result of the task. This result can be accessed in the done method
      *
      * @throws  Exception  DOCUMENT ME!
      */
     protected abstract T doInBackground() throws Exception;
 
     /**
-     * DOCUMENT ME!
+     * This method is executed in the edt after the backgrund task 
      */
     protected void done() {
     }
 
     /**
-     * DOCUMENT ME!
+     * provides the result of the background task
      *
-     * @return  DOCUMENT ME!
+     * @return  the result of the background task
      *
-     * @throws  Exception  DOCUMENT ME!
+     * @throws  Exception  the exception, that was thrown in the background task
      */
     protected T get() throws Exception {
         if (thrownException != null) {
@@ -109,7 +108,7 @@ public abstract class WaitingDialogThread<T> implements Runnable {
     }
 
     /**
-     * DOCUMENT ME!
+     * starts the implemented task
      */
     public void start() {
         if (!EventQueue.isDispatchThread()) {
@@ -178,9 +177,11 @@ public abstract class WaitingDialogThread<T> implements Runnable {
         }
 
         if (shouldBeSetVisible) {
+            //show the waiting dialog
             StaticSwingTools.showDialog(wd);
         }
 
+        // starts the task in the edt without waiting dialog
         done();
     }
 }

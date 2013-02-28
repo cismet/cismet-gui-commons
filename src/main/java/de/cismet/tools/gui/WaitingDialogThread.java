@@ -20,7 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.Icon;
 
 /**
- * Executes a task in the background and shows a WaitingDialog until the end of the task
+ * Executes a task in the background and shows a WaitingDialog until the end of the task.
  *
  * @author   therter
  * @version  $Revision$, $Date$
@@ -78,7 +78,7 @@ public abstract class WaitingDialogThread<T> implements Runnable {
     }
 
     /**
-     * The task that should be executed is implemented in this method
+     * The task that should be executed is implemented in this method.
      *
      * @return  the result of the task. This result can be accessed in the done method
      *
@@ -87,13 +87,13 @@ public abstract class WaitingDialogThread<T> implements Runnable {
     protected abstract T doInBackground() throws Exception;
 
     /**
-     * This method is executed in the edt after the backgrund task 
+     * This method is executed in the edt after the backgrund task.
      */
     protected void done() {
     }
 
     /**
-     * provides the result of the background task
+     * provides the result of the background task.
      *
      * @return  the result of the background task
      *
@@ -108,7 +108,7 @@ public abstract class WaitingDialogThread<T> implements Runnable {
     }
 
     /**
-     * starts the implemented task
+     * starts the implemented task.
      */
     public void start() {
         if (!EventQueue.isDispatchThread()) {
@@ -177,7 +177,7 @@ public abstract class WaitingDialogThread<T> implements Runnable {
         }
 
         if (shouldBeSetVisible) {
-            //show the waiting dialog
+            // show the waiting dialog
             StaticSwingTools.showDialog(wd);
         }
 

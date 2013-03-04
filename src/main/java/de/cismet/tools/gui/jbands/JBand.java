@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,12 +29,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.RepaintManager;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
@@ -54,6 +58,7 @@ import de.cismet.tools.gui.jbands.interfaces.BandWeightProvider;
 import de.cismet.tools.gui.jbands.interfaces.Section;
 import de.cismet.tools.gui.jbands.interfaces.Spot;
 import de.cismet.tools.gui.jbands.interfaces.StationaryBandMemberMouseListeningComponent;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
  * DOCUMENT ME!
@@ -72,8 +77,10 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
     HashMap<JComponent, BandMember> bandMembersViaComponents = new HashMap<JComponent, BandMember>();
     HashMap<BandMember, JComponent> componentsViaBandMembers = new HashMap<BandMember, JComponent>();
     JBandsPanel bandsPanel = new JBandsPanel();
+    JLegendPanel legendPanel = new JLegendPanel();
     ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
     BandMember selectedBandMember = null;
+    int count = 0;
     private int maxPreferredPrefixWidth = 0;
     private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private BandModel model;
@@ -84,7 +91,6 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
     private double maxValue = Double.MIN_VALUE;
     private float heightsWeightSum = 0f;
     private double realWidth = 0;
-    private int xoffset = 0;
     private List<JBandYDimension> bandPosY = new ArrayList<JBandYDimension>();
     private Map<Band, ArrayList<ArrayList<BandMember>>> subBandMap =
         new HashMap<Band, ArrayList<ArrayList<BandMember>>>();
@@ -92,8 +98,8 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
     private boolean readOnly = false;
     private boolean refreshAvoided = false;
     private Component lastPressedComponent = null;
-
     private boolean dragged = false;
+    private Runnable worker = null;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -112,6 +118,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
     public JBand(final boolean readOnly) {
         this.readOnly = readOnly;
         setLayout(new BorderLayout());
+        add(legendPanel, BorderLayout.LINE_START);
         add(scrollPane, BorderLayout.CENTER);
         setOpaque(false);
         bandsPanel.setOpaque(false);
@@ -120,6 +127,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+        setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
     }
 
     /**
@@ -170,16 +178,20 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * DOCUMENT ME!
      */
     private void init() {
+        final double prefWidth = legendPanel.getPreferredSize().getWidth();
         minValue = Double.MAX_VALUE;
         maxValue = Double.MIN_VALUE;
         bandsPanel.removeAll();
+        legendPanel.removeAll();
+
         for (int row = 0; row < model.getNumberOfBands(); ++row) {
             final int cols = model.getBand(row).getNumberOfMembers();
             final Band rowBand = model.getBand(row);
             JComponent prefix = null;
             if (rowBand instanceof BandPrefixProvider) {
                 prefix = ((BandPrefixProvider)rowBand).getPrefixComponent();
-                bandsPanel.add(prefix);
+                legendPanel.add(prefix);
+//                bandsPanel.add(prefix);
                 maxPreferredPrefixWidth = (maxPreferredPrefixWidth < prefix.getPreferredSize().width)
                     ? prefix.getPreferredSize().width : maxPreferredPrefixWidth;
             }
@@ -226,6 +238,10 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         realWidth = getMaxValue() - getMinValue();
 
         layoutBandMemberComponents();
+
+        if (legendPanel.getPreferredSize().getWidth() != prefWidth) {
+            updateUI();
+        }
     }
 
     /**
@@ -282,8 +298,6 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             if (rowBand instanceof BandPrefixProvider) {
                 final JComponent prefix = ((BandPrefixProvider)rowBand).getPrefixComponent();
                 prefix.setBounds(0, posy, maxPreferredPrefixWidth, memberHeight);
-
-                xoffset = (xoffset > prefix.getPreferredSize().width) ? xoffset : prefix.getPreferredSize().width;
             }
             if (memberHeight > 0) {
                 bandPosY.add(new JBandYDimension(rowBand, posy, posy + memberHeight - 1));
@@ -413,15 +427,16 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             final int memberHeight,
             final int posy) {
         final JComponent comp = member.getBandMemberComponent();
-        final double widthFactor = ((double)bandsPanel.getWidth() - xoffset) / realWidth;
+        final double widthFactor = ((double)bandsPanel.getWidth()) / realWidth;
+
         if (member instanceof Section) {
-            final int posx = (int)(((member.getMin() - minValue) * widthFactor) + 0.5d) + xoffset;
-            final int lastPosX = (int)(((member.getMax() - minValue) * widthFactor) + 0.5d) + xoffset;
+            final int posx = (int)(((member.getMin() - minValue) * widthFactor) + 0.5d);
+            final int lastPosX = (int)(((member.getMax() - minValue) * widthFactor) + 0.5d);
             final int memberWidth = Math.max(lastPosX - posx, 1);
             return new Rectangle(posx, posy, memberWidth, memberHeight);
         } else if (member instanceof Spot) {
             final int memberWidth = comp.getPreferredSize().width;
-            final int posx = (int)(((member.getMin() - minValue) * widthFactor) + 0.5d - (memberWidth / 2d)) + xoffset;
+            final int posx = (int)(((member.getMin() - minValue) * widthFactor) + 0.5d - (memberWidth / 2d));
             return new Rectangle(posx, posy, memberWidth, memberHeight);
         }
         return null;
@@ -442,7 +457,28 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @param  zoomFactor  DOCUMENT ME!
      */
     public void setZoomFactor(final double zoomFactor) {
+        final double myZoomFactor = zoomFactor / this.zoomFactor;
         this.zoomFactor = zoomFactor;
+        setRefreshAvoided(true);
+        final RepaintManager rm = RepaintManager.currentManager(bandsPanel);
+        rm.markCompletelyClean(bandsPanel);
+
+        scrollPane.getViewport().revalidate();
+
+        if (selectedBandMember != null) {
+            final double relTargetPosition = (selectedBandMember.getMin() / (maxValue - minValue));
+            final double newJBandWidth = scrollPane.getWidth() * 0.9 * zoomFactor; //
+            final double absTargetPosition = newJBandWidth / myZoomFactor * relTargetPosition;
+            final double currentXOffset = scrollPane.getViewport().getViewPosition().getX();
+            final double currentAbsTargetViewPosition = absTargetPosition - currentXOffset;
+            final double newOffset = ((currentAbsTargetViewPosition + currentXOffset) * myZoomFactor)
+                        - currentAbsTargetViewPosition;
+
+            final Rectangle r = scrollPane.getViewportBorderBounds();
+            final Point newPosition = new Point((int)(newOffset), (int)r.getY());
+            scrollPane.getViewport().setViewPosition(newPosition);
+        }
+        setRefreshAvoided(false);
         scrollPane.getViewport().revalidate();
     }
 
@@ -673,6 +709,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
     public void actionPerformed(final ActionEvent e) {
         // reagieren auf ActionEvents von BandMembern
     }
+
     @Override
     public void bandModelChanged(final BandModelEvent e) {
         if (!refreshAvoided) {
@@ -715,86 +752,22 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @param  args  DOCUMENT ME!
      */
     public static void main(final String[] args) {
+        Log4JQuickConfig.configure4LumbermillOnLocalhost();
         final JFrame jf = new JFrame("Test");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.getContentPane().setLayout(new BorderLayout());
 
         final JBand jbdTest = new JBand();
 
-        final MinimumHeightBand sb0 = new MinimumHeightBand("Titel");
+        final MinimumHeightBand sb0 = new MinimumHeightBand();
 
         sb0.addMember(new SimpleTextSection("OTOL-800", 0, 300, true, false));
         sb0.addMember(new SimpleTextSection("OTOL-8700", 300, 500, false, false));
-        sb0.addMember(new SimpleTextSection("OTOL-900", 500, 1010, false, true));
+        sb0.addMember(new SimpleTextSection("OTOL-900", 500, 1000, false, true));
 
-        final DefaultBand sb1 = new DefaultBand("Das erste richtige");
-        sb1.addMember(new SimpleSection(0, 10));
-        int from = 10;
-        int to = 20;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
-        from += 10;
-        to += 10;
-        sb1.addMember(new SimpleSection(from, to));
+        final DefaultBand sb1 = new DefaultBand("Selektierbar");
 
-        sb1.addMember(new SimpleSection(310, 1000));
-        sb1.addMember(new SimpleSection(1000, 1010));
+        sb1.addMember(new SelectableSectionPanel(250, 1000));
 
         final SimpleBand sb2 = new SimpleBand();
         sb2.addMember(new SimpleSection(0, 10));
@@ -805,7 +778,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         final SimpleBand sb3 = new SimpleBand();
         sb3.addMember(new SimpleSection(0, 50));
         sb3.addMember(new SimpleSection(50, 300));
-        sb3.addMember(new SimpleSection(300, 1010));
+        sb3.addMember(new SimpleSection(300, 1000));
         final SimpleBand sb4 = new SimpleBand("Punkte .......");
 
         sb4.addMember(new SimpleSpot(100));
@@ -849,13 +822,12 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         sbm.addBand(sb5);
 
         jbdTest.setModel(sbm);
-        jbdTest.setZoomFactor(2);
-//        jf.getContentPane().setBackground(Color.red);
+        // jbdTest.setZoomFactor(2);
+// jf.getContentPane().setBackground(Color.red);
         jbdTest.setBorder(new EmptyBorder(10, 10, 10, 10));
         jf.getContentPane().add(jbdTest, BorderLayout.CENTER);
 
         final JSlider jsl = new JSlider(0, 100);
-
         jsl.addChangeListener(new ChangeListener() {
 
                 @Override
@@ -875,14 +847,24 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
                     ((SimpleBandModel)(jbdTest.getModel())).fireBandModelValuesChanged();
                 }
             });
-        jf.getContentPane().add(checker, BorderLayout.NORTH);
+
+        final JButton cmd2 = new JButton("2.0");
+        cmd2.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    jbdTest.setZoomFactor(2d);
+                }
+            });
+        // jf.getContentPane().add(checker, BorderLayout.NORTH);
+        jf.getContentPane().add(cmd2, BorderLayout.NORTH);
 
         jsl.setValue(0);
         jf.getContentPane().add(jsl, BorderLayout.SOUTH);
         jf.setSize(300, 400);
         jf.setVisible(true);
         final java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        jf.setBounds((screenSize.width - 800) / 2, (screenSize.height - 222) / 2, 800, 222);
+        jf.setBounds((screenSize.width - 800) / 2, (screenSize.height - 222) / 2, 1000, 222);
     }
 
     /**
@@ -947,11 +929,138 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @return  DOCUMENT ME!
      */
     private double getSationForXValue(final int x) {
-        return ((double)Math.round(((realWidth * (x - xoffset) / (bandsPanel.getWidth() - xoffset)) + minValue)
+        return ((double)Math.round(((realWidth * (x) / (bandsPanel.getWidth())) + minValue)
                             * 10.0)) / 10.0;
     }
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static class SelectableSectionPanel extends JPanel implements Section, BandMember, BandMemberSelectable {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private boolean selected;
+        private double from = 0;
+        private double to = 0;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates new form SimpleSectionPanel.
+         *
+         * @param  from  DOCUMENT ME!
+         * @param  to    DOCUMENT ME!
+         */
+        public SelectableSectionPanel(final double from, final double to) {
+            this(Color.getHSBColor((float)Math.random(), 0.85f, 1.0f), from, to);
+        }
+
+        /**
+         * Creates a new SimpleSectionPanel object.
+         *
+         * @param  c     DOCUMENT ME!
+         * @param  from  DOCUMENT ME!
+         * @param  to    DOCUMENT ME!
+         */
+        public SelectableSectionPanel(final Color c, final double from, final double to) {
+            initComponents();
+            this.from = from;
+            this.to = to;
+            setBackground(c);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code.
+         * The content of this method is always regenerated by the Form Editor.
+         */
+        private void initComponents() {
+            setBackground(new java.awt.Color(255, 51, 0));
+            setOpaque(true);
+            setPreferredSize(new java.awt.Dimension(1, 1));
+
+            final org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
+            this.setLayout(layout);
+            layout.setHorizontalGroup(
+                layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(0, 1, Short.MAX_VALUE));
+            layout.setVerticalGroup(
+                layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(0, 1, Short.MAX_VALUE));
+        }
+
+        @Override
+        public boolean isSelected() {
+            return selected;
+        }
+
+        @Override
+        public void setSelected(final boolean selection) {
+            this.selected = selection;
+            if (selection) {
+                setBackground(getBackground().darker());
+            } else {
+                setBackground(getBackground().brighter());
+            }
+        }
+
+        @Override
+        public boolean isSelectable() {
+            return true;
+        }
+
+        @Override
+        public BandMember getBandMember() {
+            return this;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  from  DOCUMENT ME!
+         */
+        public void setFrom(final double from) {
+            this.from = from;
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param  to  DOCUMENT ME!
+         */
+        public void setTo(final double to) {
+            this.to = to;
+        }
+
+        @Override
+        public double getMax() {
+            return (from < to) ? to : from;
+        }
+
+        @Override
+        public double getMin() {
+            return (from < to) ? from : to;
+        }
+
+        @Override
+        public JComponent getBandMemberComponent() {
+            return this;
+        }
+
+        @Override
+        public double getFrom() {
+            return from;
+        }
+
+        @Override
+        public double getTo() {
+            return to;
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -1100,6 +1209,41 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      *
      * @version  $Revision$, $Date$
      */
+    class JLegendPanel extends JPanel {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new JBandsPanel object.
+         */
+        public JLegendPanel() {
+            super(null);
+            setOpaque(false);
+            setForeground(new Color(50, 50, 50, 150));
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Dimension getPreferredSize() {
+            final Dimension d = super.getPreferredSize();
+            double maxWidth = 100;
+            for (int i = 0; i < getComponentCount(); ++i) {
+                final int tmp = (int)getComponent(i).getPreferredSize().getWidth();
+                if (tmp > maxWidth) {
+                    maxWidth = tmp;
+                }
+            }
+            maxWidth += 2;
+            return new Dimension((int)maxWidth, d.height);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
     class JBandsPanel extends JPanel {
 
         //~ Instance fields ----------------------------------------------------
@@ -1156,8 +1300,8 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
          * @param  measurementx  DOCUMENT ME!
          */
         public void setMeasurementx(final int measurementx) {
-            if (measurementx < xoffset) {
-                this.measurementx = xoffset;
+            if (measurementx < 0) {
+                this.measurementx = 0;
             } else {
                 this.measurementx = measurementx;
             }
@@ -1169,6 +1313,9 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         @Override
         public Dimension getPreferredSize() {
             final Dimension d = super.getPreferredSize();
+//            return new Dimension((int)(scrollPane.getWidth() * 0.9 * zoomFactor)
+//                            - (int)legendPanel.getPreferredSize().getWidth(),
+//                    d.height);
             return new Dimension((int)(scrollPane.getWidth() * 0.9 * zoomFactor), d.height);
         }
 

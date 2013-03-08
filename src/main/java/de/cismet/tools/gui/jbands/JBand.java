@@ -515,46 +515,43 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
     public void mouseClicked(final MouseEvent e) {
         if (!readOnly && (e.getClickCount() == 2)) {
             if (e.getComponent() == bandsPanel) {
-                if (e.getX() >= maxPreferredPrefixWidth) {
-                    final int y = e.getY();
-                    int startY = 0;
-                    int bandHeight = 0;
-                    Band targetBand = null;
+                final int y = e.getY();
+                int startY = 0;
+                int bandHeight = 0;
+                Band targetBand = null;
 
-                    for (final JBandYDimension tmp : bandPosY) {
-                        if ((y >= tmp.getyMin()) && (y <= tmp.getyMax())) {
-                            targetBand = tmp.getBand();
-                            startY = tmp.getyMin();
-                            bandHeight = tmp.getyMax() - tmp.getyMin();
-                            break;
-                        }
+                for (final JBandYDimension tmp : bandPosY) {
+                    if ((y >= tmp.getyMin()) && (y <= tmp.getyMax())) {
+                        targetBand = tmp.getBand();
+                        startY = tmp.getyMin();
+                        bandHeight = tmp.getyMax() - tmp.getyMin();
+                        break;
                     }
+                }
 
-                    if (targetBand != null) {
-                        if (targetBand instanceof BandModificationProvider) {
-                            final double station = getSationForXValue(e.getX());
-                            final ArrayList<ArrayList<BandMember>> subBands = subBandMap.get(targetBand);
-                            int n = (y - startY) / (bandHeight / subBands.size());
+                if (targetBand != null) {
+                    if (targetBand instanceof BandModificationProvider) {
+                        final double station = getSationForXValue(e.getX());
+                        final ArrayList<ArrayList<BandMember>> subBands = subBandMap.get(targetBand);
+                        int n = (y - startY) / (bandHeight / subBands.size());
 
-                            --n;
-                            // the first band is a the end of the list
-                            if (n == -1) {
-                                n = subBands.size() - 1;
-                            }
-                            ((BandModificationProvider)targetBand).addMember(
-                                station,
-                                null,
-                                getMinValue(),
-                                getMaxValue(),
-                                subBands.get(n));
+                        --n;
+                        // the first band is a the end of the list
+                        if (n == -1) {
+                            n = subBands.size() - 1;
                         }
+                        ((BandModificationProvider)targetBand).addMember(
+                            station,
+                            null,
+                            getMinValue(),
+                            getMaxValue(),
+                            subBands.get(n));
                     }
                 }
             }
         } else {
             if (e.getComponent() instanceof BandMemberSelectable) {
                 final BandMemberSelectable selecteable = (BandMemberSelectable)e.getComponent();
-                final BandMember oldBelectedBandMember = selectedBandMember;
                 JBandCursorManager.getInstance().setCursor(this);
 
                 if (e.getClickCount() == 1) {

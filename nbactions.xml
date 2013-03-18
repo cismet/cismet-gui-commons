@@ -78,18 +78,27 @@
         </properties>
     </action>
     <action>
-            <actionName>run.single.main</actionName>
-            <goals>
-                <goal>process-classes</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
-            </goals>
-            <properties>
-                <jalopy.skip>true</jalopy.skip>
-                <exec.classpathScope>${classPathScope}</exec.classpathScope>
-                <exec.args>-classpath %classpath ${packageClassName}</exec.args>
-                <exec.executable>java</exec.executable>
-            </properties>
-        </action>
-        
+        <actionName>run.single.main</actionName>
+        <goals>
+            <goal>process-classes</goal>
+            <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
+        </goals>
+        <properties>
+            <jalopy.skip>true</jalopy.skip>
+            <exec.classpathScope>${classPathScope}</exec.classpathScope>
+            <exec.args>-classpath %classpath ${packageClassName}</exec.args>
+            <exec.executable>java</exec.executable>
+        </properties>
+    </action>
+    <action>
+        <actionName>build</actionName>
+        <goals>
+            <goal>install</goal>
+        </goals>
+        <properties>
+            <maven.test.skip>true</maven.test.skip>
+            <jalopy.skip>true</jalopy.skip>
+        </properties>
+    </action> 
     
 </actions>

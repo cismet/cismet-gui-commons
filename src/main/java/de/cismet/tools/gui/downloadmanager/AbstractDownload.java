@@ -190,7 +190,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
 
         while (!fileFound) {
             while (fileToSaveTo.exists() && (counter < 1000)) {
-                fileToSaveTo = new File(directoryToSaveTo, filename + counter + extension);
+                fileToSaveTo = new File(directoryToSaveTo, filename + "(" + counter + ")" + extension);
                 counter++;
             }
 

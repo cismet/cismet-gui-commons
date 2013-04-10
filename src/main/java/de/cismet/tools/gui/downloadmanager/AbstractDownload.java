@@ -154,7 +154,8 @@ public abstract class AbstractDownload extends Observable implements Download, R
     /**
      * Determines the destination file for this download. There exist given parameters like a download destination and a
      * pattern for the file name. It's possible that a previous download with equal parameters still exists physically,
-     * therefore this method adds a counter (2..999) which is appended to the filename.
+     * therefore this method adds a counter (2..999) which is appended to the filename. This counter is surrounded by
+     * parentheses.
      *
      * @param  filename   The file name for this download.
      * @param  extension  The extension for the downloaded file.
@@ -190,7 +191,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
 
         while (!fileFound) {
             while (fileToSaveTo.exists() && (counter < 1000)) {
-                fileToSaveTo = new File(directoryToSaveTo, filename + counter + extension);
+                fileToSaveTo = new File(directoryToSaveTo, filename + "(" + counter + ")" + extension);
                 counter++;
             }
 

@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.swing.JPanel;
+
 import de.cismet.commons.converter.Converter;
 import de.cismet.commons.converter.FormatHint;
 
@@ -32,11 +34,11 @@ import de.cismet.commons.converter.FormatHint;
  * @author   mscholl
  * @version  1.0
  */
-public abstract class AbstractConverterChooseVisualPanel<T extends Converter> extends javax.swing.JPanel {
+public class DefaultConverterChooseVisualPanel extends JPanel {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final transient Logger LOG = Logger.getLogger(AbstractConverterChooseVisualPanel.class);
+    private static final transient Logger LOG = Logger.getLogger(DefaultConverterChooseVisualPanel.class);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -57,13 +59,13 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
     //~ Constructors -----------------------------------------------------------
 
     /**
-     * Creates a new AbstractConverterChooseVisualPanel object.
+     * Creates a new DefaultConverterChooseVisualPanel object.
      *
      * @param   model  ctrl DOCUMENT ME!
      *
      * @throws  IllegalArgumentException  NullPointerException DOCUMENT ME!
      */
-    public AbstractConverterChooseVisualPanel(final AbstractConverterChooseWizardPanel model) {
+    public DefaultConverterChooseVisualPanel(final AbstractConverterChooseWizardPanel model) {
         if (model == null) {
             throw new IllegalArgumentException("model must not be null"); // NOI18N
         }
@@ -74,8 +76,8 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
         initComponents();
 
         this.setName(NbBundle.getMessage(
-                AbstractConverterChooseVisualPanel.class,
-                "AbstractConverterChooseVisualPanel.name")); // NOI18N
+                DefaultConverterChooseVisualPanel.class,
+                "DefaultConverterChooseVisualPanel.name")); // NOI18N
 
         cboConverterChooser.addItemListener(WeakListeners.create(ItemListener.class, converterL, cboConverterChooser));
     }
@@ -97,11 +99,11 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
     public void init() {
         this.cboConverterChooser.removeAllItems();
 
-        final List<T> converters = getConverters();
-        Collections.sort(converters, new Comparator<T>() {
+        final List<? extends Converter> converters = model.getAvailableConverters();
+        Collections.sort(converters, new Comparator<Converter>() {
 
                 @Override
-                public int compare(final T o1, final T o2) {
+                public int compare(final Converter o1, final Converter o2) {
                     if ((o1 instanceof FormatHint) && (o2 instanceof FormatHint)) {
                         return ((FormatHint)o1).getFormatName().compareTo(((FormatHint)o2).getFormatName());
                     } else {
@@ -110,19 +112,12 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
                 }
             });
 
-        for (final T converter : converters) {
+        for (final Converter converter : converters) {
             this.cboConverterChooser.addItem(converter);
         }
 
         this.cboConverterChooser.setSelectedIndex(0);
     }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public abstract List<T> getConverters();
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -147,8 +142,8 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
         jPanel1.add(cboConverterChooser, gridBagConstraints);
 
         lblConverter.setText(org.openide.util.NbBundle.getMessage(
-                AbstractConverterChooseVisualPanel.class,
-                "AbstractConverterChooseVisualPanel.lblConverter.text")); // NOI18N
+                DefaultConverterChooseVisualPanel.class,
+                "DefaultConverterChooseVisualPanel.lblConverter.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -157,8 +152,8 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
         jPanel1.add(lblConverter, gridBagConstraints);
 
         lblFormatDescription.setText(org.openide.util.NbBundle.getMessage(
-                AbstractConverterChooseVisualPanel.class,
-                "AbstractConverterChooseVisualPanel.lblFormatDescription.text")); // NOI18N
+                DefaultConverterChooseVisualPanel.class,
+                "DefaultConverterChooseVisualPanel.lblFormatDescription.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -166,11 +161,11 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(lblFormatDescription, gridBagConstraints);
 
-        lblFormatDescriptionValue.setFont(new java.awt.Font("Tahoma", 0, 10));         // NOI18N
+        lblFormatDescriptionValue.setFont(new java.awt.Font("Tahoma", 0, 10));        // NOI18N
         lblFormatDescriptionValue.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblFormatDescriptionValue.setText(org.openide.util.NbBundle.getMessage(
-                AbstractConverterChooseVisualPanel.class,
-                "AbstractConverterChooseVisualPanel.lblFormatDescriptionValue.text")); // NOI18N
+                DefaultConverterChooseVisualPanel.class,
+                "DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -181,8 +176,8 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
         jPanel1.add(lblFormatDescriptionValue, gridBagConstraints);
 
         lblFormatExample.setText(org.openide.util.NbBundle.getMessage(
-                AbstractConverterChooseVisualPanel.class,
-                "AbstractConverterChooseVisualPanel.lblFormatExample.text")); // NOI18N
+                DefaultConverterChooseVisualPanel.class,
+                "DefaultConverterChooseVisualPanel.lblFormatExample.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -194,10 +189,10 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
         pnlFormatExample.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         pnlFormatExample.setLayout(new java.awt.GridBagLayout());
 
-        lblFormatExampleValue.setFont(new java.awt.Font("Tahoma", 0, 10));         // NOI18N
+        lblFormatExampleValue.setFont(new java.awt.Font("Tahoma", 0, 10));        // NOI18N
         lblFormatExampleValue.setText(org.openide.util.NbBundle.getMessage(
-                AbstractConverterChooseVisualPanel.class,
-                "AbstractConverterChooseVisualPanel.lblFormatExampleValue.text")); // NOI18N
+                DefaultConverterChooseVisualPanel.class,
+                "DefaultConverterChooseVisualPanel.lblFormatExampleValue.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -236,7 +231,7 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
         public void itemStateChanged(final ItemEvent e) {
             if (ItemEvent.SELECTED == e.getStateChange()) {
                 @SuppressWarnings("unchecked")
-                final T converter = (T)e.getItem();
+                final Converter converter = (Converter)e.getItem();
                 if (converter instanceof FormatHint) {
                     final FormatHint hint = (FormatHint)converter;
 
@@ -258,8 +253,8 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
                     }
                 } else {
                     lblFormatDescriptionValue.setText(NbBundle.getMessage(
-                            AbstractConverterChooseVisualPanel.class,
-                            "AbstractConverterChooseVisualPanel.lblFormatDescriptionValue.text")); // NOI18N
+                            DefaultConverterChooseVisualPanel.class,
+                            "DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text")); // NOI18N
 
                     resetExample();
                 }
@@ -273,8 +268,8 @@ public abstract class AbstractConverterChooseVisualPanel<T extends Converter> ex
          */
         private void resetExample() {
             lblFormatExampleValue.setText(NbBundle.getMessage(
-                    AbstractConverterChooseVisualPanel.class,
-                    "AbstractConverterChooseVisualPanel.lblFormatExampleValue.text"));
+                    DefaultConverterChooseVisualPanel.class,
+                    "DefaultConverterChooseVisualPanel.lblFormatExampleValue.text")); // NOI18N
             pnlFormatExample.removeAll();
 
             final GridBagConstraints constraints = new GridBagConstraints();

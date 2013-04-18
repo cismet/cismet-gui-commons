@@ -10,6 +10,8 @@ package de.cismet.commos.gui.wizard.converter;
 import org.openide.WizardDescriptor;
 import org.openide.util.NbBundle;
 
+import java.util.List;
+
 import de.cismet.commons.converter.Converter;
 
 import de.cismet.commos.gui.wizard.AbstractWizardPanel;
@@ -33,11 +35,13 @@ public abstract class AbstractConverterChooseWizardPanel extends AbstractWizardP
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public abstract AbstractConverterChooseVisualPanel getComponent();
+    protected DefaultConverterChooseVisualPanel createComponent() {
+        return new DefaultConverterChooseVisualPanel(this);
+    }
 
     @Override
     protected void read(final WizardDescriptor wizard) {
-        getComponent().init();
+        ((DefaultConverterChooseVisualPanel)getComponent()).init();
         wizard.putProperty(
             WizardDescriptor.PROP_INFO_MESSAGE,
             NbBundle.getMessage(
@@ -53,8 +57,15 @@ public abstract class AbstractConverterChooseWizardPanel extends AbstractWizardP
 
     @Override
     public boolean isValid() {
-        return true;
+        return converter != null;
     }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public abstract List<Converter> getAvailableConverters();
 
     /**
      * DOCUMENT ME!

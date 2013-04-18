@@ -22,6 +22,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 
 import de.cismet.commons.converter.Converter;
@@ -80,6 +83,7 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
                 "DefaultConverterChooseVisualPanel.name")); // NOI18N
 
         cboConverterChooser.addItemListener(WeakListeners.create(ItemListener.class, converterL, cboConverterChooser));
+        cboConverterChooser.setRenderer(new ConverterRenderer());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -137,6 +141,7 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(cboConverterChooser, gridBagConstraints);
@@ -217,6 +222,34 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
     } // </editor-fold>//GEN-END:initComponents
 
     //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private final class ConverterRenderer extends DefaultListCellRenderer {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public Component getListCellRendererComponent(final JList list,
+                final Object value,
+                final int index,
+                final boolean isSelected,
+                final boolean cellHasFocus) {
+            final Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+            if ((c instanceof JLabel) && (value instanceof FormatHint)) {
+                final JLabel label = (JLabel)c;
+                final FormatHint formatHint = (FormatHint)value;
+
+                label.setText(formatHint.getFormatDisplayName());
+            }
+
+            return c;
+        }
+    }
 
     /**
      * DOCUMENT ME!

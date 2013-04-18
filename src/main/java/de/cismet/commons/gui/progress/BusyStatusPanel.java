@@ -113,7 +113,7 @@ public class BusyStatusPanel extends JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
+        final java.awt.GridBagConstraints gridBagConstraints;
 
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
@@ -121,15 +121,19 @@ public class BusyStatusPanel extends JPanel {
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        lblProgress.setText(org.openide.util.NbBundle.getMessage(BusyStatusPanel.class, "BusyStatusPanel.lblProgress.text")); // NOI18N
+        lblProgress.setText(org.openide.util.NbBundle.getMessage(
+                BusyStatusPanel.class,
+                "BusyStatusPanel.lblProgress.text")); // NOI18N
         jPanel1.add(lblProgress, new java.awt.GridBagConstraints());
 
         lblStatusMsg.setFont(new java.awt.Font("DejaVu Sans", 1, 13)); // NOI18N
-        lblStatusMsg.setText(org.openide.util.NbBundle.getMessage(BusyStatusPanel.class, "BusyStatusPanel.lblStatusMsg.text")); // NOI18N
+        lblStatusMsg.setText(org.openide.util.NbBundle.getMessage(
+                BusyStatusPanel.class,
+                "BusyStatusPanel.lblStatusMsg.text"));                 // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 8);
         jPanel1.add(lblStatusMsg, gridBagConstraints);
 
         add(jPanel1, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 }

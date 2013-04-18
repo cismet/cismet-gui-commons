@@ -34,7 +34,7 @@
         <Component class="org.jdesktop.swingx.JXBusyLabel" name="lblProgress">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/commos/gui/progress/Bundle.properties" key="BusyStatusPanel.lblProgress.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/commons/gui/progress/Bundle.properties" key="BusyStatusPanel.lblProgress.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -49,7 +49,7 @@
               <Font name="DejaVu Sans" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/commos/gui/progress/Bundle.properties" key="BusyStatusPanel.lblStatusMsg.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="de/cismet/commons/gui/progress/Bundle.properties" key="BusyStatusPanel.lblStatusMsg.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>

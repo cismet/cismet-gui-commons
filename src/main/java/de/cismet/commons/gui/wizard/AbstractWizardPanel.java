@@ -5,7 +5,7 @@
 *              ... and it just works.
 *
 ****************************************************/
-package de.cismet.commos.gui.wizard;
+package de.cismet.commons.gui.wizard;
 
 import org.openide.WizardDescriptor;
 import org.openide.util.ChangeSupport;

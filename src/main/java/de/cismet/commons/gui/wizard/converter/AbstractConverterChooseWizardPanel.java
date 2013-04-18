@@ -5,7 +5,7 @@
 *              ... and it just works.
 *
 ****************************************************/
-package de.cismet.commos.gui.wizard.converter;
+package de.cismet.commons.gui.wizard.converter;
 
 import org.openide.WizardDescriptor;
 import org.openide.util.NbBundle;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import de.cismet.commons.converter.Converter;
 
-import de.cismet.commos.gui.wizard.AbstractWizardPanel;
+import de.cismet.commons.gui.wizard.AbstractWizardPanel;
 
 /**
  * Basic ConverterChooser panel implementation.

@@ -109,7 +109,8 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
                 @Override
                 public int compare(final Converter o1, final Converter o2) {
                     if ((o1 instanceof FormatHint) && (o2 instanceof FormatHint)) {
-                        return ((FormatHint)o1).getFormatName().compareTo(((FormatHint)o2).getFormatName());
+                        return ((FormatHint)o1).getFormatDisplayName()
+                                    .compareTo(((FormatHint)o2).getFormatDisplayName());
                     } else {
                         return o1.hashCode() - o2.hashCode();
                     }

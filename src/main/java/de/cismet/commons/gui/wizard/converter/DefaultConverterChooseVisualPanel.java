@@ -101,6 +101,10 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
      * DOCUMENT ME!
      */
     public void init() {
+        // we save the current converter first because the removal and re-addition of the converters to the box triggers
+        // the item listener which in turn changes the current converter of the model
+        final Converter selectedConv = model.getConverter();
+
         this.cboConverterChooser.removeAllItems();
 
         final List<? extends Converter> converters = model.getAvailableConverters();
@@ -121,7 +125,11 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
             this.cboConverterChooser.addItem(converter);
         }
 
-        this.cboConverterChooser.setSelectedIndex(0);
+        if (selectedConv == null) {
+            this.cboConverterChooser.setSelectedIndex(0);
+        } else {
+            this.cboConverterChooser.setSelectedItem(selectedConv);
+        }
     }
 
     /**

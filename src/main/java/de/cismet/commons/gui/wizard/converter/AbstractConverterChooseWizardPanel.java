@@ -41,6 +41,7 @@ public abstract class AbstractConverterChooseWizardPanel extends AbstractWizardP
 
     @Override
     protected void read(final WizardDescriptor wizard) {
+        converter = (Converter)wizard.getProperty(PROP_CONVERTER);
         ((DefaultConverterChooseVisualPanel)getComponent()).init();
         wizard.putProperty(
             WizardDescriptor.PROP_INFO_MESSAGE,

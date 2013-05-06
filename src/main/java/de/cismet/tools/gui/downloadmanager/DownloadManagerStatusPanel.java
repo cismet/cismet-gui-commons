@@ -11,15 +11,15 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import com.sun.awt.AWTUtilities;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+import javax.swing.JDialog;
 import javax.swing.JWindow;
 import javax.swing.Timer;
 
@@ -35,22 +35,18 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static final long ANIMATION_TIME = 500;
-    private static final float ANIMATION_TIME_f = (float)ANIMATION_TIME;
+    private static final int DISPOSING_TIME = 3000;
 
     //~ Instance fields --------------------------------------------------------
 
-    // End of variables declaration
     int dowloads = 0;
     Timer animationTimer;
-    // Variables declaration - do not modify
+    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblRunning;
     private javax.swing.JLabel lblRunningCounter;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JLabel lblTotalCounter;
-    private int showX;
-    private int startY;
-    private long animationStart;
+    // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
@@ -60,6 +56,18 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
     public DownloadManagerStatusPanel() {
         initComponents();
         DownloadManager.instance().addDownloadListChangedListener(this);
+        this.addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mouseClicked(final MouseEvent me) {
+                    if (me.getClickCount() == 2) {
+                        final JDialog downloadManager = DownloadManagerDialog.instance(
+                                StaticSwingTools.getParentFrame(DownloadManagerStatusPanel.this));
+                        downloadManager.pack();
+                        StaticSwingTools.showDialog(downloadManager);
+                    }
+                }
+            });
         updateLabels();
     }
 
@@ -81,9 +89,11 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
 
         setLayout(new java.awt.GridBagLayout());
 
+        lblRunning.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/downloadmanager.png"))); // NOI18N
         lblRunning.setText(org.openide.util.NbBundle.getMessage(
                 DownloadManagerStatusPanel.class,
-                "DownloadManagerStatusPanel.lblRunning.text")); // NOI18N
+                "DownloadManagerStatusPanel.lblRunning.text"));                                           // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         add(lblRunning, gridBagConstraints);
@@ -138,73 +148,17 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
      * DOCUMENT ME!
      */
     private void showNotification() {
-        final DownloadDesktopNotification notification = new DownloadDesktopNotification();
-        final JWindow window = new JWindow();
-//        window.setUndecorated(true);
-//        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        final JWindow tmp = new JWindow();
-        tmp.getContentPane().add(notification);
-        tmp.pack();
-        final Dimension windowSize = tmp.getSize();
-        tmp.getContentPane().removeAll();
-        window.getContentPane().add(notification);
-        window.pack();
-        window.setSize(windowSize);
-        final Frame f = StaticSwingTools.getParentFrame(this);
-        window.setLocation(f.getWidth() - windowSize.width - 10, f.getHeight() - windowSize.height - 10);
-        window.setVisible(true);
-        window.setBackground(new Color(1.0f, 1.0f, 1.0f, 1.0f));
-        window.repaint();
-
-        final Timer t = new Timer(3000, new ActionListener() {
+        final DownloadDesktopNotification notification = new DownloadDesktopNotification(StaticSwingTools
+                        .getParentFrame(this));
+        notification.floatInFromLowerFrameBound();
+        final Timer t = new Timer(DISPOSING_TIME, new ActionListener() {
 
                     @Override
                     public void actionPerformed(final ActionEvent ae) {
-                        window.setVisible(false);
-                        window.dispose();
+                        notification.setVisible(false);
+                        notification.dispose();
                     }
                 });
         t.start();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  x  DOCUMENT ME!
-     * @param  w  DOCUMENT ME!
-     */
-    private void showAt(final int x, final JWindow w) {
-        showX = x;
-        final Frame f = StaticSwingTools.getParentFrame(w);
-        startY = f.getY() + f.getHeight();
-
-        final ActionListener animationLogic = new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent ae) {
-                    final long elapsed = System.currentTimeMillis() - animationStart;
-                    if (elapsed > ANIMATION_TIME) {
-                        w.getContentPane().removeAll();
-                        w.getContentPane().add(new DownloadDesktopNotification());
-                        w.pack();
-                        w.setLocation(showX, startY - w.getSize().height);
-                        w.setVisible(true);
-                        w.repaint();
-                        animationTimer.stop();
-                        animationTimer = null;
-                    } else {
-                        final float progress = (float)elapsed / ANIMATION_TIME_f;
-//                    int animationHeight =(int) progress*w.getHeight();
-//                    animationHeight = Math.max(animationHeight, 1);
-                        w.pack();
-                        w.setLocation(showX, startY - w.getHeight());
-                        w.setVisible(true);
-                        w.repaint();
-                    }
-                }
-            };
-        animationTimer = new Timer(50, animationLogic);
-        animationStart = System.currentTimeMillis();
-        animationTimer.start();
     }
 }

@@ -39,9 +39,10 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
 
     //~ Instance fields --------------------------------------------------------
 
-    int dowloads = 0;
+    int completedDownlaods = 0;
     Timer animationTimer;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lblDone;
     private javax.swing.JLabel lblRunning;
     private javax.swing.JLabel lblRunningCounter;
     private javax.swing.JLabel lblTotal;
@@ -86,6 +87,7 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
         lblRunningCounter = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
         lblTotalCounter = new javax.swing.JLabel();
+        lblDone = new javax.swing.JLabel();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -94,15 +96,16 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
         lblRunning.setText(org.openide.util.NbBundle.getMessage(
                 DownloadManagerStatusPanel.class,
                 "DownloadManagerStatusPanel.lblRunning.text"));                                           // NOI18N
+        lblRunning.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         add(lblRunning, gridBagConstraints);
 
         lblRunningCounter.setText(org.openide.util.NbBundle.getMessage(
                 DownloadManagerStatusPanel.class,
                 "DownloadManagerStatusPanel.lblRunningCounter.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         add(lblRunningCounter, gridBagConstraints);
@@ -111,7 +114,7 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
                 DownloadManagerStatusPanel.class,
                 "DownloadManagerStatusPanel.lblTotal.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         add(lblTotal, gridBagConstraints);
@@ -120,19 +123,27 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
                 DownloadManagerStatusPanel.class,
                 "DownloadManagerStatusPanel.lblTotalCounter.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 10);
         add(lblTotalCounter, gridBagConstraints);
-    }                                                                // </editor-fold>//GEN-END:initComponents
+
+        lblDone.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerStatusPanel.class,
+                "DownloadManagerStatusPanel.lblDone.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        add(lblDone, gridBagConstraints);
+    }                                                        // </editor-fold>//GEN-END:initComponents
 
     @Override
     public void downloadListChanged(final DownloadListChangedEvent event) {
-        final int i = DownloadManager.instance().getCountDownloadsCompleted();
-        if (dowloads < i) {
+        final int tmp = DownloadManager.instance().getCountDownloadsCompleted();
+        if (completedDownlaods < tmp) {
             showNotification();
         }
-        dowloads = i;
+        completedDownlaods = tmp;
         updateLabels();
     }
 

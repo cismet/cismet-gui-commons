@@ -77,11 +77,9 @@ public class DownloadDesktopNotificationPanel extends JPanel {
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("DejaVu Sans", 1, 13));  // NOI18N
+        jLabel1.setFont(new java.awt.Font("DejaVu Sans", 1, 13)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(
-                DownloadDesktopNotificationPanel.class,
-                "DownloadDesktopNotificationPanel.jLabel1.text")); // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(DownloadDesktopNotificationPanel.class, "DownloadDesktopNotificationPanel.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -90,30 +88,25 @@ public class DownloadDesktopNotificationPanel extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(jLabel1, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("DejaVu Sans", 0, 10));  // NOI18N
+        jLabel2.setFont(new java.awt.Font("DejaVu Sans", 0, 10)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(
-                DownloadDesktopNotificationPanel.class,
-                "DownloadDesktopNotificationPanel.jLabel2.text")); // NOI18N
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(DownloadDesktopNotificationPanel.class, "DownloadDesktopNotificationPanel.jLabel2.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 20, 10);
         add(jLabel2, gridBagConstraints);
 
         jLabel3.setForeground(new java.awt.Color(254, 254, 254));
-        jLabel3.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/download.png"))); // NOI18N
-        jLabel3.setText(org.openide.util.NbBundle.getMessage(
-                DownloadDesktopNotificationPanel.class,
-                "DownloadDesktopNotificationPanel.jLabel3.text"));                                 // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/download.png"))); // NOI18N
+        jLabel3.setText(org.openide.util.NbBundle.getMessage(DownloadDesktopNotificationPanel.class, "DownloadDesktopNotificationPanel.jLabel3.text")); // NOI18N
         jLabel3.setFocusable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
         add(jLabel3, gridBagConstraints);
-    }                                                                                              // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 }

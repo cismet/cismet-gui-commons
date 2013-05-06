@@ -13,6 +13,7 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import org.openide.util.Exceptions;
 
 import java.awt.Color;
@@ -22,6 +23,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JDialog;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -68,9 +72,18 @@ public class DownloadDesktopNotification extends JWindow implements ActionListen
         });
         this.getContentPane().add(new DownloadDesktopNotificationPanel());
         this.setSize(tmp.getSize());
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(final MouseEvent me) {
+                if (me.getClickCount() == 2) {
+                    final JDialog downloadManager = DownloadManagerDialog.instance(
+                            StaticSwingTools.getParentFrame(DownloadDesktopNotification.this));
+                    downloadManager.pack();
+                    StaticSwingTools.showDialog(downloadManager);
+                }
+            }
+        });
     }
-    
-    
 
     //~ Methods ----------------------------------------------------------------
     /**

@@ -185,4 +185,11 @@ public class MultipleDownload extends Observable implements Download, Observer {
 
         return hash;
     }
+
+    @Override
+    public void cancelDownload() {
+        for (final Download d : downloads) {
+            d.cancelDownload();
+        }
+    }
 }

@@ -30,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import java.util.Observable;
+import java.util.concurrent.Future;
 
 import javax.swing.JPanel;
 
@@ -231,6 +232,12 @@ public abstract class AbstractDownload extends Observable implements Download, R
                 return;
             }
         }
+    }
+
+    @Override
+    public void cancelDownload() {
+        this.status = State.ABORTED;
+        stateChanged();
     }
 
     /**

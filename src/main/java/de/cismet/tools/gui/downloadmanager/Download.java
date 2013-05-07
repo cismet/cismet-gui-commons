@@ -33,7 +33,7 @@ public interface Download {
 
         //~ Enum constants -----------------------------------------------------
 
-        WAITING, RUNNING, RUNNING_WITH_ERROR, COMPLETED, COMPLETED_WITH_ERROR
+        WAITING, RUNNING, RUNNING_WITH_ERROR, COMPLETED, COMPLETED_WITH_ERROR, ABORTED
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -42,6 +42,11 @@ public interface Download {
      * Notifies the download that it should start.
      */
     void startDownload();
+
+    /**
+     * Cancels the download and sets the status to aborted.
+     */
+    void cancelDownload();
 
     /**
      * Returns the current state of the download.

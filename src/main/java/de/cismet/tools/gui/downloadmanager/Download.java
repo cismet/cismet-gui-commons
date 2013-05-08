@@ -44,11 +44,6 @@ public interface Download {
     void startDownload();
 
     /**
-     * Cancels the download and sets the status to aborted.
-     */
-    void cancelDownload();
-
-    /**
      * Returns the current state of the download.
      *
      * @return  The state of the download.

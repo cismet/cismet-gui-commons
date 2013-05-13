@@ -140,6 +140,8 @@ public class MultipleDownload extends Observable implements Download, Observer {
                 downloadsCompleted++;
                 downloadsErroneous++;
                 status = State.RUNNING_WITH_ERROR;
+            } else if (download.getStatus() == State.ABORTED) {
+                downloadsCompleted++;
             }
 
             if (downloadsCompleted == downloads.size()) {
@@ -184,5 +186,12 @@ public class MultipleDownload extends Observable implements Download, Observer {
         hash = (37 * hash) + ((this.title != null) ? this.title.hashCode() : 0);
 
         return hash;
+    }
+
+    @Override
+    public void cancelDownload() {
+        for (final Download d : downloads) {
+            d.cancelDownload();
+        }
     }
 }

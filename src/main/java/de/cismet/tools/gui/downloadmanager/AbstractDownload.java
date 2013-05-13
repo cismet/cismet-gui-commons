@@ -26,12 +26,14 @@ package de.cismet.tools.gui.downloadmanager;
 import org.apache.log4j.Logger;
 
 import org.openide.util.Cancellable;
+import org.openide.util.Exceptions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import java.util.Observable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.swing.JPanel;
@@ -53,12 +55,13 @@ public abstract class AbstractDownload extends Observable implements Download, R
     protected File fileToSaveTo;
     protected State status;
     protected String title;
-    protected Future f;
+    protected Future downloadFuture;
     protected boolean started = false;
     protected Exception caughtException;
     protected final Logger log = Logger.getLogger(this.getClass());
 
     //~ Methods ----------------------------------------------------------------
+
     /**
      * Returns the title of the download.
      *
@@ -142,7 +145,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
     public void startDownload() {
         if (!started) {
             started = true;
-            f = CismetThreadPool.submit(this);
+            downloadFuture = CismetThreadPool.submit(this);
 //            CismetThreadPool.execute(this);
         }
     }

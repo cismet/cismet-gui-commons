@@ -23,6 +23,10 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
+import net.sf.jasperreports.engine.JasperExportManager;
+
+import org.openide.util.Cancellable;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -51,7 +55,7 @@ import de.cismet.security.exceptions.RequestFailedException;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class HttpDownload extends AbstractDownload {
+public class HttpDownload extends AbstractDownload implements Cancellable {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -149,10 +153,21 @@ public class HttpDownload extends AbstractDownload {
                                         headers);
                 }
             }
-
+            if (Thread.interrupted()) {
+                log.info("Download was interuppted");
+                deleteFile();
+                return;
+            }
             out = new FileOutputStream(fileToSaveTo);
             boolean downloading = true;
             while (downloading) {
+                if (Thread.interrupted()) {
+                    log.info("Download was interuppted");
+                    out.close();
+                    resp.close();
+                    deleteFile();
+                    return;
+                }
                 // Size buffer according to how much of the file is left to download.
                 final byte[] buffer;
                 buffer = new byte[MAX_BUFFER_SIZE];
@@ -244,5 +259,24 @@ public class HttpDownload extends AbstractDownload {
         hash = (43 * hash) + ((this.fileToSaveTo != null) ? this.fileToSaveTo.hashCode() : 0);
 
         return hash;
+    }
+
+    @Override
+    public boolean cancel() {
+        final boolean cancelled = downloadFuture.cancel(true);
+        if (cancelled) {
+            status = State.ABORTED;
+            stateChanged();
+        }
+        return cancelled;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void deleteFile() {
+        if (fileToSaveTo.exists() && fileToSaveTo.isFile()) {
+            fileToSaveTo.delete();
+        }
     }
 }

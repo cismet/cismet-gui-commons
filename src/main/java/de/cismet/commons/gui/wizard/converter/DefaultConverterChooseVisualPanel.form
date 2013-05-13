@@ -45,8 +45,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblConverter">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/commons/gui/wizard/converter/Bundle.properties" key="DefaultConverterChooseVisualPanel.lblConverter.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="model.getText(&quot;DefaultConverterChooseVisualPanel.lblConverter.text&quot;)" type="code"/>
             </Property>
           </Properties>
           <Constraints>
@@ -57,8 +57,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblFormatDescription">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/commons/gui/wizard/converter/Bundle.properties" key="DefaultConverterChooseVisualPanel.lblFormatDescription.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="model.getText(&quot;DefaultConverterChooseVisualPanel.lblFormatDescription.text&quot;)" type="code"/>
             </Property>
           </Properties>
           <Constraints>
@@ -73,8 +73,8 @@
               <Font name="Tahoma" size="10" style="0"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/commons/gui/wizard/converter/Bundle.properties" key="DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="model.getText(&quot;DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text&quot;)" type="code"/>
             </Property>
           </Properties>
           <Constraints>
@@ -85,8 +85,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblFormatExample">
           <Properties>
-            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="de/cismet/commons/gui/wizard/converter/Bundle.properties" key="DefaultConverterChooseVisualPanel.lblFormatExample.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="model.getText(&quot;DefaultConverterChooseVisualPanel.lblFormatExample.text&quot;)" type="code"/>
             </Property>
           </Properties>
           <Constraints>
@@ -119,8 +119,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="10" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="de/cismet/commons/gui/wizard/converter/Bundle.properties" key="DefaultConverterChooseVisualPanel.lblFormatExampleValue.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="model.getText(&quot;DefaultConverterChooseVisualPanel.lblFormatExampleValue.text&quot;)" type="code"/>
                 </Property>
               </Properties>
               <Constraints>

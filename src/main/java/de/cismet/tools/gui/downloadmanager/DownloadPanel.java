@@ -347,7 +347,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
      *
      * @param  evt  The event object.
      */
-    private void formMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_formMouseClicked
+    private void formMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (evt.getClickCount() > 1) {
             if (download.getCaughtException() != null) {
                 DownloadManagerDialog.showExceptionDialog(download);
@@ -355,54 +355,54 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
                 BrowserLauncher.openURLorFile(download.getFileToSaveTo().getParentFile().getAbsolutePath());
             }
         }
-    }                                                                    //GEN-LAST:event_formMouseClicked
+    }//GEN-LAST:event_formMouseClicked
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void jxlOpenFileActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlOpenFileActionPerformed
+    private void jxlOpenFileActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jxlOpenFileActionPerformed
         BrowserLauncher.openURLorFile(download.getFileToSaveTo().getAbsolutePath());
-    }                                                                               //GEN-LAST:event_jxlOpenFileActionPerformed
+    }//GEN-LAST:event_jxlOpenFileActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void mniOpenFileActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniOpenFileActionPerformed
+    private void mniOpenFileActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniOpenFileActionPerformed
         BrowserLauncher.openURLorFile(download.getFileToSaveTo().getAbsolutePath());
-    }                                                                               //GEN-LAST:event_mniOpenFileActionPerformed
+    }//GEN-LAST:event_mniOpenFileActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void mniOpenDirectoryActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniOpenDirectoryActionPerformed
+    private void mniOpenDirectoryActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniOpenDirectoryActionPerformed
         BrowserLauncher.openURLorFile(download.getFileToSaveTo().getParentFile().getAbsolutePath());
-    }                                                                                    //GEN-LAST:event_mniOpenDirectoryActionPerformed
+    }//GEN-LAST:event_mniOpenDirectoryActionPerformed
 
     /**
      * An action listener.
      *
      * @param  evt  The event.
      */
-    private void mniRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniRemoveActionPerformed
+    private void mniRemoveActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniRemoveActionPerformed
         DownloadManager.instance().removeDownload(download);
-    }                                                                             //GEN-LAST:event_mniRemoveActionPerformed
+    }//GEN-LAST:event_mniRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         if (download instanceof Cancellable) {
             ((Cancellable)download).cancel();
         }
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * Initiates the icon. According to the file extension of the download, an appropriate icon will be shown.
@@ -448,6 +448,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         switch (download.getStatus()) {
             case WAITING: {
                 prbProgress.setVisible(false);
+                lblTitle.setText(download.getTitle());
                 lblMessage.setVisible(true);
                 jxlOpenFile.setVisible(false);
                 mniOpenFile.setEnabled(false);
@@ -458,6 +459,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
             }
             case RUNNING: {
                 prbProgress.setVisible(true);
+                lblTitle.setText(download.getTitle());
                 lblMessage.setVisible(false);
                 jxlOpenFile.setVisible(false);
                 mniOpenFile.setEnabled(false);
@@ -468,6 +470,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
             }
             case COMPLETED: {
                 prbProgress.setVisible(false);
+                lblTitle.setText(download.getTitle());
                 lblMessage.setVisible(false);
                 btnCancel.setVisible(false);
                 jxlOpenFile.setVisible(download.getFileToSaveTo() != null);
@@ -481,6 +484,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
             }
             case COMPLETED_WITH_ERROR: {
                 prbProgress.setVisible(false);
+                lblTitle.setText(download.getTitle());
                 jxlOpenFile.setVisible(false);
                 mniOpenFile.setEnabled(false);
                 mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
@@ -514,6 +518,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
             }
             case ABORTED: {
                 prbProgress.setVisible(false);
+                lblTitle.setText(download.getTitle());
                 jxlOpenFile.setVisible(false);
                 mniOpenFile.setEnabled(false);
                 mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);

@@ -25,11 +25,15 @@ package de.cismet.tools.gui.downloadmanager;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.Cancellable;
+import org.openide.util.Exceptions;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import java.util.Observable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.swing.JPanel;
@@ -51,6 +55,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
     protected File fileToSaveTo;
     protected State status;
     protected String title;
+    protected Future downloadFuture;
     protected boolean started = false;
     protected Exception caughtException;
     protected final Logger log = Logger.getLogger(this.getClass());
@@ -140,7 +145,8 @@ public abstract class AbstractDownload extends Observable implements Download, R
     public void startDownload() {
         if (!started) {
             started = true;
-            CismetThreadPool.execute(this);
+            downloadFuture = CismetThreadPool.submit(this);
+//            CismetThreadPool.execute(this);
         }
     }
 
@@ -234,11 +240,16 @@ public abstract class AbstractDownload extends Observable implements Download, R
         }
     }
 
-    @Override
-    public void cancelDownload() {
-        this.status = State.ABORTED;
-        stateChanged();
-    }
+//    @Override
+//    public boolean cancel() {
+//        final boolean flag = f.cancel(true);
+//        if (!flag) {
+//            log.fatal("could not cancel download thread");
+//        }
+//        this.status = State.ABORTED;
+//        stateChanged();
+//        return f.isCancelled();
+//    }
 
     /**
      * Marks this observable as changed and notifies observers.

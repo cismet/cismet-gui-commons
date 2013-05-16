@@ -14,6 +14,7 @@ package de.cismet.tools.gui.downloadmanager;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.Cancellable;
 import org.openide.util.NbBundle;
 
 import java.awt.Color;
@@ -309,17 +310,22 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jxlOpenFile, gridBagConstraints);
 
-        btnCancel.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/cross-circle.png_16x16.png")));       // NOI18N
-        btnCancel.setText(org.openide.util.NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.btnCancel.text"));  // NOI18N
-        btnCancel.setToolTipText(org.openide.util.NbBundle.getMessage(
-                DownloadPanel.class,
-                "DownloadPanel.btnCancel.toolTipText"));                                                               // NOI18N
-        btnCancel.setBorderPainted(false);
-        btnCancel.setContentAreaFilled(false);
-        btnCancel.setFocusPainted(false);
-        btnCancel.setRolloverIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/cross-circle-frame.png_16x16.png"))); // NOI18N
+        if (download instanceof Cancellable) {
+            btnCancel.setIcon(new javax.swing.ImageIcon(
+                    getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/cross-circle.png_16x16.png"))); // NOI18N
+            btnCancel.setText(org.openide.util.NbBundle.getMessage(
+                    DownloadPanel.class,
+                    "DownloadPanel.btnCancel.text"));                                                                // NOI18N
+            btnCancel.setToolTipText(org.openide.util.NbBundle.getMessage(
+                    DownloadPanel.class,
+                    "DownloadPanel.btnCancel.toolTipText"));                                                         // NOI18N
+            btnCancel.setBorderPainted(false);
+            btnCancel.setContentAreaFilled(false);
+            btnCancel.setFocusPainted(false);
+            btnCancel.setRolloverIcon(new javax.swing.ImageIcon(
+                    getClass().getResource(
+                        "/de/cismet/tools/gui/downloadmanager/res/cross-circle-frame.png_16x16.png")));              // NOI18N
+        }
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -327,11 +333,13 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
                     btnCancelActionPerformed(evt);
                 }
             });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
-        add(btnCancel, gridBagConstraints);
+        if (download instanceof Cancellable) {
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+            add(btnCancel, gridBagConstraints);
+        }
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -391,7 +399,9 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
      * @param  evt  DOCUMENT ME!
      */
     private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
-        download.cancelDownload();
+        if (download instanceof Cancellable) {
+            ((Cancellable)download).cancel();
+        }
     }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**

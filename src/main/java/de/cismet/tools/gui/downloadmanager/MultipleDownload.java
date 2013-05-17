@@ -140,6 +140,8 @@ public class MultipleDownload extends Observable implements Download, Observer {
                 downloadsCompleted++;
                 downloadsErroneous++;
                 status = State.RUNNING_WITH_ERROR;
+            } else if (download.getStatus() == State.ABORTED) {
+                downloadsCompleted++;
             }
 
             if (downloadsCompleted == downloads.size()) {

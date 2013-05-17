@@ -33,7 +33,7 @@ public interface Download {
 
         //~ Enum constants -----------------------------------------------------
 
-        WAITING, RUNNING, RUNNING_WITH_ERROR, COMPLETED, COMPLETED_WITH_ERROR
+        WAITING, RUNNING, RUNNING_WITH_ERROR, COMPLETED, COMPLETED_WITH_ERROR, ABORTED
     }
 
     //~ Methods ----------------------------------------------------------------

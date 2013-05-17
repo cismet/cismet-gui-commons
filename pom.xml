@@ -5,7 +5,7 @@
     <parent>
         <groupId>de.cismet.cids</groupId>
         <artifactId>cids-parent</artifactId>
-        <version>2.0-SNAPSHOT</version>
+        <version>2.0</version>
     </parent>
 
     <groupId>de.cismet.commons</groupId>
@@ -15,6 +15,13 @@
 
     <name>cismet GUI Commons</name>
     <description>!!! description pending !!!</description>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <distribution>repo</distribution>
+            <url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
+        </license>
+    </licenses>
 
     <prerequisites>
         <maven>3</maven>
@@ -53,6 +60,16 @@
             <groupId>de.cismet.commons</groupId>
             <artifactId>wss-bean</artifactId>
             <version>2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-dialogs</artifactId>
+            <version>RELEASE701</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-dialogs-i18n-de</artifactId>
+            <version>RELEASE69</version>
         </dependency>
         <dependency>
             <groupId>org.swinglabs</groupId>

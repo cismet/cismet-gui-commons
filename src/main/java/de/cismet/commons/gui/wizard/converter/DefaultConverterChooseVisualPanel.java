@@ -112,6 +112,7 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
     private void init() {
         assert EventQueue.isDispatchThread() : "only EDT allowed"; // NOI18N
 
+        // we set the initialising flag so that listeners do not perform their usual actions
         initialising = true;
 
         final Converter selectedConv = model.getConverter();
@@ -136,13 +137,14 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
             this.cboConverterChooser.addItem(converter);
         }
 
+        // initialising is unset as we want the listeners to resume normal operations
+        initialising = false;
+
         if (selectedConv == null) {
             this.cboConverterChooser.setSelectedIndex(0);
         } else {
             this.cboConverterChooser.setSelectedItem(selectedConv);
         }
-
-        initialising = false;
     }
 
     /**

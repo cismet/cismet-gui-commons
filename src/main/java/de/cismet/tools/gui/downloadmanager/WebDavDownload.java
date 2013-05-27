@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
+import org.openide.util.Cancellable;
+
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
@@ -18,7 +20,7 @@ import de.cismet.security.WebDavClient;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class WebDavDownload extends AbstractDownload {
+public class WebDavDownload extends AbstractDownload implements Cancellable {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -82,6 +84,13 @@ public class WebDavDownload extends AbstractDownload {
             out = new FileOutputStream(fileToSaveTo);
             boolean downloading = true;
             while (downloading) {
+                if (Thread.interrupted()) {
+                    log.info("Download was interuppted");
+                    out.close();
+                    resp.close();
+                    deleteFile();
+                    return;
+                }
                 // Size buffer according to how much of the file is left to download.
                 final byte[] buffer;
                 buffer = new byte[MAX_BUFFER_SIZE];
@@ -153,5 +162,24 @@ public class WebDavDownload extends AbstractDownload {
         hash = (43 * hash) + ((this.fileToSaveTo != null) ? this.fileToSaveTo.hashCode() : 0);
 
         return hash;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void deleteFile() {
+        if (fileToSaveTo.exists() && fileToSaveTo.isFile()) {
+            fileToSaveTo.delete();
+        }
+    }
+
+    @Override
+    public boolean cancel() {
+        final boolean cancelled = downloadFuture.cancel(true);
+        if (cancelled) {
+            status = State.ABORTED;
+            stateChanged();
+        }
+        return cancelled;
     }
 }

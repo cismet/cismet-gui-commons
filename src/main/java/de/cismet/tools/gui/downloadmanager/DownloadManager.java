@@ -131,7 +131,8 @@ public class DownloadManager implements Observer, Configurable {
 
         for (final Download download : downloads) {
             if ((download.getStatus() == Download.State.COMPLETED)
-                        || (download.getStatus() == Download.State.COMPLETED_WITH_ERROR)) {
+                        || (download.getStatus() == Download.State.COMPLETED_WITH_ERROR)
+                        || (download.getStatus() == Download.State.ABORTED)) {
                 downloadsRemoved.add(download);
             }
         }
@@ -369,6 +370,19 @@ public class DownloadManager implements Observer, Configurable {
                 if (!(download instanceof MultipleDownload)) {
                     countDownloadsRunning++;
                 }
+
+                break;
+            }
+            case ABORTED: {
+                if (!(download instanceof MultipleDownload)) {
+                    countDownloadsRunning--;
+                }
+
+                if (downloads.contains(download)) {
+                    countDownloadsCompleted++;
+                }
+
+                startDownloads();
 
                 break;
             }

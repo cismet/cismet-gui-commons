@@ -335,11 +335,11 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         add(pnlCloseAutomatically, gridBagConstraints);
 
         spnNotificationDisplayTime.setModel(new javax.swing.SpinnerNumberModel(3, 1, 50, 1));
-        spnNotificationDisplayTime.setMinimumSize(new java.awt.Dimension(52, 28));
-        spnNotificationDisplayTime.setPreferredSize(new java.awt.Dimension(52, 28));
+        spnNotificationDisplayTime.setMinimumSize(new java.awt.Dimension(52, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(spnNotificationDisplayTime, gridBagConstraints);

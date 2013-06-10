@@ -11,20 +11,9 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import com.sun.awt.AWTUtilities;
+import org.openide.util.NbBundle;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Window;
-import java.awt.geom.RoundRectangle2D;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JWindow;
 
 /**
  * DOCUMENT ME!
@@ -35,20 +24,36 @@ import javax.swing.JWindow;
 public class DownloadDesktopNotificationPanel extends JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel lblFiller;
+    private javax.swing.JLabel lblIcon;
+    private javax.swing.JLabel lblSubTitle1;
+    private javax.swing.JLabel lblSubTitle2;
+    private javax.swing.JLabel lblSubTitle3;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel pnlSubTitle;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
 
     /**
      * Creates new form DowloadDesktopNotification.
+     *
+     * @param  downloadName  DOCUMENT ME!
+     * @param  isErroneous   DOCUMENT ME!
      */
-    public DownloadDesktopNotificationPanel() {
+    public DownloadDesktopNotificationPanel(final String downloadName, final boolean isErroneous) {
+//        this.downloadName = downloadName;
         initComponents();
         this.setOpaque(false);
-//        this.setB
+        lblSubTitle2.setText(downloadName);
+        if (isErroneous) {
+            lblTitle.setText(org.openide.util.NbBundle.getMessage(
+                    DownloadDesktopNotificationPanel.class,
+                    "DownloadDesktopNotificationPanel.lblTitle.erroneous.text"));
+            lblSubTitle3.setText(org.openide.util.NbBundle.getMessage(
+                    DownloadDesktopNotificationPanel.class,
+                    "DownloadDesktopNotificationPanel.lblSubTitle3.erroneous.text"));
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -70,50 +75,97 @@ public class DownloadDesktopNotificationPanel extends JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        lblIcon = new javax.swing.JLabel();
+        pnlSubTitle = new javax.swing.JPanel();
+        lblSubTitle2 = new javax.swing.JLabel();
+        lblSubTitle1 = new javax.swing.JLabel();
+        lblSubTitle3 = new javax.swing.JLabel();
+        lblFiller = new javax.swing.JLabel();
 
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("DejaVu Sans", 1, 13));  // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(
+        lblTitle.setFont(new java.awt.Font("DejaVu Sans", 1, 13));  // NOI18N
+        lblTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblTitle.setText(org.openide.util.NbBundle.getMessage(
                 DownloadDesktopNotificationPanel.class,
-                "DownloadDesktopNotificationPanel.jLabel1.text")); // NOI18N
+                "DownloadDesktopNotificationPanel.lblTitle.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        add(jLabel1, gridBagConstraints);
+        add(lblTitle, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font("DejaVu Sans", 0, 10));  // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(
-                DownloadDesktopNotificationPanel.class,
-                "DownloadDesktopNotificationPanel.jLabel2.text")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 20, 10);
-        add(jLabel2, gridBagConstraints);
-
-        jLabel3.setForeground(new java.awt.Color(254, 254, 254));
-        jLabel3.setIcon(new javax.swing.ImageIcon(
+        lblIcon.setForeground(new java.awt.Color(254, 254, 254));
+        lblIcon.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/download.png"))); // NOI18N
-        jLabel3.setText(org.openide.util.NbBundle.getMessage(
+        lblIcon.setText(org.openide.util.NbBundle.getMessage(
                 DownloadDesktopNotificationPanel.class,
-                "DownloadDesktopNotificationPanel.jLabel3.text"));                                 // NOI18N
-        jLabel3.setFocusable(false);
+                "DownloadDesktopNotificationPanel.lblIcon.text"));                                 // NOI18N
+        lblIcon.setFocusable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
-        add(jLabel3, gridBagConstraints);
-    }                                                                                              // </editor-fold>//GEN-END:initComponents
+        add(lblIcon, gridBagConstraints);
+
+        pnlSubTitle.setOpaque(false);
+        pnlSubTitle.setLayout(new java.awt.GridBagLayout());
+
+        lblSubTitle2.setFont(new java.awt.Font("DejaVu Sans", 0, 10));  // NOI18N
+        lblSubTitle2.setForeground(new java.awt.Color(255, 255, 255));
+        lblSubTitle2.setText(org.openide.util.NbBundle.getMessage(
+                DownloadDesktopNotificationPanel.class,
+                "DownloadDesktopNotificationPanel.lblSubTitle2.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 20, 5);
+        pnlSubTitle.add(lblSubTitle2, gridBagConstraints);
+
+        lblSubTitle1.setFont(new java.awt.Font("DejaVu Sans", 0, 10));  // NOI18N
+        lblSubTitle1.setForeground(new java.awt.Color(254, 254, 254));
+        lblSubTitle1.setText(org.openide.util.NbBundle.getMessage(
+                DownloadDesktopNotificationPanel.class,
+                "DownloadDesktopNotificationPanel.lblSubTitle1.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        pnlSubTitle.add(lblSubTitle1, gridBagConstraints);
+
+        lblSubTitle3.setFont(new java.awt.Font("DejaVu Sans", 0, 10));  // NOI18N
+        lblSubTitle3.setForeground(new java.awt.Color(254, 254, 254));
+        lblSubTitle3.setText(org.openide.util.NbBundle.getMessage(
+                DownloadDesktopNotificationPanel.class,
+                "DownloadDesktopNotificationPanel.lblSubTitle3.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        pnlSubTitle.add(lblSubTitle3, gridBagConstraints);
+
+        lblFiller.setText(org.openide.util.NbBundle.getMessage(
+                DownloadDesktopNotificationPanel.class,
+                "DownloadDesktopNotificationPanel.lblFiller.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        pnlSubTitle.add(lblFiller, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        add(pnlSubTitle, gridBagConstraints);
+    } // </editor-fold>//GEN-END:initComponents
 }

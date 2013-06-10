@@ -60,12 +60,14 @@ public class DownloadDesktopNotification extends JWindow implements ActionListen
     /**
      * Creates a new DownloadDesktopNotification object.
      *
-     * @param  f  DOCUMENT ME!
+     * @param  f             DOCUMENT ME!
+     * @param  downlaodName  DOCUMENT ME!
+     * @param  isErroneous   DOCUMENT ME!
      */
-    public DownloadDesktopNotification(final Frame f) {
+    public DownloadDesktopNotification(final Frame f, final String downlaodName, final boolean isErroneous) {
         parentFrame = f;
         final JWindow tmp = new JWindow(f);
-        tmp.getContentPane().add(new DownloadDesktopNotificationPanel());
+        tmp.getContentPane().add(new DownloadDesktopNotificationPanel(downlaodName, isErroneous));
         tmp.pack();
         this.setContentPane(new JPanel() {
 
@@ -78,7 +80,7 @@ public class DownloadDesktopNotification extends JWindow implements ActionListen
                 }
             });
         this.setBackground(bgColor);
-        this.getContentPane().add(new DownloadDesktopNotificationPanel());
+        this.getContentPane().add(new DownloadDesktopNotificationPanel(downlaodName, isErroneous));
         this.setSize(tmp.getSize());
         finalHeight = tmp.getHeight();
         this.addMouseListener(new MouseAdapter() {
@@ -137,7 +139,7 @@ public class DownloadDesktopNotification extends JWindow implements ActionListen
         f.setSize(1024, 800);
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        final DownloadDesktopNotification w = new DownloadDesktopNotification(f);
+        final DownloadDesktopNotification w = new DownloadDesktopNotification(f, "testDownlaod", false);
         w.floatInFromLowerFrameBound();
     }
 

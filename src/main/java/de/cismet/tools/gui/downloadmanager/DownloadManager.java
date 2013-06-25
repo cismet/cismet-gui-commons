@@ -1,10 +1,12 @@
-/***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+/**
+ * *************************************************
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ * 
+* ... and it just works.
+ * 
+***************************************************
+ */
 package de.cismet.tools.gui.downloadmanager;
 
 import org.apache.log4j.Logger;
@@ -30,13 +32,12 @@ import de.cismet.tools.configuration.NoWriteError;
  * removed. Erraneous downloads remain in the collection. The download manager observes all download objects for state
  * changed and informs the download manager panel via the DownloadListChangedListener interface.
  *
- * @author   jweintraut
- * @version  $Revision$, $Date$
+ * @author jweintraut
+ * @version $Revision$, $Date$
  */
 public class DownloadManager implements Observer, Configurable {
 
     //~ Static fields/initializers ---------------------------------------------
-
     private static final Logger LOG = Logger.getLogger(DownloadManager.class);
     private static final String XML_CONF_ROOT = "downloads";
     private static final String XML_CONF_DIRECTORY = "directory";
@@ -47,11 +48,9 @@ public class DownloadManager implements Observer, Configurable {
     private static final String XML_CONF_DIALOG_CLOSEAUTOMATICALLY = "closeAutomatically";
     private static final String XML_CONF_DIALOG_USERTITLE = "userTitle";
     private static DownloadManager instance = null;
-
     //~ Instance fields --------------------------------------------------------
-
     private File destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
-                    + "cidsDownload");
+            + "cidsDownload");
     private int parallelDownloads = 2;
     private LinkedList<Download> downloads = new LinkedList<Download>();
     private List<Download> downloadsToStart = new LinkedList<Download>();
@@ -62,7 +61,6 @@ public class DownloadManager implements Observer, Configurable {
     private int countDownloadsCompleted = 0;
 
     //~ Constructors -----------------------------------------------------------
-
     /**
      * Creates a new DownloadManager object.
      */
@@ -70,11 +68,10 @@ public class DownloadManager implements Observer, Configurable {
     }
 
     //~ Methods ----------------------------------------------------------------
-
     /**
      * It's a Singleton. There can only be one download manager.
      *
-     * @return  The download manager.
+     * @return The download manager.
      */
     public static DownloadManager instance() {
         if (instance == null) {
@@ -87,7 +84,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * This method is used to add a download to the download list.
      *
-     * @param  download  A new download to add.
+     * @param download A new download to add.
      */
     public synchronized void add(final Download download) {
         if ((download == null) || downloads.contains(download)) {
@@ -99,7 +96,7 @@ public class DownloadManager implements Observer, Configurable {
         download.addObserver(this);
 
         if (download instanceof MultipleDownload) {
-            final MultipleDownload multipleDownload = (MultipleDownload)download;
+            final MultipleDownload multipleDownload = (MultipleDownload) download;
 
             for (final Download singleDownload : multipleDownload.getDownloads()) {
                 singleDownload.addObserver(this);
@@ -131,8 +128,8 @@ public class DownloadManager implements Observer, Configurable {
 
         for (final Download download : downloads) {
             if ((download.getStatus() == Download.State.COMPLETED)
-                        || (download.getStatus() == Download.State.COMPLETED_WITH_ERROR)
-                        || (download.getStatus() == Download.State.ABORTED)) {
+                    || (download.getStatus() == Download.State.COMPLETED_WITH_ERROR)
+                    || (download.getStatus() == Download.State.ABORTED)) {
                 downloadsRemoved.add(download);
             }
         }
@@ -158,7 +155,7 @@ public class DownloadManager implements Observer, Configurable {
 
             download.deleteObserver(this);
             if (download instanceof MultipleDownload) {
-                final MultipleDownload multipleDownload = (MultipleDownload)download;
+                final MultipleDownload multipleDownload = (MultipleDownload) download;
 
                 for (final Download singleDownload : multipleDownload.getDownloads()) {
                     singleDownload.deleteObserver(this);
@@ -180,14 +177,14 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * Remove a specified download from the download list.
      *
-     * @param  download  The download to remove.
+     * @param download The download to remove.
      */
     public synchronized void removeDownload(final Download download) {
         downloads.remove(download);
         download.deleteObserver(this);
 
         if (download instanceof MultipleDownload) {
-            final MultipleDownload multipleDownload = (MultipleDownload)download;
+            final MultipleDownload multipleDownload = (MultipleDownload) download;
 
             for (final Download singleDownload : multipleDownload.getDownloads()) {
                 singleDownload.deleteObserver(this);
@@ -246,7 +243,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * Returns the current download list.
      *
-     * @return  The current download list.
+     * @return The current download list.
      */
     public Collection<Download> getDownloads() {
         return downloads;
@@ -255,7 +252,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * Returns the count of erroneous downloads.
      *
-     * @return  The count of erroneous downloads.
+     * @return The count of erroneous downloads.
      */
     public int getCountDownloadsErroneous() {
         return countDownloadsErroneous;
@@ -264,7 +261,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * Returns the count of completed downloads.
      *
-     * @return  The count of completed downloads.
+     * @return The count of completed downloads.
      */
     public int getCountDownloadsCompleted() {
         return countDownloadsCompleted;
@@ -273,7 +270,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * Returns the total count of downloads.
      *
-     * @return  The total count of downloads.
+     * @return The total count of downloads.
      */
     public int getCountDownloadsTotal() {
         return countDownloadsTotal;
@@ -282,7 +279,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @return DOCUMENT ME!
      */
     public int getParallelDownloads() {
         return parallelDownloads;
@@ -291,7 +288,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * DOCUMENT ME!
      *
-     * @param  parallelDownloads  DOCUMENT ME!
+     * @param parallelDownloads DOCUMENT ME!
      */
     public void setParallelDownloads(final int parallelDownloads) {
         this.parallelDownloads = parallelDownloads;
@@ -300,7 +297,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * Returns the destination directory.
      *
-     * @return  The destination directory for downloads.
+     * @return The destination directory for downloads.
      */
     public File getDestinationDirectory() {
         return destinationDirectory;
@@ -310,7 +307,7 @@ public class DownloadManager implements Observer, Configurable {
      * Sets the destination directory for downloads. Setting this does only affect new downloads. If the given download
      * location is invalid, the DownloadManager will be disabled.
      *
-     * @param  destinationDirectory  The new destination directory for downloads.
+     * @param destinationDirectory The new destination directory for downloads.
      */
     public void setDestinationDirectory(final File destinationDirectory) {
         this.destinationDirectory = destinationDirectory;
@@ -323,9 +320,9 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * Returns a flag which tells whether download manager is enabled or not.
      *
-     * @return      The flag whether the download manager is enabled or not.
+     * @return The flag whether the download manager is enabled or not.
      *
-     * @deprecated  DOCUMENT ME!
+     * @deprecated DOCUMENT ME!
      */
     public boolean isEnabled() {
         return true;
@@ -333,11 +330,21 @@ public class DownloadManager implements Observer, Configurable {
 
     @Override
     public synchronized void update(final Observable o, final Object arg) {
+        if (arg != null) {
+            /*
+             * in this case we assume that there was an update that doesnt concern us here. E.G this could happen if
+             * the title of a download has changed and it wants to notify the its observers about it. 
+             * This feature was introduced in issue cismet/cismet-gui-commons#29 and is used for example in 
+             * the NasDownload
+             */
+            return;
+        }
+
         if (!(o instanceof Download)) {
             return;
         }
 
-        final Download download = (Download)o;
+        final Download download = (Download) o;
 
         switch (download.getStatus()) {
             case COMPLETED: {
@@ -397,7 +404,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * Adds a new DownloadListChangedListener.
      *
-     * @param  listener  The listener to add.
+     * @param listener The listener to add.
      */
     public void addDownloadListChangedListener(final DownloadListChangedListener listener) {
         listeners.add(DownloadListChangedListener.class, listener);
@@ -406,7 +413,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * Removes a DownloadListChangedListener.
      *
-     * @param  listener  The listener to remove.
+     * @param listener The listener to remove.
      */
     public void removeDownloadListChangedListener(final DownloadListChangedListener listener) {
         listeners.remove(DownloadListChangedListener.class, listener);
@@ -415,7 +422,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * Notifies all current DownloadListChangedListeners.
      *
-     * @param  event  The event to notify about.
+     * @param event The event to notify about.
      */
     protected synchronized void notifyDownloadListChanged(final DownloadListChangedEvent event) {
         for (final DownloadListChangedListener listener : listeners.getListeners(DownloadListChangedListener.class)) {
@@ -430,7 +437,7 @@ public class DownloadManager implements Observer, Configurable {
         DownloadManagerDialog.setOpenAutomatically(true);
 
         destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
-                        + "cidsDownload");
+                + "cidsDownload");
 
         Element downloads = null;
         if (parent == null) {
@@ -444,7 +451,7 @@ public class DownloadManager implements Observer, Configurable {
 
             if (!destinationDirectory.isDirectory() || !destinationDirectory.canWrite()) {
                 LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath()
-                            + "'.");
+                        + "'.");
             }
 
             return;
@@ -453,7 +460,7 @@ public class DownloadManager implements Observer, Configurable {
         final Element directory = downloads.getChild(XML_CONF_DIRECTORY);
         if ((directory == null) || (directory.getTextTrim() == null)) {
             LOG.warn("There is no destination directory configured for downloads. Using default destination directory '"
-                        + System.getProperty("user.home") + System.getProperty("file.separator") + "cidsDownload'.");
+                    + System.getProperty("user.home") + System.getProperty("file.separator") + "cidsDownload'.");
         } else {
             destinationDirectory = new File(directory.getTextTrim());
         }
@@ -482,7 +489,7 @@ public class DownloadManager implements Observer, Configurable {
         final Element askForTitle = dialog.getChild(XML_CONF_DIALOG_AKSFORTITLE);
         if ((askForTitle == null) || (askForTitle.getTextTrim() == null)) {
             LOG.warn(
-                "There is no configuration whether to ask for download titles or not. Using default value 'true'.");
+                    "There is no configuration whether to ask for download titles or not. Using default value 'true'.");
         } else {
             final String value = askForTitle.getTextTrim();
             DownloadManagerDialog.setAskForJobname("1".equals(value) || "true".equalsIgnoreCase(value));
@@ -491,7 +498,7 @@ public class DownloadManager implements Observer, Configurable {
         final Element openAutomatically = dialog.getChild(XML_CONF_DIALOG_OPENAUTOMATICALLY);
         if ((openAutomatically == null) || (openAutomatically.getTextTrim() == null)) {
             LOG.warn(
-                "There is no configuration whether to open downloads automatically or not. Using default value 'true'.");
+                    "There is no configuration whether to open downloads automatically or not. Using default value 'true'.");
         } else {
             final String value = openAutomatically.getTextTrim();
             DownloadManagerDialog.setOpenAutomatically("1".equals(value) || "true".equalsIgnoreCase(value));
@@ -500,7 +507,7 @@ public class DownloadManager implements Observer, Configurable {
         final Element closeAutomatically = dialog.getChild(XML_CONF_DIALOG_CLOSEAUTOMATICALLY);
         if ((closeAutomatically == null) || (closeAutomatically.getTextTrim() == null)) {
             LOG.warn(
-                "There is no configuration whether to close the download manager dialog automatically or not. Using default value 'true'.");
+                    "There is no configuration whether to close the download manager dialog automatically or not. Using default value 'true'.");
         } else {
             final String value = closeAutomatically.getTextTrim();
             DownloadManagerDialog.setCloseAutomatically("1".equals(value) || "true".equalsIgnoreCase(value));

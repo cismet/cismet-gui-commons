@@ -333,6 +333,15 @@ public class DownloadManager implements Observer, Configurable {
 
     @Override
     public synchronized void update(final Observable o, final Object arg) {
+        if (arg != null) {
+            /*
+             * in this case we assume that there was an update that doesnt concern us here. E.G this could happen if the
+             * title of a download has changed and it wants to notify the its observers about it. This feature was
+             * introduced in issue cismet/cismet-gui-commons#29 and is used for example in the NasDownload
+             */
+            return;
+        }
+
         if (!(o instanceof Download)) {
             return;
         }

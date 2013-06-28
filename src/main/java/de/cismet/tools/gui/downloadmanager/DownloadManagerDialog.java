@@ -121,10 +121,11 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
 
         final int countDownloadsErroneous = DownloadManager.instance().getCountDownloadsErroneous();
         final int countDownloadsCompleted = DownloadManager.instance().getCountDownloadsCompleted();
+        final int countDownlaodCancelled = DownloadManager.instance().getCountDownloadsCancelled();
         final int countDownloadsTotal = DownloadManager.instance().getCountDownloadsTotal();
 
         lblDownloadsTotalValue.setText(String.valueOf(countDownloadsTotal));
-        btnClearList.setEnabled((countDownloadsCompleted + countDownloadsErroneous) > 0);
+        btnClearList.setEnabled((countDownloadsCompleted + countDownloadsErroneous + countDownlaodCancelled) > 0);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -709,10 +710,12 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
             case CHANGED_COUNTERS: {
                 final int countDownloadsErraneous = DownloadManager.instance().getCountDownloadsErroneous();
                 final int countDownloadsCompleted = DownloadManager.instance().getCountDownloadsCompleted();
+                final int countDownloadsCancelled = DownloadManager.instance().getCountDownloadsCancelled();
                 final int countDownloadsTotal = DownloadManager.instance().getCountDownloadsTotal();
 
                 lblDownloadsTotalValue.setText(String.valueOf(countDownloadsTotal));
-                btnClearList.setEnabled((countDownloadsCompleted + countDownloadsErraneous) > 0);
+                btnClearList.setEnabled((countDownloadsCompleted + countDownloadsErraneous + countDownloadsCancelled)
+                            > 0);
 
                 if (openAutomatically) {
                     final Iterator<Download> downloadToOpenIter = downloadsToOpen.iterator();

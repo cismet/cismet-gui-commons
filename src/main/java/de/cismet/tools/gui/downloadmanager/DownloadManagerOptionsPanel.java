@@ -56,6 +56,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
     private boolean openAutomatically = true;
     private boolean closeAutomatically = true;
     private int parallelDownloads = 2;
+    private int notificationDisplayTime = 3;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChangeDownloadDestination;
@@ -67,6 +68,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
     private javax.swing.JLabel lblCloseAutomatically;
     private javax.swing.JLabel lblDestinationDirectory;
     private javax.swing.JLabel lblJobname;
+    private javax.swing.JLabel lblNotificationDisplayTime;
     private javax.swing.JLabel lblOpenAutomatically;
     private javax.swing.JLabel lblParallelDownloads;
     private javax.swing.JPanel pnlCloseAutomatically;
@@ -77,6 +79,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
     private javax.swing.JRadioButton rdoOpenAutomatically;
     private javax.swing.ButtonGroup rgrCloseAutomatically;
     private javax.swing.ButtonGroup rgrOpenAutomatically;
+    private javax.swing.JSpinner spnNotificationDisplayTime;
     private javax.swing.JSpinner spnParallelDownloads;
     // End of variables declaration//GEN-END:variables
 
@@ -126,6 +129,8 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         pnlCloseAutomatically = new javax.swing.JPanel();
         rdoDontCloseAutomatically = new javax.swing.JRadioButton();
         rdoCloseAutomatically = new javax.swing.JRadioButton();
+        spnNotificationDisplayTime = new javax.swing.JSpinner();
+        lblNotificationDisplayTime = new javax.swing.JLabel();
 
         fileChooser.setDialogTitle(org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
@@ -215,13 +220,13 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.gridheight = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 1.0;
         add(filler1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -281,6 +286,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
         add(lblParallelDownloads, gridBagConstraints);
 
@@ -327,7 +333,27 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(pnlCloseAutomatically, gridBagConstraints);
-    } // </editor-fold>//GEN-END:initComponents
+
+        spnNotificationDisplayTime.setModel(new javax.swing.SpinnerNumberModel(3, 1, 50, 1));
+        spnNotificationDisplayTime.setMinimumSize(new java.awt.Dimension(52, 23));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
+        add(spnNotificationDisplayTime, gridBagConstraints);
+
+        lblNotificationDisplayTime.setText(org.openide.util.NbBundle.getMessage(
+                DownloadManagerOptionsPanel.class,
+                "DownloadManagerOptionsPanel.lblNotificationDisplayTime.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
+        add(lblNotificationDisplayTime, gridBagConstraints);
+    }                                                                            // </editor-fold>//GEN-END:initComponents
 
     /**
      * An event handler.
@@ -371,6 +397,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         openAutomatically = DownloadManagerDialog.isOpenAutomatically();
         closeAutomatically = DownloadManagerDialog.isCloseAutomatically();
         parallelDownloads = DownloadManager.instance().getParallelDownloads();
+        notificationDisplayTime = DownloadManager.instance().getNotificationDisplayTime();
 
         jhlDownloadDestination.setText(downloadDestination.getAbsolutePath());
         chkAskForJobname.setSelected(askForJobtitle);
@@ -379,6 +406,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         rdoOpenAutomatically.setSelected(openAutomatically);
         rdoDontOpenAutomatically.setSelected(!openAutomatically);
         spnParallelDownloads.setValue(parallelDownloads);
+        spnNotificationDisplayTime.setValue(notificationDisplayTime);
     }
 
     /**
@@ -391,6 +419,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         openAutomatically = rdoOpenAutomatically.isSelected();
         closeAutomatically = rdoCloseAutomatically.isSelected();
         parallelDownloads = (Integer)spnParallelDownloads.getValue();
+        notificationDisplayTime = (Integer)spnNotificationDisplayTime.getValue();
 
         if (!askForJobtitle) {
             jobname = "";
@@ -402,6 +431,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         DownloadManagerDialog.setOpenAutomatically(openAutomatically);
         DownloadManagerDialog.setCloseAutomatically(closeAutomatically);
         DownloadManager.instance().setParallelDownloads(parallelDownloads);
+        DownloadManager.instance().setNotificationDisplayTime(notificationDisplayTime);
     }
 
     /**
@@ -418,7 +448,8 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
                         || (!askForJobtitle == chkAskForJobname.isSelected())
                         || (!openAutomatically == rdoOpenAutomatically.isSelected())
                         || (!closeAutomatically == rdoCloseAutomatically.isSelected())
-                        || (parallelDownloads != ((Integer)spnParallelDownloads.getValue()).intValue());
+                        || (parallelDownloads != ((Integer)spnParallelDownloads.getValue()).intValue())
+                        || (notificationDisplayTime != ((Integer)spnNotificationDisplayTime.getValue()).intValue());
         }
 
         return result;

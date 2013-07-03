@@ -448,6 +448,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         switch (download.getStatus()) {
             case WAITING: {
                 prbProgress.setVisible(false);
+                lblTitle.setText(download.getTitle());
                 lblMessage.setVisible(true);
                 jxlOpenFile.setVisible(false);
                 mniOpenFile.setEnabled(false);
@@ -458,6 +459,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
             }
             case RUNNING: {
                 prbProgress.setVisible(true);
+                lblTitle.setText(download.getTitle());
                 lblMessage.setVisible(false);
                 jxlOpenFile.setVisible(false);
                 mniOpenFile.setEnabled(false);
@@ -468,6 +470,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
             }
             case COMPLETED: {
                 prbProgress.setVisible(false);
+                lblTitle.setText(download.getTitle());
                 lblMessage.setVisible(false);
                 btnCancel.setVisible(false);
                 jxlOpenFile.setVisible(download.getFileToSaveTo() != null);
@@ -481,6 +484,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
             }
             case COMPLETED_WITH_ERROR: {
                 prbProgress.setVisible(false);
+                lblTitle.setText(download.getTitle());
                 jxlOpenFile.setVisible(false);
                 mniOpenFile.setEnabled(false);
                 mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
@@ -514,6 +518,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
             }
             case ABORTED: {
                 prbProgress.setVisible(false);
+                lblTitle.setText(download.getTitle());
                 jxlOpenFile.setVisible(false);
                 mniOpenFile.setEnabled(false);
                 mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);

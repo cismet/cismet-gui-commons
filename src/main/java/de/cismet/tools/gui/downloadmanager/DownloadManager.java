@@ -41,6 +41,7 @@ public class DownloadManager implements Observer, Configurable {
     private static final String XML_CONF_ROOT = "downloads";
     private static final String XML_CONF_DIRECTORY = "directory";
     private static final String XML_CONF_PARALLEL_DOWNLOADS = "parallelDownloads";
+    private static final String XML_CONF_NOTIFICATION_DISPLAY_TIME = "notificationDisplayTime";
     private static final String XML_CONF_DIALOG = "dialog";
     private static final String XML_CONF_DIALOG_AKSFORTITLE = "askForTitle";
     private static final String XML_CONF_DIALOG_OPENAUTOMATICALLY = "openAutomatically";
@@ -53,6 +54,7 @@ public class DownloadManager implements Observer, Configurable {
     private File destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
                     + "cidsDownload");
     private int parallelDownloads = 2;
+    private int notificationDisplayTime = 3;
     private LinkedList<Download> downloads = new LinkedList<Download>();
     private List<Download> downloadsToStart = new LinkedList<Download>();
     private EventListenerList listeners = new EventListenerList();
@@ -60,6 +62,7 @@ public class DownloadManager implements Observer, Configurable {
     private volatile int countDownloadsRunning = 0;
     private int countDownloadsErroneous = 0;
     private int countDownloadsCompleted = 0;
+    private int countDownloadsCancelled = 0;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -154,6 +157,10 @@ public class DownloadManager implements Observer, Configurable {
                     countDownloadsCompleted--;
                     break;
                 }
+                case ABORTED: {
+                    countDownloadsCancelled--;
+                    break;
+                }
             }
 
             download.deleteObserver(this);
@@ -206,6 +213,10 @@ public class DownloadManager implements Observer, Configurable {
             }
             case COMPLETED: {
                 countDownloadsCompleted--;
+                break;
+            }
+            case ABORTED: {
+                countDownloadsCancelled--;
                 break;
             }
         }
@@ -284,6 +295,15 @@ public class DownloadManager implements Observer, Configurable {
      *
      * @return  DOCUMENT ME!
      */
+    public int getCountDownloadsCancelled() {
+        return countDownloadsCancelled;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public int getParallelDownloads() {
         return parallelDownloads;
     }
@@ -295,6 +315,24 @@ public class DownloadManager implements Observer, Configurable {
      */
     public void setParallelDownloads(final int parallelDownloads) {
         this.parallelDownloads = parallelDownloads;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getNotificationDisplayTime() {
+        return notificationDisplayTime;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  notificationDisplayTime  DOCUMENT ME!
+     */
+    public void setNotificationDisplayTime(final int notificationDisplayTime) {
+        this.notificationDisplayTime = notificationDisplayTime;
     }
 
     /**
@@ -333,6 +371,15 @@ public class DownloadManager implements Observer, Configurable {
 
     @Override
     public synchronized void update(final Observable o, final Object arg) {
+        if (arg != null) {
+            /*
+             * in this case we assume that there was an update that doesnt concern us here. E.G this could happen if the
+             * title of a download has changed and it wants to notify the its observers about it. This feature was
+             * introduced in issue cismet/cismet-gui-commons#29 and is used for example in the NasDownload
+             */
+            return;
+        }
+
         if (!(o instanceof Download)) {
             return;
         }
@@ -379,7 +426,8 @@ public class DownloadManager implements Observer, Configurable {
                 }
 
                 if (downloads.contains(download)) {
-                    countDownloadsCompleted++;
+//                    countDownloadsCompleted++;
+                    countDownloadsCancelled++;
                 }
 
                 startDownloads();
@@ -470,6 +518,20 @@ public class DownloadManager implements Observer, Configurable {
             } catch (NumberFormatException e) {
                 LOG.warn("Configuration for limit of parallel downloads is invalid. Using default value of '2'", e);
                 this.parallelDownloads = 2;
+            }
+        }
+
+        final Element notificationDisplayTime = downloads.getChild(XML_CONF_NOTIFICATION_DISPLAY_TIME);
+        if ((notificationDisplayTime == null) || (notificationDisplayTime.getTextTrim() == null)) {
+            LOG.warn("There is no display time for download notifications configured. Using default time '3' sec.");
+        } else {
+            try {
+                this.notificationDisplayTime = Integer.parseInt(notificationDisplayTime.getText());
+            } catch (NumberFormatException e) {
+                LOG.warn(
+                    "Configuration for display time of download notification is invalid. Using default value of '3' sec",
+                    e);
+                this.notificationDisplayTime = 3;
             }
         }
 

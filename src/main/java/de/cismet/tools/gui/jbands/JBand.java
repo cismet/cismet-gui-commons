@@ -89,6 +89,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
     private float[] heightWeights;
     private double minValue = Double.MAX_VALUE;
     private double maxValue = Double.MIN_VALUE;
+    private double additionalZoomFactor = 1;
     private float heightsWeightSum = 0f;
     private double realWidth = 0;
     private List<JBandYDimension> bandPosY = new ArrayList<JBandYDimension>();
@@ -172,6 +173,15 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         this.model = model;
         model.addBandModelListener(this);
         init();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  readOnly  DOCUMENT ME!
+     */
+    public void setReadOnly(final boolean readOnly) {
+        this.readOnly = readOnly;
     }
 
     /**
@@ -448,7 +458,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      * @return  DOCUMENT ME!
      */
     public double getZoomFactor() {
-        return zoomFactor;
+        return zoomFactor / additionalZoomFactor;
     }
 
     /**
@@ -456,7 +466,8 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      *
      * @param  zoomFactor  DOCUMENT ME!
      */
-    public void setZoomFactor(final double zoomFactor) {
+    public void setZoomFactor(double zoomFactor) {
+        zoomFactor = zoomFactor * additionalZoomFactor;
         final double myZoomFactor = zoomFactor / this.zoomFactor;
         this.zoomFactor = zoomFactor;
         setRefreshAvoided(true);
@@ -580,6 +591,36 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         if ((e.getComponent() instanceof BandMemberMouseListeningComponent)) {
             ((BandMemberMouseListeningComponent)e.getComponent()).mouseClicked(e);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  selecteable  DOCUMENT ME!
+     */
+    public void setSelectedMember(final BandMemberSelectable selecteable) {
+        if (selecteable.isSelectable() && !selecteable.isSelected()
+                    && !(selecteable == selectedBandMember)) {
+            selecteable.setSelected(true);
+            if (selectedBandMember != null) {
+                ((BandMemberSelectable)selectedBandMember).setSelected(false);
+            }
+            selectedBandMember = selecteable.getBandMember();
+        } else {
+            selecteable.setSelected(false);
+            selectedBandMember = null;
+        }
+        if (model instanceof SimpleBandModel) {
+            final SimpleBandModel sbm = ((SimpleBandModel)model);
+            sbm.fireBandModelSelectionChanged();
+        }
+    }
+
+    @Override
+    public void setSize(final int width, final int height) {
+        super.setSize(width, height);
+        scrollPane.setSize(width, height);
+        bandsPanel.setSize(width, height);
     }
 
     @Override
@@ -898,6 +939,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      */
     public void setMinValue(final double minValue) {
         this.minValue = minValue;
+        setAdditionalZoomFactor();
     }
 
     /**
@@ -916,6 +958,17 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
      */
     public void setMaxValue(final double maxValue) {
         this.maxValue = maxValue;
+        setAdditionalZoomFactor();
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void setAdditionalZoomFactor() {
+        additionalZoomFactor = (maxValue - minValue) / 1000;
+        if (additionalZoomFactor < 1) {
+            additionalZoomFactor = 1;
+        }
     }
 
     /**

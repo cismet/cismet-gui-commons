@@ -259,6 +259,14 @@ public abstract class AbstractDownload extends Observable implements Download, R
         notifyObservers();
     }
 
+    /**
+     * DOCUMENT ME!
+     */
+    protected void titleChanged() {
+        setChanged();
+        notifyObservers(getTitle());
+    }
+
     @Override
     public boolean equals(final Object obj) {
         if (!(obj instanceof AbstractDownload)) {

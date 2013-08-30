@@ -101,7 +101,7 @@ public class StaticStartupTools {
 
                 final Graphics g = bi.getGraphics();
                 // ((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .4f));
-                frame.getContentPane().paintAll(g);
+                frame.paintAll(g);
                 g.dispose();
             }
 

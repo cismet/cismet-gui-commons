@@ -361,8 +361,11 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
                     }
                 }
             }
+            double roundingDifference = 0.0;
             if (subBands.size() > 0) {
+                roundingDifference = ((double)memberHeight / (1.0 + (double)subBands.size()));
                 memberHeight = (int)(memberHeight / (1 + subBands.size()));
+                roundingDifference = roundingDifference - (double)memberHeight;
             }
             for (final BandMember bm : masterBand) {
                 bm.getBandMemberComponent().setBounds(getBoundsOfComponent(bm, memberHeight, posy));
@@ -374,6 +377,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
                 }
                 posy += memberHeight;
             }
+            posy += roundingDifference * (1 + subBands.size());
             subBands.add(masterBand);
             subBandMap.put(rowBand, subBands);
         }
@@ -395,7 +399,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         }
         return false;
     }
-
+    
     /**
      * DOCUMENT ME!
      *

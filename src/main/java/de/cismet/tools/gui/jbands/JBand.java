@@ -302,8 +302,16 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
                 memberHeight = 0;
             } else if ((heightWeights[zeile] == 0) && (rowBand instanceof BandAbsoluteHeightProvider)) {
                 memberHeight = ((BandAbsoluteHeightProvider)rowBand).getAbsoluteHeight();
+                final int subCount = getSubbandCount(rowBand);
+                if (memberHeight < subCount) {
+                    memberHeight = subCount;
+                }
             } else {
                 memberHeight = (int)(((double)remainingBandsPanelHeight) * heightWeights[zeile] / heightsWeightSum);
+                final int subCount = getSubbandCount(rowBand);
+                if (memberHeight < subCount) {
+                    memberHeight = subCount;
+                }
             }
             if (rowBand instanceof BandPrefixProvider) {
                 final JComponent prefix = ((BandPrefixProvider)rowBand).getPrefixComponent();
@@ -328,8 +336,16 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
                 continue;
             } else if ((heightWeights[zeile] == 0) && (rowBand instanceof BandAbsoluteHeightProvider)) {
                 memberHeight = ((BandAbsoluteHeightProvider)rowBand).getAbsoluteHeight();
+                final int subCount = getSubbandCount(rowBand);
+                if (memberHeight < subCount) {
+                    memberHeight = subCount;
+                }
             } else {
                 memberHeight = (int)(((double)remainingBandsPanelHeight) * heightWeights[zeile] / heightsWeightSum);
+                final int subCount = getSubbandCount(rowBand);
+                if (memberHeight < subCount) {
+                    memberHeight = subCount;
+                }
             }
             final ArrayList<ArrayList<BandMember>> subBands = new ArrayList<ArrayList<BandMember>>();
             final ArrayList<BandMember> masterBand = new ArrayList<BandMember>();
@@ -399,7 +415,49 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         }
         return false;
     }
-    
+
+    /**
+     * Calculates the count of subbands for the given band.
+     *
+     * @param   band  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private int getSubbandCount(final Band band) {
+        final ArrayList<ArrayList<BandMember>> subBands = new ArrayList<ArrayList<BandMember>>();
+        final ArrayList<BandMember> masterBand = new ArrayList<BandMember>();
+        for (int i = 0; i < band.getNumberOfMembers(); ++i) {
+            masterBand.add(band.getMember(i));
+        }
+
+        for (int i = 0; i < band.getNumberOfMembers(); ++i) {
+            for (int j = i; j < band.getNumberOfMembers(); ++j) {
+                final BandMember bi = band.getMember(i);
+                final BandMember bj = band.getMember(j);
+                if ((i != j) && masterBand.contains(bi) && masterBand.contains(bj)) {
+                    if (isColliding(bi, bj)) {
+                        masterBand.remove(bj);
+                        boolean added = false;
+                        for (final ArrayList<BandMember> subBand : subBands) {
+                            if (!hasCollisions(subBand, bj)) {
+                                subBand.add(bj);
+                                added = true;
+                                break;
+                            }
+                        }
+                        if (!added) {
+                            final ArrayList<BandMember> newSubBand = new ArrayList<BandMember>();
+                            newSubBand.add(bj);
+                            subBands.add(newSubBand);
+                        }
+                    }
+                }
+            }
+        }
+
+        return subBands.size() + 1;
+    }
+
     /**
      * DOCUMENT ME!
      *

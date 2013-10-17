@@ -1,0 +1,11 @@
+{
+  "colors" : {
+    "Tree.selectionBackground" : "#c3d4e8",
+    "Table.selectionBackground" : "#c3d4e8",
+    "Tree.selectionForeground" : "#000000",
+    "Table.selectionForeground" : "#000000",
+    "Cismap.featureSelectionForeground" : "#0d2364"
+
+  },
+  "booleans" : null
+}

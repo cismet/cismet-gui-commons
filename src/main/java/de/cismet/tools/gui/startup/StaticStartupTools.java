@@ -23,7 +23,9 @@ import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
+import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
@@ -76,14 +78,33 @@ public class StaticStartupTools {
             // Create a buffered image which is the right (translucent) format for the current graphics device, this
             // should ensure the fastest possible performance. Adding on some extra height to make room for the
             // reflection
+            final BufferedImage bi;
+            // check if Unix, to use workaround, as JFrame.paintAll() seems not to work under Linux
+            final String OS = System.getProperty("os.name").toLowerCase();
+            final boolean isUnix = ((OS.indexOf("nix") >= 0) || (OS.indexOf("nux") >= 0) || (OS.indexOf("aix") >= 0));
+            if (isUnix) {
+                final Insets insets = frame.getInsets();
+                final int x = new Double(frame.getBounds().getX()).intValue() + insets.left;
+                final int y = new Double(frame.getBounds().getY()).intValue() + insets.top;
+                final int width = frame.getWidth() - insets.right;
+                final int h = frame.getHeight() - insets.top - insets.bottom;
 
-            final BufferedImage bi = configuration.createCompatibleImage(frame.getWidth(),
-                    frame.getHeight(),
-                    Transparency.TRANSLUCENT);
-            final Graphics g = bi.getGraphics();
-            // ((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .4f));
-            frame.paintAll(g);
-            g.dispose();
+                final Rectangle screenRect = new Rectangle(x,
+                        y,
+                        width,
+                        h);
+                bi = new Robot().createScreenCapture(screenRect);
+            } else {
+                bi = configuration.createCompatibleImage(frame.getWidth(),
+                        frame.getHeight(),
+                        Transparency.TRANSLUCENT);
+
+                final Graphics g = bi.getGraphics();
+                // ((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .4f));
+                frame.paintAll(g);
+                g.dispose();
+            }
+
             final BoxBlurFilter blurFilter = new BoxBlurFilter();
             blurFilter.setRadius(1);
             blurFilter.filter(bi, bi);

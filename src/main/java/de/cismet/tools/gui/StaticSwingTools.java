@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import java.awt.*;
@@ -714,5 +716,25 @@ public class StaticSwingTools {
                     }
                 }
             });
+    }
+
+    /**
+     * A Method to make UIManger.put comands configurable via a json file.
+     *
+     * <p>The json File has to placed to <code>/de/cismet/tools/gui/uitweaks.json</code>.</p>
+     *
+     * <p>An example json file can be found on <a href="https://github.com/cismet/cismet-gui-commons/issues/39">
+     * GitHub</a>.</p>
+     */
+    public static void tweakUI() {
+        final ObjectMapper mapper = new ObjectMapper();
+        try {
+            final UITweaks config = mapper.readValue(UITweaks.class.getResourceAsStream(
+                        "/de/cismet/tools/gui/uitweaks.json"),
+                    UITweaks.class);
+            config.apply();
+        } catch (Exception e) {
+            log.warn("Problem during TweakingUI", e);
+        }
     }
 }

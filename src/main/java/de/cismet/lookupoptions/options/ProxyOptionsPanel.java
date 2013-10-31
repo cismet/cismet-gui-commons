@@ -417,8 +417,12 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         final Element proxyUsernameElement = new Element(CONF_USERNAME);
         final Element proxyPasswordElement = new Element(CONF_PASSWORD);
         final Element proxyDomainElement = new Element(CONF_DOMAIN);
+        String pwEncrypted = null;
 
-        final String pwEncrypted = PasswordEncrypter.encryptString(password);
+        if (password != null) {
+            pwEncrypted = PasswordEncrypter.encryptString(password);
+        }
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("getConfiguration [type: " + proxyType.toString() // NOI18N
                         + " | host: " + host   // NOI18N

@@ -14,6 +14,9 @@ package de.cismet.tools.gui.downloadmanager;
 
 import org.apache.log4j.Logger;
 
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
+
 import org.openide.util.NbBundle;
 
 import java.awt.BorderLayout;
@@ -29,6 +32,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -264,13 +268,18 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
             instance.dlgExceptionDialog.pack();
             StaticSwingTools.showDialog(instance.dlgExceptionDialog);
         } else {
-            JOptionPane.showMessageDialog(
-                StaticSwingTools.getParentFrameIfNotNull(instance),
-                download.getCaughtException().getMessage(),
-                NbBundle.getMessage(
-                    DownloadPanel.class,
-                    "DownloadManagerDialog.showExceptionDialog(Download).error.title"),
-                JOptionPane.ERROR_MESSAGE);
+            final Exception ex = download.getCaughtException();
+            final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
+                    NbBundle.getMessage(
+                        DownloadPanel.class,
+                        "DownloadManagerDialog.showExceptionDialog(Download).error.title"),
+                    ex.getMessage(),
+                    null,
+                    null,
+                    ex,
+                    Level.ALL,
+                    null);
+            JXErrorPane.showDialog(StaticSwingTools.getParentFrameIfNotNull(instance), ei);
         }
     }
 

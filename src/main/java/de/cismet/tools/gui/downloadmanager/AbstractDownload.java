@@ -27,10 +27,13 @@ import org.apache.log4j.Logger;
 
 import org.openide.util.Cancellable;
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import java.text.MessageFormat;
 
 import java.util.Observable;
 import java.util.concurrent.ExecutionException;
@@ -131,8 +134,12 @@ public abstract class AbstractDownload extends Observable implements Download, R
      * @param  exception  The caught exception.
      */
     protected void error(final Exception exception) {
-        log.error("Exception occurred while downloading '" + fileToSaveTo + "'.", exception);
-        fileToSaveTo.deleteOnExit();
+        if (fileToSaveTo != null) {
+            log.error("Exception occurred while downloading '" + fileToSaveTo + "'.", exception);
+            fileToSaveTo.deleteOnExit();
+        } else {
+            log.error("Exception occurred while download.", exception);
+        }
         caughtException = exception;
         status = State.COMPLETED_WITH_ERROR;
         stateChanged();
@@ -190,6 +197,18 @@ public abstract class AbstractDownload extends Observable implements Download, R
                                 + "'. Cancelling download."));
                 return;
             }
+        }
+
+        if (!directoryToSaveTo.canWrite()) {
+            log.error("Can not write to " + directoryToSaveTo.getAbsolutePath()
+                        + ". Probably write permissions are missing.");
+            final String errorMessage = NbBundle.getMessage(
+                    AbstractDownload.class,
+                    "AbstractDownload.determineDestinationFile().canNotWriteToDirectory");
+            final Exception ex = new Exception();
+            ex.getLocalizedMessage();
+            error(new Exception(MessageFormat.format(errorMessage, directoryToSaveTo.getAbsolutePath())));
+            return;
         }
 
         fileToSaveTo = new File(directoryToSaveTo, filename + extension);

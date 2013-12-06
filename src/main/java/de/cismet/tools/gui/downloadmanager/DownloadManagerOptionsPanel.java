@@ -22,6 +22,7 @@ import org.openide.util.lookup.ServiceProvider;
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
@@ -364,9 +365,23 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         final int returnValue = fileChooser.showOpenDialog(this);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            downloadDestination = fileChooser.getSelectedFile();
-            downloadDestinationChanged = true;
-            jhlDownloadDestination.setText(downloadDestination.getAbsolutePath());
+            final File tmp_downloadDestination = fileChooser.getSelectedFile();
+            // check if the choosen download directory is valid
+            if (!tmp_downloadDestination.isDirectory() || !tmp_downloadDestination.canWrite()) {
+                LOG.error("The download manager can't use the directory '" + tmp_downloadDestination.getAbsolutePath()
+                            + "'.");
+                final String errorMessage = NbBundle.getMessage(
+                        DownloadManagerOptionsPanel.class,
+                        "DownloadManagerOptionsPanel.btnChangeDownloadDestinationActionPerformed().folder.dialog.message");
+                final String errorTitle = NbBundle.getMessage(
+                        DownloadManagerOptionsPanel.class,
+                        "DownloadManagerOptionsPanel.btnChangeDownloadDestinationActionPerformed().folder.dialog.title");
+                JOptionPane.showMessageDialog(this, errorMessage, errorTitle, JOptionPane.ERROR_MESSAGE);
+            } else {
+                downloadDestination = tmp_downloadDestination;
+                downloadDestinationChanged = true;
+                jhlDownloadDestination.setText(downloadDestination.getAbsolutePath());
+            }
         }
     } //GEN-LAST:event_btnChangeDownloadDestinationActionPerformed
 

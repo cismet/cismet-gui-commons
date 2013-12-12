@@ -11,30 +11,30 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import java.awt.Component;
+import java.awt.image.BufferedImage;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import java.net.URLEncoder;
 
-import javax.swing.ProgressMonitorInputStream;
-
-import de.cismet.security.WebDavClient;
-import java.awt.image.BufferedImage;
-import java.io.InputStream;
 import java.util.Iterator;
+
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.event.IIOReadProgressListener;
 import javax.imageio.stream.ImageInputStream;
+
 import javax.swing.ProgressMonitor;
+import javax.swing.ProgressMonitorInputStream;
 
 /**
- * This class contains some static method, which are useful in conjunction with the WebDavClient
+ * This class contains some static method, which are useful in conjunction with the WebDavClient.
  *
  * @author   therter
  * @version  $Revision$, $Date$
@@ -150,17 +150,23 @@ public class WebDavHelper {
         }
         return url;
     }
-    
+
     /**
      * DOCUMENT ME!
      *
-     * @param   fileName  DOCUMENT ME!
+     * @param   fileName         DOCUMENT ME!
+     * @param   webDavDirectory  DOCUMENT ME!
+     * @param   webDavClient     DOCUMENT ME!
+     * @param   parent           DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      *
      * @throws  IOException  DOCUMENT ME!
      */
-    public static BufferedImage downloadImageFromWebDAV(final String fileName, final String webDavDirectory, final WebDavClient webDavClient, final Component parent) throws IOException {
+    public static BufferedImage downloadImageFromWebDAV(final String fileName,
+            final String webDavDirectory,
+            final WebDavClient webDavClient,
+            final Component parent) throws IOException {
         final String encodedFileName = WebDavHelper.encodeURL(fileName);
         final InputStream iStream = webDavClient.getInputStream(webDavDirectory
                         + encodedFileName);
@@ -171,7 +177,7 @@ public class WebDavHelper {
             final ImageInputStream iiStream = ImageIO.createImageInputStream(iStream);
             final Iterator<ImageReader> itReader = ImageIO.getImageReaders(iiStream);
             final ImageReader reader = itReader.next();
-            
+
             if (parent != null) {
                 final ProgressMonitor monitor = new ProgressMonitor(parent, "Bild wird übertragen...", "", 0, 100);
 
@@ -228,7 +234,7 @@ public class WebDavHelper {
                         }
                     });
             }
-            
+
             final ImageReadParam param = reader.getDefaultReadParam();
             reader.setInput(iiStream, true, true);
             final BufferedImage result;
@@ -242,5 +248,5 @@ public class WebDavHelper {
         } finally {
             IOUtils.closeQuietly(iStream);
         }
-    }    
+    }
 }

@@ -574,6 +574,36 @@ public class StaticSwingTools {
     }
 
     /**
+     * Determines the bounds of a component to centers it on the screen on which the mouse pointer is located.
+     *
+     * @param   c  Component instance to be centered
+     *
+     * @return  The bounds of the component
+     */
+    public static Rectangle getCenterBoundsForComponent(final Component c) {
+        final PointerInfo pInfo = MouseInfo.getPointerInfo();
+        final Point pointerLocation = pInfo.getLocation();
+
+        // determine screen boundaries w.r.t. the current mouse position
+        final GraphicsConfiguration[] cfgArr = pInfo.getDevice().getConfigurations();
+
+        Rectangle bounds = null;
+        for (int i = 0; i < cfgArr.length; i++) {
+            bounds = cfgArr[i].getBounds();
+
+            if (pointerLocation.x <= bounds.x) {
+                break;
+            }
+        }
+
+        // determine coordinates in the center of the current mouse location
+        final int x = bounds.x + ((bounds.width - c.getWidth()) / 2);
+        final int y = bounds.y + ((bounds.height - c.getHeight()) / 2);
+
+        return new Rectangle(x, y, c.getWidth(), c.getHeight());
+    }
+
+    /**
      * Shows given dialog centered relative to its parent frame.
      *
      * @param  dialog  dialog

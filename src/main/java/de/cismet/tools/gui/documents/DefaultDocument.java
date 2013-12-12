@@ -11,13 +11,12 @@
  */
 package de.cismet.tools.gui.documents;
 
-import de.cismet.security.WebDavHelper;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
-import de.cismet.security.WebDavClient;
 
 import org.jdesktop.swingx.graphics.GraphicsUtilities;
 
+import java.awt.Component;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -37,8 +36,10 @@ import java.nio.channels.FileChannel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import de.cismet.security.WebDavClient;
+import de.cismet.security.WebDavHelper;
+
 import de.cismet.tools.gui.Static2DTools;
-import java.awt.Component;
 
 /**
  * DOCUMENT ME!
@@ -70,23 +71,30 @@ public class DefaultDocument implements Document {
      * @param  name         DOCUMENT ME!
      * @param  documentURI  DOCUMENT ME!
      */
-    public DefaultDocument(final String name, final String documentURI, WebDavClient webDavClient, Component parent, String webDavDirectory) {
+    public DefaultDocument(final String name, final String documentURI) {
+        this(name, documentURI, null, null, null);
+    }
+
+    /**
+     * Creates a new DefaultDocument object.
+     *
+     * @param  name             DOCUMENT ME!
+     * @param  documentURI      DOCUMENT ME!
+     * @param  webDavClient     DOCUMENT ME!
+     * @param  parent           DOCUMENT ME!
+     * @param  webDavDirectory  DOCUMENT ME!
+     */
+    public DefaultDocument(final String name,
+            final String documentURI,
+            final WebDavClient webDavClient,
+            final Component parent,
+            final String webDavDirectory) {
         this.name = name;
         this.documentURI = documentURI;
         this.parent = parent;
         this.webDavClient = webDavClient;
         this.webDavDirectory = webDavDirectory;
         init();
-    }
-    
-    /**
-     * Creates a new DefaultDocument object.
-     *
-     * @param  name         DOCUMENT ME!
-     * @param  documentURI  DOCUMENT ME!
-     */
-    public DefaultDocument(final String name, final String documentURI) {
-        this(name, documentURI, null, null, null);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -185,7 +193,11 @@ public class DefaultDocument implements Document {
 
                 try {
                     if (webDavClient != null) {
-                        ii = new ImageIcon( WebDavHelper.downloadImageFromWebDAV(documentURI, webDavDirectory, webDavClient, parent) );
+                        ii = new ImageIcon(WebDavHelper.downloadImageFromWebDAV(
+                                    documentURI,
+                                    webDavDirectory,
+                                    webDavClient,
+                                    parent));
                     } else {
                         ii = new ImageIcon(GraphicsUtilities.loadCompatibleImage(new URL(documentURI)));
                     }

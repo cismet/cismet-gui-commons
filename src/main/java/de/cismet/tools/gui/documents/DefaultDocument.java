@@ -16,6 +16,7 @@ import com.sun.pdfview.PDFPage;
 
 import org.jdesktop.swingx.graphics.GraphicsUtilities;
 
+import java.awt.Component;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -35,6 +36,9 @@ import java.nio.channels.FileChannel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import de.cismet.security.WebDavClient;
+import de.cismet.security.WebDavHelper;
+
 import de.cismet.tools.gui.Static2DTools;
 
 /**
@@ -53,6 +57,9 @@ public class DefaultDocument implements Document {
     String name = null;
     Image preview = null;
     String extension = null;
+    WebDavClient webDavClient = null;
+    Component parent = null;
+    String webDavDirectory = null;
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
 
@@ -65,8 +72,28 @@ public class DefaultDocument implements Document {
      * @param  documentURI  DOCUMENT ME!
      */
     public DefaultDocument(final String name, final String documentURI) {
+        this(name, documentURI, null, null, null);
+    }
+
+    /**
+     * Creates a new DefaultDocument object.
+     *
+     * @param  name             DOCUMENT ME!
+     * @param  documentURI      DOCUMENT ME!
+     * @param  webDavClient     DOCUMENT ME!
+     * @param  parent           DOCUMENT ME!
+     * @param  webDavDirectory  DOCUMENT ME!
+     */
+    public DefaultDocument(final String name,
+            final String documentURI,
+            final WebDavClient webDavClient,
+            final Component parent,
+            final String webDavDirectory) {
         this.name = name;
         this.documentURI = documentURI;
+        this.parent = parent;
+        this.webDavClient = webDavClient;
+        this.webDavDirectory = webDavDirectory;
         init();
     }
 
@@ -165,7 +192,15 @@ public class DefaultDocument implements Document {
             if (extension.matches("jpg|jpeg|gif|png|bmp")) { // NOI18N
 
                 try {
-                    ii = new ImageIcon(GraphicsUtilities.loadCompatibleImage(new URL(documentURI)));
+                    if (webDavClient != null) {
+                        ii = new ImageIcon(WebDavHelper.downloadImageFromWebDAV(
+                                    documentURI,
+                                    webDavDirectory,
+                                    webDavClient,
+                                    parent));
+                    } else {
+                        ii = new ImageIcon(GraphicsUtilities.loadCompatibleImage(new URL(documentURI)));
+                    }
                 } catch (Exception e) {
                     log.warn(e, e);
                     try {

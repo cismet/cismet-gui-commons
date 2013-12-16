@@ -36,12 +36,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import java.net.URL;
+
 import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import de.cismet.tools.gui.Static2DTools;
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -123,57 +126,98 @@ public class StaticStartupTools {
     }
 
     /**
-     * DOCUMENT ME!
+     * Shows the ghost frame and uses the .bounds file frome the user directory to determine the position of the ghost
+     * frame on the screen. If the .bounds file does not exist, the size of the given image will be used.
      *
-     * @param   file   DOCUMENT ME!
-     * @param   title  DOCUMENT ME!
+     * @param   file   The image, that should be shown in the ghost frame, without the ending .png
+     * @param   title  the content of the title bar
      *
-     * @return  DOCUMENT ME!
+     * @return  the ghost frame
      *
      * @throws  Exception  DOCUMENT ME!
      */
     public static JFrame showGhostFrame(final String file, final String title) throws Exception {
         final File boundsFile = new File(file + ".bounds");
-        Rectangle rectangle = null;
 
-        final BufferedReader reader = new BufferedReader(new FileReader(boundsFile));
-        final String x = reader.readLine();
-        final String y = reader.readLine();
-        final String width = reader.readLine();
-        final String height = reader.readLine();
-        reader.close();
-        rectangle = new Rectangle();
-        rectangle.setBounds(Integer.parseInt(x),
-            Integer.parseInt(y),
-            Integer.parseInt(width),
-            Integer.parseInt(height));
-        final ImageIcon i = new ImageIcon(file + ".png");
+        if (boundsFile.exists()) {
+            Rectangle rectangle = null;
+
+            final BufferedReader reader = new BufferedReader(new FileReader(boundsFile));
+            final String x = reader.readLine();
+            final String y = reader.readLine();
+            final String width = reader.readLine();
+            final String height = reader.readLine();
+            reader.close();
+            rectangle = new Rectangle();
+            rectangle.setBounds(Integer.parseInt(x),
+                Integer.parseInt(y),
+                Integer.parseInt(width),
+                Integer.parseInt(height));
+            final ImageIcon i = new ImageIcon(file + ".png");
+            final BufferedImage bi = (BufferedImage)(Static2DTools.removeUnusedBorder(i.getImage(), 0, 1));
+            final JFrame fake = new JFrame(title);
+
+            if (rectangle != null) {
+                fake.setBounds(rectangle);
+            }
+
+            return showGhostFrameInternal(fake, bi);
+        } else {
+            final File imageFile = new File(file + ".png");
+            return showCustomGhostFrame(imageFile.toURI().toURL(), title);
+        }
+    }
+
+    /**
+     * Shows the ghost frame. The ghost frame will have the same size as the given image
+     *
+     * @param   file   The image, that should be shown in the ghost frame
+     * @param   title  the content of the title bar
+     *
+     * @return  the ghost frame
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static JFrame showCustomGhostFrame(final URL file, final String title) throws Exception {
+        final ImageIcon i = new ImageIcon(file);
         final BufferedImage bi = (BufferedImage)(Static2DTools.removeUnusedBorder(i.getImage(), 0, 1));
         final JFrame fake = new JFrame(title);
+
+        fake.setSize(bi.getWidth(), bi.getHeight());
+        final Rectangle r = StaticSwingTools.getCenterBoundsForComponent(fake);
+        fake.setBounds(r);
+
+        return showGhostFrameInternal(fake, bi);
+    }
+
+    /**
+     * Shows a frame with the given image and a JXBusyLabel in front of.
+     *
+     * @param   frame          the ghost frame to show
+     * @param   bufferedImage  the image of the ghost frame
+     *
+     * @return  the given frame
+     */
+    private static JFrame showGhostFrameInternal(final JFrame frame, final BufferedImage bufferedImage) {
+        final JXBusyLabel busy = new JXBusyLabel(new Dimension(100, 100));
+        final GlossPainter gp = new GlossPainter(new Color(255, 255, 255, 25),
+                GlossPainter.GlossPosition.TOP);
+        final ImagePainter ip = new ImagePainter(bufferedImage);
         final JXPanel p = new JXPanel();
         p.setAlpha(.5f);
 
         p.setLayout(new BorderLayout());
-        fake.getContentPane().add(p, BorderLayout.CENTER);
-        if (rectangle != null) {
-            fake.setBounds(rectangle);
-        }
-
-        final JXBusyLabel busy = new JXBusyLabel(new Dimension(100, 100));
-        final GlossPainter gp = new GlossPainter(new Color(255, 255, 255, 25),
-                GlossPainter.GlossPosition.TOP);
-        final ImagePainter ip = new ImagePainter(bi);
-
         p.setBackgroundPainter(new CompoundPainter(ip, gp));
 
+        frame.getContentPane().add(p, BorderLayout.CENTER);
         busy.setDelay(100);
         busy.setOpaque(false);
         busy.setBusy(true);
         busy.setHorizontalAlignment(busy.CENTER);
 
         p.add(busy, BorderLayout.CENTER);
-        fake.setVisible(true);
-        return fake;
+        frame.setVisible(true);
+        return frame;
     }
 
     /**

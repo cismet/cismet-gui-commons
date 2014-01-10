@@ -23,16 +23,18 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import net.sf.jasperreports.engine.JasperExportManager;
-
 import org.openide.util.Cancellable;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import java.util.HashMap;
@@ -68,6 +70,13 @@ public class HttpDownload extends AbstractDownload implements Cancellable {
     private HashMap<String, String> headers;
 
     //~ Constructors -----------------------------------------------------------
+
+    /**
+     * StandardConstructor defined for usage by subclasse like the ButlerDownload. If used it must be garuanteed that
+     * the fields are set correctly before the Download starts running.
+     */
+    public HttpDownload() {
+    }
 
     /**
      * Constructor for Download.
@@ -121,66 +130,96 @@ public class HttpDownload extends AbstractDownload implements Cancellable {
 
     //~ Methods ----------------------------------------------------------------
 
-    @Override
-    public void run() {
-        if (status != State.WAITING) {
-            return;
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   src   DOCUMENT ME!
+     * @param   dest  DOCUMENT ME!
+     *
+     * @throws  IOException  DOCUMENT ME!
+     */
+    protected void downloadStream(final InputStream src, final OutputStream dest) throws IOException {
+        boolean downloading = true;
+        while (downloading) {
+            if (Thread.interrupted()) {
+                log.info("Download was interuppted");
+                dest.close();
+                src.close();
+                deleteFile();
+                return;
+            }
+            // Size buffer according to how much of the file is left to download.
+            final byte[] buffer;
+            buffer = new byte[MAX_BUFFER_SIZE];
+
+            // Read from server into buffer.
+            final int read = src.read(buffer);
+            if (read == -1) {
+                downloading = false;
+            } else {
+                // Write buffer to file.
+                dest.write(buffer, 0, read);
+            }
         }
+    }
 
-        status = State.RUNNING;
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  URISyntaxException                   DOCUMENT ME!
+     * @throws  FileNotFoundException                DOCUMENT ME!
+     * @throws  AccessMethodIsNotSupportedException  DOCUMENT ME!
+     * @throws  RequestFailedException               DOCUMENT ME!
+     * @throws  NoHandlerForURLException             DOCUMENT ME!
+     * @throws  Exception                            DOCUMENT ME!
+     */
+    protected InputStream getUrlInputStreamWithWebAcessManager(final URL url) throws URISyntaxException,
+        FileNotFoundException,
+        AccessMethodIsNotSupportedException,
+        RequestFailedException,
+        NoHandlerForURLException,
+        Exception {
+        InputStream resp = null;
+        if ("file".equals(url.getProtocol())) {
+            resp = new FileInputStream(new File(url.toURI()));
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("Sending request \n" + request + "\n to '" + url.toExternalForm() + "'.");
+            }
 
+            if ((request == null) || (request.trim().length() <= 0)) {
+                resp = WebAccessManager.getInstance().doRequest(url);
+            } else {
+                resp = WebAccessManager.getInstance()
+                            .doRequest(
+                                    url,
+                                    new StringReader(request),
+                                    ACCESS_METHODS.POST_REQUEST,
+                                    headers);
+            }
+        }
+        return resp;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    protected void downloadStream() {
         FileOutputStream out = null;
         InputStream resp = null;
-
-        stateChanged();
-
         try {
-            if ("file".equals(url.getProtocol())) {
-                resp = new FileInputStream(new File(url.toURI()));
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("Sending request \n" + request + "\n to '" + url.toExternalForm() + "'.");
-                }
-
-                if ((request == null) || (request.trim().length() <= 0)) {
-                    resp = WebAccessManager.getInstance().doRequest(url);
-                } else {
-                    resp = WebAccessManager.getInstance()
-                                .doRequest(
-                                        url,
-                                        new StringReader(request),
-                                        ACCESS_METHODS.POST_REQUEST,
-                                        headers);
-                }
-            }
+            resp = getUrlInputStreamWithWebAcessManager(url);
             if (Thread.interrupted()) {
                 log.info("Download was interuppted");
                 deleteFile();
                 return;
             }
             out = new FileOutputStream(fileToSaveTo);
-            boolean downloading = true;
-            while (downloading) {
-                if (Thread.interrupted()) {
-                    log.info("Download was interuppted");
-                    out.close();
-                    resp.close();
-                    deleteFile();
-                    return;
-                }
-                // Size buffer according to how much of the file is left to download.
-                final byte[] buffer;
-                buffer = new byte[MAX_BUFFER_SIZE];
-
-                // Read from server into buffer.
-                final int read = resp.read(buffer);
-                if (read == -1) {
-                    downloading = false;
-                } else {
-                    // Write buffer to file.
-                    out.write(buffer, 0, read);
-                }
-            }
+            downloadStream(resp, out);
         } catch (MissingArgumentException ex) {
             error(ex);
         } catch (AccessMethodIsNotSupportedException ex) {
@@ -210,6 +249,18 @@ public class HttpDownload extends AbstractDownload implements Cancellable {
                 }
             }
         }
+    }
+
+    @Override
+    public void run() {
+        if (status != State.WAITING) {
+            return;
+        }
+
+        status = State.RUNNING;
+        stateChanged();
+
+        downloadStream();
 
         if (status == State.RUNNING) {
             status = State.COMPLETED;

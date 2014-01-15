@@ -179,47 +179,6 @@
         </plugins>
         <finalName>cismetGuiCommons</finalName>
     </build>
-
-    <!-- TODO add profiles for other java.vendors like Apple -->
-    <!--Platform specific sun tools.jar they are on every sun vm-->
-    <profiles>
-        <profile>
-            <id>default-tools-sun</id>
-            <activation>
-                <property>
-                    <name>java.vendor</name>
-                    <value>Sun Microsystems Inc.</value>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>com.sun</groupId>
-                    <artifactId>tools</artifactId>
-                    <version>1.4.2</version>
-                    <scope>system</scope>
-                    <systemPath>${java.home}/../lib/tools.jar</systemPath>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>default-tools-oracle</id>
-            <activation>
-                <property>
-                    <name>java.vendor</name>
-                    <value>Oracle Corporation</value>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>com.sun</groupId>
-                    <artifactId>tools</artifactId>
-                    <version>1.4.2</version>
-                    <scope>system</scope>
-                    <systemPath>${java.home}/../lib/tools.jar</systemPath>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
 </project>
 
 

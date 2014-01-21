@@ -61,6 +61,8 @@ public class HttpDownload extends AbstractDownload implements Cancellable {
 
     //~ Static fields/initializers ---------------------------------------------
 
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(HttpDownload.class);
+
     private static final int MAX_BUFFER_SIZE = 1024;
 
     //~ Instance fields --------------------------------------------------------
@@ -124,7 +126,14 @@ public class HttpDownload extends AbstractDownload implements Cancellable {
         this.headers = headers;
 
         status = State.WAITING;
-
+        if (url != null) {
+            LOG.info("inited HttpDownload on: " + url.toString()
+                        + "<br>and request=" + request
+                        + "<br>and title=" + title
+                        + "<br>and filename=" + filename
+                        + "<br>and extension=" + extension
+                        + "<br>with these headers:" + headers);
+        }
         determineDestinationFile(filename, extension);
     }
 

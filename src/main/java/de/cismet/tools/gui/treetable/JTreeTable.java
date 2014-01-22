@@ -125,6 +125,18 @@ public class JTreeTable extends JTable {
     }
 
     /**
+     * Returns the index of the row that contains the cell currently being edited. If nothing is being edited, returns
+     * -1.
+     *
+     * @return  the index of the row that contains the cell currently being edited; returns -1 if nothing being edited
+     *
+     * @see     #getEditingRow()
+     */
+    public int getRealEditingRow() {
+        return editingRow;
+    }
+
+    /**
      * Overridden to pass the new rowHeight to the tree.
      *
      * @param  rowHeight  DOCUMENT ME!

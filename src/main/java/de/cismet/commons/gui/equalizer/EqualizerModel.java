@@ -25,7 +25,8 @@ public interface EqualizerModel {
     Range getRange();
 
     /**
-     * Getter for the category name at the specified index.
+     * Getter for the category name at the specified index. Shall throw {@link IndexOutOfBoundsException} if index is
+     * <code>&lt; 0</code> or <code>&gt;= {@link #getEqualizerCategoryCount()}</code>.
      *
      * @param   index  the category index
      *
@@ -41,7 +42,8 @@ public interface EqualizerModel {
     int getEqualizerCategoryCount();
 
     /**
-     * Getter for the current value at the specified index.
+     * Getter for the current value at the specified index. Shall throw {@link IndexOutOfBoundsException} if index is
+     * <code>&lt; 0</code> or <code>&gt;= {@link #getEqualizerCategoryCount()}</code>.
      *
      * @param   index  the category index
      *
@@ -51,7 +53,9 @@ public interface EqualizerModel {
 
     /**
      * Setter for the a new value at the specified index. The value has to be within the <code>Range</code> of this
-     * model. Otherwise an {@link IllegalArgumentException} shall be thrown.
+     * model. Otherwise an {@link IllegalArgumentException} shall be thrown. Shall throw
+     * {@link IndexOutOfBoundsException} if index is <code>&lt; 0</code> or <code>&gt;=
+     * {@link #getEqualizerCategoryCount()}</code>.
      *
      * @param  index  the category index
      * @param  value  the new value

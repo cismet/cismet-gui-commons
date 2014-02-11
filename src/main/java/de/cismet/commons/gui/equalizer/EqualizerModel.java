@@ -8,7 +8,7 @@
 package de.cismet.commons.gui.equalizer;
 
 /**
- * Basic equalizer model interface that ensures that all necessary values can be accessed and altered. 
+ * Basic equalizer model interface that ensures that all necessary values can be accessed and altered.
  *
  * @author   martin.scholl@cismet.de
  * @version  1.0
@@ -30,8 +30,6 @@ public interface EqualizerModel {
      * @param   index  the category index
      *
      * @return  the name of the category at the specified index
-     * 
-     * @throws IndexOutOfBoundsException if index is <code>&lt; 0</code> or <code>&gt;= {@link #getEqualizerCategoryCount()}</code>
      */
     String getEqualizerCategory(final int index);
 
@@ -48,38 +46,31 @@ public interface EqualizerModel {
      * @param   index  the category index
      *
      * @return  the current value at the specified index
-     * 
-     * @throws IndexOutOfBoundsException if index is <code>&lt; 0</code> or <code>&gt;= {@link #getEqualizerCategoryCount()}</code>
      */
     int getValueAt(final int index);
 
     /**
-     * Setter for the a new value at the specified index. The value has to be within the 
-     * <code>Range</code> of this model. Otherwise an {@link IllegalArgumentException} shall be thrown.
+     * Setter for the a new value at the specified index. The value has to be within the <code>Range</code> of this
+     * model. Otherwise an {@link IllegalArgumentException} shall be thrown.
      *
      * @param  index  the category index
      * @param  value  the new value
-     * 
-     * @throws IllegalArgumentException if value is not within <code>Range</code>
-     * @throws IndexOutOfBoundsException if index is <code>&lt; 0</code> or <code>&gt;= {@link #getEqualizerCategoryCount()}</code>
      */
     void setValueAt(final int index, final int value);
 
     /**
-     * Adds a new 
-     * <code>EqualizerModelListener</code> to this model. Any registered listener will be informed of model changes. If
-     * a listener has already been added any subsequent calls with the same instance shall be ignore. This means that
-     * any listener shall only be called once when a change happens. If 
-     * <code>null</code> is passed nothing shall be done.
+     * Adds a new <code>EqualizerModelListener</code> to this model. Any registered listener will be informed of model
+     * changes. If a listener has already been added any subsequent calls with the same instance shall be ignore. This
+     * means that any listener shall only be called once when a change happens. If <code>null</code> is passed nothing
+     * shall be done.
      *
      * @param  eml  the <code>EqualizerModelListener</code> to add
      */
     void addEqualizerModelListener(final EqualizerModelListener eml);
-    
+
     /**
-     * Remove the specified 
-     * <code>EqualizerModelListener</code>. It will not be informed of changes anymore. If there is no such listener or if 
-     * <code>null</code> is passed nothing shall be done.
+     * Remove the specified <code>EqualizerModelListener</code>. It will not be informed of changes anymore. If there is
+     * no such listener or if <code>null</code> is passed nothing shall be done.
      *
      * @param  eml  the <code>EqualizerModelListener</code> to remove
      */

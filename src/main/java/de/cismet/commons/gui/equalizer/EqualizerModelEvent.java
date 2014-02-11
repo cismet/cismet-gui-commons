@@ -10,8 +10,7 @@ package de.cismet.commons.gui.equalizer;
 import java.util.EventObject;
 
 /**
- * The 
- * <code>EqualizerModelEvent</code> shall provide info about the nature of the {@link EqualizerModel} change.
+ * The <code>EqualizerModelEvent</code> shall provide info about the nature of the {@link EqualizerModel} change.
  *
  * @author   martin.scholl@cismet.de
  * @version  1.0
@@ -29,10 +28,11 @@ public final class EqualizerModelEvent extends EventObject {
     /**
      * Creates a new EqualizerModelEvent object. Properties of this event will be set to defaults:<br/>
      * <br/>
+     *
      * <ul>
-     * <li><code>index=-1</code></li>
-     * <li><code>oldValue=Integer.MIN_VALUE</code></li>
-     * <li><code>newValue=Integer.MIN_VALUE</code></li>
+     *   <li><code>index=-1</code></li>
+     *   <li><code>oldValue=Integer.MIN_VALUE</code></li>
+     *   <li><code>newValue=Integer.MIN_VALUE</code></li>
      * </ul>
      *
      * @param  source  the <code>EqualizerModel</code> that caused the event
@@ -64,9 +64,8 @@ public final class EqualizerModelEvent extends EventObject {
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * Getter for the index that changed. A value of 
-     * <code>-1</code> indicates that it is not known which index actually changed and thus the value getters will not
-     * provide actual valid values.
+     * Getter for the index that changed. A value of <code>-1</code> indicates that it is not known which index actually
+     * changed and thus the value getters will not provide actual valid values.
      *
      * @return  the index that was changed or <code>-1</code> if the actual index is not known
      */

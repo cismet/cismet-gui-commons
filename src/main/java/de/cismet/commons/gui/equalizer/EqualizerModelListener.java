@@ -20,9 +20,8 @@ public interface EqualizerModelListener extends EventListener {
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * Callback which shall be called whenever a change happened in the 
-     * <code>EqualizerModel</code>. The 
-     * <code>EqualizerModelEvent</code> shall provide additional information about the nature of the change.
+     * Callback which shall be called whenever a change happened in the <code>EqualizerModel</code>. The <code>
+     * EqualizerModelEvent</code> shall provide additional information about the nature of the change.
      *
      * @param  event  the event object
      */

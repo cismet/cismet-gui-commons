@@ -40,7 +40,7 @@ public final class EqualizerCategory implements Cloneable {
      * @param   name   the name of the category
      * @param   value  the value of the category
      *
-     * @throws  IllegalArgumentException  DOCUMENT ME!
+     * @throws  IllegalArgumentException  if the give name is <code>null</code> or empty
      */
     public EqualizerCategory(final String name, final int value) {
         if ((name == null) || name.isEmpty()) {
@@ -95,8 +95,8 @@ public final class EqualizerCategory implements Cloneable {
     public int hashCode() {
         int hash = 5;
 
-        hash += (name == null) ? 0 : (5 * name.hashCode());
-        hash += 5 * value;
+        hash += (this.name == null) ? 0 : 5 * hash +  this.name.hashCode();
+        hash += 5 * hash + this.value;
 
         return hash;
     }

@@ -48,10 +48,10 @@ public final class EqualizerModelEvent extends EventObject {
     /**
      * Creates a new EqualizerModelEvent object.
      *
-     * @param  source    DOCUMENT ME!
-     * @param  index     DOCUMENT ME!
-     * @param  oldValue  DOCUMENT ME!
-     * @param  newValue  DOCUMENT ME!
+     * @param  source    the source of the event
+     * @param  index     the index that changed
+     * @param  oldValue  the value before the change at the given index
+     * @param  newValue  the value after the change at the given index
      */
     public EqualizerModelEvent(final Object source, final int index, final int oldValue, final int newValue) {
         super(source);

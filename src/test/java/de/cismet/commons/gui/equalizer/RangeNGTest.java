@@ -1,25 +1,41 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.commons.gui.equalizer;
 
-import static org.testng.Assert.*;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.*;
+
 /**
+ * DOCUMENT ME!
  *
- * @author mscholl
+ * @author   mscholl
+ * @version  $Revision$, $Date$
  */
-public class RangeNGTest
-{
-    @Test(expectedExceptions = {IllegalArgumentException.class})
-    public void testEnsureMinLessThanMax1()
-    {
-        final Range range = new Range(0,0);
+public class RangeNGTest {
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
+    @Test(expectedExceptions = { IllegalArgumentException.class })
+    public void testEnsureMinLessThanMax1() {
+        final Range range = new Range(0, 0);
         fail("no exception thrown");
     }
-    
-    @Test(expectedExceptions = {IllegalArgumentException.class})
-    public void testEnsureMinLessThanMax2()
-    {
-        final Range range = new Range(1,0);
+
+    /**
+     * DOCUMENT ME!
+     */
+    @Test(expectedExceptions = { IllegalArgumentException.class })
+    public void testEnsureMinLessThanMax2() {
+        final Range range = new Range(1, 0);
         fail("no exception thrown");
     }
 }

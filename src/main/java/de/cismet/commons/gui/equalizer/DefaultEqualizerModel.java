@@ -49,10 +49,10 @@ public class DefaultEqualizerModel extends AbstractEqualizerModel {
 
     /**
      * Creates a new DefaultEqualizerModel object using the given list of <code>EqualizerCategory</code>s and the given
-     * <code>Range</code>. <code>null</code> is not permitted as parameter value and results in an <code>
-     * IllegalArgumentException</code>. Additionally, <code>IllegalArgumentException</code> will also be thrown if any
-     * of the initial values of the categories is not within <code>Range</code> or there are duplicate category names
-     * <br/>
+     * <code>Range</code>. <code>null</code> is not permitted for any parameter value and results in an <code>
+     * IllegalArgumentException</code>. Additionally, <code>IllegalArgumentException</code> will also be thrown if the
+     * category collection is empty or if any of the initial values of the categories is not within <code>Range</code>
+     * or there are duplicate category names.<br/>
      * <br/>
      * <b>NOTE:</b> The element sorting of the collection's {@link Iterator} is responsible for the indexing of
      * available categories. This means that the first element of the <code>Iterator</code> will be available at index
@@ -62,15 +62,16 @@ public class DefaultEqualizerModel extends AbstractEqualizerModel {
      * @param   equalizerCategories  the <code>EqualizerCategory</code>s of this model
      * @param   range                the <code>Range</code> of the values of this model's categories
      *
-     * @throws  IllegalArgumentException  if any argument is <code>null</code>, if there are duplicate category names or
-     *                                    if any initial value is not within <code>Range</code>
+     * @throws  IllegalArgumentException  if any argument is <code>null</code>, if the category collection is empty, if
+     *                                    there are duplicate category names or if any initial value is not within
+     *                                    <code>Range</code>
      */
     public DefaultEqualizerModel(final Collection<EqualizerCategory> equalizerCategories, final Range range) {
-        if (equalizerCategories == null) {
-            throw new IllegalArgumentException("equalizerCategories must not be null"); // NOI18N
+        if ((equalizerCategories == null) || equalizerCategories.isEmpty()) {
+            throw new IllegalArgumentException("equalizerCategories must not be null or empty"); // NOI18N
         }
         if (range == null) {
-            throw new IllegalArgumentException("range must not be null");               // NOI18N
+            throw new IllegalArgumentException("range must not be null");                        // NOI18N
         }
 
         checkDuplicateCategoryNames(equalizerCategories);

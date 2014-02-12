@@ -95,8 +95,8 @@ public final class EqualizerCategory implements Cloneable {
     public int hashCode() {
         int hash = 5;
 
-        hash += (this.name == null) ? 0 : 5 * hash +  this.name.hashCode();
-        hash += 5 * hash + this.value;
+        hash += (this.name == null) ? 0 : ((5 * hash) + this.name.hashCode());
+        hash += (5 * hash) + this.value;
 
         return hash;
     }

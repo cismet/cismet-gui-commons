@@ -17,6 +17,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.testng.Assert.*;
@@ -76,11 +77,19 @@ public class DefaultEqualizerModelNGTest {
     }
 
     /**
-     * Test of getEqualizerCategories method, of class DefaultEqualizerModel.
+     * DOCUMENT ME!
      */
     @Test(expectedExceptions = { IllegalArgumentException.class })
     public void testDefaultEqualizerModel_nullCategories() {
         new DefaultEqualizerModel(null);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    @Test(expectedExceptions = { IllegalArgumentException.class })
+    public void testDefaultEqualizerModel_emptyCategories() {
+        new DefaultEqualizerModel(new ArrayList<EqualizerCategory>(0));
     }
 
     /**

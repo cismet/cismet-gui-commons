@@ -5,10 +5,6 @@
 *              ... and it just works.
 *
 ****************************************************/
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.cismet.commons.gui.equalizer;
 
 import org.testng.annotations.AfterClass;
@@ -280,5 +276,38 @@ public class DefaultEqualizerModelNGTest {
 
         assertEquals(instance.getValueAt(0), 1);
         assertEquals(instance.getValueAt(2), 4);
+    }
+    
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testCheckValueWithinRange_notWithinRange1() {
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
+                    new EqualizerCategory("test1", -1),
+                    new EqualizerCategory("test2", 7),
+                    new EqualizerCategory("test3", -5)),
+                new Range(-5, 7));
+        instance.checkValueWithinRange(8);
+    }
+    
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testCheckValueWithinRange_notWithinRange2() {
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
+                    new EqualizerCategory("test1", -1),
+                    new EqualizerCategory("test2", 7),
+                    new EqualizerCategory("test3", -5)),
+                new Range(-5, 7));
+        instance.checkValueWithinRange(-6);
+    }
+    
+    @Test
+    public void testCheckValueWithinRange() {
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
+                    new EqualizerCategory("test1", -1),
+                    new EqualizerCategory("test2", 7),
+                    new EqualizerCategory("test3", -5)),
+                new Range(-5, 7));
+        instance.checkValueWithinRange(0);
+        instance.checkValueWithinRange(2);
+        instance.checkValueWithinRange(-5);
+        instance.checkValueWithinRange(7);
     }
 }

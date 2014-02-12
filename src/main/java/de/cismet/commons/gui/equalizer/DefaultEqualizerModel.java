@@ -87,13 +87,13 @@ public class DefaultEqualizerModel extends AbstractEqualizerModel {
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * checks if value is within the range of the model.
+     * Checks if value is within the range of the model.
      *
      * @param   value  value to check
      *
      * @throws  IllegalArgumentException  if value is not within range of the model
      */
-    private void checkValueWithinRange(final int value) {
+    public void checkValueWithinRange(final int value) {
         if ((range.getMin() > value) || (range.getMax() < value)) {
             throw new IllegalArgumentException("value is not within range: [value=" + value + "|range=" + range + "]"); // NOI18N
         }

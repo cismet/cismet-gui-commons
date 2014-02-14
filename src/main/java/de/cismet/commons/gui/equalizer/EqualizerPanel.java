@@ -637,7 +637,7 @@ public class EqualizerPanel extends javax.swing.JPanel {
         protected void paintComponent(final Graphics g) {
             super.paintComponent(g);
 
-            if (!splinePainted || model.getEqualizerCategoryCount() < 2) {
+            if (!splinePainted || (model.getEqualizerCategoryCount() < 2)) {
                 // nothing to do, bail out
                 return;
             }
@@ -994,6 +994,7 @@ public class EqualizerPanel extends javax.swing.JPanel {
                             slider.setValue(newValue);
                         }
                     }
+                    pnlEqualizer.repaint();
                 } finally {
                     updateInProgress = false;
                 }

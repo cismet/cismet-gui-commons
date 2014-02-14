@@ -399,17 +399,21 @@ public class StaticSwingTools {
      * @param  sPane  DOCUMENT ME!
      */
     public static void setNiftyScrollBars(final JScrollPane sPane) {
-        Dimension d = sPane.getVerticalScrollBar().getPreferredSize();
-        sPane.getVerticalScrollBar().getComponent(0).setVisible(false);
-        sPane.getVerticalScrollBar().getComponent(1).setVisible(false);
-        sPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, d.height));
-        d = sPane.getHorizontalScrollBar().getPreferredSize();
-        sPane.getHorizontalScrollBar().getComponent(0).setVisible(false);
-        sPane.getHorizontalScrollBar().getComponent(1).setVisible(false);
-        sPane.getHorizontalScrollBar().setPreferredSize(new Dimension(d.width, 8));
-        sPane.setBackground(sPane.getViewport().getBackground());
-        sPane.getHorizontalScrollBar().setBackground(sPane.getViewport().getBackground());
-        sPane.getVerticalScrollBar().setBackground(sPane.getViewport().getBackground());
+        try {
+            Dimension d = sPane.getVerticalScrollBar().getPreferredSize();
+            sPane.getVerticalScrollBar().getComponent(0).setVisible(false);
+            sPane.getVerticalScrollBar().getComponent(1).setVisible(false);
+            sPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, d.height));
+            d = sPane.getHorizontalScrollBar().getPreferredSize();
+            sPane.getHorizontalScrollBar().getComponent(0).setVisible(false);
+            sPane.getHorizontalScrollBar().getComponent(1).setVisible(false);
+            sPane.getHorizontalScrollBar().setPreferredSize(new Dimension(d.width, 8));
+            sPane.setBackground(sPane.getViewport().getBackground());
+            sPane.getHorizontalScrollBar().setBackground(sPane.getViewport().getBackground());
+            sPane.getVerticalScrollBar().setBackground(sPane.getViewport().getBackground());
+        } catch (Exception e) {
+            log.warn("Cannot create the nifty scrollbars.", e);
+        }
     }
 
     /**

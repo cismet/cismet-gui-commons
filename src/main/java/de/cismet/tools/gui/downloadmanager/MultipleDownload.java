@@ -92,6 +92,7 @@ public class MultipleDownload extends Observable implements Download, Observer {
     public void setStatus(final State status) {
         this.status = status;
         setChanged();
+        notifyObservers();
     }
 
     @Override

@@ -28,6 +28,7 @@ public class BackgroundTaskMultipleDownload extends MultipleDownload {
 
     private FetchDownloadsTask fetchDownloadTask;
     private SwingWorker<Collection<? extends Download>, Void> worker;
+    private Exception caughtException;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -61,8 +62,8 @@ public class BackgroundTaskMultipleDownload extends MultipleDownload {
                     try {
                         addDownloadsSubsequently(get());
                     } catch (Exception ex) {
-//                        error(ex);
-                        // TODO change this!!!
+                        caughtException = ex;
+                        setStatus(State.COMPLETED_WITH_ERROR);
                     }
                 }
             };
@@ -73,6 +74,11 @@ public class BackgroundTaskMultipleDownload extends MultipleDownload {
 
         setStatus(State.RUNNING);
         worker.execute();
+    }
+
+    @Override
+    public Exception getCaughtException() {
+        return caughtException;
     }
 
     /**

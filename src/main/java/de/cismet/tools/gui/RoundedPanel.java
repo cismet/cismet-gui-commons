@@ -30,7 +30,7 @@ public class RoundedPanel extends javax.swing.JPanel {
 
     protected int curve = 20;
 
-    private int alpha = 60;
+    protected int alpha = 60;
     private Color alphaColor;
 
     //~ Constructors -----------------------------------------------------------

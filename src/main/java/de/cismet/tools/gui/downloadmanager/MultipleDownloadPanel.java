@@ -51,7 +51,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
 
     //~ Instance fields --------------------------------------------------------
 
-    Map<Download, JPanel> downloadsInSingleDownloadsPanel = new HashMap<Download, JPanel>();
+    private Map<Download, JPanel> downloadsInSingleDownloadsPanel = new HashMap<Download, JPanel>();
 
     private MultipleDownload download;
     private JPanel pnlSingleDownloads;

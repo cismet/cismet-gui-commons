@@ -276,9 +276,18 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
     private void updateComponents() {
         switch (download.getStatus()) {
             case WAITING: {
-                prbProgress.setVisible(false);
-                lblMessage.setVisible(true);
-                mniRemove.setEnabled(true);
+                if (download instanceof BackgroundTaskMultipleDownload) {
+                    lblMessage.setVisible(false);
+                    prbProgress.setIndeterminate(true);
+                    prbProgress.setString(NbBundle.getMessage(
+                            MultipleDownloadPanel.class,
+                            "MultipleDownloadPanel.prbProgress.string.waiting.BackgroundTaskMultipleDownload"));
+                    prbProgress.setVisible(true);
+                } else {
+                    mniRemove.setEnabled(true);
+                    prbProgress.setVisible(false);
+                    lblMessage.setVisible(true);
+                }
 
                 break;
             }

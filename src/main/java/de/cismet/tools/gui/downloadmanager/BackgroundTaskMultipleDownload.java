@@ -61,6 +61,7 @@ public class BackgroundTaskMultipleDownload extends MultipleDownload {
                 protected void done() {
                     try {
                         addDownloadsSubsequently(get());
+                        setStatus(State.RUNNING);
                     } catch (Exception ex) {
                         caughtException = ex;
                         setStatus(State.COMPLETED_WITH_ERROR);
@@ -68,11 +69,6 @@ public class BackgroundTaskMultipleDownload extends MultipleDownload {
                 }
             };
 
-        if (getStatus() != State.WAITING) {
-            return;
-        }
-
-        setStatus(State.RUNNING);
         worker.execute();
     }
 

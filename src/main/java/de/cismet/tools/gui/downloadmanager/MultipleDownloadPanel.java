@@ -231,10 +231,14 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
      */
     private void formMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_formMouseClicked
         if (evt.getClickCount() > 1) {
-            if (isSingleDownloadsPanelShown) {
-                hideSingleDownloads();
-            } else {
-                showSingleDownloads();
+            if (download.getCaughtException() != null) {
+                DownloadManagerDialog.showExceptionDialog(download);
+            } else if (download.getDownloadsTotal() > 0) {
+                if (isSingleDownloadsPanelShown) {
+                    hideSingleDownloads();
+                } else {
+                    showSingleDownloads();
+                }
             }
         }
     }                                                                    //GEN-LAST:event_formMouseClicked
@@ -485,6 +489,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
                 pnlSingleDownloads.add(pnlSingleDownload);
             }
         }
+        tbtDownloads.setVisible(!downloads.isEmpty());
     }
 
     //~ Inner Classes ----------------------------------------------------------

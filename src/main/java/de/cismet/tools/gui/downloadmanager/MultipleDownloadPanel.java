@@ -297,6 +297,8 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
                 lblTitle.setForeground(SystemColor.textText);
 
                 prbProgress.setVisible(true);
+                // set the maximum of prbProgress because it is now known for BackgroundTaskMultipleDownload
+                prbProgress.setMaximum(download.getDownloadsTotal());
                 if (download.getDownloadsCompleted() == 0) {
                     prbProgress.setIndeterminate(true);
                     prbProgress.setString(NbBundle.getMessage(
@@ -498,6 +500,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
                 pnlSingleDownloads.add(pnlSingleDownload);
             }
         }
+        // the single downloads should only be visible if there are downloads to show
         tbtDownloads.setVisible(!downloads.isEmpty());
     }
 

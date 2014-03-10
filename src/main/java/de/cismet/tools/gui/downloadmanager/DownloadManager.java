@@ -27,7 +27,7 @@ import de.cismet.tools.configuration.NoWriteError;
 
 /**
  * The download manager manages all current downloads. New downloads are added to a collection, completed downloads are
- * removed. Erraneous downloads remain in the collection. The download manager observes all download objects for state
+ * removed. Erroneous downloads remain in the collection. The download manager observes all download objects for state
  * changed and informs the download manager panel via the DownloadListChangedListener interface.
  *
  * @author   jweintraut
@@ -103,6 +103,7 @@ public class DownloadManager implements Observer, Configurable {
 
         if (download instanceof MultipleDownload) {
             final MultipleDownload multipleDownload = (MultipleDownload)download;
+            downloadsToStart.add(multipleDownload);
 
             for (final Download singleDownload : multipleDownload.getDownloads()) {
                 singleDownload.addObserver(this);
@@ -124,6 +125,43 @@ public class DownloadManager implements Observer, Configurable {
                 DownloadListChangedEvent.Action.CHANGED_COUNTERS));
 
         startDownloads();
+    }
+
+    /**
+     * Checks if the encapsulated downloads of a BackgroundTaskMultipleDownload have already been added to the
+     * DownloadManager. If a single download has not yet been added it is added and the observers will be notified.
+     *
+     * @param  backgroundTaskMultipleDownload  DOCUMENT ME!
+     */
+    public synchronized void addDownloadsSubsequently(
+            final BackgroundTaskMultipleDownload backgroundTaskMultipleDownload) {
+        if ((backgroundTaskMultipleDownload == null) || !downloads.contains(backgroundTaskMultipleDownload)) {
+            return;
+        }
+
+        boolean downloadsWereAdded = false;
+        for (final Download encapsulatedDownload : backgroundTaskMultipleDownload.getDownloads()) {
+            if (!downloads.contains(encapsulatedDownload)) {
+                encapsulatedDownload.addObserver(this);
+                encapsulatedDownload.addObserver(backgroundTaskMultipleDownload);
+
+                downloadsToStart.add(encapsulatedDownload);
+                downloadsWereAdded = true;
+            }
+        }
+
+        if (downloadsWereAdded) {
+            notifyDownloadListChanged(new DownloadListChangedEvent(
+                    this,
+                    backgroundTaskMultipleDownload,
+                    DownloadListChangedEvent.Action.ADDED_DOWNLOADS_SUBSEQUENTLY));
+            notifyDownloadListChanged(new DownloadListChangedEvent(
+                    this,
+                    backgroundTaskMultipleDownload,
+                    DownloadListChangedEvent.Action.CHANGED_COUNTERS));
+
+            startDownloads();
+        }
     }
 
     /**

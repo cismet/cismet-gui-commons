@@ -25,7 +25,10 @@ import java.awt.GridBagConstraints;
 import java.awt.SystemColor;
 import java.awt.geom.Path2D;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -47,6 +50,8 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
     private static final Logger LOG = Logger.getLogger(MultipleDownloadPanel.class);
 
     //~ Instance fields --------------------------------------------------------
+
+    private Map<Download, JPanel> downloadsInSingleDownloadsPanel = new HashMap<Download, JPanel>();
 
     private MultipleDownload download;
     private JPanel pnlSingleDownloads;
@@ -226,10 +231,14 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
      */
     private void formMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_formMouseClicked
         if (evt.getClickCount() > 1) {
-            if (isSingleDownloadsPanelShown) {
-                hideSingleDownloads();
-            } else {
-                showSingleDownloads();
+            if (download.getCaughtException() != null) {
+                DownloadManagerDialog.showExceptionDialog(download);
+            } else if (download.getDownloadsTotal() > 0) {
+                if (isSingleDownloadsPanelShown) {
+                    hideSingleDownloads();
+                } else {
+                    showSingleDownloads();
+                }
             }
         }
     }                                                                    //GEN-LAST:event_formMouseClicked
@@ -267,9 +276,18 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
     private void updateComponents() {
         switch (download.getStatus()) {
             case WAITING: {
-                prbProgress.setVisible(false);
-                lblMessage.setVisible(true);
-                mniRemove.setEnabled(true);
+                if (download instanceof BackgroundTaskMultipleDownload) {
+                    lblMessage.setVisible(false);
+                    prbProgress.setIndeterminate(true);
+                    prbProgress.setString(NbBundle.getMessage(
+                            MultipleDownloadPanel.class,
+                            "MultipleDownloadPanel.prbProgress.string.waiting.BackgroundTaskMultipleDownload"));
+                    prbProgress.setVisible(true);
+                } else {
+                    mniRemove.setEnabled(true);
+                    prbProgress.setVisible(false);
+                    lblMessage.setVisible(true);
+                }
 
                 break;
             }
@@ -279,6 +297,8 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
                 lblTitle.setForeground(SystemColor.textText);
 
                 prbProgress.setVisible(true);
+                // set the maximum of prbProgress because it is now known for BackgroundTaskMultipleDownload
+                prbProgress.setMaximum(download.getDownloadsTotal());
                 if (download.getDownloadsCompleted() == 0) {
                     prbProgress.setIndeterminate(true);
                     prbProgress.setString(NbBundle.getMessage(
@@ -354,32 +374,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         pnlSingleDownloads = new JPanel();
         pnlSingleDownloads.setLayout(new BoxLayout(pnlSingleDownloads, BoxLayout.PAGE_AXIS));
 
-        final Iterator<? extends Download> iterDownloads = download.getDownloads().iterator();
-        Branch.Position position = null;
-        for (int i = 0; iterDownloads.hasNext(); i++) {
-            final Download singleDownload = iterDownloads.next();
-
-            final DownloadPanel pnlSingleDownloadPanel = new DownloadPanel(
-                    singleDownload,
-                    true,
-                    !iterDownloads.hasNext());
-            singleDownload.addObserver(pnlSingleDownloadPanel);
-
-            if (i == 0) {
-                position = Branch.Position.FIRST;
-            } else if (i == (download.getDownloads().size() - 1)) {
-                position = Branch.Position.LAST;
-            } else {
-                position = Branch.Position.NORMAL;
-            }
-            final JComponent braBranch = new Branch(pnlSingleDownloadPanel, position);
-
-            final JPanel pnlSingleDownload = new JPanel();
-            pnlSingleDownload.setLayout(new BoxLayout(pnlSingleDownload, BoxLayout.LINE_AXIS));
-            pnlSingleDownload.add(braBranch);
-            pnlSingleDownload.add(pnlSingleDownloadPanel);
-            pnlSingleDownloads.add(pnlSingleDownload);
-        }
+        addDownloadsToPnlSingleDownloads(download.getDownloads());
     }
 
     /**
@@ -463,6 +458,50 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
 
         revalidate();
         repaint();
+    }
+    /**
+     * DOCUMENT ME!
+     */
+    public void redrawEncapsulatedDownloads() {
+        addDownloadsToPnlSingleDownloads(download.getDownloads());
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  downloads  DOCUMENT ME!
+     */
+    private void addDownloadsToPnlSingleDownloads(final Collection<? extends Download> downloads) {
+        final Iterator<? extends Download> iterDownloads = downloads.iterator();
+        Branch.Position position = null;
+        for (int i = 0; iterDownloads.hasNext(); i++) {
+            final Download singleDownload = iterDownloads.next();
+            if (!downloadsInSingleDownloadsPanel.containsKey(singleDownload)) {
+                final DownloadPanel pnlSingleDownloadPanel = new DownloadPanel(
+                        singleDownload,
+                        true,
+                        !iterDownloads.hasNext());
+                singleDownload.addObserver(pnlSingleDownloadPanel);
+
+                if (i == (download.getDownloads().size() - 1)) {
+                    position = Branch.Position.LAST;
+                } else if (i == 0) {
+                    position = Branch.Position.FIRST;
+                } else {
+                    position = Branch.Position.NORMAL;
+                }
+                final JComponent braBranch = new Branch(pnlSingleDownloadPanel, position);
+
+                final JPanel pnlSingleDownload = new JPanel();
+                pnlSingleDownload.setLayout(new BoxLayout(pnlSingleDownload, BoxLayout.LINE_AXIS));
+                pnlSingleDownload.add(braBranch);
+                pnlSingleDownload.add(pnlSingleDownloadPanel);
+                downloadsInSingleDownloadsPanel.put(singleDownload, pnlSingleDownload);
+                pnlSingleDownloads.add(pnlSingleDownload);
+            }
+        }
+        // the single downloads should only be visible if there are downloads to show
+        tbtDownloads.setVisible(!downloads.isEmpty());
     }
 
     //~ Inner Classes ----------------------------------------------------------

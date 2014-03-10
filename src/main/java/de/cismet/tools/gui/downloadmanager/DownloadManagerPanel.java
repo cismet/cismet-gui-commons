@@ -64,7 +64,6 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-
     /**
      * Creates new form DownloadManagerPanel.
      */
@@ -159,6 +158,24 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
         repaint();
     }
 
+    /**
+     * Gets a collection of downloads and tells the panels of a MultipleDownload to redraw its encapsulated downloads.
+     *
+     * @param  downloads  DOCUMENT ME!
+     */
+    protected synchronized void addSubsequentDownloads(final Collection<Download> downloads) {
+        if (downloads == null) {
+            return;
+        }
+        for (final Download download : downloads) {
+            final JPanel pnlDownload = panels.get(download);
+            if (pnlDownload instanceof MultipleDownloadPanel) {
+                final MultipleDownloadPanel mpnlDownload = (MultipleDownloadPanel)pnlDownload;
+                mpnlDownload.redrawEncapsulatedDownloads();
+            }
+        }
+    }
+
     @Override
     public synchronized void downloadListChanged(final DownloadListChangedEvent event) {
         final Collection<Download> downloads = event.getDownloads();
@@ -170,6 +187,10 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
             }
             case REMOVED: {
                 remove(downloads);
+                break;
+            }
+            case ADDED_DOWNLOADS_SUBSEQUENTLY: {
+                addSubsequentDownloads(downloads);
                 break;
             }
         }

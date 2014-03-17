@@ -11,8 +11,11 @@
  */
 package de.cismet.security;
 
+import org.openide.util.Exceptions;
+
 import java.awt.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
@@ -595,6 +598,61 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
 
             readLock.unlock();
         }
+    }
+
+    /**
+     * Checks with a HEAD request, if an URL is accessible or not.
+     *
+     * <p>Note: The method might return false, even if the URL exists, because of network problems or permission issues
+     * etc...</p>
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  true: the URL is accessible. Otherwise false
+     */
+    public boolean checkIfURLaccessible(final URL url) {
+        boolean urlAccessible = false;
+        // if the URL is accessible an InputStream is returned. Otherwise an Exception is thrown. As the URL might not
+        // be accessible, the exceptions are only logged in the debug mode.
+        InputStream inputStream = null;
+        try {
+            inputStream = this.doRequest(url, "", AccessHandler.ACCESS_METHODS.HEAD_REQUEST);
+            urlAccessible = (inputStream != null) ? true : false;
+        } catch (final MissingArgumentException ex) {
+            if (log.isDebugEnabled()) {
+                log.debug("Could not read document from URL '" + url.toExternalForm() + "'.", ex);
+            }
+        } catch (final AccessMethodIsNotSupportedException ex) {
+            if (log.isDebugEnabled()) {
+                log.debug("Can't access document URL '" + url.toExternalForm()
+                            + "' with default access method.",
+                    ex);
+            }
+        } catch (final RequestFailedException ex) {
+            if (log.isDebugEnabled()) {
+                log.debug("Requesting document from URL '" + url.toExternalForm() + "' failed.",
+                    ex);
+            }
+        } catch (final NoHandlerForURLException ex) {
+            if (log.isDebugEnabled()) {
+                log.debug("Can't handle URL '" + url.toExternalForm() + "'.", ex);
+            }
+        } catch (final Exception ex) {
+            if (log.isDebugEnabled()) {
+                log.debug("An exception occurred while opening URL '" + url.toExternalForm()
+                            + "'.",
+                    ex);
+            }
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException ex) {
+                    log.warn("Could not close stream.", ex);
+                }
+            }
+        }
+        return urlAccessible;
     }
 
     /**

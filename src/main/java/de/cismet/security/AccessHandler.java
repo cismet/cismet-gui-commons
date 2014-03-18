@@ -37,7 +37,7 @@ public interface AccessHandler {
 
         //~ Enum constants -----------------------------------------------------
 
-        POST_REQUEST, GET_REQUEST, POST_REQUEST_NO_TUNNEL, GET_REQUEST_NO_TUNNEL
+        POST_REQUEST, GET_REQUEST, POST_REQUEST_NO_TUNNEL, GET_REQUEST_NO_TUNNEL, HEAD_REQUEST, HEAD_REQUEST_NO_TUNNEL
     }
     /**
      * todo ein handler könnte mehr als einen Typ verarbeiten.

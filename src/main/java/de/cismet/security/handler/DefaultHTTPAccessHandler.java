@@ -15,6 +15,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
@@ -84,7 +85,9 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
             log.debug("Access method: '" + method + "'."); // NOI18N
         }
 
-        if ((tunnel != null) && ((method == ACCESS_METHODS.GET_REQUEST) || (method == ACCESS_METHODS.POST_REQUEST))
+        if ((tunnel != null)
+                    && ((method == ACCESS_METHODS.GET_REQUEST) || (method == ACCESS_METHODS.POST_REQUEST)
+                        || (method == ACCESS_METHODS.HEAD_REQUEST))
                     && tunnel.isResponsible(method, url.toString())) {
             return tunnel.doRequest(url, new StringReader(parameter.toString()), method, options);
         } else {
@@ -112,6 +115,23 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
                         }
 
                         httpMethod = new GetMethod(url.toString());
+                    }
+                    break;
+                }
+                case HEAD_REQUEST_NO_TUNNEL:
+                case HEAD_REQUEST: {
+                    if (parameter.length() > 0) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("HTTP HEAD: '" + url.toString() + "?" + parameter + "'."); // NOI18N
+                        }
+
+                        httpMethod = new HeadMethod(url.toString() + "?" + parameter);                  // NOI18N
+                    } else {
+                        if (log.isDebugEnabled()) {
+                            log.debug("No parameters specified. HTTP HEAD: '" + url.toString() + "'."); // NOI18N
+                        }
+
+                        httpMethod = new HeadMethod(url.toString());
                     }
                     break;
                 }
@@ -156,8 +176,23 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
                     if (log.isDebugEnabled()) {
                         log.debug("HTTP status code from server: OK.");                                 // NOI18N
                     }
+                    if ((method == ACCESS_METHODS.HEAD_REQUEST) || (method == ACCESS_METHODS.HEAD_REQUEST_NO_TUNNEL)) {
+                        // returning the HTTP Header as InputStream, because some valid InputStream has to be returned.
+                        // The HTTP body can not be returned because it does not exist for HEAD requests.
+                        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        final ObjectOutputStream oos = new ObjectOutputStream(baos);
 
-                    return new BufferedInputStream(httpMethod.getResponseBodyAsStream());
+                        oos.writeObject(httpMethod.getRequestHeaders());
+
+                        oos.flush();
+                        oos.close();
+
+                        final InputStream is = new ByteArrayInputStream(baos.toByteArray());
+                        baos.close();
+                        return is;
+                    } else {
+                        return new BufferedInputStream(httpMethod.getResponseBodyAsStream());
+                    }
                 }
                 default: {
                     if (log.isDebugEnabled()) {

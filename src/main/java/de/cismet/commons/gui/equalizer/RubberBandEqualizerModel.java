@@ -168,7 +168,7 @@ public final class RubberBandEqualizerModel extends DefaultEqualizerModel {
             if (carryOver > 0) {
                 values[i]++;
                 carryOver--;
-            } else if (carryOver < 0) {
+            } else if ((carryOver < 0) && (values[i] != 0)) {
                 values[i]--;
                 carryOver++;
             }

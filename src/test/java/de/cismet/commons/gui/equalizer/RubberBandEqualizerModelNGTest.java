@@ -112,7 +112,7 @@ public class RubberBandEqualizerModelNGTest {
      */
     @Test
     public void testSetValueAt() {
-        final RubberBandEqualizerModel instance = new RubberBandEqualizerModel(Arrays.asList(
+        RubberBandEqualizerModel instance = new RubberBandEqualizerModel(Arrays.asList(
                     new EqualizerCategory("test1", 33),
                     new EqualizerCategory("test2", 33),
                     new EqualizerCategory("test3", 34)));
@@ -155,5 +155,50 @@ public class RubberBandEqualizerModelNGTest {
         assertEquals(instance.getValueAt(0), 0);
         assertEquals(instance.getValueAt(1), 0);
         assertEquals(instance.getValueAt(2), 100);
+        
+        instance = new RubberBandEqualizerModel(Arrays.asList(
+                    new EqualizerCategory("test1", 10),
+                    new EqualizerCategory("test2", 10),
+                    new EqualizerCategory("test3", 10),
+                    new EqualizerCategory("test4", 10),
+                    new EqualizerCategory("test5", 10),
+                    new EqualizerCategory("test6", 10),
+                    new EqualizerCategory("test7", 10),
+                    new EqualizerCategory("test8", 10),
+                    new EqualizerCategory("test9", 10),
+                    new EqualizerCategory("test10", 10)));
+        instance.setValueAt(0, 50);
+        assertEquals(instance.getValueAt(0), 50);
+        assertEquals(instance.getValueAt(1), 5);
+        assertEquals(instance.getValueAt(2), 5);
+        assertEquals(instance.getValueAt(3), 5);
+        assertEquals(instance.getValueAt(4), 5);
+        assertEquals(instance.getValueAt(5), 6);
+        assertEquals(instance.getValueAt(6), 6);
+        assertEquals(instance.getValueAt(7), 6);
+        assertEquals(instance.getValueAt(8), 6);
+        assertEquals(instance.getValueAt(9), 6);
+        instance.setValueAt(9, 49);
+        assertEquals(instance.getValueAt(0), 45);
+        assertEquals(instance.getValueAt(1), 0);
+        assertEquals(instance.getValueAt(2), 0);
+        assertEquals(instance.getValueAt(3), 0);
+        assertEquals(instance.getValueAt(4), 0);
+        assertEquals(instance.getValueAt(5), 1);
+        assertEquals(instance.getValueAt(6), 1);
+        assertEquals(instance.getValueAt(7), 2);
+        assertEquals(instance.getValueAt(8), 2);
+        assertEquals(instance.getValueAt(9), 49);
+        instance.setValueAt(0, 50);
+        assertEquals(instance.getValueAt(0), 50);
+        assertEquals(instance.getValueAt(1), 0);
+        assertEquals(instance.getValueAt(2), 0);
+        assertEquals(instance.getValueAt(3), 0);
+        assertEquals(instance.getValueAt(4), 0);
+        assertEquals(instance.getValueAt(5), 0);
+        assertEquals(instance.getValueAt(6), 0);
+        assertEquals(instance.getValueAt(7), 1);
+        assertEquals(instance.getValueAt(8), 1);
+        assertEquals(instance.getValueAt(9), 48);
     }
 }

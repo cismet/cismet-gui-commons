@@ -84,4 +84,9 @@ public final class Range implements Serializable {
 
         return (this.min == other.min) && (this.max == other.max);
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " [min=" + min + "|max=" + max + "]"; // NOI18N
+    }
 }

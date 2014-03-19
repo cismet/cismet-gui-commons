@@ -39,6 +39,8 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
 
     //~ Instance fields --------------------------------------------------------
 
+    protected boolean showPopupMenu = true;
+
     JPopupMenu popupMenu = null;
 
     boolean mouseInPopupArea = false;
@@ -56,6 +58,16 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
      * Creates a new instance of JPopupMenuButton.
      */
     public JPopupMenuButton() {
+        this(true);
+    }
+
+    /**
+     * Creates a new instance of JPopupMenuButton.
+     *
+     * @param  showPopupMenu  do not use the popup menu funtionality
+     */
+    public JPopupMenuButton(final boolean showPopupMenu) {
+        this.showPopupMenu = showPopupMenu;
         setIcon(null);
         setVerticalTextPosition(SwingConstants.CENTER);
         setHorizontalTextPosition(SwingConstants.LEFT);
@@ -233,7 +245,9 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
             }
             final BufferedImage tmp = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
             icon.paintIcon(this, tmp.getGraphics(), 0, iconYOffset);
-            arrow.paintIcon(this, tmp.getGraphics(), icon.getIconWidth(), arrowYOffset);
+            if (showPopupMenu) {
+                arrow.paintIcon(this, tmp.getGraphics(), icon.getIconWidth(), arrowYOffset);
+            }
             if (isSelected) {
                 super.setSelectedIcon(new ImageIcon(tmp));
             } else {

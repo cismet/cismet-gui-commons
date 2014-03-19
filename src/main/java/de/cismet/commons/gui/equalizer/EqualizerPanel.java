@@ -240,6 +240,14 @@ public class EqualizerPanel extends javax.swing.JPanel {
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public void setEnabled(final boolean enabled) {
+        super.setEnabled(enabled);
+        for (final JSlider s : sliderMap.values()) {
+            s.setEnabled(enabled);
+        }
+    }
+
     /**
      * Getter for the current <code>EqualizerModel.</code>
      *
@@ -543,6 +551,7 @@ public class EqualizerPanel extends javax.swing.JPanel {
         label.setOpaque(false);
         // TODO: support for rotating the label text
         final JSlider slider = new JSlider(JSlider.VERTICAL);
+        slider.setEnabled(isEnabled());
         slider.setOpaque(false);
         slider.setMinimum(model.getRange().getMin());
         slider.setMaximum(model.getRange().getMax());

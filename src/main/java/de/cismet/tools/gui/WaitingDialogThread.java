@@ -42,6 +42,7 @@ public abstract class WaitingDialogThread<T> implements Runnable {
     private Icon icon;
     private T backgroundResult;
     private Exception thrownException;
+    protected WaitDialog wd;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -118,7 +119,7 @@ public abstract class WaitingDialogThread<T> implements Runnable {
         isAlive = true;
         shouldBeSetVisible = false;
         thrownException = null;
-        final WaitDialog wd = new WaitDialog(parent, modal, text, icon);
+        wd = new WaitDialog(parent, modal, text, icon);
         final ReentrantLock lock = new ReentrantLock();
 
         final Thread t = new Thread(new Runnable() {

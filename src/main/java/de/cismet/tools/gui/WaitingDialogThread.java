@@ -33,6 +33,8 @@ public abstract class WaitingDialogThread<T> implements Runnable {
 
     //~ Instance fields --------------------------------------------------------
 
+    protected WaitDialog wd;
+
     private int delay = 0;
     private volatile boolean isAlive = true;
     private volatile boolean shouldBeSetVisible = false;
@@ -42,7 +44,6 @@ public abstract class WaitingDialogThread<T> implements Runnable {
     private Icon icon;
     private T backgroundResult;
     private Exception thrownException;
-    protected WaitDialog wd;
 
     //~ Constructors -----------------------------------------------------------
 

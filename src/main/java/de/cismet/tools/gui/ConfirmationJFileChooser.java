@@ -18,8 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileSystemView;
 
 /**
- * If the user choose a filename, that already exists, the user must confirm, that the
- * file could be overridden.
+ * If the user choose a filename, that already exists, the user must confirm, that the file could be overridden.
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$

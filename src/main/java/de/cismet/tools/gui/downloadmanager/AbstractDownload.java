@@ -23,10 +23,10 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
+import com.sun.grizzly.util.AbstractThreadPool;
+
 import org.apache.log4j.Logger;
 
-import org.openide.util.Cancellable;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 import java.io.File;
@@ -36,12 +36,16 @@ import java.io.IOException;
 import java.text.MessageFormat;
 
 import java.util.Observable;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.swing.JPanel;
 
-import de.cismet.tools.CismetThreadPool;
+import de.cismet.commons.concurrency.CismetConcurrency.CismetThreadFactory;
+import de.cismet.commons.concurrency.CismetExecutors;
 
 /**
  * The objects of this class represent downloads. This class encompasses several default methods which should be the
@@ -52,6 +56,24 @@ import de.cismet.tools.CismetThreadPool;
  */
 public abstract class AbstractDownload extends Observable implements Download, Runnable, Comparable {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final ExecutorService downloadThreadPool;
+
+    static {
+        final SecurityManager s = System.getSecurityManager();
+        final ThreadGroup parent = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+        final int initialParallelDownloads = (DownloadManager.instance().getParallelDownloads() == 0)
+            ? 10 : DownloadManager.instance().getParallelDownloads();
+        final ThreadGroup threadGroup = new ThreadGroup(parent, "DownloadThreadPool");
+        downloadThreadPool = CismetExecutors.newCachedLimitedThreadPool(
+                initialParallelDownloads,
+                new CismetThreadFactory(threadGroup, "DownloadThreadPool", null),
+                new DownloadRejectExecutionHandler());
+    }
+
+    protected static final Logger log = Logger.getLogger(AbstractDownload.class);
+
     //~ Instance fields --------------------------------------------------------
 
     protected String directory;
@@ -61,7 +83,6 @@ public abstract class AbstractDownload extends Observable implements Download, R
     protected Future downloadFuture;
     protected boolean started = false;
     protected Exception caughtException;
-    protected final Logger log = Logger.getLogger(this.getClass());
 
     //~ Methods ----------------------------------------------------------------
 
@@ -152,8 +173,12 @@ public abstract class AbstractDownload extends Observable implements Download, R
     public void startDownload() {
         if (!started) {
             started = true;
-            downloadFuture = CismetThreadPool.submit(this);
-//            CismetThreadPool.execute(this);
+            if (downloadThreadPool != null) {
+                downloadFuture = downloadThreadPool.submit(this);
+            } else {
+                log.error("Download Thread Pool is null. Downlaod can not be started");
+                error(new IllegalStateException("downloadThread is null. Can not start Download"));
+            }
         }
     }
 
@@ -269,7 +294,6 @@ public abstract class AbstractDownload extends Observable implements Download, R
 //        stateChanged();
 //        return f.isCancelled();
 //    }
-
     /**
      * Marks this observable as changed and notifies observers.
      */
@@ -321,5 +345,41 @@ public abstract class AbstractDownload extends Observable implements Download, R
 
         final AbstractDownload other = (AbstractDownload)o;
         return this.title.compareTo(other.title);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parallelDownloads  DOCUMENT ME!
+     */
+    public static void setParallelDownloads(final int parallelDownloads) {
+        if (downloadThreadPool == null) {
+            log.error("Thread pool for downloads is null. Currently it is not possible to start downloads");
+        }
+        if (downloadThreadPool instanceof ThreadPoolExecutor) {
+            ((ThreadPoolExecutor)downloadThreadPool).setMaximumPoolSize(parallelDownloads);
+        }
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    private static final class DownloadRejectExecutionHandler implements RejectedExecutionHandler {
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
+            log.error("Execution of Downlaod Thread was rejected.");
+            if (r instanceof AbstractDownload) {
+                final AbstractDownload download = (AbstractDownload)r;
+                download.error(new RejectedExecutionException(
+                        " Downlaod konnte nicht gestartet werden. Es stehen nicht genügend DownlaodThreads bereit."));
+            }
+        }
     }
 }

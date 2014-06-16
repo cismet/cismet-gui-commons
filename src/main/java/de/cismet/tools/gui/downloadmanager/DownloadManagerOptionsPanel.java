@@ -446,6 +446,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         DownloadManagerDialog.setOpenAutomatically(openAutomatically);
         DownloadManagerDialog.setCloseAutomatically(closeAutomatically);
         DownloadManager.instance().setParallelDownloads(parallelDownloads);
+        AbstractDownload.setParallelDownloads(parallelDownloads);
         DownloadManager.instance().setNotificationDisplayTime(notificationDisplayTime);
     }
 

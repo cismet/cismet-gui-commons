@@ -57,7 +57,7 @@ import de.cismet.security.exceptions.RequestFailedException;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class HttpDownload extends AbstractDownload implements Cancellable {
+public class HttpDownload extends AbstractCancellableDownload {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -319,19 +319,6 @@ public class HttpDownload extends AbstractDownload implements Cancellable {
         hash = (43 * hash) + ((this.fileToSaveTo != null) ? this.fileToSaveTo.hashCode() : 0);
 
         return hash;
-    }
-
-    @Override
-    public boolean cancel() {
-        boolean cancelled = true;
-        if (downloadFuture != null) {
-            cancelled = downloadFuture.cancel(true);
-        }
-        if (cancelled) {
-            status = State.ABORTED;
-            stateChanged();
-        }
-        return cancelled;
     }
 
     /**

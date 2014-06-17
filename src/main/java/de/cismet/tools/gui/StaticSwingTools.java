@@ -535,6 +535,15 @@ public class StaticSwingTools {
         } else {
             if (isRelativeToParentFrame && (parent != null)) {
                 final Frame parentFrame = getParentFrame(parent);
+
+                // UGLY BUT IT WORKS - this part is for Windows users
+                // enforcing dialog to be set on top of other dialogs to prevent
+                // that the dialog becomes unreachable behind another modal dialog
+                dialog.setAlwaysOnTop(true);
+                dialog.toFront();
+                dialog.requestFocus();
+                dialog.setAlwaysOnTop(false);
+
                 if (parentFrame == null) {
                     centerWindowOnScreen(dialog);
                 } else {

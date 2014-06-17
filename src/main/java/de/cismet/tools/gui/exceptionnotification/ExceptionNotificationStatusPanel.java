@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 
+import java.util.Properties;
 import java.util.logging.Level;
 
 import javax.swing.JFrame;
@@ -40,6 +41,30 @@ import de.cismet.tools.gui.StaticSwingTools;
  */
 public class ExceptionNotificationStatusPanel extends javax.swing.JPanel implements DefaultExceptionHandlerListener {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
+            ExceptionNotificationStatusPanel.class);
+    private static int FLASH_TIME;
+    private static int FLASH_PAUSE;
+    private static int STEADY_TIME;
+
+    static {
+        final Properties prop = new Properties();
+        try {
+            prop.load(ExceptionNotificationStatusPanel.class.getResourceAsStream(
+                    "exceptionNotificationStatusPanel.properties"));
+            FLASH_TIME = Integer.parseInt(prop.getProperty("flashTime"));
+            FLASH_PAUSE = Integer.parseInt(prop.getProperty("flashPause"));
+            STEADY_TIME = Integer.parseInt(prop.getProperty("steadyTime"));
+        } catch (Exception ex) {
+            LOG.error("Could not load the properties for the ExceptionNotificationStatusPanel", ex);
+            FLASH_TIME = 5;
+            FLASH_PAUSE = 500;
+            STEADY_TIME = 30;
+        }
+    }
+
     //~ Instance fields --------------------------------------------------------
 
     private Throwable uncaughtException;
@@ -61,11 +86,12 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
         initComponents();
         this.setVisible(false);
 
-        flashTimer = new Timer(500, new FlashHandler());
+        final int repetitions = (int)Math.floor(FLASH_TIME * 1000d / FLASH_PAUSE);
+        flashTimer = new Timer(FLASH_PAUSE, new FlashHandler(repetitions));
         flashTimer.setRepeats(true);
         flashTimer.setInitialDelay(0);
 
-        steadyTimer = new Timer(30 * 1000, new SteadyHandler());
+        steadyTimer = new Timer(STEADY_TIME * 1000, new SteadyHandler());
         steadyTimer.setRepeats(false);
     }
 
@@ -231,6 +257,18 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
         //~ Instance fields ----------------------------------------------------
 
         private int counter;
+        private int repetitions;
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new FlashHandler object.
+         *
+         * @param  repetitions  DOCUMENT ME!
+         */
+        public FlashHandler(final int repetitions) {
+            this.repetitions = repetitions;
+        }
 
         //~ Methods ------------------------------------------------------------
 
@@ -239,7 +277,7 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
             if (flashTimer.isRunning()) {
                 letIconFlashOrShowAnEmptyPanel((counter % 2) == 0);
                 counter++;
-                if (counter > 10) {
+                if (counter >= repetitions) {
                     counter = 0;
                     letIconFlashOrShowAnEmptyPanel(true);
                     ((Timer)ae.getSource()).stop();

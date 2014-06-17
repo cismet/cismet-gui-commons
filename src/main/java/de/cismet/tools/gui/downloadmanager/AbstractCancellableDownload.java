@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,10 +15,14 @@ package de.cismet.tools.gui.downloadmanager;
 import org.openide.util.Cancellable;
 
 /**
+ * DOCUMENT ME!
  *
- * @author daniel
+ * @author   daniel
+ * @version  $Revision$, $Date$
  */
 public abstract class AbstractCancellableDownload extends AbstractDownload implements Cancellable {
+
+    //~ Methods ----------------------------------------------------------------
 
     @Override
     public boolean cancel() {
@@ -21,7 +32,7 @@ public abstract class AbstractCancellableDownload extends AbstractDownload imple
             isDone = downloadFuture.isDone();
             cancelled = downloadFuture.cancel(true);
         }
-        
+
         if (cancelled || isDone) {
             status = State.ABORTED;
             stateChanged();
@@ -29,5 +40,4 @@ public abstract class AbstractCancellableDownload extends AbstractDownload imple
 
         return downloadFuture.isCancelled();
     }
-
 }

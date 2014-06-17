@@ -20,7 +20,7 @@ import de.cismet.security.WebDavClient;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class WebDavDownload extends AbstractDownload implements Cancellable {
+public class WebDavDownload extends AbstractCancellableDownload {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -171,18 +171,5 @@ public class WebDavDownload extends AbstractDownload implements Cancellable {
         if (fileToSaveTo.exists() && fileToSaveTo.isFile()) {
             fileToSaveTo.delete();
         }
-    }
-
-    @Override
-    public boolean cancel() {
-        boolean cancelled = true;
-        if (downloadFuture != null) {
-            cancelled = downloadFuture.cancel(true);
-        }
-        if (cancelled) {
-            status = State.ABORTED;
-            stateChanged();
-        }
-        return cancelled;
     }
 }

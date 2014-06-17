@@ -29,11 +29,12 @@ import de.cismet.tools.gui.StaticSwingTools;
 /**
  * A small panel shown in the status bar, with a click on a icon a error dialog is shown.At the start of the Navigator
  * the panel is empty, if an uncaught exception occurs than an error-icon flashes a few times and afterwards is steady
- * for 30 seconds. After the 30 seconds the icon disappears again. With a click on that icon an error dialog is shown,
- * which contains the stack trace of that uncaught exception. After the dialog is closed, the icon disappears, except
- * another exception occurs.<br/>
+ * for several seconds. After these seconds the icon disappears again. With a click on that icon an error dialog is
+ * shown, which contains the stack trace of that uncaught exception. After the dialog is closed, the icon disappears,
+ * except another exception occurs.<br/>
  * To be notified about the uncaught exceptions ExceptionNotificationStatusPanel can be added as a listener to various
- * ExceptionHandler.
+ * ExceptionHandler.<br/>
+ * The different times can be configured in the exceptionNotificationStatusPanel.properties
  *
  * @author   Gilles Baatz
  * @version  $Revision$, $Date$
@@ -54,9 +55,9 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
         try {
             prop.load(ExceptionNotificationStatusPanel.class.getResourceAsStream(
                     "exceptionNotificationStatusPanel.properties"));
-            FLASH_TIME = Integer.parseInt(prop.getProperty("flashTime"));
-            FLASH_PAUSE = Integer.parseInt(prop.getProperty("flashPause"));
-            STEADY_TIME = Integer.parseInt(prop.getProperty("steadyTime"));
+            FLASH_TIME = Math.abs(Integer.parseInt(prop.getProperty("flashTime")));
+            FLASH_PAUSE = Math.abs(Integer.parseInt(prop.getProperty("flashPause")));
+            STEADY_TIME = Math.abs(Integer.parseInt(prop.getProperty("steadyTime")));
         } catch (Exception ex) {
             LOG.error("Could not load the properties for the ExceptionNotificationStatusPanel", ex);
             FLASH_TIME = 5;
@@ -257,7 +258,7 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
         //~ Instance fields ----------------------------------------------------
 
         private int counter;
-        private int repetitions;
+        private final int repetitions;
 
         //~ Constructors -------------------------------------------------------
 

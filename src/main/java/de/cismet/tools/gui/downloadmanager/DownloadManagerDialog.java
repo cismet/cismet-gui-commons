@@ -219,7 +219,6 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
             instance.dlgJobname.pack();
 
             StaticSwingTools.showDialog(instance.dlgJobname);
-            instance.dlgJobname.toFront();
 
             result = instance.isJobnameConfirmed;
 

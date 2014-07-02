@@ -177,12 +177,12 @@ public class LayeredAlertPanel extends javax.swing.JPanel {
 
         @Override
         public Dimension preferredLayoutSize(final Container parent) {
-            return parent.getPreferredSize();
+            return new Dimension(100, 100);
         }
 
         @Override
         public Dimension minimumLayoutSize(final Container parent) {
-            return parent.getMinimumSize();
+            return new Dimension(100, 100);
         }
 
         @Override

@@ -911,9 +911,16 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         sbm.addBand(sb2);
         sbm.addBand(new EmptyAbsoluteHeightedBand(1));
 
+        final SimpleModifiableBand sb6 = new SimpleModifiableBand("Band");
+
+        sb6.addMember(new SimpleModifiableBandMember(sb6, false, 0, 100));
+        sb6.addMember(new SimpleModifiableBandMember(sb6, false, 200, 500));
+        sb6.addMember(new SimpleModifiableBandMember(sb6, false, 600, 1000));
+
         sbm.addBand(sb3);
         sbm.addBand(sb4);
         sbm.addBand(sb4a);
+        sbm.addBand(sb6);
 
         final SimpleBand sb5 = new SimpleBand();
         sb5.addMember(new SimpleSection(0, 1100));

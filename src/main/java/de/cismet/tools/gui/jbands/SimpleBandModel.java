@@ -34,8 +34,6 @@ public class SimpleBandModel implements BandModel, BandListener {
 
     @Override
     public Band getBand(final int bandNumber) {
-        assert (bandNumber > 0);
-        assert (bandNumber < bands.size());
         return bands.get(bandNumber);
     }
 
@@ -47,10 +45,15 @@ public class SimpleBandModel implements BandModel, BandListener {
     /**
      * DOCUMENT ME!
      *
-     * @param  band  DOCUMENT ME!
+     * @param   band  DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  DOCUMENT ME!
      */
     public void addBand(final Band band) {
-        assert (band != null);
+        if (band == null) {
+            throw new IllegalArgumentException("band must not be null");
+        }
+
         if (band instanceof BandModificationProvider) {
             ((BandModificationProvider)band).addBandListener(this);
         }
@@ -61,11 +64,16 @@ public class SimpleBandModel implements BandModel, BandListener {
     /**
      * DOCUMENT ME!
      *
-     * @param  band  DOCUMENT ME!
-     * @param  pos   DOCUMENT ME!
+     * @param   band  DOCUMENT ME!
+     * @param   pos   DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  DOCUMENT ME!
      */
     public void insertBand(final Band band, final int pos) {
-        assert (band != null);
+        if (band == null) {
+            throw new IllegalArgumentException("band must not be null");
+        }
+
         bands.add(pos, band);
         fireBandModelChanged();
     }
@@ -78,8 +86,6 @@ public class SimpleBandModel implements BandModel, BandListener {
      * @return  DOCUMENT ME!
      */
     public int removeBand(final Band band) {
-        assert (band != null);
-        assert (bands.contains(band));
         final int pos = bands.indexOf(band);
         if (band instanceof BandModificationProvider) {
             ((BandModificationProvider)band).removeBandListener(this);

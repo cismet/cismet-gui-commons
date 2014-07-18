@@ -8,6 +8,7 @@
 package de.cismet.tools.gui.jbands;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.cismet.tools.gui.jbands.interfaces.Band;
 import de.cismet.tools.gui.jbands.interfaces.BandListener;
@@ -26,7 +27,7 @@ public class SimpleBandModel implements BandModel, BandListener {
     //~ Instance fields --------------------------------------------------------
 
     private ArrayList<Band> bands = new ArrayList<Band>();
-    private ArrayList<BandModelListener> listeners = new ArrayList<BandModelListener>();
+    private final CopyOnWriteArrayList<BandModelListener> listeners = new CopyOnWriteArrayList<BandModelListener>();
     private double min = -1;
     private double max = -1;
 

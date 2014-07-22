@@ -52,6 +52,7 @@ import de.cismet.tools.gui.jbands.interfaces.BandMemberSelectable;
 import de.cismet.tools.gui.jbands.interfaces.BandModel;
 import de.cismet.tools.gui.jbands.interfaces.BandModelListener;
 import de.cismet.tools.gui.jbands.interfaces.BandModificationProvider;
+import de.cismet.tools.gui.jbands.interfaces.BandPostfixProvider;
 import de.cismet.tools.gui.jbands.interfaces.BandPrefixProvider;
 import de.cismet.tools.gui.jbands.interfaces.BandSnappingPointProvider;
 import de.cismet.tools.gui.jbands.interfaces.BandWeightProvider;
@@ -78,10 +79,13 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
     HashMap<BandMember, JComponent> componentsViaBandMembers = new HashMap<BandMember, JComponent>();
     JBandsPanel bandsPanel = new JBandsPanel();
     JLegendPanel legendPanel = new JLegendPanel();
+    JLegendPanel postfixPanel = new JLegendPanel();
+
     ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
     BandMember selectedBandMember = null;
     int count = 0;
     private int maxPreferredPrefixWidth = 0;
+    private int maxPreferredPostfixWidth = 0;
     private final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private BandModel model;
     private double zoomFactor = 1.0;
@@ -121,6 +125,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         setLayout(new BorderLayout());
         add(legendPanel, BorderLayout.LINE_START);
         add(scrollPane, BorderLayout.CENTER);
+        add(postfixPanel, BorderLayout.LINE_END);
         setOpaque(false);
         bandsPanel.setOpaque(false);
         bandsPanel.addMouseMotionListener(this);
@@ -201,7 +206,6 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             if (rowBand instanceof BandPrefixProvider) {
                 prefix = ((BandPrefixProvider)rowBand).getPrefixComponent();
                 legendPanel.add(prefix);
-//                bandsPanel.add(prefix);
                 maxPreferredPrefixWidth = (maxPreferredPrefixWidth < prefix.getPreferredSize().width)
                     ? prefix.getPreferredSize().width : maxPreferredPrefixWidth;
             }
@@ -222,6 +226,15 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
 
                 if (!Arrays.asList(comp.getMouseMotionListeners()).contains(this)) {
                     comp.addMouseMotionListener(this);
+                }
+            }
+
+            if (rowBand instanceof BandPostfixProvider) {
+                final JComponent postfix = ((BandPostfixProvider)rowBand).getPostfixComponent();
+                postfixPanel.add(postfix);
+                final int pWidth = postfix.getPreferredSize().width;
+                if (maxPreferredPostfixWidth < pWidth) {
+                    maxPreferredPostfixWidth = pWidth;
                 }
             }
         }
@@ -266,8 +279,6 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             return;
         }
 
-        int posy = 0;
-
         int remainingBandsPanelHeight = bandsPanel.getHeight();
 
         for (int zeile = 0; zeile < model.getNumberOfBands(); ++zeile) {
@@ -294,6 +305,7 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
         }
 
         // prefixes
+        int posy = 0;
         for (int zeile = 0; zeile < model.getNumberOfBands(); ++zeile) {
             final Band rowBand = model.getBand(zeile);
 
@@ -396,6 +408,37 @@ public class JBand extends JPanel implements ActionListener, MouseListener, Mous
             posy += roundingDifference * (1 + subBands.size());
             subBands.add(masterBand);
             subBandMap.put(rowBand, subBands);
+        }
+
+        // postfix
+        posy = 0;
+        for (int row = 0; row < model.getNumberOfBands(); ++row) {
+            final Band rowBand = model.getBand(row);
+
+            int memberHeight;
+            if (!rowBand.isEnabled()) {
+                memberHeight = 0;
+            } else if ((heightWeights[row] == 0) && (rowBand instanceof BandAbsoluteHeightProvider)) {
+                memberHeight = ((BandAbsoluteHeightProvider)rowBand).getAbsoluteHeight();
+                final int subCount = getSubbandCount(rowBand);
+                if (memberHeight < subCount) {
+                    memberHeight = subCount;
+                }
+            } else {
+                memberHeight = (int)(((double)remainingBandsPanelHeight) * heightWeights[row] / heightsWeightSum);
+                final int subCount = getSubbandCount(rowBand);
+                if (memberHeight < subCount) {
+                    memberHeight = subCount;
+                }
+            }
+            if (rowBand instanceof BandPostfixProvider) {
+                final JComponent prefix = ((BandPostfixProvider)rowBand).getPostfixComponent();
+                prefix.setBounds(0, posy, maxPreferredPostfixWidth, memberHeight);
+            }
+            if (memberHeight > 0) {
+                bandPosY.add(new JBandYDimension(rowBand, posy, posy + memberHeight - 1));
+            }
+            posy += memberHeight;
         }
     }
 

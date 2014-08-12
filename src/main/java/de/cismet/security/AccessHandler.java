@@ -48,7 +48,7 @@ public interface AccessHandler {
 
         //~ Enum constants -----------------------------------------------------
 
-        WSS, HTTP, SOAP, SANY
+        WSS, HTTP, SOAP, SANY, FTP
     }
 
     //~ Methods ----------------------------------------------------------------

@@ -39,6 +39,7 @@ import de.cismet.security.exceptions.NoHandlerForURLException;
 import de.cismet.security.exceptions.RequestFailedException;
 
 import de.cismet.security.handler.DefaultHTTPAccessHandler;
+import de.cismet.security.handler.FTPAccessHandler;
 import de.cismet.security.handler.HTTPBasedAccessHandler;
 import de.cismet.security.handler.WSSAccessHandler;
 
@@ -168,17 +169,20 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
         }
         final WSSAccessHandler wssHandler = new WSSAccessHandler();
         final DefaultHTTPAccessHandler httpHandler = new DefaultHTTPAccessHandler();
+        final FTPAccessHandler ftpHandler = new FTPAccessHandler();
         // SOAPAccessHandler soapAccessHandler = new SOAPAccessHandler();
         // SanyAccessHandler sanyAccessHandler = new SanyAccessHandler();
         defaultHandler = httpHandler;
         allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.WSS, wssHandler);
         allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.HTTP, httpHandler);
+        allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.FTP, ftpHandler);
         // allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.SOAP, soapAccessHandler);
         // allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.SANY, sanyAccessHandler);
         supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.WSS);
         supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.HTTP);
         supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.SOAP);
         supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.SANY);
+        supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.FTP);
     }
 
     /**

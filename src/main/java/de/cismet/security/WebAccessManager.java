@@ -11,8 +11,6 @@
  */
 package de.cismet.security;
 
-import org.openide.util.Exceptions;
-
 import java.awt.Component;
 
 import java.io.IOException;
@@ -479,8 +477,6 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
         RequestFailedException,
         NoHandlerForURLException,
         Exception {
-        readLock.lock();
-
         if (url == null) {
             throw new MissingArgumentException("URL is null.");                        // NOI18N
         } else if (accessMethod == null) {
@@ -491,10 +487,15 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
             log.debug("Request URL: '" + url.toString() + "'."); // NOI18N
         }
 
+        readLock.lock();
+
         final AccessHandler handler;
         try {
             handler = handlerMapping.get(url);
-
+        } finally {
+            readLock.unlock();
+        }
+        try {
             if (handler != null) {
                 if (log.isDebugEnabled()) {
                     log.debug("Handler for URL '" + url + "' available."); // NOI18N
@@ -527,12 +528,6 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
             log.error("Error while doRequest.", ex);                                     // NOI18N
 
             throw ex;
-        } finally {
-            if (log.isDebugEnabled()) {
-                log.debug("Releasing lock."); // NOI18N
-            }
-
-            readLock.unlock();
         }
     }
 
@@ -544,8 +539,6 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
         RequestFailedException,
         NoHandlerForURLException,
         Exception {
-        readLock.lock();
-
         if (url == null) {
             throw new MissingArgumentException("URL is null."); // NOI18N
         }
@@ -554,10 +547,15 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
             log.debug("Request URL: '" + url.toString() + "'."); // NOI18N
         }
 
+        readLock.lock();
+
         final AccessHandler handler;
         try {
             handler = handlerMapping.get(url);
-
+        } finally {
+            readLock.unlock();
+        }
+        try {
             if (handler != null) {
                 if (log.isDebugEnabled()) {
                     log.debug("Handler for URL '" + url + "' available."); // NOI18N
@@ -591,12 +589,6 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
             log.error("Error while doRequest.", ex);                                     // NOI18N
 
             throw ex;
-        } finally {
-            if (log.isDebugEnabled()) {
-                log.debug("Releasing lock."); // NOI18N
-            }
-
-            readLock.unlock();
         }
     }
 

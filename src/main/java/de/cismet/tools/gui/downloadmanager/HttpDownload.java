@@ -23,8 +23,6 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import org.openide.util.Cancellable;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -40,6 +38,8 @@ import java.net.URL;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
+
+import de.cismet.security.AccessHandler;
 
 import de.cismet.security.AccessHandler.ACCESS_METHODS;
 
@@ -199,7 +199,6 @@ public class HttpDownload extends AbstractCancellableDownload {
             if (log.isDebugEnabled()) {
                 log.debug("Sending request \n" + request + "\n to '" + url.toExternalForm() + "'.");
             }
-
             if ((request == null) || (request.trim().length() <= 0)) {
                 resp = WebAccessManager.getInstance().doRequest(url);
             } else {

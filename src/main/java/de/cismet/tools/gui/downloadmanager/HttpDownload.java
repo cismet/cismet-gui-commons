@@ -23,8 +23,6 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import org.openide.util.Cancellable;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -201,11 +199,6 @@ public class HttpDownload extends AbstractCancellableDownload {
             if (log.isDebugEnabled()) {
                 log.debug("Sending request \n" + request + "\n to '" + url.toExternalForm() + "'.");
             }
-
-            if ("ftp".equalsIgnoreCase(url.getProtocol())) {
-                WebAccessManager.getInstance().registerAccessHandler(url, AccessHandler.ACCESS_HANDLER_TYPES.FTP);
-            }
-
             if ((request == null) || (request.trim().length() <= 0)) {
                 resp = WebAccessManager.getInstance().doRequest(url);
             } else {
@@ -215,10 +208,6 @@ public class HttpDownload extends AbstractCancellableDownload {
                                     new StringReader(request),
                                     ACCESS_METHODS.POST_REQUEST,
                                     headers);
-            }
-
-            if ("ftp".equalsIgnoreCase(url.getProtocol())) {
-                WebAccessManager.getInstance().deregisterAccessHandler(url);
             }
         }
         return resp;

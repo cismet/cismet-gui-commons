@@ -11,8 +11,6 @@
  */
 package de.cismet.security;
 
-import org.openide.util.Exceptions;
-
 import java.awt.Component;
 
 import java.io.IOException;
@@ -29,9 +27,13 @@ import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import de.cismet.netutil.Proxy;
+import de.cismet.commons.security.AccessHandler;
+import de.cismet.commons.security.AccessHandler.ACCESS_HANDLER_TYPES;
+import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
+import de.cismet.commons.security.Tunnel;
+import de.cismet.commons.security.TunnelStore;
 
-import de.cismet.security.AccessHandler.ACCESS_HANDLER_TYPES;
+import de.cismet.netutil.Proxy;
 
 import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
 import de.cismet.security.exceptions.MissingArgumentException;

@@ -15,7 +15,8 @@ import java.net.URL;
 
 import java.util.HashMap;
 
-import de.cismet.security.AccessHandler;
+import de.cismet.commons.security.AccessHandler;
+
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;

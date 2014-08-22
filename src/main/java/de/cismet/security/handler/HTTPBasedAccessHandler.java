@@ -24,6 +24,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.cismet.commons.security.handler.AbstractAccessHandler;
+
 import de.cismet.netutil.Proxy;
 
 import de.cismet.security.GUICredentialsProvider;

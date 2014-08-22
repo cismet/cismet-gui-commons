@@ -22,9 +22,12 @@ import java.net.URL;
 
 import java.util.HashMap;
 
-import de.cismet.netutil.Proxy;
+import de.cismet.commons.security.AccessHandler.ACCESS_HANDLER_TYPES;
+import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
+import de.cismet.commons.security.Tunnel;
+import de.cismet.commons.security.handler.AbstractAccessHandler;
 
-import de.cismet.security.Tunnel;
+import de.cismet.netutil.Proxy;
 
 import static org.apache.commons.net.ftp.FTP.BINARY_FILE_TYPE;
 

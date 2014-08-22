@@ -32,7 +32,7 @@ import java.util.Observer;
 
 import javax.swing.ImageIcon;
 
-import de.cismet.security.exceptions.BadHttpStatusCodeException;
+import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
 
 import de.cismet.tools.BrowserLauncher;
 

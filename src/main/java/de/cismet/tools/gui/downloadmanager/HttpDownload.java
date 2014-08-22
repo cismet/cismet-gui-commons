@@ -39,14 +39,12 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
-import de.cismet.security.AccessHandler;
-
-import de.cismet.security.AccessHandler.ACCESS_METHODS;
+import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
+import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
 
 import de.cismet.security.WebAccessManager;
 
 import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
-import de.cismet.security.exceptions.BadHttpStatusCodeException;
 import de.cismet.security.exceptions.MissingArgumentException;
 import de.cismet.security.exceptions.NoHandlerForURLException;
 import de.cismet.security.exceptions.RequestFailedException;

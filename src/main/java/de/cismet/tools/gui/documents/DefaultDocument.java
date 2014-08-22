@@ -36,8 +36,8 @@ import java.nio.channels.FileChannel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import de.cismet.security.WebDavClient;
-import de.cismet.security.WebDavHelper;
+import de.cismet.commons.security.WebDavClient;
+import de.cismet.commons.security.WebDavHelper;
 
 import de.cismet.tools.gui.Static2DTools;
 

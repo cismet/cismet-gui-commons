@@ -31,16 +31,12 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.cismet.netutil.tunnel.TunnelTargetGroup;
-
-import de.cismet.security.AccessHandler.ACCESS_HANDLER_TYPES;
-import de.cismet.security.AccessHandler.ACCESS_METHODS;
-
-import de.cismet.security.Tunnel;
-import de.cismet.security.TunnelStore;
-
-import de.cismet.security.exceptions.BadHttpStatusCodeException;
-import de.cismet.security.exceptions.CannotReadFromURLException;
+import de.cismet.commons.security.AccessHandler.ACCESS_HANDLER_TYPES;
+import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
+import de.cismet.commons.security.Tunnel;
+import de.cismet.commons.security.TunnelStore;
+import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
+import de.cismet.commons.security.exceptions.CannotReadFromURLException;
 
 /**
  * DOCUMENT ME!

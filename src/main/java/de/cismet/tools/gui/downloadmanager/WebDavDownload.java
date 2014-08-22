@@ -12,7 +12,7 @@ import org.openide.util.Cancellable;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-import de.cismet.security.WebDavClient;
+import de.cismet.commons.security.WebDavClient;
 
 /**
  * DOCUMENT ME!

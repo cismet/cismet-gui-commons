@@ -26,7 +26,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import de.cismet.security.exceptions.BadHttpStatusCodeException;
+import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
 
 import de.cismet.tools.gui.StaticSwingTools;
 

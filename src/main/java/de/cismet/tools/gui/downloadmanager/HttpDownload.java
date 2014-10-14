@@ -31,9 +31,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 
 import java.util.HashMap;
 
@@ -115,7 +117,7 @@ public class HttpDownload extends AbstractCancellableDownload {
             final HashMap<String, String> headers,
             final String directory,
             final String title,
-            final String filename,
+            String filename,
             final String extension) {
         this.url = url;
         this.request = request;
@@ -132,6 +134,13 @@ public class HttpDownload extends AbstractCancellableDownload {
                         + "<br>and extension=" + extension
                         + "<br>with these headers:" + headers);
         }
+
+        try {
+            filename = URLDecoder.decode(filename, "utf8");
+        } catch (UnsupportedEncodingException ex) {
+            LOG.error(ex, ex);
+        }
+
         determineDestinationFile(filename, extension);
     }
 

@@ -78,7 +78,7 @@ public class DocumentPanel extends javax.swing.JPanel {
                     final Object selection = lstDocuments.getSelectedValue();
                     if (selection != null) {
                         final Document d = (Document)selection;
-                        new Thread() {
+                        new Thread("DocumentPanel valueChanged()") {
 
                             @Override
                             public void run() {
@@ -243,7 +243,7 @@ public class DocumentPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void panPreviewComponentResized(final java.awt.event.ComponentEvent evt) { //GEN-FIRST:event_panPreviewComponentResized
+    private void panPreviewComponentResized(final java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_panPreviewComponentResized
         final Object sel = lstDocuments.getSelectedValue();
         if (sel != null) {
             final Document selD = (Document)sel;
@@ -256,14 +256,14 @@ public class DocumentPanel extends javax.swing.JPanel {
                     }
                 });
         }
-    } //GEN-LAST:event_panPreviewComponentResized
+    }//GEN-LAST:event_panPreviewComponentResized
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void lblPreviewMouseClicked(final java.awt.event.MouseEvent evt) {                                    //GEN-FIRST:event_lblPreviewMouseClicked
+    private void lblPreviewMouseClicked(final java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPreviewMouseClicked
         final Document selD = (Document)lstDocuments.getSelectedValue();
         if (!evt.isPopupTrigger() && (evt.getClickCount() > 1) && (selD != null)) {
             String gotoUrl = selD.getDocumentURI();
@@ -280,7 +280,7 @@ public class DocumentPanel extends javax.swing.JPanel {
                 }
             }
         }
-    }                                                                                                             //GEN-LAST:event_lblPreviewMouseClicked
+    }//GEN-LAST:event_lblPreviewMouseClicked
 
     /**
      * DOCUMENT ME!

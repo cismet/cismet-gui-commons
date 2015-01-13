@@ -423,8 +423,9 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             pwEncrypted = PasswordEncrypter.encryptString(password);
         }
 
+        final String proxyTypeString = (proxyType != null) ? proxyType.toString() : null ;
         if (LOG.isDebugEnabled()) {
-            LOG.debug("getConfiguration [type: " + proxyType.toString() // NOI18N
+            LOG.debug("getConfiguration [type: " + proxyTypeString // NOI18N
                         + " | host: " + host   // NOI18N
                         + " | port: " + port   // NOI18N
                         + " | username: " + username // NOI18N
@@ -432,7 +433,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
                         + " | domain: " + domain + " ]"); // NOI18N
         }
 
-        proxyTypeElement.addContent(proxyType.toString());
+        proxyTypeElement.addContent(proxyTypeString);
         proxyHostElement.addContent(host);
         proxyPortElement.addContent(Integer.toString(port));
         proxyUsernameElement.addContent(username);

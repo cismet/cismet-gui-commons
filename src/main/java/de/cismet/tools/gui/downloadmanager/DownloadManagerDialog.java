@@ -37,6 +37,7 @@ import java.util.logging.Level;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -287,7 +288,15 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      * Closes the DownloadManagerDialog.
      */
     public static void close() {
-        instance.dispatchEvent(new WindowEvent(instance, WindowEvent.WINDOW_CLOSING));
+        if (SwingUtilities.isEventDispatchThread()) {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        instance.dispatchEvent(new WindowEvent(instance, WindowEvent.WINDOW_CLOSING));
+                    }
+                });
+        }
     }
 
     /**

@@ -288,7 +288,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      * Closes the DownloadManagerDialog.
      */
     public static void close() {
-        if (SwingUtilities.isEventDispatchThread()) {
+        if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(new Runnable() {
 
                     @Override
@@ -296,6 +296,8 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                         instance.dispatchEvent(new WindowEvent(instance, WindowEvent.WINDOW_CLOSING));
                     }
                 });
+        } else {
+            instance.dispatchEvent(new WindowEvent(instance, WindowEvent.WINDOW_CLOSING));
         }
     }
 

@@ -423,11 +423,11 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             pwEncrypted = PasswordEncrypter.encryptString(password);
         }
 
-        final String proxyTypeString = (proxyType != null) ? proxyType.toString() : null ;
+        final String proxyTypeString = (proxyType != null) ? proxyType.toString() : null;
         if (LOG.isDebugEnabled()) {
             LOG.debug("getConfiguration [type: " + proxyTypeString // NOI18N
-                        + " | host: " + host   // NOI18N
-                        + " | port: " + port   // NOI18N
+                        + " | host: " + host // NOI18N
+                        + " | port: " + port // NOI18N
                         + " | username: " + username // NOI18N
                         + " | password: " + pwEncrypted // NOI18N
                         + " | domain: " + domain + " ]"); // NOI18N

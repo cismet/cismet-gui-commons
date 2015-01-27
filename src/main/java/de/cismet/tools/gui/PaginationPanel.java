@@ -7,9 +7,13 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
+import org.openide.util.Exceptions;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+
+import java.text.ParseException;
 
 /**
  * DOCUMENT ME!
@@ -312,7 +316,7 @@ public class PaginationPanel extends javax.swing.JPanel {
                 new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         tfPageSize.setMinimumSize(new java.awt.Dimension(50, 27));
         tfPageSize.setPreferredSize(new java.awt.Dimension(50, 27));
-        tfPageSize.setValue(50d);
+        tfPageSize.setValue(50L);
         tfPageSize.addKeyListener(new java.awt.event.KeyAdapter() {
 
                 @Override
@@ -410,7 +414,11 @@ public class PaginationPanel extends javax.swing.JPanel {
      */
     private void tfPageSizeKeyPressed(final java.awt.event.KeyEvent evt) { //GEN-FIRST:event_tfPageSizeKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            refresh();
+            try {
+                tfPageSize.commitEdit();
+                refresh();
+            } catch (final ParseException ex) {
+            }
         }
     }                                                                      //GEN-LAST:event_tfPageSizeKeyPressed
 
@@ -429,10 +437,11 @@ public class PaginationPanel extends javax.swing.JPanel {
     private void setPage(int page) {
         setPageSize(((Long)tfPageSize.getValue()).intValue());
 
+        if (page > getLastPage()) {
+            page = getLastPage();
+        }
         if (page < getFirstPage()) {
             page = 1;
-        } else if (page > getLastPage()) {
-            page = getLastPage();
         }
 
         this.page = page;

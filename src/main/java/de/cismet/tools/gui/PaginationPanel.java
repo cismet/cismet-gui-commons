@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import org.openide.util.Exceptions;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;

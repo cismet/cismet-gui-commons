@@ -18,10 +18,14 @@ package de.cismet.lookupoptions.options;
 
 import org.openide.util.lookup.ServiceProvider;
 
+import javax.swing.JOptionPane;
+
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
 
 import de.cismet.security.WebAccessManager;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -101,7 +105,11 @@ public class CredentialsOptionsPanel extends AbstractOptionsPanel implements Opt
      * @param  evt  DOCUMENT ME!
      */
     private void btnResetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnResetActionPerformed
-        WebAccessManager.getInstance().resetWSSCredentials();
+        WebAccessManager.getInstance().resetCredentials();
+        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+            org.openide.util.NbBundle.getMessage(
+                CredentialsOptionsPanel.class,
+                "CredentialsOptionsPanel.OptionController.success_message"));
     }                                                                            //GEN-LAST:event_btnResetActionPerformed
 
     @Override

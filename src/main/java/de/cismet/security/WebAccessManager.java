@@ -138,6 +138,22 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
     }
 
     /**
+     * DOCUMENT ME!
+     */
+    public void resetCredentials() {
+        for (final AccessHandler wmsHandler : allHandlers.values()) {
+            // pruefen ob vom Typ HTTPBasedAccessHandler
+            if ((wmsHandler != null) && (wmsHandler instanceof HTTPBasedAccessHandler)) {
+                // proxy setzen
+                if (log.isDebugEnabled()) {
+                    log.debug("reset credentials"); // NOI18N
+                }
+                ((HTTPBasedAccessHandler)wmsHandler).resetCredentials();
+            }
+        }
+    }
+
+    /**
      * Returns the Proxy-Object of the HTTP-AccessHandler or (if it not exists) the Proxy-Object of the
      * WSS-AccessHandler or null if no proxy exists.
      *

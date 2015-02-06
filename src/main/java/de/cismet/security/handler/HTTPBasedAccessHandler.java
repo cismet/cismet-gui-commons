@@ -195,4 +195,14 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
 
         return cp;
     }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void resetCredentials() {
+        for (final GUICredentialsProvider prov : httpCredentialsForURLS.values()) {
+            prov.setUsernamePassword(null);
+        }
+        httpCredentialsForURLS.clear();
+    }
 }

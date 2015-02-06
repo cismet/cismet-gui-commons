@@ -106,7 +106,9 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
     /**
      * DOCUMENT ME!
      */
+    @Override
     public void resetCredentials() {
+        super.resetCredentials();
         wssAccessorMapping.clear();
     }
 

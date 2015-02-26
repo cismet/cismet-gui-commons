@@ -166,6 +166,17 @@ public class SimpleBandModel implements BandModel, BandListener {
      *
      * @param  e  DOCUMENT ME!
      */
+    public void fireBandModelSelectionChanged(final BandModelEvent e) {
+        for (final BandModelListener bml : listeners) {
+            bml.bandModelSelectionChanged(e);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     public void fireBandModelValuesChanged(final BandModelEvent e) {
         for (final BandModelListener bml : listeners) {
             bml.bandModelValuesChanged(e);

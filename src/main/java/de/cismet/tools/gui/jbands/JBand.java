@@ -951,11 +951,14 @@ public class JBand extends JPanel implements ActionListener,
             sbm.fireBandModelSelectionChanged(e);
         }
     }
-    
+
+    /**
+     * DOCUMENT ME!
+     */
     public void dispose() {
         if (model != null) {
-            for (int i = 0; i < model.getNumberOfBands();++i) {
-                Band band = model.getBand(i);
+            for (int i = 0; i < model.getNumberOfBands(); ++i) {
+                final Band band = model.getBand(i);
 
                 if (band instanceof DisposableBand) {
                     ((DisposableBand)band).dispose();

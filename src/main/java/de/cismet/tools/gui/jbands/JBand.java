@@ -65,6 +65,7 @@ import de.cismet.tools.gui.jbands.interfaces.BandPostfixProvider;
 import de.cismet.tools.gui.jbands.interfaces.BandPrefixProvider;
 import de.cismet.tools.gui.jbands.interfaces.BandSnappingPointProvider;
 import de.cismet.tools.gui.jbands.interfaces.BandWeightProvider;
+import de.cismet.tools.gui.jbands.interfaces.DisposableBand;
 import de.cismet.tools.gui.jbands.interfaces.Section;
 import de.cismet.tools.gui.jbands.interfaces.Spot;
 import de.cismet.tools.gui.jbands.interfaces.StationaryBandMemberMouseListeningComponent;
@@ -157,42 +158,7 @@ public class JBand extends JPanel implements ActionListener,
         bandsPanel.setOpaque(false);
         bandsPanel.addMouseMotionListener(this);
         bandsPanel.addMouseListener(this);
-        bandsPanel.addKeyListener(this);
-        legendPanel.addKeyListener(this);
-        postfixPanel.addKeyListener(this);
-        bandsPanel.getActionMap().put(KeyStroke.getKeyStroke('a'), new AbstractAction() {
 
-                @Override
-                public Object getValue(final String key) {
-                    return null;
-                }
-
-                @Override
-                public void putValue(final String key, final Object value) {
-                }
-
-                @Override
-                public void setEnabled(final boolean b) {
-                }
-
-                @Override
-                public boolean isEnabled() {
-                    return true;
-                }
-
-                @Override
-                public void addPropertyChangeListener(final PropertyChangeListener listener) {
-                }
-
-                @Override
-                public void removePropertyChangeListener(final PropertyChangeListener listener) {
-                }
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    System.out.println("drin");
-                }
-            });
         setFocusable(true);
         bandsPanel.setFocusable(true);
         legendPanel.setFocusable(true);
@@ -812,12 +778,12 @@ public class JBand extends JPanel implements ActionListener,
                         if (selecteable.isSelectable() && !selecteable.isSelected()
                                     && !selectedBandMember.contains(selecteable)) {
                             // select band member
-                            selecteable.setSelected(true);
                             if (!selectedBandMember.isEmpty()
                                         && !((selectionMode == SelectionMode.MULTIPLE_INTERVAL_SELECTION)
                                             && (e.isShiftDown() || e.isControlDown()))) {
                                 deselectAllBandMember();
                             }
+                            selecteable.setSelected(true);
 
                             if ((selectionMode == SelectionMode.MULTIPLE_INTERVAL_SELECTION) && e.isShiftDown()
                                         && !selectedBandMember.isEmpty()) {
@@ -983,6 +949,23 @@ public class JBand extends JPanel implements ActionListener,
             final BandModelEvent e = new BandModelEvent();
             e.setSelectionLost(true);
             sbm.fireBandModelSelectionChanged(e);
+        }
+    }
+    
+    public void dispose() {
+        if (model != null) {
+            for (int i = 0; i < model.getNumberOfBands();++i) {
+                Band band = model.getBand(i);
+
+                if (band instanceof DisposableBand) {
+                    ((DisposableBand)band).dispose();
+                }
+
+                for (int mi = 0; mi < band.getNumberOfMembers(); ++mi) {
+                    band.getMember(mi).getBandMemberComponent().removeMouseListener(this);
+                    band.getMember(mi).getBandMemberComponent().removeMouseMotionListener(this);
+                }
+            }
         }
     }
 

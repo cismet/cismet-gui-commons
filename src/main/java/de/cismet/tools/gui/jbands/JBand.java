@@ -1109,7 +1109,7 @@ public class JBand extends JPanel implements ActionListener,
         if (!refreshAvoided) {
             init();
             if ((e != null) && e.isSelectionLost()) {
-                selectedBandMember = null;
+                selectedBandMember.clear();
             }
             EventQueue.invokeLater(new Runnable() {
 
@@ -1125,7 +1125,7 @@ public class JBand extends JPanel implements ActionListener,
     public void bandModelValuesChanged(final BandModelEvent e) {
         if (!refreshAvoided) {
             if ((e != null) && e.isSelectionLost()) {
-                selectedBandMember = null;
+                selectedBandMember.clear();
             }
             layoutBandMemberComponents();
             repaint();

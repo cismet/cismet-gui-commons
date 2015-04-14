@@ -163,7 +163,7 @@ public class JBand extends JPanel implements ActionListener,
         bandsPanel.setFocusable(true);
         legendPanel.setFocusable(true);
         postfixPanel.setFocusable(true);
-        this.addKeyListener(this);
+//        this.addKeyListener(this);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));

@@ -17,8 +17,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +29,8 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.cismet.commons.security.AccessHandler;
 import de.cismet.commons.security.AccessHandler.ACCESS_HANDLER_TYPES;
@@ -527,7 +532,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
                         log.debug("Handler supports access method '" + accessMethod + "'."); // NOI18N
                     }
 
-                    return handler.doRequest(url, requestParameter, accessMethod, options);
+                    final URL encodedUrl = encodeUrlIfNeeded(url);
+                    return handler.doRequest(encodedUrl, requestParameter, accessMethod, options);
                 } else {
                     throw new AccessMethodIsNotSupportedException("The access method '" + accessMethod
                                 + "' is not supported by handler '" // NOI18N
@@ -540,7 +546,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
                 }
 
                 if (defaultHandler != null) {
-                    return defaultHandler.doRequest(url, requestParameter, accessMethod, options);
+                    final URL encodedUrl = encodeUrlIfNeeded(url);
+                    return defaultHandler.doRequest(encodedUrl, requestParameter, accessMethod, options);
                 } else {
                     throw new NoHandlerForURLException("No default handler available."); // NOI18N
                 }
@@ -556,6 +563,35 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
 
             readLock.unlock();
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  MalformedURLException         DOCUMENT ME!
+     * @throws  UnsupportedEncodingException  DOCUMENT ME!
+     */
+    public static URL encodeUrlIfNeeded(final URL url) throws MalformedURLException, UnsupportedEncodingException {
+        // allowed URI characters according to RFC 3986 => https://tools.ietf.org/html/rfc3986
+        final String allowedCharacters =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=";
+        // group all characters that not matches one of the allowed characters
+        final String regex = "([^" + Pattern.quote(allowedCharacters) + "]*)";
+
+        final Pattern p = Pattern.compile(regex);
+        final Matcher m = p.matcher(url.toString());
+        final URL encodedUrl;
+        if (m.find()) {
+            encodedUrl = new URL(URLEncoder.encode(url.toString(), "UTF8"));
+        } else {
+            encodedUrl = url;
+        }
+
+        return encodedUrl;
     }
 
     @Override
@@ -590,7 +626,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
                         log.debug("Handler supports access method + '" + ACCESS_METHODS.POST_REQUEST + "'."); // NOI18N
                     }
 
-                    return handler.doRequest(url, requestParameter, options);
+                    final URL encodedUrl = encodeUrlIfNeeded(url);
+                    return handler.doRequest(encodedUrl, requestParameter, options);
                 } else {
                     throw new AccessMethodIsNotSupportedException("The access method '" + ACCESS_METHODS.POST_REQUEST
                                 + "' is not supported by handler '" // NOI18N
@@ -604,7 +641,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
                 }
 
                 if (defaultHandler != null) {
-                    return defaultHandler.doRequest(url, requestParameter, options);
+                    final URL encodedUrl = encodeUrlIfNeeded(url);
+                    return defaultHandler.doRequest(encodedUrl, requestParameter, options);
                 } else {
                     throw new NoHandlerForURLException("No default handler available."); // NOI18N
                 }
@@ -638,7 +676,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
         // be accessible, the exceptions are only logged in the debug mode.
         InputStream inputStream = null;
         try {
-            inputStream = this.doRequest(url, "", AccessHandler.ACCESS_METHODS.HEAD_REQUEST);
+            final URL encodedUrl = encodeUrlIfNeeded(url);
+            inputStream = this.doRequest(encodedUrl, "", AccessHandler.ACCESS_METHODS.HEAD_REQUEST);
             urlAccessible = (inputStream != null) ? true : false;
         } catch (final MissingArgumentException ex) {
             if (log.isDebugEnabled()) {

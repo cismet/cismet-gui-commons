@@ -35,9 +35,12 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+
+import de.cismet.tools.gui.downloadmanager.DownloadManager;
 
 /**
  * DOCUMENT ME!
@@ -778,6 +781,96 @@ public class StaticSwingTools {
             config.apply();
         } catch (Exception e) {
             log.warn("Problem during TweakingUI", e);
+        }
+    }
+
+    /**
+     * Opens a JFileChooser with a filter for the given file extensions and checks if the chosen file has the right
+     * extension. If not the first right extension is added.
+     *
+     * @param   currentDirectoryPath      The currebnt path that should be shown in the dialog
+     * @param   isSaveDialog              True, if a save dialog should be shown. Otherwise a open dialog will be shown
+     * @param   allowedFileExtension      all allowed file extensions or null, if every extension should be allowed
+     * @param   fileExtensionDescription  The description of the file extension.
+     * @param   parent                    the parent component of the dialog
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static File chooseFile(final String currentDirectoryPath,
+            final boolean isSaveDialog,
+            final String[] allowedFileExtension,
+            final String fileExtensionDescription,
+            final Component parent) {
+        JFileChooser fc;
+
+        try {
+            fc = new ConfirmationJFileChooser(currentDirectoryPath);
+        } catch (Exception bug) {
+            // Bug Workaround http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6544857
+            fc = new JFileChooser(currentDirectoryPath, new RestrictedFileSystemView());
+        }
+
+        final FileFilter fileFilter = new FileFilter() {
+
+                @Override
+                public boolean accept(final File f) {
+                    boolean fileAllowed = f.isDirectory();
+
+                    if (allowedFileExtension == null) {
+                        fileAllowed = true;
+                    } else if (!fileAllowed) {
+                        final String extension = (f.getName().contains(".")
+                                ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
+
+                        for (final String allowedExt : allowedFileExtension) {
+                            if (extension.equals(allowedExt)) {
+                                fileAllowed = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    return fileAllowed;
+                }
+
+                @Override
+                public String getDescription() {
+                    String description = fileExtensionDescription;
+
+                    if ((description == null) && (allowedFileExtension != null)) {
+                        for (final String allowedExt : allowedFileExtension) {
+                            if (description == null) {
+                                description = allowedExt;
+                            } else {
+                                description += ", " + allowedExt;
+                            }
+                        }
+                    } else {
+                        description += "";
+                    }
+
+                    return description;
+                }
+            };
+
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.setFileFilter(fileFilter);
+
+        final int state = (isSaveDialog ? fc.showSaveDialog(parent) : fc.showOpenDialog(parent));
+        if (log.isDebugEnabled()) {
+            log.debug("state:" + state); // NOI18N
+        }
+
+        if (state == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+
+            if (!fileFilter.accept(file)) {
+                file = new File(file.getAbsolutePath() + "." + allowedFileExtension[0]);
+            }
+
+            return file;
+        } else {
+            return null;
         }
     }
 }

@@ -13,6 +13,8 @@ package de.cismet.tools.gui;
 
 import org.apache.log4j.Logger;
 
+import org.openide.util.Cancellable;
+
 import java.awt.EventQueue;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -25,7 +27,7 @@ import javax.swing.Icon;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public abstract class WaitingDialogThread<T> implements Runnable {
+public abstract class WaitingDialogThread<T> implements Runnable, Cancellable {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -38,12 +40,15 @@ public abstract class WaitingDialogThread<T> implements Runnable {
     private int delay = 0;
     private volatile boolean isAlive = true;
     private volatile boolean shouldBeSetVisible = false;
-    private java.awt.Frame parent;
-    private boolean modal;
-    private String text;
-    private Icon icon;
+    private final java.awt.Frame parent;
+    private final boolean modal;
+    private final String text;
+    private final Icon icon;
     private T backgroundResult;
     private Exception thrownException;
+    private final boolean cancellable;
+    private Thread worker = null;
+    private boolean canceled = false;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -61,11 +66,32 @@ public abstract class WaitingDialogThread<T> implements Runnable {
             final String text,
             final Icon icon,
             final int delay) {
+        this(parent, modal, text, icon, delay, false);
+    }
+
+    /**
+     * Creates a new WaitingDialogThread object.
+     *
+     * @param  parent       paretn frame
+     * @param  modal        true, if the dialog should be modal
+     * @param  text         the text that should be shown in the dialog
+     * @param  icon         the icon of the dialog
+     * @param  delay        after this delay, the dialog should be shown
+     * @param  cancellable  true, if a cancel button should be shown and the {@link #doInBackground()} method should
+     *                      handle the interrupt signal, if this is true
+     */
+    public WaitingDialogThread(final java.awt.Frame parent,
+            final boolean modal,
+            final String text,
+            final Icon icon,
+            final int delay,
+            final boolean cancellable) {
         this.parent = parent;
         this.modal = modal;
         this.text = text;
         this.icon = icon;
         this.delay = delay;
+        this.cancellable = cancellable;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -109,6 +135,18 @@ public abstract class WaitingDialogThread<T> implements Runnable {
         }
     }
 
+    @Override
+    public boolean cancel() {
+        canceled = true;
+        try {
+            worker.interrupt();
+        } catch (SecurityException e) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * starts the implemented task.
      */
@@ -120,15 +158,20 @@ public abstract class WaitingDialogThread<T> implements Runnable {
         isAlive = true;
         shouldBeSetVisible = false;
         thrownException = null;
-        wd = new WaitDialog(parent, modal, text, icon);
         final ReentrantLock lock = new ReentrantLock();
+
+        if (cancellable) {
+            wd = new WaitDialog(parent, modal, text, icon, this);
+        } else {
+            wd = new WaitDialog(parent, modal, text, icon);
+        }
 
         final Thread t = new Thread(new Runnable() {
 
                     @Override
                     public void run() {
                         try {
-                            final Thread worker = new Thread(WaitingDialogThread.this);
+                            worker = new Thread(WaitingDialogThread.this);
                             worker.start();
 
                             try {
@@ -183,7 +226,9 @@ public abstract class WaitingDialogThread<T> implements Runnable {
             StaticSwingTools.showDialog(wd);
         }
 
-        // starts the task in the edt without waiting dialog
-        done();
+        if (!canceled) {
+            // starts the task in the edt without waiting dialog
+            done();
+        }
     }
 }

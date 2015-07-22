@@ -130,9 +130,9 @@
             <version>1.5.8</version>
         </dependency>
         <dependency>
-            <groupId>jasperreports</groupId>
+            <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>3.5.2</version>
+            <version>6.0.4</version>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>

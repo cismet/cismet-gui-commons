@@ -133,6 +133,7 @@ public class JBand extends JPanel implements ActionListener,
     private Component lastPressedComponent = null;
     private boolean dragged = false;
     private SelectionMode selectionMode = SelectionMode.SINGLE_SELECTION;
+    private boolean hideEmptyPrePostfix = false;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -151,9 +152,7 @@ public class JBand extends JPanel implements ActionListener,
     public JBand(final boolean readOnly) {
         this.readOnly = readOnly;
         setLayout(new BorderLayout());
-        add(legendPanel, BorderLayout.LINE_START);
         add(scrollPane, BorderLayout.CENTER);
-        add(postfixPanel, BorderLayout.LINE_END);
         setOpaque(false);
         bandsPanel.setOpaque(false);
         bandsPanel.addMouseMotionListener(this);
@@ -181,6 +180,28 @@ public class JBand extends JPanel implements ActionListener,
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the hideEmptyPrePostfix
+     */
+    public boolean isHideEmptyPrePostfix() {
+        return hideEmptyPrePostfix;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  hideEmptyPrePostfix  the hideEmptyPrePostfix to set
+     */
+    public void setHideEmptyPrePostfix(final boolean hideEmptyPrePostfix) {
+        this.hideEmptyPrePostfix = hideEmptyPrePostfix;
+
+        if (model != null) {
+            init();
+        }
+    }
 
     /**
      * DOCUMENT ME!
@@ -354,6 +375,28 @@ public class JBand extends JPanel implements ActionListener,
             }
         }
 
+        if (isHideEmptyPrePostfix()) {
+            if (!Arrays.asList(getComponents()).contains(legendPanel) && (legendPanel.getComponentCount() > 0)) {
+                add(legendPanel, BorderLayout.LINE_START);
+            } else if (Arrays.asList(getComponents()).contains(legendPanel) && (legendPanel.getComponentCount() == 0)) {
+                remove(legendPanel);
+            }
+
+            if (!Arrays.asList(getComponents()).contains(postfixPanel) && (postfixPanel.getComponentCount() > 0)) {
+                add(postfixPanel, BorderLayout.LINE_END);
+            } else if (Arrays.asList(getComponents()).contains(postfixPanel)
+                        && (postfixPanel.getComponentCount() == 0)) {
+                remove(postfixPanel);
+            }
+        } else {
+            if (!Arrays.asList(getComponents()).contains(legendPanel)) {
+                add(legendPanel, BorderLayout.LINE_START);
+            }
+
+            if (!Arrays.asList(getComponents()).contains(postfixPanel)) {
+                add(postfixPanel, BorderLayout.LINE_END);
+            }
+        }
         realWidth = getMaxValue() - getMinValue();
 
         layoutBandMemberComponents();
@@ -1267,6 +1310,7 @@ public class JBand extends JPanel implements ActionListener,
         jf.setVisible(true);
         final java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         jf.setBounds((screenSize.width - 800) / 2, (screenSize.height - 222) / 2, 1000, 222);
+        jbdTest.setHideEmptyPrePostfix(true);
     }
 
     /**

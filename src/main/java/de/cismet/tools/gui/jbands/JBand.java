@@ -25,8 +25,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import java.beans.PropertyChangeListener;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,8 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -44,7 +40,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.KeyStroke;
 import javax.swing.RepaintManager;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
@@ -1389,6 +1384,29 @@ public class JBand extends JPanel implements ActionListener,
     private double getSationForXValue(final int x) {
         return ((double)Math.round(((realWidth * (x) / (bandsPanel.getWidth())) + minValue)
                             * 10.0)) / 10.0;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  bandMember  DOCUMENT ME!
+     */
+    public void scrollToBandMember(final BandMember bandMember) {
+        final double min = bandMember.getMin();
+        final double max = bandMember.getMax();
+        final double len = max - min;
+        final double mid = min + (len / 2);
+        final double fac = mid / (maxValue);
+
+        // soll dafür sorgen, dass die mitte de members genau in die Mitte der scrollpane gescrollt wird
+        // nicht adäquat aber vorerst ausreichend
+        final double facCorrected = 0.5 - ((0.5 - fac) * zoomFactor * 3);
+
+        final double sblen = scrollPane.getHorizontalScrollBar().getMaximum()
+                    - scrollPane.getHorizontalScrollBar().getWidth();
+
+        scrollPane.getHorizontalScrollBar().setValue((int)(sblen * facCorrected));
+//        scrollPane.scrollRectToVisible(rectangle);
     }
 
     //~ Inner Classes ----------------------------------------------------------

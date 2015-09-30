@@ -7,6 +7,10 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Metadata;
+
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageDecoder;
@@ -19,6 +23,7 @@ import java.awt.image.SampleModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.lang.ref.SoftReference;
 
@@ -164,6 +169,23 @@ public class MultiPagePictureReader {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     *
+     * @throws  IOException  DOCUMENT ME!
+     */
+    public Metadata getMetadata() throws IOException {
+        try {
+            final InputStream is = decoder.getInputStream();
+            return ImageMetadataReader.readMetadata(is);
+        } catch (ImageProcessingException ex) {
+            LOG.error("unable to process metadata", ex);
+            return null;
+        }
+    }
 
     /**
      * DOCUMENT ME!

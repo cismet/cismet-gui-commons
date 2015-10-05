@@ -7,10 +7,6 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Metadata;
-
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageDecoder;
@@ -44,8 +40,8 @@ public class MultiPagePictureReader {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(MultiPagePictureReader.class);
     private static final int MB = 1024 * 1024;
-    private static final String CODEC_JPEG = "jpeg"; // NOI18N
-    private static final String CODEC_TIFF = "tiff"; // NOI18N
+    public static final String CODEC_JPEG = "jpeg"; // NOI18N
+    public static final String CODEC_TIFF = "tiff"; // NOI18N
 
     //~ Instance fields --------------------------------------------------------
 
@@ -55,6 +51,8 @@ public class MultiPagePictureReader {
     private final SoftReference<BufferedImage>[] cache;
     private final boolean caching;
     private final boolean checkHeapSize;
+    private final SeekableStream stream;
+    private final String codec;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -95,7 +93,7 @@ public class MultiPagePictureReader {
             throw new IOException("Could not open file: " + imageFile); // NOI18N
         }
 
-        final String codec = getCodecString(imageFile.getName());
+        codec = getCodecString(imageFile.getName());
         if (codec == null) {
             throw new IOException("Unsupported filetype: " + imageFile.getAbsolutePath()
                         + " is not a tiff or jpeg file!"); // NOI18N
@@ -105,8 +103,8 @@ public class MultiPagePictureReader {
         this.caching = caching;
         this.checkHeapSize = checkHeapSize;
 
-        final SeekableStream ss = new FileSeekableStream(imageFile);
-        decoder = ImageCodec.createImageDecoder(codec, ss, null);
+        stream = new FileSeekableStream(imageFile);
+        decoder = ImageCodec.createImageDecoder(codec, stream, null);
 
         pageCount = decoder.getNumPages();
 
@@ -136,7 +134,7 @@ public class MultiPagePictureReader {
             throw new IllegalArgumentException("Cannot open a null URL.");
         }
 
-        final String codec = getCodecString(imageURL.toExternalForm());
+        codec = getCodecString(imageURL.toExternalForm());
 
         if (codec == null) {
             throw new IOException("Unsupported filetype: '" + imageURL.toExternalForm()
@@ -147,7 +145,6 @@ public class MultiPagePictureReader {
         this.caching = caching;
         this.checkHeapSize = checkHeapSize;
 
-        final SeekableStream stream;
         try {
             stream = new MemoryCacheSeekableStream(WebAccessManager.getInstance().doRequest(imageURL));
         } catch (final Exception ex) {
@@ -174,17 +171,14 @@ public class MultiPagePictureReader {
      * DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
-     *
-     * @throws  IOException  DOCUMENT ME!
      */
-    public Metadata getMetadata() throws IOException {
+    public InputStream getInputStream() {
         try {
-            final InputStream is = decoder.getInputStream();
-            return ImageMetadataReader.readMetadata(is);
-        } catch (ImageProcessingException ex) {
-            LOG.error("unable to process metadata", ex);
-            return null;
+            stream.reset();
+        } catch (IOException ex) {
+            LOG.fatal(ex, ex);
         }
+        return stream;
     }
 
     /**
@@ -304,6 +298,15 @@ public class MultiPagePictureReader {
         }
 
         return result;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public String getCodec() {
+        return codec;
     }
 
     /**

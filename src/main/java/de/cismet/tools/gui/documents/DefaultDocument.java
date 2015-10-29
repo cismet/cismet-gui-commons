@@ -193,11 +193,21 @@ public class DefaultDocument implements Document {
 
                 try {
                     if (webDavClient != null) {
-                        ii = new ImageIcon(WebDavHelper.downloadImageFromWebDAV(
-                                    documentURI,
-                                    webDavDirectory,
-                                    webDavClient,
-                                    parent));
+                        if (WebDavHelper.isUrlAccessible(webDavClient, documentURI)) {
+                            ii = new ImageIcon(WebDavHelper.downloadImageFromWebDAV(
+                                        documentURI,
+                                        webDavDirectory,
+                                        webDavClient,
+                                        parent));
+                        } else {
+                            ii = new ImageIcon(WebDavHelper.downloadImageFromWebDAV(
+                                        documentURI
+                                                + ".thumbnail."
+                                                + extension,
+                                        webDavDirectory,
+                                        webDavClient,
+                                        parent));
+                        }
                     } else {
                         ii = new ImageIcon(GraphicsUtilities.loadCompatibleImage(new URL(documentURI)));
                     }

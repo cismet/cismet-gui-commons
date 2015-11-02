@@ -21,10 +21,7 @@ import org.openide.util.NbBundle;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import java.io.File;
 
@@ -35,7 +32,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AbstractDocument;
@@ -55,23 +51,24 @@ import de.cismet.tools.gui.downloadmanager.Download.State;
  * @author   jweintraut
  * @version  $Revision$, $Date$
  */
-public class DownloadManagerDialog extends javax.swing.JDialog implements WindowListener, DownloadListChangedListener {
+public class DownloadManagerDialog extends javax.swing.JDialog implements DownloadListChangedListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static Logger LOG = Logger.getLogger(DownloadManagerDialog.class);
-
-    private static DownloadManagerDialog instance;
-    private static boolean askForJobname = false;
-    private static boolean openAutomatically = true;
-    private static boolean closeAutomatically = true;
-    private static String jobname = "";
+    private static final Logger LOG = Logger.getLogger(DownloadManagerDialog.class);
+    private static DownloadManagerDialog INSTANCE;
 
     //~ Instance fields --------------------------------------------------------
 
-    private boolean isJobnameConfirmed = true;
+    private boolean askForJobNameEnabled = false;
+    private boolean openAutomaticallyEnabled = true;
+    private boolean closeAutomaticallyEnabled = true;
+    private boolean closeMainDialogAfterClosingSubDialog = false;
+    private String jobName = "";
 
-    private Collection<Download> downloadsToOpen = new LinkedList<Download>();
+    private boolean jobNameConfirmed = true;
+
+    private final Collection<Download> downloadsToOpen = new LinkedList<Download>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
@@ -103,11 +100,9 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
 
     /**
      * Creates new form DownloadManagerDialog.
-     *
-     * @param  parent  The parent frame.
      */
-    private DownloadManagerDialog(final java.awt.Frame parent) {
-        super(parent, false);
+    private DownloadManagerDialog() {
+        super((Frame)null, false);
 
         initComponents();
 
@@ -136,51 +131,44 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     //~ Methods ----------------------------------------------------------------
 
     /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static DownloadManagerDialog getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new DownloadManagerDialog();
+            INSTANCE.pack();
+            DownloadManager.instance().addDownloadListChangedListener(INSTANCE);
+        }
+
+        return INSTANCE;
+    }
+
+    /**
      * Creates or returns the singleton object.
      *
      * @param       parent  The parent frame of this dialog.
      *
      * @return      The singleton instance.
      *
-     * @deprecated  Use instance(Component) instead.
+     * @deprecated  Use getInstance() instead.
      */
     public static DownloadManagerDialog instance(final Frame parent) {
-        if (instance == null) {
-            instance = new DownloadManagerDialog(parent);
-            DownloadManager.instance().addDownloadListChangedListener(instance);
-
-            instance.addWindowListener(instance);
-            instance.setPreferredSize(new Dimension(450, 500));
-            instance.setLocationRelativeTo(parent);
-        }
-
-        return instance;
+        return getInstance();
     }
 
     /**
      * Creates or returns the singleton object.
      *
-     * @param   parent  The parent frame of this dialog.
-     *
-     * @return  The singleton instance.
-     */
-    public static DownloadManagerDialog instance(final Component parent) {
-        return instance((parent instanceof Frame) ? (Frame)parent : StaticSwingTools.getParentFrame(parent));
-    }
-
-    /**
-     * If no download manager dialog exists, this method will instantiate and display a download manager dialog.
-     *
      * @param       parent  The parent frame of this dialog.
      *
-     * @deprecated  Use show(Component) instead.
+     * @return      The singleton instance.
+     *
+     * @deprecated  Use getInstance() instead.
      */
-    public static void show(final Frame parent) {
-        if (instance == null) {
-            final DownloadManagerDialog dialog = instance(parent);
-            dialog.pack();
-            StaticSwingTools.showDialog(dialog);
-        }
+    public static DownloadManagerDialog instance(final Component parent) {
+        return getInstance();
     }
 
     /**
@@ -189,11 +177,8 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      * @param  parent  The parent frame of this dialog.
      */
     public static void show(final Component parent) {
-        if (instance == null) {
-            final DownloadManagerDialog dialog = instance(parent);
-            dialog.setVisible(true);
-            dialog.pack();
-        }
+        final DownloadManagerDialog dialog = getInstance();
+        StaticSwingTools.showDialog(parent, dialog, true);
     }
 
     /**
@@ -203,28 +188,41 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      *
      * @return      The jobname specified by the user.
      *
-     * @deprecated  Use showAskingForUserTitle(Component) instead.
+     * @deprecated  use getInstance().showAskingForUserTitleDialog(Component) instead.
      */
     public static boolean showAskingForUserTitle(final Frame parent) {
-        final boolean close = (instance == null);
-        show(parent);
-        boolean result = instance.isJobnameConfirmed;
+        return getInstance().showAskingForUserTitleDialog(parent);
+    }
 
-        if (askForJobname) {
-            instance.txtJobname.setText(jobname);
-            instance.txtJobname.setCaretPosition(jobname.length());
-            if ((instance.dlgJobname.getOwner() != null) && (parent != null) && (parent.getIconImage() != null)) {
-                instance.dlgJobname.getOwner().setIconImage(parent.getIconImage());
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   parent  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean showAskingForUserTitleDialog(final Component parent) {
+        final Frame parentFrame = (parent instanceof Frame) ? (Frame)parent : StaticSwingTools.getParentFrame(parent);
+
+        final boolean close = !isVisible();
+        show(parentFrame);
+        boolean result = isJobNameConfirmed();
+
+        if (isAskForJobNameEnabled()) {
+            txtJobname.setText(getJobName());
+            txtJobname.setCaretPosition(getJobName().length());
+            if ((dlgJobname.getOwner() != null) && (parentFrame != null) && (parentFrame.getIconImage() != null)) {
+                dlgJobname.getOwner().setIconImage(parentFrame.getIconImage());
             }
-            instance.dlgJobname.setPreferredSize(instance.dlgJobname.getMinimumSize());
-            instance.dlgJobname.pack();
+            dlgJobname.setPreferredSize(dlgJobname.getMinimumSize());
+            dlgJobname.pack();
 
-            StaticSwingTools.showDialog(instance.dlgJobname);
+            StaticSwingTools.showDialog(dlgJobname);
 
-            result = instance.isJobnameConfirmed;
+            result = isJobNameConfirmed();
 
-            if (!instance.isJobnameConfirmed && close) {
-                close();
+            if (!isJobNameConfirmed() && close) {
+                closeWindow();
             }
         }
 
@@ -234,12 +232,25 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
     /**
      * Displays the DownloadManagerDialog and asks - if user wants to - for a jobname.
      *
-     * @param   parent  The parent frame.
+     * @param       parent  The parent frame.
      *
-     * @return  The jobname specified by the user.
+     * @return      The jobname specified by the user.
+     *
+     * @deprecated  use getInstance().showAskingForUserTitleDialog(Component) instead.
      */
     public static boolean showAskingForUserTitle(final Component parent) {
-        return showAskingForUserTitle(StaticSwingTools.getParentFrame(parent));
+        return getInstance().showAskingForUserTitleDialog(parent);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param       download  DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().showTheExceptionDialog(download) instead
+     */
+    public static void showExceptionDialog(final Download download) {
+        getInstance().showTheExceptionDialog(download);
     }
 
     /**
@@ -247,7 +258,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      *
      * @param  download  The erroneous download.
      */
-    public static void showExceptionDialog(final Download download) {
+    public void showTheExceptionDialog(final Download download) {
         if (download.getCaughtException() == null) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("There is no exception to visualize.");
@@ -255,19 +266,19 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
             return;
         }
 
-        final Frame parent = StaticSwingTools.getParentFrame(instance);
-        if ((instance.dlgExceptionDialog.getOwner() != null) && (parent != null) && (parent.getIconImage() != null)) {
-            instance.dlgJobname.getOwner().setIconImage(parent.getIconImage());
+        final Frame parent = StaticSwingTools.getParentFrame(this);
+        if ((dlgExceptionDialog.getOwner() != null) && (parent != null) && (parent.getIconImage() != null)) {
+            dlgJobname.getOwner().setIconImage(parent.getIconImage());
         }
 
         final JPanel exceptionPanel = download.getExceptionPanel(download.getCaughtException());
 
         if (exceptionPanel != null) {
-            instance.pnlExceptionDialogContainer.removeAll();
-            instance.pnlExceptionDialogContainer.add(exceptionPanel, BorderLayout.CENTER);
-            instance.dlgExceptionDialog.invalidate();
-            instance.dlgExceptionDialog.pack();
-            StaticSwingTools.showDialog(instance.dlgExceptionDialog);
+            pnlExceptionDialogContainer.removeAll();
+            pnlExceptionDialogContainer.add(exceptionPanel, BorderLayout.CENTER);
+            dlgExceptionDialog.invalidate();
+            dlgExceptionDialog.pack();
+            StaticSwingTools.showDialog(dlgExceptionDialog);
         } else {
             final Exception ex = download.getCaughtException();
             final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
@@ -280,97 +291,148 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                     ex,
                     Level.ALL,
                     null);
-            JXErrorPane.showDialog(StaticSwingTools.getParentFrameIfNotNull(instance), ei);
+            JXErrorPane.showDialog(StaticSwingTools.getParentFrameIfNotNull(this), ei);
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().closeWindow() instead
+     */
+    public static void close() {
+        getInstance().closeWindow();
     }
 
     /**
      * Closes the DownloadManagerDialog.
      */
-    public static void close() {
+    public void closeWindow() {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(new Runnable() {
 
                     @Override
                     public void run() {
-                        instance.dispatchEvent(new WindowEvent(instance, WindowEvent.WINDOW_CLOSING));
+                        closeWindow();
                     }
                 });
         } else {
-            instance.dispatchEvent(new WindowEvent(instance, WindowEvent.WINDOW_CLOSING));
+            if (dlgJobname.isVisible() || dlgExceptionDialog.isVisible()) {
+                closeMainDialogAfterClosingSubDialog = true;
+            } else {
+                setVisible(false);
+            }
         }
     }
 
     /**
-     * Returns the jobname.
+     * DOCUMENT ME!
      *
-     * @return  The jobname.
+     * @return      DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().getJobName() instead
      */
     public static String getJobname() {
-        return jobname;
+        return getInstance().getJobName();
     }
 
     /**
-     * Sets the jobname. Should only be used by xome configuring component.
+     * DOCUMENT ME!
      *
-     * @param  jobname  The jobname.
+     * @param       jobname  DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().setJobName(jobname) instead
      */
     public static void setJobname(final String jobname) {
-        DownloadManagerDialog.jobname = jobname;
+        getInstance().setJobName(jobname);
     }
 
     /**
-     * If the user wants to be asked for a jobname.
+     * DOCUMENT ME!
      *
-     * @return  A flag indicating whether the user wants to be asked for a jobname.
+     * @return      DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().isAskForJobNameEnabled() instead
      */
     public static boolean isAskForJobname() {
-        return askForJobname;
+        return getInstance().isAskForJobNameEnabled();
     }
 
     /**
-     * Sets the flag whether the user wants to be asked for a jobname.
+     * DOCUMENT ME!
      *
-     * @param  askForJobname  The flag whether the user wants to be asked for a jobname.
+     * @param       askForJobname  DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().setAskForJobNameEnabled(askForJobname) instead
      */
     public static void setAskForJobname(final boolean askForJobname) {
-        DownloadManagerDialog.askForJobname = askForJobname;
+        getInstance().setAskForJobNameEnabled(askForJobname);
     }
 
     /**
-     * If the user wants the last download to be opened automatically.
+     * DOCUMENT ME!
      *
-     * @return  A flag indicating whether the user wants the last download to be opened automatically.
+     * @return      DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().isOpenAutomaticallyEnabled() instead
      */
     public static boolean isOpenAutomatically() {
-        return openAutomatically;
+        return getInstance().isOpenAutomaticallyEnabled();
     }
 
     /**
-     * Sets the flag whether the user wants the last download to be opened automatically.
+     * DOCUMENT ME!
      *
-     * @param  openAutomatically  The flag whether the user wants the last download to be opened automatically.
+     * @param       openAutomatically  DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().setOpenAutomaticallyEnabled(openAutomatically) instead
      */
     public static void setOpenAutomatically(final boolean openAutomatically) {
-        DownloadManagerDialog.openAutomatically = openAutomatically;
+        getInstance().setOpenAutomaticallyEnabled(openAutomatically);
     }
 
     /**
-     * If the user the DownloadManagerDialog to close automatically.
+     * DOCUMENT ME!
      *
-     * @return  A flag indicating whether the user wants the DownloadManagerDialog to close automatically.
+     * @return      DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().isCloseAutomaticallyEnabled() instead
      */
     public static boolean isCloseAutomatically() {
-        return closeAutomatically;
+        return getInstance().isCloseAutomaticallyEnabled();
     }
 
     /**
-     * Sets the flag whether the user wants the DownloadManagerDialog to close automatically.
+     * DOCUMENT ME!
      *
-     * @param  closeAutomatically  The flag whether the user wants the DownloadManagerDialog to close automatically.
+     * @param       closeAutomatically  DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().setCloseAutomaticallyEnabled(closeAutomatically) instead
      */
     public static void setCloseAutomatically(final boolean closeAutomatically) {
-        DownloadManagerDialog.closeAutomatically = closeAutomatically;
+        getInstance().setCloseAutomaticallyEnabled(closeAutomatically);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return      DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().isJobNameConfirmed() instead
+     */
+    public static boolean isJobnameConfirmed() {
+        return getInstance().isJobNameConfirmed();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param       isJobNameConfirmed  DOCUMENT ME!
+     *
+     * @deprecated  use getInstance().setJobNameConfirmed(isJobnameConfirmed) instead
+     */
+    public static void setJobnameConfirmed(final boolean isJobNameConfirmed) {
+        getInstance().setJobNameConfirmed(isJobNameConfirmed);
     }
 
     /**
@@ -571,9 +633,9 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
         dlgExceptionDialog.getContentPane().add(btnClose, gridBagConstraints);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.title")); // NOI18N
         setMinimumSize(new java.awt.Dimension(423, 300));
+        setPreferredSize(new java.awt.Dimension(450, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         scpDownloadManagerPanel.setBorder(null);
@@ -669,9 +731,13 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      * @param  evt  The event.
      */
     private void btnOKActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOKActionPerformed
-        jobname = txtJobname.getText();
-        isJobnameConfirmed = true;
-        dlgJobname.dispose();
+        setJobName(txtJobname.getText());
+        setJobNameConfirmed(true);
+        dlgJobname.toFront();
+        dlgJobname.setVisible(false);
+        if (closeMainDialogAfterClosingSubDialog) {
+            closeWindow();
+        }
     }                                                                         //GEN-LAST:event_btnOKActionPerformed
 
     /**
@@ -680,9 +746,12 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      * @param  evt  The event.
      */
     private void txtJobnameActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtJobnameActionPerformed
-        jobname = txtJobname.getText();
-        isJobnameConfirmed = true;
-        dlgJobname.dispose();
+        setJobName(txtJobname.getText());
+        setJobNameConfirmed(true);
+        dlgJobname.setVisible(false);
+        if (closeMainDialogAfterClosingSubDialog) {
+            closeWindow();
+        }
     }                                                                              //GEN-LAST:event_txtJobnameActionPerformed
 
     /**
@@ -691,8 +760,11 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      * @param  evt  The event.
      */
     private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
-        isJobnameConfirmed = false;
-        dlgJobname.dispose();
+        setJobNameConfirmed(false);
+        dlgJobname.setVisible(false);
+        if (closeMainDialogAfterClosingSubDialog) {
+            closeWindow();
+        }
     }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
@@ -702,13 +774,107 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
      */
     private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCloseActionPerformed
         dlgExceptionDialog.setVisible(false);
+        if (closeMainDialogAfterClosingSubDialog) {
+            closeWindow();
+        }
     }                                                                            //GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * An action listener.
      *
-     * @param  event  The event.
+     * @return  DOCUMENT ME!
      */
+    /**
+     * Returns the jobname.
+     *
+     * @return  The jobname.
+     */
+    public String getJobName() {
+        return jobName;
+    }
+
+    /**
+     * Sets the jobname. Should only be used by xome configuring component.
+     *
+     * @param  jobName  The jobname.
+     */
+    public void setJobName(final String jobName) {
+        this.jobName = jobName;
+    }
+
+    /**
+     * If the user wants to be asked for a jobname.
+     *
+     * @return  A flag indicating whether the user wants to be asked for a jobname.
+     */
+    public boolean isAskForJobNameEnabled() {
+        return askForJobNameEnabled;
+    }
+
+    /**
+     * Sets the flag whether the user wants to be asked for a jobname.
+     *
+     * @param  askForJobNameEnabled  The flag whether the user wants to be asked for a jobname.
+     */
+    public void setAskForJobNameEnabled(final boolean askForJobNameEnabled) {
+        this.askForJobNameEnabled = askForJobNameEnabled;
+    }
+
+    /**
+     * If the user wants the last download to be opened automatically.
+     *
+     * @return  A flag indicating whether the user wants the last download to be opened automatically.
+     */
+    public boolean isOpenAutomaticallyEnabled() {
+        return openAutomaticallyEnabled;
+    }
+
+    /**
+     * Sets the flag whether the user wants the last download to be opened automatically.
+     *
+     * @param  openAutomaticallyEnabled  The flag whether the user wants the last download to be opened automatically.
+     */
+    public void setOpenAutomaticallyEnabled(final boolean openAutomaticallyEnabled) {
+        this.openAutomaticallyEnabled = openAutomaticallyEnabled;
+    }
+
+    /**
+     * If the user the DownloadManagerDialog to close automatically.
+     *
+     * @return  A flag indicating whether the user wants the DownloadManagerDialog to close automatically.
+     */
+    public boolean isCloseAutomaticallyEnabled() {
+        return closeAutomaticallyEnabled;
+    }
+
+    /**
+     * Sets the flag whether the user wants the DownloadManagerDialog to close automatically.
+     *
+     * @param  closeAutomaticallyEnabled  The flag whether the user wants the DownloadManagerDialog to close
+     *                                    automatically.
+     */
+    public void setCloseAutomaticallyEnabled(final boolean closeAutomaticallyEnabled) {
+        this.closeAutomaticallyEnabled = closeAutomaticallyEnabled;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isJobNameConfirmed() {
+        return jobNameConfirmed;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  jobNameConfirmed  DOCUMENT ME!
+     */
+    public void setJobNameConfirmed(final boolean jobNameConfirmed) {
+        this.jobNameConfirmed = jobNameConfirmed;
+    }
+
     /**
      * Opens a file manager pointing to the destination directory for downloads.
      *
@@ -723,7 +889,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
         switch (event.getAction()) {
             case ADDED: {
                 final Collection<Download> downloads = event.getDownloads();
-                if (openAutomatically) {
+                if (openAutomaticallyEnabled) {
                     downloadsToOpen.addAll(downloads);
                 }
             }
@@ -737,7 +903,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                 btnClearList.setEnabled((countDownloadsCompleted + countDownloadsErraneous + countDownloadsCancelled)
                             > 0);
 
-                if (openAutomatically) {
+                if (openAutomaticallyEnabled) {
                     final Iterator<Download> downloadToOpenIter = downloadsToOpen.iterator();
                     while (downloadToOpenIter.hasNext()) {
                         final Download downloadToOpen = downloadToOpenIter.next();
@@ -752,79 +918,12 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
                 }
 
                 // The second condition ensures that the dialog isn't closed after the list was cleared
-                if (closeAutomatically && (countDownloadsTotal > 0)
+                if (closeAutomaticallyEnabled && (countDownloadsTotal > 0)
                             && (countDownloadsTotal == countDownloadsCompleted)) {
-                    close();
+                    closeWindow();
                 }
             }
         }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  e  DOCUMENT ME!
-     */
-    @Override
-    public void windowOpened(final WindowEvent e) {
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  e  DOCUMENT ME!
-     */
-    @Override
-    public void windowClosing(final WindowEvent e) {
-        removeWindowListener(instance);
-        DownloadManager.instance().removeDownloadListChangedListener(pnlDownloadManagerPanel);
-        DownloadManager.instance().removeDownloadListChangedListener(instance);
-        instance = null;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  e  DOCUMENT ME!
-     */
-    @Override
-    public void windowClosed(final WindowEvent e) {
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  e  DOCUMENT ME!
-     */
-    @Override
-    public void windowIconified(final WindowEvent e) {
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  e  DOCUMENT ME!
-     */
-    @Override
-    public void windowDeiconified(final WindowEvent e) {
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  e  DOCUMENT ME!
-     */
-    @Override
-    public void windowActivated(final WindowEvent e) {
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  e  DOCUMENT ME!
-     */
-    @Override
-    public void windowDeactivated(final WindowEvent e) {
     }
 
     //J-
@@ -833,12 +932,13 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
          * Most filesystems allow all characters (except NUL) for filenames.
          * NTFS doesn't allow NUL \ / : * ? " < > |
          */
+
         private static final String FILTER = "[^\u0000\\\\/:*?\"<>|]*";
 
         @Override
         public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-            if(string != null && string.length() > 0) {
-                if(!string.matches(FILTER)) {
+            if (string != null && string.length() > 0) {
+                if (!string.matches(FILTER)) {
                     return;
                 }
             }
@@ -848,8 +948,8 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Window
 
         @Override
         public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-            if(text != null && text.length() > 0) {
-                if(!text.matches(FILTER)) {
+            if (text != null && text.length() > 0) {
+                if (!text.matches(FILTER)) {
                     return;
                 }
             }

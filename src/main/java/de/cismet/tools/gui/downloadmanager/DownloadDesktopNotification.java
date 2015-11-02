@@ -11,8 +11,6 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import org.openide.util.Exceptions;
-
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -41,11 +39,11 @@ public class DownloadDesktopNotification extends JWindow implements ActionListen
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static int XOFF = 20;
-    private static int YOFF = 30;
-    private static int PIXEL_PER_STEP = 2;
-    private static int MILLIS_TO_WAIT = 20;
-    private static Color bgColor = new Color(80, 80, 80, 170);
+    private static final int XOFF = 20;
+    private static final int YOFF = 30;
+    private static final int PIXEL_PER_STEP = 2;
+    private static final int MILLIS_TO_WAIT = 20;
+    private static final Color bgColor = new Color(80, 80, 80, 170);
 
     //~ Instance fields --------------------------------------------------------
 
@@ -53,7 +51,7 @@ public class DownloadDesktopNotification extends JWindow implements ActionListen
     int yPosFinal = 0;
     int currY = 0;
     int finalHeight;
-    private Frame parentFrame;
+    private final Frame parentFrame;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -88,9 +86,7 @@ public class DownloadDesktopNotification extends JWindow implements ActionListen
                 @Override
                 public void mouseClicked(final MouseEvent me) {
                     if (me.getClickCount() == 2) {
-                        final JDialog downloadManager = DownloadManagerDialog.instance(
-                                StaticSwingTools.getParentFrame(DownloadDesktopNotification.this));
-                        downloadManager.pack();
+                        final JDialog downloadManager = DownloadManagerDialog.getInstance();
                         StaticSwingTools.showDialog(downloadManager);
                     }
                 }

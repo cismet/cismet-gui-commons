@@ -511,9 +511,9 @@ public class DownloadManager implements Observer, Configurable {
 
     @Override
     public void configure(final Element parent) {
-        DownloadManagerDialog.setAskForJobname(true);
-        DownloadManagerDialog.setJobname("");
-        DownloadManagerDialog.setOpenAutomatically(true);
+        DownloadManagerDialog.getInstance().setAskForJobNameEnabled(true);
+        DownloadManagerDialog.getInstance().setJobName("");
+        DownloadManagerDialog.getInstance().setOpenAutomaticallyEnabled(true);
 
         destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
                         + "cidsDownload");
@@ -585,7 +585,8 @@ public class DownloadManager implements Observer, Configurable {
                 "There is no configuration whether to ask for download titles or not. Using default value 'true'.");
         } else {
             final String value = askForTitle.getTextTrim();
-            DownloadManagerDialog.setAskForJobname("1".equals(value) || "true".equalsIgnoreCase(value));
+            DownloadManagerDialog.getInstance()
+                    .setAskForJobNameEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
         final Element openAutomatically = dialog.getChild(XML_CONF_DIALOG_OPENAUTOMATICALLY);
@@ -594,7 +595,8 @@ public class DownloadManager implements Observer, Configurable {
                 "There is no configuration whether to open downloads automatically or not. Using default value 'true'.");
         } else {
             final String value = openAutomatically.getTextTrim();
-            DownloadManagerDialog.setOpenAutomatically("1".equals(value) || "true".equalsIgnoreCase(value));
+            DownloadManagerDialog.getInstance()
+                    .setOpenAutomaticallyEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
         final Element closeAutomatically = dialog.getChild(XML_CONF_DIALOG_CLOSEAUTOMATICALLY);
@@ -603,14 +605,15 @@ public class DownloadManager implements Observer, Configurable {
                 "There is no configuration whether to close the download manager dialog automatically or not. Using default value 'true'.");
         } else {
             final String value = closeAutomatically.getTextTrim();
-            DownloadManagerDialog.setCloseAutomatically("1".equals(value) || "true".equalsIgnoreCase(value));
+            DownloadManagerDialog.getInstance()
+                    .setCloseAutomaticallyEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
         final Element userTitle = dialog.getChild(XML_CONF_DIALOG_USERTITLE);
         if ((userTitle == null) || (userTitle.getTextTrim() == null)) {
             LOG.warn("There is no user title for downloads configured. Using default value 'cidsDownload'.");
         } else {
-            DownloadManagerDialog.setJobname(userTitle.getTextTrim());
+            DownloadManagerDialog.getInstance().setJobName(userTitle.getTextTrim());
         }
     }
 
@@ -632,16 +635,18 @@ public class DownloadManager implements Observer, Configurable {
         parallelDownloads.addContent(String.valueOf(this.parallelDownloads));
 
         final Element askForTitle = new Element(XML_CONF_DIALOG_AKSFORTITLE);
-        askForTitle.addContent(DownloadManagerDialog.isAskForJobname() ? "true" : "false");
+        askForTitle.addContent(DownloadManagerDialog.getInstance().isAskForJobNameEnabled() ? "true" : "false");
 
         final Element openAutomatically = new Element(XML_CONF_DIALOG_OPENAUTOMATICALLY);
-        openAutomatically.addContent(DownloadManagerDialog.isOpenAutomatically() ? "true" : "false");
+        openAutomatically.addContent(DownloadManagerDialog.getInstance().isOpenAutomaticallyEnabled() ? "true"
+                                                                                                      : "false");
 
         final Element closeAutomatically = new Element(XML_CONF_DIALOG_CLOSEAUTOMATICALLY);
-        closeAutomatically.addContent(DownloadManagerDialog.isCloseAutomatically() ? "true" : "false");
+        closeAutomatically.addContent(DownloadManagerDialog.getInstance().isCloseAutomaticallyEnabled() ? "true"
+                                                                                                        : "false");
 
         final Element userTitle = new Element(XML_CONF_DIALOG_USERTITLE);
-        userTitle.addContent(DownloadManagerDialog.getJobname());
+        userTitle.addContent(DownloadManagerDialog.getInstance().getJobName());
 
         dialog.addContent(askForTitle);
         dialog.addContent(openAutomatically);

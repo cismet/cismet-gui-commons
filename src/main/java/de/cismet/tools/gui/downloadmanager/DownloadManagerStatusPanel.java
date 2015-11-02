@@ -64,7 +64,7 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
                 @Override
                 public void mouseClicked(final MouseEvent me) {
                     if (me.getClickCount() == 2) {
-                        final JDialog downloadManager = DownloadManagerDialog.instance(StaticSwingTools.getParentFrame(DownloadManagerStatusPanel.this));
+                        final JDialog downloadManager = DownloadManagerDialog.getInstance();
                         downloadManager.pack();
                         StaticSwingTools.showDialog(downloadManager);
                     }
@@ -150,7 +150,7 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
             final Download[] downloadArr = downloads.toArray(new Download[downloads.size()]);
             final int tmpComplDownloads = DownloadManager.instance().getCountDownloadsCompleted();
             final int tmpErrDownloads = DownloadManager.instance().getCountDownloadsErroneous();
-            if (!DownloadManagerDialog.instance(StaticSwingTools.getParentFrame(this)).isShowing()) {
+            if (!DownloadManagerDialog.getInstance().isShowing()) {
                 if (completedDownlaods < tmpComplDownloads) {
                     showNotification(downloadArr[0].getTitle(), false);
                 } else if (erroneousDownloads < tmpErrDownloads) {

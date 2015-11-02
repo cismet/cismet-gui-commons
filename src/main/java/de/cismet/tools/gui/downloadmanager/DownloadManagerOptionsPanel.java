@@ -407,10 +407,10 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
     public void update() {
         downloadDestination = DownloadManager.instance().getDestinationDirectory();
         downloadDestinationChanged = false;
-        jobname = DownloadManagerDialog.getJobname();
-        askForJobtitle = DownloadManagerDialog.isAskForJobname();
-        openAutomatically = DownloadManagerDialog.isOpenAutomatically();
-        closeAutomatically = DownloadManagerDialog.isCloseAutomatically();
+        jobname = DownloadManagerDialog.getInstance().getJobName();
+        askForJobtitle = DownloadManagerDialog.getInstance().isAskForJobNameEnabled();
+        openAutomatically = DownloadManagerDialog.getInstance().isOpenAutomaticallyEnabled();
+        closeAutomatically = DownloadManagerDialog.getInstance().isCloseAutomaticallyEnabled();
         parallelDownloads = DownloadManager.instance().getParallelDownloads();
         notificationDisplayTime = DownloadManager.instance().getNotificationDisplayTime();
 
@@ -441,10 +441,10 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         }
 
         DownloadManager.instance().setDestinationDirectory(downloadDestination);
-        DownloadManagerDialog.setJobname(jobname);
-        DownloadManagerDialog.setAskForJobname(askForJobtitle);
-        DownloadManagerDialog.setOpenAutomatically(openAutomatically);
-        DownloadManagerDialog.setCloseAutomatically(closeAutomatically);
+        DownloadManagerDialog.getInstance().setJobName(jobname);
+        DownloadManagerDialog.getInstance().setAskForJobNameEnabled(askForJobtitle);
+        DownloadManagerDialog.getInstance().setOpenAutomaticallyEnabled(openAutomatically);
+        DownloadManagerDialog.getInstance().setCloseAutomaticallyEnabled(closeAutomatically);
         DownloadManager.instance().setParallelDownloads(parallelDownloads);
         AbstractDownload.setParallelDownloads(parallelDownloads);
         DownloadManager.instance().setNotificationDisplayTime(notificationDisplayTime);

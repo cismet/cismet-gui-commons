@@ -232,7 +232,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
     private void formMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_formMouseClicked
         if (evt.getClickCount() > 1) {
             if (download.getCaughtException() != null) {
-                DownloadManagerDialog.showExceptionDialog(download);
+                DownloadManagerDialog.getInstance().showTheExceptionDialog(download);
             } else if (download.getDownloadsTotal() > 0) {
                 if (isSingleDownloadsPanelShown) {
                     hideSingleDownloads();

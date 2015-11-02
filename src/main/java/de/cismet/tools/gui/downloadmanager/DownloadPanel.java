@@ -350,7 +350,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
     private void formMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_formMouseClicked
         if (evt.getClickCount() > 1) {
             if (download.getCaughtException() != null) {
-                DownloadManagerDialog.showExceptionDialog(download);
+                DownloadManagerDialog.getInstance().showTheExceptionDialog(download);
             } else if ((download.getStatus() == Download.State.COMPLETED) && (download.getFileToSaveTo() != null)) {
                 BrowserLauncher.openURLorFile(download.getFileToSaveTo().getParentFile().getAbsolutePath());
             }

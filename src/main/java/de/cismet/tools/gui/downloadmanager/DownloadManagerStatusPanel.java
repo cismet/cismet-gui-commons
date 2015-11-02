@@ -21,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.util.Collection;
 
 import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import de.cismet.tools.gui.StaticSwingTools;
@@ -63,9 +64,7 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
                 @Override
                 public void mouseClicked(final MouseEvent me) {
                     if (me.getClickCount() == 2) {
-                        final JDialog downloadManager = DownloadManagerDialog.instance(
-                                StaticSwingTools.getParentFrame(DownloadManagerStatusPanel.this));
-                        downloadManager.pack();
+                        final JDialog downloadManager = DownloadManagerDialog.getInstance();
                         StaticSwingTools.showDialog(downloadManager);
                     }
                 }
@@ -150,10 +149,12 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
             final Download[] downloadArr = downloads.toArray(new Download[downloads.size()]);
             final int tmpComplDownloads = DownloadManager.instance().getCountDownloadsCompleted();
             final int tmpErrDownloads = DownloadManager.instance().getCountDownloadsErroneous();
-            if (completedDownlaods < tmpComplDownloads) {
-                showNotification(downloadArr[0].getTitle(), false);
-            } else if (erroneousDownloads < tmpErrDownloads) {
-                showNotification(downloadArr[0].getTitle(), true);
+            if (!DownloadManagerDialog.getInstance().isShowing()) {
+                if (completedDownlaods < tmpComplDownloads) {
+                    showNotification(downloadArr[0].getTitle(), false);
+                } else if (erroneousDownloads < tmpErrDownloads) {
+                    showNotification(downloadArr[0].getTitle(), true);
+                }
             }
             completedDownlaods = tmpComplDownloads;
             erroneousDownloads = tmpErrDownloads;
@@ -180,20 +181,39 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
      * @param  isErroneous   DOCUMENT ME!
      */
     private void showNotification(final String downloadName, final boolean isErroneous) {
-        final DownloadDesktopNotification notification = new DownloadDesktopNotification(StaticSwingTools
-                        .getParentFrame(this),
-                downloadName,
-                isErroneous);
-        notification.floatInFromLowerFrameBound();
-        final Timer t = new Timer(DownloadManager.instance().getNotificationDisplayTime() * 1000,
-                new ActionListener() {
+        if (!SwingUtilities.isEventDispatchThread()) {
+            SwingUtilities.invokeLater(new Runnable() {
 
                     @Override
-                    public void actionPerformed(final ActionEvent ae) {
-                        notification.setVisible(false);
-                        notification.dispose();
+                    public void run() {
+                        showNotification(downloadName, isErroneous);
                     }
                 });
-        t.start();
+        } else {
+            final DownloadDesktopNotification notification = new DownloadDesktopNotification(StaticSwingTools
+                            .getParentFrame(this),
+                    downloadName,
+                    isErroneous);
+            notification.floatInFromLowerFrameBound();
+            final Timer t = new Timer(DownloadManager.instance().getNotificationDisplayTime() * 1000,
+                    new ActionListener() {
+
+                        @Override
+                        public void actionPerformed(final ActionEvent ae) {
+                            SwingUtilities.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            notification.dispose();
+                                        } catch (final Exception ex) {
+                                            log.warn(ex, ex);
+                                        }
+                                    }
+                                });
+                        }
+                    });
+            t.start();
+        }
     }
 }

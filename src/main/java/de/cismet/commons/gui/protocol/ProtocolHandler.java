@@ -108,8 +108,9 @@ public class ProtocolHandler {
     /**
      * DOCUMENT ME!
      *
-     * @param  protocolStep  DOCUMENT ME!
-     * @return 
+     * @param   protocolStep  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
      */
     public boolean recordStep(final ProtocolStep protocolStep) {
         if (isRecordEnabled()) {

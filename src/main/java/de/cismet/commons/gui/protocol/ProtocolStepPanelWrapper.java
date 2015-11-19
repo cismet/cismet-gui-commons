@@ -22,8 +22,6 @@ import java.awt.BorderLayout;
  */
 public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
 
-    //~ Instance fields --------------------------------------------------------
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

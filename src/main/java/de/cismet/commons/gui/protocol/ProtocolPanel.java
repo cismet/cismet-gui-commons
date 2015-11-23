@@ -12,11 +12,20 @@
  */
 package de.cismet.commons.gui.protocol;
 
+import org.jfree.ui.ExtensionFileFilter;
+
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
+import java.io.File;
+
+import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileFilter;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -26,13 +35,23 @@ import javax.swing.SwingUtilities;
  */
 public class ProtocolPanel extends javax.swing.JPanel {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ProtocolPanel.class);
+
     //~ Instance fields --------------------------------------------------------
 
     private final ProtocolHandler handler;
+    private final FileFilter fileFilter = new ExtensionFileFilter(org.openide.util.NbBundle.getMessage(
+                ProtocolPanel.class,
+                "ProtocolPanel.filefilter.jsonfiledesc"),
+            "json");
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToggleButton jToggleButton1;
@@ -81,13 +100,17 @@ public class ProtocolPanel extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jFileChooser1 = new javax.swing.JFileChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         panSteps = new javax.swing.JPanel();
         panFiller = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jToggleButton1 = new javax.swing.JToggleButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+
+        jFileChooser1.setFileFilter(fileFilter);
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -124,13 +147,6 @@ public class ProtocolPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jScrollPane1, gridBagConstraints);
 
-        jPanel2.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        add(jPanel2, gridBagConstraints);
-
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(
@@ -165,9 +181,42 @@ public class ProtocolPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
         jPanel4.add(jToggleButton1, gridBagConstraints);
 
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton2,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton2.text")); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
+        jPanel4.add(jButton2, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton3,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton3.text")); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 3);
+        jPanel4.add(jButton3, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel4, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
@@ -177,18 +226,83 @@ public class ProtocolPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         handler.clearSteps();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
         handler.setRecordEnabled(jToggleButton1.isSelected());
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }                                                                                  //GEN-LAST:event_jToggleButton1ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
+        final int status = jFileChooser1.showSaveDialog(StaticSwingTools.getParentFrame(this));
+        if (status == JFileChooser.APPROVE_OPTION) {
+            final File selectedFile = jFileChooser1.getSelectedFile();
+
+            new SwingWorker<Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        try {
+                            final File fileToSave;
+                            if (selectedFile.getName().toLowerCase().endsWith(".json")) {
+                                fileToSave = selectedFile;
+                            } else {
+                                fileToSave = new File(selectedFile.getAbsolutePath() + ".json");
+                            }
+                            handler.writeToFile(fileToSave);
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                    }
+                }.execute();
+        } else if (status == JFileChooser.CANCEL_OPTION) {
+        }
+    } //GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
+        final int status = jFileChooser1.showOpenDialog(StaticSwingTools.getParentFrame(this));
+        if (status == JFileChooser.APPROVE_OPTION) {
+            final File selectedFile = jFileChooser1.getSelectedFile();
+            new SwingWorker<Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        try {
+                            handler.readFromFile(selectedFile);
+                        } catch (final Exception ex) {
+                            LOG.error(ex, ex);
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                    }
+                }.execute();
+        } else if (status == JFileChooser.CANCEL_OPTION) {
+        }
+    } //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -213,7 +327,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
             panSteps.add(panFiller, constraints);
 
             panSteps.revalidate();
-            
+
             jScrollPane1.getVerticalScrollBar().setValue(jScrollPane1.getVerticalScrollBar().getMaximum());
             repaint();
         } else {

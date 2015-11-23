@@ -7,6 +7,7 @@
 ****************************************************/
 package de.cismet.commons.gui.protocol;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version  $Revision$, $Date$
  */
 @XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
 public abstract class AbstractProtocolStep implements ProtocolStep {

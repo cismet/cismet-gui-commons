@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.commons.gui.protocol;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.xml.bind.annotation.XmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,8 @@ import lombok.Setter;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
+@XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
 @NoArgsConstructor

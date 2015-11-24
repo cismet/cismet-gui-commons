@@ -19,10 +19,6 @@ import de.cismet.commons.gui.protocol.AbstractProtocolStepPanel;
  */
 public class CommentProtocolStepPanel extends AbstractProtocolStepPanel {
 
-    //~ Instance fields --------------------------------------------------------
-
-    private final CommentProtocolStep commentProtocolStep;
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -38,12 +34,17 @@ public class CommentProtocolStepPanel extends AbstractProtocolStepPanel {
      * @param  commentProtocolStep  DOCUMENT ME!
      */
     public CommentProtocolStepPanel(final CommentProtocolStep commentProtocolStep) {
-        this.commentProtocolStep = commentProtocolStep;
+        super(commentProtocolStep);
 
         initComponents();
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public CommentProtocolStep getProtocolStep() {
+        return (CommentProtocolStep)super.getProtocolStep();
+    }
 
     /**
      * DOCUMENT ME!
@@ -91,7 +92,7 @@ public class CommentProtocolStepPanel extends AbstractProtocolStepPanel {
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, htmlifyText(commentProtocolStep.getMessage()));
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, htmlifyText(getProtocolStep().getMessage()));
         jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;

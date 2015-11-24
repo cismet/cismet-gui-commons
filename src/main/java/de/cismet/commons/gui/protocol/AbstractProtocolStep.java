@@ -11,12 +11,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -40,9 +46,17 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ProtocolStepMetaInfo metaInfo;
+    private ProtocolStepMetaInfo metaInfo;
 
     private Date date;
+    @Setter(AccessLevel.NONE)
+    private Set<ProtocolStepParameter> parameters;
+
+    @Getter(AccessLevel.PRIVATE)
+    private final transient ProtocolStepListenerHandler listenerHandler = new ProtocolStepListenerHandler();
+
+    @Getter(AccessLevel.PRIVATE)
+    private final HashMap<String, ProtocolStepParameter> parameterMap = new HashMap<String, ProtocolStepParameter>();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -61,6 +75,15 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
      *
      * @return  DOCUMENT ME!
      */
+    public Set<ProtocolStepParameter> createParameters() {
+        return new HashSet<ProtocolStepParameter>();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     protected abstract ProtocolStepMetaInfo createMetaInfo();
 
     @Override
@@ -73,6 +96,7 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
     @Override
     public void fromJsonString(final String jsonString) throws IOException {
         final AbstractProtocolStep protocolStep = (AbstractProtocolStep)fromJsonString(jsonString, getClass());
+        setParameters(protocolStep.getParameters());
         copyParams(protocolStep);
     }
 
@@ -101,7 +125,104 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
      *
      * @param  other  DOCUMENT ME!
      */
+    @Deprecated
     protected void copyParams(final AbstractProtocolStep other) {
-        setDate(other.getDate());
+    }
+
+    @Override
+    public boolean addProtocolStepListener(final ProtocolStepListener listener) {
+        return listenerHandler.addProtocolStepListener(listener);
+    }
+
+    @Override
+    public boolean removeProtocolStepListener(final ProtocolStepListener listener) {
+        return listenerHandler.removeProtocolStepListener(listener);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  event  DOCUMENT ME!
+     */
+    protected void fireParametersChanged(final ProtocolStepListenerEvent event) {
+        listenerHandler.parametersChanged(event);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  parameters  DOCUMENT ME!
+     */
+    public void setParameters(final Set<ProtocolStepParameter> parameters) {
+        this.parameters = parameters;
+
+        parameterMap.clear();
+        for (final ProtocolStepParameter parameter : parameters) {
+            if (parameter != null) {
+                parameterMap.put(parameter.getKey(), parameter);
+            }
+        }
+        fireParametersChanged(new ProtocolStepListenerEvent(this));
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   key  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Object getParameterValue(final String key) {
+        final ProtocolStepParameter parameter = parameterMap.get(key);
+        if (parameter != null) {
+            return parameter.getValue();
+        } else {
+            return null;
+        }
+    }
+
+    //~ Inner Classes ----------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class ProtocolStepListenerHandler implements ProtocolStepListener {
+
+        //~ Instance fields ----------------------------------------------------
+
+        private final Collection<ProtocolStepListener> listeners = new ArrayList<ProtocolStepListener>();
+
+        //~ Methods ------------------------------------------------------------
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   listener  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean addProtocolStepListener(final ProtocolStepListener listener) {
+            return listeners.add(listener);
+        }
+
+        /**
+         * DOCUMENT ME!
+         *
+         * @param   listener  DOCUMENT ME!
+         *
+         * @return  DOCUMENT ME!
+         */
+        public boolean removeProtocolStepListener(final ProtocolStepListener listener) {
+            return listeners.remove(listener);
+        }
+
+        @Override
+        public void parametersChanged(final ProtocolStepListenerEvent event) {
+            for (final ProtocolStepListener listener : listeners) {
+                listener.parametersChanged(event);
+            }
+        }
     }
 }

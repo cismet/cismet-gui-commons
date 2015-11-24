@@ -11,6 +11,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.IOException;
 
+import java.util.Date;
+import java.util.Set;
+
 /**
  * DOCUMENT ME!
  *
@@ -27,6 +30,20 @@ public interface ProtocolStep {
      * @return  DOCUMENT ME!
      */
     ProtocolStepMetaInfo getMetaInfo();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    Set<ProtocolStepParameter> getParameters();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    Date getDate();
 
     /**
      * DOCUMENT ME!
@@ -52,4 +69,22 @@ public interface ProtocolStep {
      * @return  DOCUMENT ME!
      */
     AbstractProtocolStepPanel visualize();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   listener  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    boolean addProtocolStepListener(final ProtocolStepListener listener);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   listener  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    boolean removeProtocolStepListener(final ProtocolStepListener listener);
 }

@@ -39,4 +39,11 @@ public interface ProtocolStepPanel {
      * @return  DOCUMENT ME!
      */
     Component getTitleComponent();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    ProtocolStep getProtocolStep();
 }

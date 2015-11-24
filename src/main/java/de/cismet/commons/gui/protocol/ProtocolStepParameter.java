@@ -5,6 +5,11 @@
 *              ... and it just works.
 *
 ****************************************************/
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package de.cismet.commons.gui.protocol;
 
 import lombok.AllArgsConstructor;
@@ -25,11 +30,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProtocolStepMetaInfo {
+public class ProtocolStepParameter {
 
     //~ Instance fields --------------------------------------------------------
 
     private String key;
-    private String description;
-    private String javaCanonicalClassName;
+    private Object value;
 }

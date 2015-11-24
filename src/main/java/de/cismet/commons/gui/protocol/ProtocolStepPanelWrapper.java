@@ -20,9 +20,16 @@ import java.awt.BorderLayout;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
+public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements ProtocolStepListener {
+
+    //~ Instance fields --------------------------------------------------------
+
+    private final ProtocolStep protocolStep;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
@@ -36,17 +43,34 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
     /**
      * Creates new form ProtocolStepPanelWrapper.
      *
-     * @param  stepPanel  DOCUMENT ME!
+     * @param  protocolStep  DOCUMENT ME!
      */
-    public ProtocolStepPanelWrapper(final ProtocolStepPanel stepPanel) {
+    public ProtocolStepPanelWrapper(final ProtocolStep protocolStep) {
+        this.protocolStep = protocolStep;
+        protocolStep.addProtocolStepListener(this);
         initComponents();
 
-        panIcon.add(stepPanel.getIconComponent(), BorderLayout.CENTER);
-        panTitle.add(stepPanel.getTitleComponent(), BorderLayout.CENTER);
-        panMain.add(stepPanel.getMainComponent(), BorderLayout.CENTER);
+        if (protocolStep.getParameters() != null) {
+            showStep();
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
+    public final void showStep() {
+        panIcon.removeAll();
+        panTitle.removeAll();
+        panMain.removeAll();
+        final ProtocolStepPanel protocolStepPanel = protocolStep.visualize();
+        panIcon.add(protocolStepPanel.getIconComponent(), BorderLayout.CENTER);
+        panTitle.add(protocolStepPanel.getTitleComponent(), BorderLayout.CENTER);
+        panMain.add(protocolStepPanel.getMainComponent(), BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -59,9 +83,12 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         panTitle = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         panIcon = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         panMain = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -71,6 +98,10 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
 
         panTitle.setMinimumSize(new java.awt.Dimension(100, 50));
         panTitle.setLayout(new java.awt.BorderLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel2, protocolStep.getMetaInfo().getDescription());
+        panTitle.add(jLabel2, java.awt.BorderLayout.CENTER);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -84,6 +115,15 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
         panIcon.setMinimumSize(new java.awt.Dimension(50, 50));
         panIcon.setPreferredSize(new java.awt.Dimension(50, 50));
         panIcon.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel1,
+            org.openide.util.NbBundle.getMessage(
+                ProtocolStepPanelWrapper.class,
+                "ProtocolStepPanelWrapper.jLabel1.text")); // NOI18N
+        panIcon.add(jLabel1, java.awt.BorderLayout.CENTER);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -117,6 +157,15 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
         add(jPanel1, gridBagConstraints);
 
         panMain.setLayout(new java.awt.BorderLayout());
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jLabel3,
+            org.openide.util.NbBundle.getMessage(
+                ProtocolStepPanelWrapper.class,
+                "ProtocolStepPanelWrapper.jLabel3.text")); // NOI18N
+        panMain.add(jLabel3, java.awt.BorderLayout.CENTER);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -131,4 +180,12 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         add(jSeparator1, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public void parametersChanged(final ProtocolStepListenerEvent event) {
+        final ProtocolStep step = event.getProtocolStep();
+        if (step.equals(protocolStep)) {
+            showStep();
+        }
+    }
 }

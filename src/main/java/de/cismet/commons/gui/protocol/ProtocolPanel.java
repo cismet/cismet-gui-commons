@@ -311,7 +311,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
      */
     private void addStep(final ProtocolStep step) {
         if (SwingUtilities.isEventDispatchThread()) {
-            final Component wrapper = new ProtocolStepPanelWrapper(step.visualize());
+            final Component wrapper = new ProtocolStepPanelWrapper(step);
 
             panSteps.remove(panFiller);
             final GridBagConstraints constraints = new GridBagConstraints();

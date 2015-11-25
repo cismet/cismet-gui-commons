@@ -12,7 +12,9 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -68,7 +70,10 @@ public class ProtocolHandler {
                 "PolymorphicProtocolStepDeserializerModule",
                 new Version(1, 0, 0, null, null, null));
         module.addSerializer(ProtocolStep.class, new ProtocolStepSerializer());
+        module.addSerializer(ProtocolStepParameter.class, new ProtocolStepParameterSerializer());
         module.addDeserializer(ProtocolStep.class, new ProtocolStepDeserializer());
+        module.addDeserializer(ProtocolStepParameter.class, new ProtocolStepParameterDeserializer());
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         objectMapper.registerModule(module);
     }
@@ -418,6 +423,71 @@ public class ProtocolHandler {
             jg.writeObjectField("metaInfo", step.getMetaInfo());
             jg.writeObjectField("parameters", step.getParameters());
             jg.writeEndObject();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class ProtocolStepParameterSerializer extends StdSerializer<ProtocolStepParameter> {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ProtocolStepSerializer object.
+         */
+        ProtocolStepParameterSerializer() {
+            super(ProtocolStepParameter.class);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public void serialize(final ProtocolStepParameter param, final JsonGenerator jg, final SerializerProvider sp)
+                throws IOException, JsonGenerationException {
+            jg.writeStartObject();
+            jg.writeObjectField("key", param.getKey());
+            jg.writeObjectField("value", param.getValue());
+            jg.writeObjectField("className", param.getClassName());
+            jg.writeEndObject();
+        }
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @version  $Revision$, $Date$
+     */
+    class ProtocolStepParameterDeserializer extends StdDeserializer<ProtocolStepParameter> {
+
+        //~ Constructors -------------------------------------------------------
+
+        /**
+         * Creates a new ProtocolStepParameterDeserializer object.
+         */
+        ProtocolStepParameterDeserializer() {
+            super(ProtocolStepParameter.class);
+        }
+
+        //~ Methods ------------------------------------------------------------
+
+        @Override
+        public ProtocolStepParameter deserialize(final JsonParser jp, final DeserializationContext dc)
+                throws IOException, JsonProcessingException {
+            final ObjectMapper mapper = (ObjectMapper)jp.getCodec();
+            final ObjectNode root = (ObjectNode)mapper.readTree(jp);
+            try {
+                final String key = root.get("key").textValue();
+                final String className = root.get("className").textValue();
+
+                final Class paramValueClass = Class.forName(className);
+                final Object valueObject = mapper.readValue(root.get("value").toString(), paramValueClass);
+                return new ProtocolStepParameter(key, valueObject);
+            } catch (final Exception ex) {
+                LOG.error("error while deserializing parameter", ex);
+                return null;
+            }
         }
     }
 }

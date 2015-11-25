@@ -29,11 +29,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProtocolStepParameter {
 
     //~ Instance fields --------------------------------------------------------
 
     private String key;
     private Object value;
+    private String className;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new ProtocolStepParameter object.
+     *
+     * @param  key    DOCUMENT ME!
+     * @param  value  DOCUMENT ME!
+     */
+    public ProtocolStepParameter(final String key, final Object value) {
+        setKey(key);
+        setValue(value);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  value  DOCUMENT ME!
+     */
+    public final void setValue(final Object value) {
+        this.value = value;
+        if (value != null) {
+            className = value.getClass().getCanonicalName();
+        }
+    }
 }

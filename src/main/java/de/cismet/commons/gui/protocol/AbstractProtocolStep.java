@@ -33,7 +33,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version  $Revision$, $Date$
  */
 @XmlRootElement
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
 public abstract class AbstractProtocolStep implements ProtocolStep {
@@ -49,6 +48,7 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
     private ProtocolStepMetaInfo metaInfo;
 
     private Date date;
+
     @Setter(AccessLevel.NONE)
     private Set<ProtocolStepParameter> parameters;
 

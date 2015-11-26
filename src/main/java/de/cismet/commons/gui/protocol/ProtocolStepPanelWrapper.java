@@ -14,6 +14,8 @@ package de.cismet.commons.gui.protocol;
 
 import java.awt.BorderLayout;
 
+import javax.swing.SwingUtilities;
+
 /**
  * DOCUMENT ME!
  *
@@ -185,7 +187,13 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements Prot
     public void parametersChanged(final ProtocolStepListenerEvent event) {
         final ProtocolStep step = event.getProtocolStep();
         if (step.equals(protocolStep)) {
-            showStep();
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        showStep();
+                    }
+                });
         }
     }
 }

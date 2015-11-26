@@ -92,7 +92,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
         jToggleButton1.setSelected(this.handler.isRecordEnabled());
         for (final ProtocolStep step : this.handler.getAllSteps()) {
-            addStep(step);
+            addStep(step, true);
         }
     }
 
@@ -286,25 +286,25 @@ public class ProtocolPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         handler.clearSteps();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
         handler.setRecordEnabled(jToggleButton1.isSelected());
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }                                                                                  //GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         final int status = jFileChooser1.showSaveDialog(StaticSwingTools.getParentFrame(this));
         if (status == JFileChooser.APPROVE_OPTION) {
             final File selectedFile = jFileChooser1.getSelectedFile();
@@ -333,14 +333,14 @@ public class ProtocolPanel extends javax.swing.JPanel {
                 }.execute();
         } else if (status == JFileChooser.CANCEL_OPTION) {
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    } //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         final int status = jFileChooser1.showOpenDialog(StaticSwingTools.getParentFrame(this));
         if (status == JFileChooser.APPROVE_OPTION) {
             final File selectedFile = jFileChooser1.getSelectedFile();
@@ -362,37 +362,43 @@ public class ProtocolPanel extends javax.swing.JPanel {
                 }.execute();
         } else if (status == JFileChooser.CANCEL_OPTION) {
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    } //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
         StaticSwingTools.showDialog(jDialog1);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
         ProtocolHandler.getInstance().recordStep(new CommentProtocolStep(jTextPane1.getText()));
         jTextPane1.setText("");
         jTextPane1.requestFocus();
         jDialog1.setVisible(false);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
-     * @param  step  DOCUMENT ME!
+     * @param  step           DOCUMENT ME!
+     * @param  showImmediate  DOCUMENT ME!
      */
-    private void addStep(final ProtocolStep step) {
+    private void addStep(final ProtocolStep step, final boolean showImmediate) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("adding GUI for protocol " + step.getMetaInfo().getKey()
+                        + "' and rendering it immediately: " + showImmediate);
+        }
+
         if (SwingUtilities.isEventDispatchThread()) {
-            final Component wrapper = new ProtocolStepPanelWrapper(step);
+            final Component wrapper = new ProtocolStepPanelWrapper(step, showImmediate);
 
             panSteps.remove(panFiller);
             final GridBagConstraints constraints = new GridBagConstraints();
@@ -416,7 +422,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
                     @Override
                     public void run() {
-                        addStep(step);
+                        addStep(step, showImmediate);
                     }
                 });
         }
@@ -466,7 +472,8 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
         @Override
         public void stepAdded(final ProtocolHandlerListenerEvent event) {
-            addStep(event.getSourceProtocolHander().getLastStep());
+            // -> don't render GUI after add! wait for initParameters()!
+            addStep(event.getSourceProtocolHander().getLastStep(), false);
         }
 
         @Override
@@ -478,7 +485,8 @@ public class ProtocolPanel extends javax.swing.JPanel {
         public void stepsRestored(final ProtocolHandlerListenerEvent event) {
             clearSteps();
             for (final ProtocolStep step : event.getSourceProtocolHander().getAllSteps()) {
-                addStep(step);
+                // -> render GUI after restore!
+                addStep(step, true);
             }
         }
     }

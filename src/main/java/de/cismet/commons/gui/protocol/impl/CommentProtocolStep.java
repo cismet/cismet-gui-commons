@@ -7,13 +7,14 @@
 ****************************************************/
 package de.cismet.commons.gui.protocol.impl;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import de.cismet.commons.gui.protocol.AbstractProtocolStep;
 import de.cismet.commons.gui.protocol.AbstractProtocolStepPanel;
 import de.cismet.commons.gui.protocol.ProtocolStepMetaInfo;
-import de.cismet.commons.gui.protocol.ProtocolStepParameter;
 
 /**
  * DOCUMENT ME!
@@ -25,6 +26,9 @@ public class CommentProtocolStep extends AbstractProtocolStep {
 
     //~ Instance fields --------------------------------------------------------
 
+    @Getter
+    @Setter
+    @JsonProperty(required = true)
     private String message;
 
     //~ Constructors -----------------------------------------------------------
@@ -57,21 +61,5 @@ public class CommentProtocolStep extends AbstractProtocolStep {
     @Override
     public AbstractProtocolStepPanel visualize() {
         return new CommentProtocolStepPanel(this);
-    }
-
-    @Override
-    public Set<ProtocolStepParameter> createParameters() {
-        final Set<ProtocolStepParameter> parameters = new HashSet<ProtocolStepParameter>();
-        parameters.add(new ProtocolStepParameter("message", message));
-        return parameters;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String getMessage() {
-        return (String)getParameterValue("message");
     }
 }

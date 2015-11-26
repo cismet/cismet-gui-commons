@@ -45,14 +45,16 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements Prot
     /**
      * Creates new form ProtocolStepPanelWrapper.
      *
-     * @param  protocolStep  DOCUMENT ME!
+     * @param  protocolStep   DOCUMENT ME!
+     * @param  showImmediate  DOCUMENT ME!
      */
-    public ProtocolStepPanelWrapper(final ProtocolStep protocolStep) {
+    public ProtocolStepPanelWrapper(final ProtocolStep protocolStep,
+            final boolean showImmediate) {
         this.protocolStep = protocolStep;
         protocolStep.addProtocolStepListener(this);
         initComponents();
 
-        if (protocolStep.getParameters() != null) {
+        if (showImmediate) {
             showStep();
         }
     }

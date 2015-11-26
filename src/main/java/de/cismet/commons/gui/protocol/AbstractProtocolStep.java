@@ -7,7 +7,7 @@
 ****************************************************/
 package de.cismet.commons.gui.protocol;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,11 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * DOCUMENT ME!
@@ -32,7 +27,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-@XmlRootElement
 @Getter
 @Setter
 public abstract class AbstractProtocolStep implements ProtocolStep {
@@ -45,18 +39,14 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
 
     //~ Instance fields --------------------------------------------------------
 
+    @JsonProperty(required = true)
     private ProtocolStepMetaInfo metaInfo;
 
+    @JsonProperty(required = true)
     private Date date;
-
-    @Setter(AccessLevel.NONE)
-    private Set<ProtocolStepParameter> parameters;
 
     @Getter(AccessLevel.PRIVATE)
     private final transient ProtocolStepListenerHandler listenerHandler = new ProtocolStepListenerHandler();
-
-    @Getter(AccessLevel.PRIVATE)
-    private final HashMap<String, ProtocolStepParameter> parameterMap = new HashMap<String, ProtocolStepParameter>();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -71,12 +61,10 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
+     * Is called before visualize() is called. E.g constructut and set serializable object properties (those annotated
+     * with @JsonProperty)
      */
-    public Set<ProtocolStepParameter> createParameters() {
-        return new HashSet<ProtocolStepParameter>();
+    public void initParameters() {
     }
 
     /**
@@ -94,10 +82,9 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
     }
 
     @Override
-    public void fromJsonString(final String jsonString) throws IOException {
+    public AbstractProtocolStep fromJsonString(final String jsonString) throws IOException {
         final AbstractProtocolStep protocolStep = (AbstractProtocolStep)fromJsonString(jsonString, getClass());
-        setParameters(protocolStep.getParameters());
-        copyParams(protocolStep);
+        return protocolStep;
     }
 
     /**
@@ -120,15 +107,6 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
     @Override
     public abstract AbstractProtocolStepPanel visualize();
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  other  DOCUMENT ME!
-     */
-    @Deprecated
-    protected void copyParams(final AbstractProtocolStep other) {
-    }
-
     @Override
     public boolean addProtocolStepListener(final ProtocolStepListener listener) {
         return listenerHandler.addProtocolStepListener(listener);
@@ -146,39 +124,6 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
      */
     protected void fireParametersChanged(final ProtocolStepListenerEvent event) {
         listenerHandler.parametersChanged(event);
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  parameters  DOCUMENT ME!
-     */
-    public void setParameters(final Set<ProtocolStepParameter> parameters) {
-        this.parameters = parameters;
-
-        parameterMap.clear();
-        for (final ProtocolStepParameter parameter : parameters) {
-            if (parameter != null) {
-                parameterMap.put(parameter.getKey(), parameter);
-            }
-        }
-        fireParametersChanged(new ProtocolStepListenerEvent(this));
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   key  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public Object getParameterValue(final String key) {
-        final ProtocolStepParameter parameter = parameterMap.get(key);
-        if (parameter != null) {
-            return parameter.getValue();
-        } else {
-            return null;
-        }
     }
 
     //~ Inner Classes ----------------------------------------------------------

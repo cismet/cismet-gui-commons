@@ -86,7 +86,10 @@ public class ProtocolTester {
         log("= protocol handler test =");
         log("=========================");
 
+        log(new CommentProtocolStep("Protollierungs-Test nummer eins...").toJsonString());
+
         log("recording some protocols...");
+        ProtocolHandler.getInstance().setRecordEnabled(true);
         ProtocolHandler.getInstance().recordStep(new CommentProtocolStep("Protollierungs-Test nummer eins..."));
         ProtocolHandler.getInstance().recordStep(new CommentProtocolStep("...noch ein Test..."));
         ProtocolHandler.getInstance().recordStep(new CommentProtocolStep("...es wird wie wild getestet..."));
@@ -103,7 +106,7 @@ public class ProtocolTester {
         log("size after jsonify: " + newList.size());
         log("protocolls after jsonify: ");
         for (final ProtocolStep newProtoFromList : newList) {
-            log("protocol: " + newProtoFromList);
+            log("protocol: " + newProtoFromList.getClass().getCanonicalName());
 
             final CommentProtocolStep newProtoFromListCasted = (CommentProtocolStep)newProtoFromList;
             log("* date: " + newProtoFromListCasted.getDate());

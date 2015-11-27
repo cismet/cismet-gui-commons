@@ -31,6 +31,10 @@ public class ProtocolHandlerAdapter implements ProtocolHandlerListener {
     }
 
     @Override
+    public void stepRemoved(final ProtocolHandlerListenerEvent event) {
+    }
+
+    @Override
     public void stepsCleared(final ProtocolHandlerListenerEvent event) {
     }
 

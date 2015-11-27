@@ -43,6 +43,13 @@ public interface ProtocolHandlerListener extends EventListener {
      *
      * @param  event  DOCUMENT ME!
      */
+    void stepRemoved(final ProtocolHandlerListenerEvent event);
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  event  DOCUMENT ME!
+     */
     void stepsCleared(final ProtocolHandlerListenerEvent event);
 
     /**

@@ -54,8 +54,7 @@ public class CommentProtocolStep extends AbstractProtocolStep {
     protected ProtocolStepMetaInfo createMetaInfo() {
         return new ProtocolStepMetaInfo(
                 "comment",
-                "comment step protocol",
-                CommentProtocolStep.class.getCanonicalName());
+                "comment step protocol");
     }
 
     @Override

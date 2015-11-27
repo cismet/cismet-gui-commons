@@ -71,17 +71,6 @@ public interface ProtocolStep {
     /**
      * DOCUMENT ME!
      *
-     * @param   jsonString  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  IOException  DOCUMENT ME!
-     */
-    ProtocolStep fromJsonString(final String jsonString) throws IOException;
-
-    /**
-     * DOCUMENT ME!
-     *
      * @return  DOCUMENT ME!
      */
     AbstractProtocolStepPanel visualize();

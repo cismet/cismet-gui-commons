@@ -7,16 +7,10 @@
 ****************************************************/
 package de.cismet.commons.gui.protocol;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import de.cismet.commons.gui.protocol.impl.DummyStep;
 
 /**
  * DOCUMENT ME!
@@ -48,7 +40,7 @@ public class ProtocolHandler {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ProtocolStorage storage = new ProtocolStorage();
+    private final LinkedList<ProtocolStep> storage = new LinkedList<ProtocolStep>();
     private final ProtocolHandlerListenerHandler listenerHandler = new ProtocolHandlerListenerHandler();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -61,18 +53,7 @@ public class ProtocolHandler {
      */
     private ProtocolHandler() {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        final ProtocolStepDeserializer deserializer = new ProtocolStepDeserializer();
-//        deserializer.registerAnimal("leash_color", Dog.class);
-//        deserializer.registerAnimal("favorite_toy", Cat.class);
-//        deserializer.registerAnimal("wing_span", Bird.class);
-        final SimpleModule module = new SimpleModule(
-                "PolymorphicProtocolStepDeserializerModule",
-                new Version(1, 0, 0, null, null, null));
-        module.addDeserializer(ProtocolStep.class, deserializer);
-
-//    objectMapper.setPropertyNamingStrategy(
-//        new CamelCaseNamingStrategy());
-        objectMapper.registerModule(module);
+        // objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -117,6 +98,7 @@ public class ProtocolHandler {
      * @param  recordEnabled  DOCUMENT ME!
      */
     public void setRecordEnabled(final boolean recordEnabled) {
+        LOG.info("protocol globally enabled: " + recordEnabled);
         this.recordEnabled = recordEnabled;
         fireRecordStateChanged(new ProtocolHandlerListenerEvent(
                 this,
@@ -139,14 +121,31 @@ public class ProtocolHandler {
      *
      * @return  DOCUMENT ME!
      */
-    public boolean recordStep(final ProtocolStep protocolStep) {
+    public boolean recordStep(final AbstractProtocolStep protocolStep) {
         if (isRecordEnabled()) {
             synchronized (storage) {
-                storage.addStep(protocolStep);
+                storage.add(protocolStep);
             }
             fireStepAdded(new ProtocolHandlerListenerEvent(this, ProtocolHandlerListenerEvent.PROTOCOL_STEP_ADDED));
+            new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        protocolStep.initParameters();
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("Parameters initialized, building GUI");
+                        }
+                        protocolStep.fireParametersChanged(new ProtocolStepListenerEvent(protocolStep));
+                    }
+                }).start();
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("protocol step '" + protocolStep.getMetaInfo().getKey()
+                            + "' added.");
+            }
             return true;
         } else {
+            LOG.warn("protocol step '" + protocolStep.getMetaInfo().getKey()
+                        + "' not added: protocol globally  disabled!");
             return false;
         }
     }
@@ -157,7 +156,7 @@ public class ProtocolHandler {
      * @return  DOCUMENT ME!
      */
     public ProtocolStep getLastStep() {
-        return ((LinkedList<ProtocolStep>)storage.getSteps()).getLast();
+        return storage.getLast();
     }
 
     /**
@@ -166,7 +165,7 @@ public class ProtocolHandler {
      * @return  DOCUMENT ME!
      */
     public List<ProtocolStep> getAllSteps() {
-        return new ArrayList<ProtocolStep>(storage.getSteps());
+        return new ArrayList<ProtocolStep>(storage);
     }
 
     /**
@@ -174,7 +173,10 @@ public class ProtocolHandler {
      */
     public void clearSteps() {
         synchronized (storage) {
-            storage.clearSteps();
+            storage.clear();
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("all protocol step cleared");
         }
         fireStepsCleared(new ProtocolHandlerListenerEvent(this, ProtocolHandlerListenerEvent.PROTOCOL_STEPS_CLEARED));
     }
@@ -187,7 +189,12 @@ public class ProtocolHandler {
      * @throws  JsonProcessingException  DOCUMENT ME!
      */
     public String toJsonString() throws JsonProcessingException {
-        return objectMapper.writeValueAsString(storage);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("saving " + storage.size() + " protocol objects to JSON");
+        }
+
+        return objectMapper.writerWithType(new TypeReference<Collection<ProtocolStep>>() {
+                }).writeValueAsString(storage);
     }
 
     /**
@@ -199,10 +206,16 @@ public class ProtocolHandler {
      * @throws  ClassNotFoundException  DOCUMENT ME!
      */
     public void fromJsonString(final String jsonString) throws IOException, ClassNotFoundException {
-        final ProtocolStorage newStorage = (ProtocolStorage)objectMapper.readValue(jsonString, ProtocolStorage.class);
+        final Collection<ProtocolStep> loadedStorage = objectMapper.readValue(
+                jsonString,
+                new TypeReference<Collection<ProtocolStep>>() {
+                });
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(loadedStorage.size() + " protocol objects restored from JSON");
+        }
         synchronized (storage) {
-            storage.clearSteps();
-            storage.addSteps(newStorage.getSteps());
+            storage.clear();
+            storage.addAll(loadedStorage);
         }
 
         fireStepsRestored(new ProtocolHandlerListenerEvent(this, ProtocolHandlerListenerEvent.PROTOCOL_STEPS_RESTORED));
@@ -344,41 +357,6 @@ public class ProtocolHandler {
         public void stepsRestored(final ProtocolHandlerListenerEvent event) {
             for (final ProtocolHandlerListener listener : listeners) {
                 listener.stepsRestored(event);
-            }
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    class ProtocolStepDeserializer extends StdDeserializer<ProtocolStep> {
-
-        //~ Constructors -------------------------------------------------------
-
-        /**
-         * Creates a new ProtocolStepDeserializer object.
-         */
-        ProtocolStepDeserializer() {
-            super(ProtocolStep.class);
-        }
-
-        //~ Methods ------------------------------------------------------------
-
-        @Override
-        public ProtocolStep deserialize(final JsonParser jp, final DeserializationContext ctxt) throws IOException,
-            JsonProcessingException {
-            final ObjectMapper mapper = (ObjectMapper)jp.getCodec();
-            final ObjectNode root = (ObjectNode)mapper.readTree(jp);
-            try {
-                final DummyStep dummyStep = mapper.readValue(root.toString(), DummyStep.class);
-                final String stepClassString = dummyStep.getMetaInfo().getJavaCanonicalClassName();
-                final Class stepClass = Class.forName(stepClassString);
-                return (ProtocolStep)mapper.readValue(root.toString(), stepClass);
-            } catch (final ClassNotFoundException ex) {
-                LOG.error("error while deserializing step", ex);
-                return null;
             }
         }
     }

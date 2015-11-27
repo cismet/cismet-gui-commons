@@ -25,6 +25,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
 
+import de.cismet.commons.gui.protocol.impl.CommentProtocolStep;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -51,9 +53,14 @@ public class ProtocolPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JPanel panFiller;
     private javax.swing.JPanel panSteps;
@@ -85,7 +92,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
         jToggleButton1.setSelected(this.handler.isRecordEnabled());
         for (final ProtocolStep step : this.handler.getAllSteps()) {
-            addStep(step);
+            addStep(step, true);
         }
     }
 
@@ -101,6 +108,10 @@ public class ProtocolPanel extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jFileChooser1 = new javax.swing.JFileChooser();
+        jDialog1 = new javax.swing.JDialog();
+        jButton5 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         panSteps = new javax.swing.JPanel();
         panFiller = new javax.swing.JPanel();
@@ -109,8 +120,41 @@ public class ProtocolPanel extends javax.swing.JPanel {
         jToggleButton1 = new javax.swing.JToggleButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         jFileChooser1.setFileFilter(fileFilter);
+
+        jDialog1.setTitle(org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jDialog1.title")); // NOI18N
+        jDialog1.setMinimumSize(new java.awt.Dimension(400, 200));
+        jDialog1.setModal(true);
+        jDialog1.setResizable(false);
+        jDialog1.getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton5,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton5.text")); // NOI18N
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton5ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jDialog1.getContentPane().add(jButton5, gridBagConstraints);
+
+        jScrollPane2.setViewportView(jTextPane1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jDialog1.getContentPane().add(jScrollPane2, gridBagConstraints);
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -128,7 +172,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
         panFillerLayout.setVerticalGroup(
             panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                297,
+                268,
                 Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -144,7 +188,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         add(jScrollPane1, gridBagConstraints);
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
@@ -219,6 +263,22 @@ public class ProtocolPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel4, gridBagConstraints);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton4,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton4.text")); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton4ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        add(jButton4, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -307,11 +367,38 @@ public class ProtocolPanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
-     * @param  step  DOCUMENT ME!
+     * @param  evt  DOCUMENT ME!
      */
-    private void addStep(final ProtocolStep step) {
+    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
+        StaticSwingTools.showDialog(jDialog1);
+    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
+        ProtocolHandler.getInstance().recordStep(new CommentProtocolStep(jTextPane1.getText()));
+        jTextPane1.setText("");
+        jTextPane1.requestFocus();
+        jDialog1.setVisible(false);
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  step           DOCUMENT ME!
+     * @param  showImmediate  DOCUMENT ME!
+     */
+    private void addStep(final ProtocolStep step, final boolean showImmediate) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("adding GUI for protocol " + step.getMetaInfo().getKey()
+                        + "' and rendering it immediately: " + showImmediate);
+        }
+
         if (SwingUtilities.isEventDispatchThread()) {
-            final Component wrapper = new ProtocolStepPanelWrapper(step.visualize());
+            final Component wrapper = new ProtocolStepPanelWrapper(step, showImmediate);
 
             panSteps.remove(panFiller);
             final GridBagConstraints constraints = new GridBagConstraints();
@@ -335,7 +422,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
                     @Override
                     public void run() {
-                        addStep(step);
+                        addStep(step, showImmediate);
                     }
                 });
         }
@@ -385,7 +472,8 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
         @Override
         public void stepAdded(final ProtocolHandlerListenerEvent event) {
-            addStep(event.getSourceProtocolHander().getLastStep());
+            // -> don't render GUI after add! wait for initParameters()!
+            addStep(event.getSourceProtocolHander().getLastStep(), false);
         }
 
         @Override
@@ -397,7 +485,8 @@ public class ProtocolPanel extends javax.swing.JPanel {
         public void stepsRestored(final ProtocolHandlerListenerEvent event) {
             clearSteps();
             for (final ProtocolStep step : event.getSourceProtocolHander().getAllSteps()) {
-                addStep(step);
+                // -> render GUI after restore!
+                addStep(step, true);
             }
         }
     }

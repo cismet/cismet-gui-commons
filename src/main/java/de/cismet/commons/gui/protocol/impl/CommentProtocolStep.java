@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.commons.gui.protocol.impl;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,15 +22,22 @@ import de.cismet.commons.gui.protocol.ProtocolStepMetaInfo;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-@Getter
-@Setter
 public class CommentProtocolStep extends AbstractProtocolStep {
 
     //~ Instance fields --------------------------------------------------------
 
+    @Getter
+    @Setter
+    @JsonProperty(required = true)
     private String message;
 
     //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new CommentProtocolStep object.
+     */
+    public CommentProtocolStep() {
+    }
 
     /**
      * Creates a new CommentProtocolStep object.
@@ -39,40 +48,17 @@ public class CommentProtocolStep extends AbstractProtocolStep {
         this.message = message;
     }
 
-    /**
-     * Creates a new CommentProtocolStep object.
-     */
-    private CommentProtocolStep() {
-    }
-
     //~ Methods ----------------------------------------------------------------
 
     @Override
     protected ProtocolStepMetaInfo createMetaInfo() {
         return new ProtocolStepMetaInfo(
                 "comment",
-                "comment step protocol",
-                CommentProtocolStep.class.getCanonicalName());
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    public String getMessage() {
-        return message;
+                "comment step protocol");
     }
 
     @Override
     public AbstractProtocolStepPanel visualize() {
         return new CommentProtocolStepPanel(this);
-    }
-
-    @Override
-    protected void copyParams(final AbstractProtocolStep other) {
-        super.copyParams(other);
-        final CommentProtocolStep otherCommentProtocolStep = (CommentProtocolStep)other;
-        setMessage(otherCommentProtocolStep.getMessage());
     }
 }

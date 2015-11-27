@@ -12,6 +12,11 @@
  */
 package de.cismet.commons.gui.protocol;
 
+import org.openide.util.Exceptions;
+
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import de.cismet.commons.gui.protocol.impl.CommentProtocolStep;
 
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
@@ -25,15 +30,11 @@ import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 public class ProtocolPanelTester extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JDialog jDialog1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JSplitPane jSplitPane1;
     private de.cismet.commons.gui.protocol.ProtocolPanel protocolPanel1;
     // End of variables declaration//GEN-END:variables
 
@@ -57,52 +58,12 @@ public class ProtocolPanelTester extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
-
-        jDialog1 = new javax.swing.JDialog();
-        jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
         jButton2 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jSplitPane1 = new javax.swing.JSplitPane();
         protocolPanel1 = new de.cismet.commons.gui.protocol.ProtocolPanel();
         jPanel1 = new javax.swing.JPanel();
-
-        jDialog1.setTitle(org.openide.util.NbBundle.getMessage(
-                ProtocolPanelTester.class,
-                "ProtocolPanelTester.jDialog1.title")); // NOI18N
-        jDialog1.setMinimumSize(new java.awt.Dimension(400, 200));
-        jDialog1.setModal(true);
-        jDialog1.setResizable(false);
-        jDialog1.getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jButton1,
-            org.openide.util.NbBundle.getMessage(ProtocolPanelTester.class, "ProtocolPanelTester.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton1ActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jDialog1.getContentPane().add(jButton1, gridBagConstraints);
-
-        jScrollPane1.setViewportView(jTextPane1);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jDialog1.getContentPane().add(jScrollPane1, gridBagConstraints);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton2,
@@ -125,64 +86,30 @@ public class ProtocolPanelTester extends javax.swing.JFrame {
             });
         jPanel2.add(jButton4);
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jButton3,
-            org.openide.util.NbBundle.getMessage(ProtocolPanelTester.class, "ProtocolPanelTester.jButton3.text")); // NOI18N
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton3ActionPerformed(evt);
-                }
-            });
-        jPanel2.add(jButton3);
-
         getContentPane().add(jPanel2, java.awt.BorderLayout.NORTH);
 
         protocolPanel1.setMinimumSize(new java.awt.Dimension(300, 33));
         protocolPanel1.setPreferredSize(new java.awt.Dimension(300, 348));
-        getContentPane().add(protocolPanel1, java.awt.BorderLayout.LINE_END);
+        jSplitPane1.setRightComponent(protocolPanel1);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
 
         final javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                283,
-                Short.MAX_VALUE));
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                310,
+                475,
                 Short.MAX_VALUE));
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        jSplitPane1.setLeftComponent(jPanel1);
+
+        getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     } // </editor-fold>//GEN-END:initComponents
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        ProtocolHandler.getInstance().recordStep(new CommentProtocolStep(jTextPane1.getText()));
-        jTextPane1.setText("");
-        jTextPane1.requestFocus();
-        jDialog1.setVisible(false);
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
-        jDialog1.setVisible(true);
-    }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -241,8 +168,12 @@ public class ProtocolPanelTester extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ProtocolPanelTester.class.getName())
                     .log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
+        try {
+            //</editor-fold>
+            //</editor-fold>
+            UIManager.setLookAndFeel("com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
+        } catch (final Exception ex) {
+        }
 
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         /* Create and display the form */

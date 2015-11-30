@@ -22,7 +22,7 @@ import javax.swing.SwingUtilities;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements ProtocolStepListener {
+public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -51,11 +51,27 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements Prot
     public ProtocolStepPanelWrapper(final ProtocolStep protocolStep,
             final boolean showImmediate) {
         this.protocolStep = protocolStep;
-        protocolStep.addProtocolStepListener(this);
         initComponents();
 
-        if (showImmediate) {
+        if (showImmediate || protocolStep.isInited()) {
             showStep();
+        } else {
+            protocolStep.addProtocolStepListener(new ProtocolStepListener() {
+
+                    @Override
+                    public void parametersChanged(final ProtocolStepListenerEvent event) {
+                        final ProtocolStep step = event.getProtocolStep();
+                        if (step.equals(protocolStep)) {
+                            SwingUtilities.invokeLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        showStep();
+                                    }
+                                });
+                        }
+                    }
+                });
         }
     }
 
@@ -100,7 +116,7 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements Prot
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        panTitle.setMinimumSize(new java.awt.Dimension(100, 50));
+        panTitle.setMinimumSize(new java.awt.Dimension(100, 30));
         panTitle.setLayout(new java.awt.BorderLayout());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, protocolStep.getMetaInfo().getDescription());
@@ -116,8 +132,8 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements Prot
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(panTitle, gridBagConstraints);
 
-        panIcon.setMinimumSize(new java.awt.Dimension(50, 50));
-        panIcon.setPreferredSize(new java.awt.Dimension(50, 50));
+        panIcon.setMinimumSize(new java.awt.Dimension(30, 30));
+        panIcon.setPreferredSize(new java.awt.Dimension(30, 30));
         panIcon.setLayout(new java.awt.BorderLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -193,18 +209,4 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements Prot
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         ProtocolHandler.getInstance().removeStep(protocolStep);
     }                                                                            //GEN-LAST:event_jButton1ActionPerformed
-
-    @Override
-    public void parametersChanged(final ProtocolStepListenerEvent event) {
-        final ProtocolStep step = event.getProtocolStep();
-        if (step.equals(protocolStep)) {
-            SwingUtilities.invokeLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        showStep();
-                    }
-                });
-        }
-    }
 }

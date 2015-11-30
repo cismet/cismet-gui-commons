@@ -147,7 +147,9 @@ public class ProtocolHandler {
 
                     @Override
                     public void run() {
+                        protocolStep.setInited(false);
                         protocolStep.initParameters();
+                        protocolStep.setInited(true);
                         if (LOG.isDebugEnabled()) {
                             LOG.debug("Parameters initialized, building GUI");
                         }

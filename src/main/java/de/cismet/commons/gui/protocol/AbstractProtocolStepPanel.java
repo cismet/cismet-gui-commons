@@ -14,14 +14,17 @@ import javax.swing.JLabel;
 /**
  * DOCUMENT ME!
  *
+ * @param    <S>
+ *
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public abstract class AbstractProtocolStepPanel extends javax.swing.JPanel implements ProtocolStepPanel {
+public abstract class AbstractProtocolStepPanel<S extends ProtocolStep> extends javax.swing.JPanel
+        implements ProtocolStepPanel {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final ProtocolStep protocolStep;
+    private final S protocolStep;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -40,7 +43,7 @@ public abstract class AbstractProtocolStepPanel extends javax.swing.JPanel imple
      *
      * @param  protocolStep  DOCUMENT ME!
      */
-    public AbstractProtocolStepPanel(final ProtocolStep protocolStep) {
+    public AbstractProtocolStepPanel(final S protocolStep) {
         this.protocolStep = protocolStep;
     }
 
@@ -52,7 +55,7 @@ public abstract class AbstractProtocolStepPanel extends javax.swing.JPanel imple
      * @return  DOCUMENT ME!
      */
     @Override
-    public ProtocolStep getProtocolStep() {
+    public S getProtocolStep() {
         return protocolStep;
     }
 

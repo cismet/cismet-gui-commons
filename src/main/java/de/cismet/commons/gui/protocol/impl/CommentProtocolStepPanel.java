@@ -17,7 +17,7 @@ import de.cismet.commons.gui.protocol.AbstractProtocolStepPanel;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class CommentProtocolStepPanel extends AbstractProtocolStepPanel {
+public class CommentProtocolStepPanel extends AbstractProtocolStepPanel<CommentProtocolStep> {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -40,11 +40,6 @@ public class CommentProtocolStepPanel extends AbstractProtocolStepPanel {
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    @Override
-    public CommentProtocolStep getProtocolStep() {
-        return (CommentProtocolStep)super.getProtocolStep();
-    }
 
     /**
      * DOCUMENT ME!

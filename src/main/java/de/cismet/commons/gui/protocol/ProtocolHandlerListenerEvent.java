@@ -26,12 +26,14 @@ public class ProtocolHandlerListenerEvent extends EventObject {
 
     public static int PROTOCOL_RECORD_STATE = 0;
     public static int PROTOCOL_STEP_ADDED = 1;
-    public static int PROTOCOL_STEPS_CLEARED = 2;
-    public static int PROTOCOL_STEPS_RESTORED = 3;
+    public static int PROTOCOL_STEP_REMOVED = 2;
+    public static int PROTOCOL_STEPS_CLEARED = 3;
+    public static int PROTOCOL_STEPS_RESTORED = 4;
 
     //~ Instance fields --------------------------------------------------------
 
     private final int id;
+    private final Object eventObject;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -42,8 +44,20 @@ public class ProtocolHandlerListenerEvent extends EventObject {
      * @param  id      DOCUMENT ME!
      */
     public ProtocolHandlerListenerEvent(final ProtocolHandler source, final int id) {
+        this(source, null, id);
+    }
+
+    /**
+     * Creates a new ProtocolHandlerListenerEvent object.
+     *
+     * @param  source       DOCUMENT ME!
+     * @param  eventObject  DOCUMENT ME!
+     * @param  id           DOCUMENT ME!
+     */
+    public ProtocolHandlerListenerEvent(final ProtocolHandler source, final Object eventObject, final int id) {
         super(source);
         this.id = id;
+        this.eventObject = eventObject;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -100,5 +114,14 @@ public class ProtocolHandlerListenerEvent extends EventObject {
      */
     public ProtocolHandler getSourceProtocolHander() {
         return (ProtocolHandler)getSource();
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public Object getEventObject() {
+        return eventObject;
     }
 }

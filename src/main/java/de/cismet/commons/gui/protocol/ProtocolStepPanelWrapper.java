@@ -29,11 +29,11 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements Prot
     private final ProtocolStep protocolStep;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel panIcon;
     private javax.swing.JPanel panMain;
@@ -90,7 +90,7 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements Prot
         jLabel2 = new javax.swing.JLabel();
         panIcon = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         panMain = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -136,24 +136,24 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements Prot
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(panIcon, gridBagConstraints);
 
-        jPanel2.setMinimumSize(new java.awt.Dimension(1, 50));
-        jPanel2.setPreferredSize(new java.awt.Dimension(1, 50));
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(
+                ProtocolStepPanelWrapper.class,
+                "ProtocolStepPanelWrapper.jButton1.text")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
 
-        final javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 1, Short.MAX_VALUE));
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                50,
-                Short.MAX_VALUE));
-
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.weighty = 1.0;
-        jPanel1.add(jPanel2, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jButton1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -184,6 +184,15 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel implements Prot
         gridBagConstraints.weightx = 1.0;
         add(jSeparator1, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
+        ProtocolHandler.getInstance().removeStep(protocolStep);
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     @Override
     public void parametersChanged(final ProtocolStepListenerEvent event) {

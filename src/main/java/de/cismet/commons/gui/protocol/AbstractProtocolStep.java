@@ -81,12 +81,6 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
         }
     }
 
-    @Override
-    public AbstractProtocolStep fromJsonString(final String jsonString) throws IOException {
-        final AbstractProtocolStep protocolStep = (AbstractProtocolStep)fromJsonString(jsonString, getClass());
-        return protocolStep;
-    }
-
     /**
      * DOCUMENT ME!
      *

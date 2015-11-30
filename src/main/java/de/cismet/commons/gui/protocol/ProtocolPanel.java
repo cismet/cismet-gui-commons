@@ -20,6 +20,9 @@ import java.awt.Insets;
 
 import java.io.File;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -48,6 +51,8 @@ public class ProtocolPanel extends javax.swing.JPanel {
                 ProtocolPanel.class,
                 "ProtocolPanel.filefilter.jsonfiledesc"),
             "json");
+    private final Map<ProtocolStep, ProtocolStepPanelWrapper> protocolStepToWrapperMap =
+        new HashMap<ProtocolStep, ProtocolStepPanelWrapper>();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -388,6 +393,20 @@ public class ProtocolPanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
+     * @param  step  DOCUMENT ME!
+     */
+    private void removeStep(final ProtocolStep step) {
+        final ProtocolStepPanelWrapper wrapper = protocolStepToWrapperMap.get(step);
+        if (wrapper != null) {
+            panSteps.remove(wrapper);
+            panSteps.revalidate();
+            repaint();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  step           DOCUMENT ME!
      * @param  showImmediate  DOCUMENT ME!
      */
@@ -398,7 +417,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
         }
 
         if (SwingUtilities.isEventDispatchThread()) {
-            final Component wrapper = new ProtocolStepPanelWrapper(step, showImmediate);
+            final ProtocolStepPanelWrapper wrapper = new ProtocolStepPanelWrapper(step, showImmediate);
 
             panSteps.remove(panFiller);
             final GridBagConstraints constraints = new GridBagConstraints();
@@ -412,6 +431,8 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
             constraints.weighty = 1;
             panSteps.add(panFiller, constraints);
+
+            protocolStepToWrapperMap.put(step, wrapper);
 
             panSteps.revalidate();
 
@@ -473,7 +494,12 @@ public class ProtocolPanel extends javax.swing.JPanel {
         @Override
         public void stepAdded(final ProtocolHandlerListenerEvent event) {
             // -> don't render GUI after add! wait for initParameters()!
-            addStep(event.getSourceProtocolHander().getLastStep(), false);
+            addStep((ProtocolStep)event.getEventObject(), false);
+        }
+
+        @Override
+        public void stepRemoved(final ProtocolHandlerListenerEvent event) {
+            removeStep((ProtocolStep)event.getEventObject());
         }
 
         @Override

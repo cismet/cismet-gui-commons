@@ -117,6 +117,19 @@ public class ProtocolHandler {
     /**
      * DOCUMENT ME!
      *
+     * @param  protocolStep  DOCUMENT ME!
+     */
+    public void removeStep(final ProtocolStep protocolStep) {
+        storage.remove(protocolStep);
+        fireStepRemoved(new ProtocolHandlerListenerEvent(
+                this,
+                protocolStep,
+                ProtocolHandlerListenerEvent.PROTOCOL_STEP_REMOVED));
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   protocolStep  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
@@ -126,7 +139,10 @@ public class ProtocolHandler {
             synchronized (storage) {
                 storage.add(protocolStep);
             }
-            fireStepAdded(new ProtocolHandlerListenerEvent(this, ProtocolHandlerListenerEvent.PROTOCOL_STEP_ADDED));
+            fireStepAdded(new ProtocolHandlerListenerEvent(
+                    this,
+                    protocolStep,
+                    ProtocolHandlerListenerEvent.PROTOCOL_STEP_ADDED));
             new Thread(new Runnable() {
 
                     @Override
@@ -282,6 +298,15 @@ public class ProtocolHandler {
      *
      * @param  event  DOCUMENT ME!
      */
+    protected void fireStepRemoved(final ProtocolHandlerListenerEvent event) {
+        listenerHandler.stepRemoved(event);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  event  DOCUMENT ME!
+     */
     protected void fireStepsCleared(final ProtocolHandlerListenerEvent event) {
         listenerHandler.stepsCleared(event);
     }
@@ -343,6 +368,13 @@ public class ProtocolHandler {
         public void stepAdded(final ProtocolHandlerListenerEvent event) {
             for (final ProtocolHandlerListener listener : listeners) {
                 listener.stepAdded(event);
+            }
+        }
+
+        @Override
+        public void stepRemoved(final ProtocolHandlerListenerEvent event) {
+            for (final ProtocolHandlerListener listener : listeners) {
+                listener.stepRemoved(event);
             }
         }
 

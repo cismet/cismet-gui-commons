@@ -7,6 +7,7 @@
 ****************************************************/
 package de.cismet.commons.gui.protocol;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,10 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
     protected static final transient ObjectMapper MAPPER = new ObjectMapper();
 
     //~ Instance fields --------------------------------------------------------
+
+    @Setter(AccessLevel.PACKAGE)
+    @JsonIgnore
+    private transient boolean isInited;
 
     @JsonProperty(required = true)
     private ProtocolStepMetaInfo metaInfo;

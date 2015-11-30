@@ -13,8 +13,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.io.IOException;
-
 import java.util.Date;
 
 /**
@@ -73,7 +71,14 @@ public interface ProtocolStep {
      *
      * @return  DOCUMENT ME!
      */
-    AbstractProtocolStepPanel visualize();
+    ProtocolStepPanel visualize();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    boolean isInited();
 
     /**
      * DOCUMENT ME!

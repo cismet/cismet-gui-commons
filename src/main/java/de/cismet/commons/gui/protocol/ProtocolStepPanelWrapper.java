@@ -34,6 +34,7 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel panIcon;
     private javax.swing.JPanel panMain;
@@ -102,11 +103,12 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         panTitle = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         panIcon = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         panMain = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -115,6 +117,35 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
         setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/commons/gui/protocol/remove_step.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(
+                ProtocolStepPanelWrapper.class,
+                "ProtocolStepPanelWrapper.jButton1.text"));                                  // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        jPanel2.add(jButton1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jPanel2, gridBagConstraints);
 
         panTitle.setMinimumSize(new java.awt.Dimension(100, 30));
         panTitle.setLayout(new java.awt.BorderLayout());
@@ -151,25 +182,6 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(panIcon, gridBagConstraints);
-
-        org.openide.awt.Mnemonics.setLocalizedText(
-            jButton1,
-            org.openide.util.NbBundle.getMessage(
-                ProtocolStepPanelWrapper.class,
-                "ProtocolStepPanelWrapper.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton1ActionPerformed(evt);
-                }
-            });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jButton1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;

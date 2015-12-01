@@ -12,6 +12,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import org.jdom.Element;
+
+import org.openide.util.Lookup;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -20,8 +24,13 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
+import de.cismet.tools.configuration.Configurable;
+import de.cismet.tools.configuration.NoWriteError;
 
 /**
  * DOCUMENT ME!
@@ -29,7 +38,7 @@ import java.util.List;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class ProtocolHandler {
+public class ProtocolHandler implements Configurable {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -43,6 +52,7 @@ public class ProtocolHandler {
     private final LinkedList<ProtocolStep> storage = new LinkedList<ProtocolStep>();
     private final ProtocolHandlerListenerHandler listenerHandler = new ProtocolHandlerListenerHandler();
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Map<String, ProtocolStepConfiguration> configMap = new HashMap<String, ProtocolStepConfiguration>();
 
     private boolean recordEnabled = false;
 
@@ -54,6 +64,15 @@ public class ProtocolHandler {
     private ProtocolHandler() {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         // objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        final Collection<? extends ProtocolStepConfiguration> configs = Lookup.getDefault()
+                    .lookupAll(ProtocolStepConfiguration.class);
+        for (final ProtocolStepConfiguration config : configs) {
+            final String configKey = config.getProtocolStepKey();
+            if (configKey != null) {
+                configMap.put(configKey, config);
+            }
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -90,6 +109,17 @@ public class ProtocolHandler {
      */
     public boolean removeProtocolHandlerListener(final ProtocolHandlerListener listener) {
         return listenerHandler.removeProtocolHandlerListener(listener);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   stepKey  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public ProtocolStepConfiguration getProtocolStepConfiguration(final String stepKey) {
+        return configMap.get(stepKey);
     }
 
     /**
@@ -320,6 +350,45 @@ public class ProtocolHandler {
      */
     protected void fireStepsRestored(final ProtocolHandlerListenerEvent event) {
         listenerHandler.stepsRestored(event);
+    }
+
+    @Override
+    public void configure(final Element parent) {
+        final Element root = parent.getChild("protocolHandler");
+        final Element steps = root.getChild("protocolSteps");
+        for (final String key : configMap.keySet()) {
+            try {
+                final ProtocolStepConfiguration config = configMap.get(key);
+                config.configure(steps);
+            } catch (final Exception ex) {
+                LOG.warn("error while configuration of " + key, ex);
+            }
+        }
+    }
+
+    @Override
+    public void masterConfigure(final Element parent) {
+        configure(parent);
+    }
+
+    @Override
+    public Element getConfiguration() throws NoWriteError {
+        final Element root = new Element("protocolHandler");
+        final Element steps = new Element("protocolSteps");
+
+        root.addContent(steps);
+
+        for (final Configurable config : configMap.values()) {
+            try {
+                final Element element = config.getConfiguration();
+                if (element != null) {
+                    steps.addContent(element);
+                }
+            } catch (final Exception t) {
+                LOG.warn("error while writing config part", t); // NOI18N
+            }
+        }
+        return root;
     }
 
     //~ Inner Classes ----------------------------------------------------------

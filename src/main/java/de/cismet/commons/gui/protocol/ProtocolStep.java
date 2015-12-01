@@ -71,6 +71,13 @@ public interface ProtocolStep {
      *
      * @return  DOCUMENT ME!
      */
+    ProtocolStepConfiguration getConfiguration();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     ProtocolStepPanel visualize();
 
     /**

@@ -43,6 +43,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ProtocolPanel.class);
+    private static final transient String FILE_SUFFIX = "prot";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -50,7 +51,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
     private final FileFilter fileFilter = new ExtensionFileFilter(org.openide.util.NbBundle.getMessage(
                 ProtocolPanel.class,
                 "ProtocolPanel.filefilter.jsonfiledesc"),
-            "json");
+            FILE_SUFFIX);
     private final Map<ProtocolStep, ProtocolStepPanelWrapper> protocolStepToWrapperMap =
         new HashMap<ProtocolStep, ProtocolStepPanelWrapper>();
 
@@ -320,10 +321,10 @@ public class ProtocolPanel extends javax.swing.JPanel {
                     protected Void doInBackground() throws Exception {
                         try {
                             final File fileToSave;
-                            if (selectedFile.getName().toLowerCase().endsWith(".json")) {
+                            if (selectedFile.getName().toLowerCase().endsWith("." + FILE_SUFFIX)) {
                                 fileToSave = selectedFile;
                             } else {
-                                fileToSave = new File(selectedFile.getAbsolutePath() + ".json");
+                                fileToSave = new File(selectedFile.getAbsolutePath() + "." + FILE_SUFFIX);
                             }
                             handler.writeToFile(fileToSave);
                         } catch (final Exception ex) {

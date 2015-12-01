@@ -66,20 +66,11 @@ public class CommentProtocolStepPanel extends AbstractProtocolStepPanel<CommentP
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblTitle,
-            org.openide.util.NbBundle.getMessage(
-                CommentProtocolStepPanel.class,
-                "CommentProtocolStepPanel.lblTitle.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblTitle, org.openide.util.NbBundle.getMessage(CommentProtocolStepPanel.class, "CommentProtocolStepPanel.lblTitle.text")); // NOI18N
 
         lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblIcon.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/lookupoptions/options/cismetlogo32.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(
-            lblIcon,
-            org.openide.util.NbBundle.getMessage(
-                CommentProtocolStepPanel.class,
-                "CommentProtocolStepPanel.lblIcon.text"));                                     // NOI18N
+        lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/impl/comment.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblIcon, org.openide.util.NbBundle.getMessage(CommentProtocolStepPanel.class, "CommentProtocolStepPanel.lblIcon.text")); // NOI18N
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -102,7 +93,7 @@ public class CommentProtocolStepPanel extends AbstractProtocolStepPanel<CommentP
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(jPanel1, gridBagConstraints);
-    } // </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
     @Override
     public Component getIconComponent() {

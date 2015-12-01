@@ -157,15 +157,20 @@ public class ProtocolHandler implements Configurable {
                 ProtocolHandlerListenerEvent.PROTOCOL_STEP_REMOVED));
     }
 
+    public boolean recordStep(final AbstractProtocolStep protocolStep) {
+        return recordStep(protocolStep, true);
+    }
+
     /**
      * DOCUMENT ME!
      *
      * @param   protocolStep  DOCUMENT ME!
+     * @param checkIfRecordIsEnabled
      *
      * @return  DOCUMENT ME!
      */
-    public boolean recordStep(final AbstractProtocolStep protocolStep) {
-        if (isRecordEnabled()) {
+    public boolean recordStep(final AbstractProtocolStep protocolStep, final boolean checkIfRecordIsEnabled) {
+        if (!checkIfRecordIsEnabled || isRecordEnabled()) {
             synchronized (storage) {
                 storage.add(protocolStep);
             }

@@ -103,6 +103,20 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
         }
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    @Override
+    public ProtocolStepConfiguration getConfiguration() {
+        if ((getMetaInfo() != null) && (getMetaInfo().getKey() != null)) {
+            return ProtocolHandler.getInstance().getProtocolStepConfiguration(getMetaInfo().getKey());
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public abstract AbstractProtocolStepPanel visualize();
 

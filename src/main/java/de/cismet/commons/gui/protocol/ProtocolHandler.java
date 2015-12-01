@@ -157,6 +157,13 @@ public class ProtocolHandler implements Configurable {
                 ProtocolHandlerListenerEvent.PROTOCOL_STEP_REMOVED));
     }
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   protocolStep  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public boolean recordStep(final AbstractProtocolStep protocolStep) {
         return recordStep(protocolStep, true);
     }
@@ -164,8 +171,8 @@ public class ProtocolHandler implements Configurable {
     /**
      * DOCUMENT ME!
      *
-     * @param   protocolStep  DOCUMENT ME!
-     * @param checkIfRecordIsEnabled
+     * @param   protocolStep            DOCUMENT ME!
+     * @param   checkIfRecordIsEnabled  DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */

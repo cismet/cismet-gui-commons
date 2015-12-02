@@ -12,12 +12,9 @@
  */
 package de.cismet.commons.gui.protocol;
 
-import org.openide.util.Exceptions;
-
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
-import de.cismet.commons.gui.protocol.impl.CommentProtocolStep;
+import de.cismet.commons.gui.protocol.impl.CommentProtocolStepImpl;
 
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
@@ -118,7 +115,7 @@ public class ProtocolPanelTester extends javax.swing.JFrame {
      */
     private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
         ProtocolHandler.getInstance()
-                .recordStep(new CommentProtocolStep(
+                .recordStep(new CommentProtocolStepImpl(
                         "    // Variables declaration - do not modify                     \n"
                         + "    private javax.swing.JButton jButton1;\n"
                         + "    private javax.swing.JPanel jPanel1;\n"
@@ -129,7 +126,7 @@ public class ProtocolPanelTester extends javax.swing.JFrame {
                         + "    private javax.swing.JPanel panSteps;\n"
                         + "    // End of variables declaration              "));
         ProtocolHandler.getInstance()
-                .recordStep(new CommentProtocolStep(
+                .recordStep(new CommentProtocolStepImpl(
                         "        final JFrame frame = new JFrame(\"test\");\n"
                         + "        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\n"
                         + "        frame.setContentPane(new ProtocolPanel());\n"

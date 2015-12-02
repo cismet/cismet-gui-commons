@@ -74,12 +74,12 @@ public class CommentProtocolStepPanel extends AbstractProtocolStepPanel<CommentP
 
         lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblIcon.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/lookupoptions/options/cismetlogo32.png"))); // NOI18N
+                getClass().getResource("/de/cismet/commons/gui/protocol/impl/comment.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             lblIcon,
             org.openide.util.NbBundle.getMessage(
                 CommentProtocolStepPanel.class,
-                "CommentProtocolStepPanel.lblIcon.text"));                                     // NOI18N
+                "CommentProtocolStepPanel.lblIcon.text"));                                    // NOI18N
 
         setLayout(new java.awt.GridBagLayout());
 

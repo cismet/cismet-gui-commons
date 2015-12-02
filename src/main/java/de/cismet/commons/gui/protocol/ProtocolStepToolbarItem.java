@@ -10,9 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.commons.gui.protocol.impl;
-
-import de.cismet.commons.gui.protocol.ProtocolStep;
+package de.cismet.commons.gui.protocol;
 
 /**
  * DOCUMENT ME!
@@ -20,7 +18,7 @@ import de.cismet.commons.gui.protocol.ProtocolStep;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public interface CommentProtocolStep extends ProtocolStep {
+public interface ProtocolStepToolbarItem {
 
     //~ Methods ----------------------------------------------------------------
 
@@ -29,5 +27,12 @@ public interface CommentProtocolStep extends ProtocolStep {
      *
      * @return  DOCUMENT ME!
      */
-    String getMessage();
+    String getSorterString();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    boolean isVisible();
 }

@@ -65,7 +65,7 @@ public class ProtocolTester {
         log("========================");
 
         log("creating protocol...");
-        final CommentProtocolStep proto = new CommentProtocolStep("dies ist ein Test-Kommentar");
+        final CommentProtocolStep proto = new CommentProtocolStepImpl("dies ist ein Test-Kommentar");
         log("protocol: " + proto);
         log("* date: " + proto.getDate());
         log("* message: " + proto.getMessage());
@@ -77,7 +77,7 @@ public class ProtocolTester {
         log("restoring protocol from json...");
         final CommentProtocolStep newProto = (CommentProtocolStep)AbstractProtocolStep.fromJsonString(
                 jsonString,
-                CommentProtocolStep.class);
+                CommentProtocolStepImpl.class);
         log("protocol: " + newProto);
         log("* date: " + newProto.getDate());
         log("* message: " + newProto.getMessage());
@@ -86,14 +86,14 @@ public class ProtocolTester {
         log("= protocol handler test =");
         log("=========================");
 
-        log(new CommentProtocolStep("Protollierungs-Test nummer eins...").toJsonString());
+        log(new CommentProtocolStepImpl("Protollierungs-Test nummer eins...").toJsonString());
 
         log("recording some protocols...");
         ProtocolHandler.getInstance().setRecordEnabled(true);
-        ProtocolHandler.getInstance().recordStep(new CommentProtocolStep("Protollierungs-Test nummer eins..."));
-        ProtocolHandler.getInstance().recordStep(new CommentProtocolStep("...noch ein Test..."));
-        ProtocolHandler.getInstance().recordStep(new CommentProtocolStep("...es wird wie wild getestet..."));
-        ProtocolHandler.getInstance().recordStep(new CommentProtocolStep("...irgendwann reicht es aber auch !"));
+        ProtocolHandler.getInstance().recordStep(new CommentProtocolStepImpl("Protollierungs-Test nummer eins..."));
+        ProtocolHandler.getInstance().recordStep(new CommentProtocolStepImpl("...noch ein Test..."));
+        ProtocolHandler.getInstance().recordStep(new CommentProtocolStepImpl("...es wird wie wild getestet..."));
+        ProtocolHandler.getInstance().recordStep(new CommentProtocolStepImpl("...irgendwann reicht es aber auch !"));
         log("number of recorded protocols: " + ProtocolHandler.getInstance().getAllSteps().size());
 
         log("storing all protocols to json...");

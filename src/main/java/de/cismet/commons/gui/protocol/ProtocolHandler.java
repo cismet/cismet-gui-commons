@@ -24,6 +24,8 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,6 +55,7 @@ public class ProtocolHandler implements Configurable {
     private final ProtocolHandlerListenerHandler listenerHandler = new ProtocolHandlerListenerHandler();
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Map<String, ProtocolStepConfiguration> configMap = new HashMap<String, ProtocolStepConfiguration>();
+    private final List<ProtocolStepToolbarItem> toolbarItems = new ArrayList<ProtocolStepToolbarItem>();
 
     private boolean recordEnabled = false;
 
@@ -73,6 +76,21 @@ public class ProtocolHandler implements Configurable {
                 configMap.put(configKey, config);
             }
         }
+
+        final Collection<? extends ProtocolStepToolbarItem> toolbarItems = Lookup.getDefault()
+                    .lookupAll(ProtocolStepToolbarItem.class);
+        for (final ProtocolStepToolbarItem toolbarItem : toolbarItems) {
+            if (toolbarItem.isVisible()) {
+                this.toolbarItems.add(toolbarItem);
+            }
+        }
+        Collections.sort(this.toolbarItems, new Comparator<ProtocolStepToolbarItem>() {
+
+                @Override
+                public int compare(final ProtocolStepToolbarItem o1, final ProtocolStepToolbarItem o2) {
+                    return o1.getSorterString().compareTo(o2.getSorterString());
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -165,7 +183,19 @@ public class ProtocolHandler implements Configurable {
      * @return  DOCUMENT ME!
      */
     public boolean recordStep(final AbstractProtocolStep protocolStep) {
-        if (isRecordEnabled()) {
+        return recordStep(protocolStep, true);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   protocolStep            DOCUMENT ME!
+     * @param   checkIfRecordIsEnabled  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean recordStep(final AbstractProtocolStep protocolStep, final boolean checkIfRecordIsEnabled) {
+        if (!checkIfRecordIsEnabled || isRecordEnabled()) {
             synchronized (storage) {
                 storage.add(protocolStep);
             }
@@ -214,6 +244,15 @@ public class ProtocolHandler implements Configurable {
      */
     public List<ProtocolStep> getAllSteps() {
         return new ArrayList<ProtocolStep>(storage);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public List<ProtocolStepToolbarItem> getToolbarItems() {
+        return new ArrayList<ProtocolStepToolbarItem>(toolbarItems);
     }
 
     /**

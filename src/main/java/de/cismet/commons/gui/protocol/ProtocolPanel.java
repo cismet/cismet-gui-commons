@@ -26,6 +26,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
@@ -64,18 +65,12 @@ public class ProtocolPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JDialog jDialog1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
-    private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel panFiller;
@@ -110,6 +105,14 @@ public class ProtocolPanel extends javax.swing.JPanel {
         for (final ProtocolStep step : this.handler.getAllSteps()) {
             addStep(step, true);
         }
+
+        for (final ProtocolStepToolbarItem toolbarItem : this.handler.getToolbarItems()) {
+            if (toolbarItem instanceof Component) {
+                jToolBar1.add((Component)toolbarItem);
+            } else if (toolbarItem instanceof Action) {
+                jToolBar1.add((Action)toolbarItem);
+            }
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -124,11 +127,6 @@ public class ProtocolPanel extends javax.swing.JPanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jFileChooser1 = new javax.swing.JFileChooser();
-        jDialog1 = new javax.swing.JDialog();
-        jButton5 = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
-        jSeparator5 = new javax.swing.JSeparator();
         jToolBar1 = new javax.swing.JToolBar();
         jToggleButton1 = new javax.swing.JToggleButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
@@ -138,7 +136,6 @@ public class ProtocolPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         filler1 = (javax.swing.Box.Filler)Box.createHorizontalGlue();
-        jButton4 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         panSteps = new javax.swing.JPanel();
@@ -146,113 +143,98 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
         jFileChooser1.setFileFilter(fileFilter);
 
-        jDialog1.setTitle(org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jDialog1.title")); // NOI18N
-        jDialog1.setMinimumSize(new java.awt.Dimension(400, 200));
-        jDialog1.setModal(true);
-        jDialog1.setResizable(false);
-        jDialog1.getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        org.openide.awt.Mnemonics.setLocalizedText(jButton5, org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton5.text")); // NOI18N
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jDialog1.getContentPane().add(jButton5, gridBagConstraints);
-
-        jScrollPane2.setViewportView(jTextPane1);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jDialog1.getContentPane().add(jScrollPane2, gridBagConstraints);
-
         setLayout(new java.awt.BorderLayout());
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/record_off.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jToggleButton1, org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jToggleButton1.text")); // NOI18N
-        jToggleButton1.setToolTipText(org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jToggleButton1.toolTipText")); // NOI18N
+        jToggleButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/commons/gui/protocol/record_off.png")));                  // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jToggleButton1,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jToggleButton1.text")); // NOI18N
+        jToggleButton1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                ProtocolPanel.class,
+                "ProtocolPanel.jToggleButton1.toolTipText"));                                                // NOI18N
         jToggleButton1.setBorderPainted(false);
         jToggleButton1.setContentAreaFilled(false);
         jToggleButton1.setFocusable(false);
         jToggleButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jToggleButton1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/record_on.png"))); // NOI18N
-        jToggleButton1.setRolloverSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/record_off.png"))); // NOI18N
-        jToggleButton1.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/record_on.png"))); // NOI18N
+        jToggleButton1.setRolloverIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/commons/gui/protocol/record_on.png")));                   // NOI18N
+        jToggleButton1.setRolloverSelectedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/commons/gui/protocol/record_off.png")));                  // NOI18N
+        jToggleButton1.setSelectedIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/commons/gui/protocol/record_on.png")));                   // NOI18N
         jToggleButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jToggleButton1ActionPerformed(evt);
+                }
+            });
         jToolBar1.add(jToggleButton1);
         jToolBar1.add(jSeparator2);
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/load.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButton3, org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton3.text")); // NOI18N
-        jButton3.setToolTipText(org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton3.toolTipText")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton3,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton3.text"));                   // NOI18N
+        jButton3.setToolTipText(org.openide.util.NbBundle.getMessage(
+                ProtocolPanel.class,
+                "ProtocolPanel.jButton3.toolTipText"));                                                                  // NOI18N
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
         jToolBar1.add(jButton3);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/save.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton2.text")); // NOI18N
-        jButton2.setToolTipText(org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton2.toolTipText")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton2,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton2.text"));                   // NOI18N
+        jButton2.setToolTipText(org.openide.util.NbBundle.getMessage(
+                ProtocolPanel.class,
+                "ProtocolPanel.jButton2.toolTipText"));                                                                  // NOI18N
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
         jToolBar1.add(jButton2);
         jToolBar1.add(jSeparator3);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton1.text")); // NOI18N
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
         jToolBar1.add(jButton1);
 
         jPanel1.setOpaque(false);
         jPanel1.add(filler1);
 
         jToolBar1.add(jPanel1);
-
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/impl/comment.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButton4, org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton4.text")); // NOI18N
-        jButton4.setToolTipText(org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton4.toolTipText")); // NOI18N
-        jButton4.setFocusable(false);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jButton4);
 
         jToolBar1.putClientProperty(Options.HEADER_STYLE_KEY, HeaderStyle.BOTH);
 
@@ -264,16 +246,18 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
         panFiller.setPreferredSize(new java.awt.Dimension(100, 1));
 
-        javax.swing.GroupLayout panFillerLayout = new javax.swing.GroupLayout(panFiller);
+        final javax.swing.GroupLayout panFillerLayout = new javax.swing.GroupLayout(panFiller);
         panFiller.setLayout(panFillerLayout);
         panFillerLayout.setHorizontalGroup(
-            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                100,
+                Short.MAX_VALUE));
         panFillerLayout.setVerticalGroup(
-            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 305, Short.MAX_VALUE)
-        );
+            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+                0,
+                315,
+                Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -288,36 +272,35 @@ public class ProtocolPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(jScrollPane1, gridBagConstraints);
 
         add(jPanel4, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         handler.clearSteps();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
         handler.setRecordEnabled(jToggleButton1.isSelected());
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }                                                                                  //GEN-LAST:event_jToggleButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         final int status = jFileChooser1.showSaveDialog(StaticSwingTools.getParentFrame(this));
         if (status == JFileChooser.APPROVE_OPTION) {
             final File selectedFile = jFileChooser1.getSelectedFile();
@@ -346,14 +329,14 @@ public class ProtocolPanel extends javax.swing.JPanel {
                 }.execute();
         } else if (status == JFileChooser.CANCEL_OPTION) {
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    } //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
         final int status = jFileChooser1.showOpenDialog(StaticSwingTools.getParentFrame(this));
         if (status == JFileChooser.APPROVE_OPTION) {
             final File selectedFile = jFileChooser1.getSelectedFile();
@@ -375,28 +358,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
                 }.execute();
         } else if (status == JFileChooser.CANCEL_OPTION) {
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        StaticSwingTools.showDialog(jDialog1);
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  evt  DOCUMENT ME!
-     */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        ProtocolHandler.getInstance().recordStep(new CommentProtocolStepImpl(jTextPane1.getText()), false);
-        jTextPane1.setText("");
-        jTextPane1.requestFocus();
-        jDialog1.setVisible(false);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    } //GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * DOCUMENT ME!

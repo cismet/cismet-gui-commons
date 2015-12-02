@@ -127,6 +127,12 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
             org.openide.util.NbBundle.getMessage(
                 ProtocolStepPanelWrapper.class,
                 "ProtocolStepPanelWrapper.jButton1.text"));                                  // NOI18N
+        jButton1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                ProtocolStepPanelWrapper.class,
+                "ProtocolStepPanelWrapper.jButton1.toolTipText"));                           // NOI18N
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setFocusPainted(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override

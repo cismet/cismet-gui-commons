@@ -147,6 +147,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
+        jToolBar1.setFocusable(false);
 
         jToggleButton1.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/commons/gui/protocol/record_off.png")));                  // NOI18N
@@ -158,6 +159,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
                 "ProtocolPanel.jToggleButton1.toolTipText"));                                                // NOI18N
         jToggleButton1.setBorderPainted(false);
         jToggleButton1.setContentAreaFilled(false);
+        jToggleButton1.setFocusPainted(false);
         jToggleButton1.setFocusable(false);
         jToggleButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jToggleButton1.setRolloverIcon(new javax.swing.ImageIcon(
@@ -184,6 +186,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
         jButton3.setToolTipText(org.openide.util.NbBundle.getMessage(
                 ProtocolPanel.class,
                 "ProtocolPanel.jButton3.toolTipText"));                                                                  // NOI18N
+        jButton3.setFocusPainted(false);
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -203,6 +206,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
         jButton2.setToolTipText(org.openide.util.NbBundle.getMessage(
                 ProtocolPanel.class,
                 "ProtocolPanel.jButton2.toolTipText"));                                                                  // NOI18N
+        jButton2.setFocusPainted(false);
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -216,9 +220,15 @@ public class ProtocolPanel extends javax.swing.JPanel {
         jToolBar1.add(jButton2);
         jToolBar1.add(jSeparator3);
 
+        jButton1.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/commons/gui/protocol/remove.png")));                // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton1,
             org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton1.text")); // NOI18N
+        jButton1.setToolTipText(org.openide.util.NbBundle.getMessage(
+                ProtocolPanel.class,
+                "ProtocolPanel.jButton1.toolTipText"));                                                // NOI18N
+        jButton1.setFocusPainted(false);
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -256,7 +266,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
         panFillerLayout.setVerticalGroup(
             panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
-                315,
+                300,
                 Short.MAX_VALUE));
 
         gridBagConstraints = new java.awt.GridBagConstraints();

@@ -158,14 +158,9 @@ public class ProtocolPanel extends javax.swing.JPanel {
                 ProtocolPanel.class,
                 "ProtocolPanel.jToggleButton1.toolTipText"));                                                // NOI18N
         jToggleButton1.setBorderPainted(false);
-        jToggleButton1.setContentAreaFilled(false);
         jToggleButton1.setFocusPainted(false);
         jToggleButton1.setFocusable(false);
         jToggleButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jToggleButton1.setRolloverIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/commons/gui/protocol/record_on.png")));                   // NOI18N
-        jToggleButton1.setRolloverSelectedIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/commons/gui/protocol/record_off.png")));                  // NOI18N
         jToggleButton1.setSelectedIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/commons/gui/protocol/record_on.png")));                   // NOI18N
         jToggleButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);

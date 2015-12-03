@@ -39,7 +39,7 @@ public class CommentProtocolStepToolbarItem extends AbstractProtocolStepToolbarI
             CommentProtocolStepToolbarItem.class,
             "CommentProtocolStepToolbarItem.tooltip");
     private static final ImageIcon ICON = new ImageIcon(CommentProtocolStepToolbarItem.class.getResource(
-                "/de/cismet/commons/gui/protocol/impl/comment.png"));
+                "/de/cismet/commons/gui/protocol/impl/comment_add.png"));
 
     //~ Constructors -----------------------------------------------------------
 

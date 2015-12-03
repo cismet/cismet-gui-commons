@@ -63,7 +63,9 @@ public class AddCommentProtocolStepDialog extends javax.swing.JDialog {
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(org.openide.util.NbBundle.getMessage(AddCommentProtocolStepDialog.class, "AddCommentProtocolStepDialog.title")); // NOI18N
+        setTitle(org.openide.util.NbBundle.getMessage(
+                AddCommentProtocolStepDialog.class,
+                "AddCommentProtocolStepDialog.title")); // NOI18N
         setPreferredSize(new java.awt.Dimension(300, 200));
         setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -80,15 +82,25 @@ public class AddCommentProtocolStepDialog extends javax.swing.JDialog {
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(AddCommentProtocolStepDialog.class, "AddCommentProtocolStepDialog.jButton1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton1,
+            org.openide.util.NbBundle.getMessage(
+                AddCommentProtocolStepDialog.class,
+                "AddCommentProtocolStepDialog.jButton1.text")); // NOI18N
         jPanel1.add(jButton1);
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton5, org.openide.util.NbBundle.getMessage(AddCommentProtocolStepDialog.class, "AddCommentProtocolStepDialog.jButton5.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            jButton5,
+            org.openide.util.NbBundle.getMessage(
+                AddCommentProtocolStepDialog.class,
+                "AddCommentProtocolStepDialog.jButton5.text")); // NOI18N
         jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    jButton5ActionPerformed(evt);
+                }
+            });
         jPanel1.add(jButton5);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -106,19 +118,19 @@ public class AddCommentProtocolStepDialog extends javax.swing.JDialog {
         getContentPane().add(jPanel2, gridBagConstraints);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton5ActionPerformed
         ProtocolHandler.getInstance().recordStep(new CommentProtocolStepImpl(jTextPane1.getText()), false);
         jTextPane1.setText("");
         jTextPane1.requestFocus();
         dispose();
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }                                                                            //GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * DOCUMENT ME!

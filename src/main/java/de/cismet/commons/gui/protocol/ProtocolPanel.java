@@ -216,7 +216,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
         jToolBar1.add(jSeparator3);
 
         jButton1.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/commons/gui/protocol/remove.png")));                // NOI18N
+                getClass().getResource("/de/cismet/commons/gui/protocol/remove_all.png")));            // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton1,
             org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton1.text")); // NOI18N

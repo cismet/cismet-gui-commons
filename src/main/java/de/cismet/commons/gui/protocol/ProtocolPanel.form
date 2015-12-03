@@ -54,16 +54,9 @@
               <ResourceString bundle="de/cismet/commons/gui/protocol/Bundle.properties" key="ProtocolPanel.jToggleButton1.toolTipText" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
             <Property name="borderPainted" type="boolean" value="false"/>
-            <Property name="contentAreaFilled" type="boolean" value="false"/>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="rolloverIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/de/cismet/commons/gui/protocol/record_on.png"/>
-            </Property>
-            <Property name="rolloverSelectedIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/de/cismet/commons/gui/protocol/record_off.png"/>
-            </Property>
             <Property name="selectedIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/de/cismet/commons/gui/protocol/record_on.png"/>
             </Property>

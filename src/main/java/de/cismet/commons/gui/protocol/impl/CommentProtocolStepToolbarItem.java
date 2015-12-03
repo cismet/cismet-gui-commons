@@ -35,7 +35,9 @@ public class CommentProtocolStepToolbarItem extends AbstractProtocolStepToolbarI
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String NAME = "";
-    private static final String TOOLTIP = "";
+    private static final String TOOLTIP = org.openide.util.NbBundle.getMessage(
+            CommentProtocolStepToolbarItem.class,
+            "CommentProtocolStepToolbarItem.tooltip");
     private static final ImageIcon ICON = new ImageIcon(CommentProtocolStepToolbarItem.class.getResource(
                 "/de/cismet/commons/gui/protocol/impl/comment.png"));
 

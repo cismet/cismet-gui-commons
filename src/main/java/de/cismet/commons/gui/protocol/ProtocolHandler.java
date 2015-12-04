@@ -31,6 +31,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.cismet.commons.gui.protocol.listener.ProtocolHandlerListener;
+import de.cismet.commons.gui.protocol.listener.ProtocolHandlerListenerEvent;
+
 import de.cismet.tools.configuration.Configurable;
 import de.cismet.tools.configuration.NoWriteError;
 

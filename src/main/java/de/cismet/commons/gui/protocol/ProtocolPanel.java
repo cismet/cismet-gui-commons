@@ -33,7 +33,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
 
-import de.cismet.commons.gui.protocol.impl.CommentProtocolStepImpl;
+import de.cismet.commons.gui.protocol.listener.ProtocolHandlerAdapter;
+import de.cismet.commons.gui.protocol.listener.ProtocolHandlerListenerEvent;
 
 import de.cismet.tools.gui.StaticSwingTools;
 

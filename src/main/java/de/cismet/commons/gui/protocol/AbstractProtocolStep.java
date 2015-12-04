@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import de.cismet.commons.gui.protocol.listener.ProtocolStepListener;
+import de.cismet.commons.gui.protocol.listener.ProtocolStepListenerEvent;
+
 /**
  * DOCUMENT ME!
  *

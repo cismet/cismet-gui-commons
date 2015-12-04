@@ -15,6 +15,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.Date;
 
+import de.cismet.commons.gui.protocol.listener.ProtocolStepListener;
+
 /**
  * DOCUMENT ME!
  *

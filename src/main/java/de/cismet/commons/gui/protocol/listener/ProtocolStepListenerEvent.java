@@ -10,9 +10,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.commons.gui.protocol;
+package de.cismet.commons.gui.protocol.listener;
 
 import java.util.EventObject;
+
+import de.cismet.commons.gui.protocol.ProtocolStep;
 
 /**
  * DOCUMENT ME!

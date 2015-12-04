@@ -20,6 +20,9 @@ import java.awt.Component;
 
 import javax.swing.SwingUtilities;
 
+import de.cismet.commons.gui.protocol.listener.ProtocolStepListener;
+import de.cismet.commons.gui.protocol.listener.ProtocolStepListenerEvent;
+
 /**
  * DOCUMENT ME!
  *

@@ -7,10 +7,10 @@
 ****************************************************/
 package de.cismet.commons.gui.protocol.impl;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import de.cismet.commons.gui.protocol.AbstractProtocolStep;
 import de.cismet.commons.gui.protocol.AbstractProtocolStepPanel;
@@ -24,27 +24,25 @@ import de.cismet.commons.gui.protocol.ProtocolStepMetaInfo;
  */
 public class CommentProtocolStepImpl extends AbstractProtocolStep implements CommentProtocolStep {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    public static ProtocolStepMetaInfo META_INFO = new ProtocolStepMetaInfo("comment", "comment step protocol");
+
     //~ Instance fields --------------------------------------------------------
 
     @Getter
-    @Setter
     @JsonProperty(required = true)
-    private String message;
+    private final String message;
 
     //~ Constructors -----------------------------------------------------------
-
-    /**
-     * Creates a new CommentProtocolStep object.
-     */
-    public CommentProtocolStepImpl() {
-    }
 
     /**
      * Creates a new CommentProtocolStep object.
      *
      * @param  message  DOCUMENT ME!
      */
-    public CommentProtocolStepImpl(final String message) {
+    @JsonCreator
+    public CommentProtocolStepImpl(@JsonProperty("message") final String message) {
         this.message = message;
     }
 
@@ -52,9 +50,7 @@ public class CommentProtocolStepImpl extends AbstractProtocolStep implements Com
 
     @Override
     protected ProtocolStepMetaInfo createMetaInfo() {
-        return new ProtocolStepMetaInfo(
-                "comment",
-                "comment step protocol");
+        return META_INFO;
     }
 
     @Override

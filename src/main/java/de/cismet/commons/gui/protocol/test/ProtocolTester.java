@@ -5,7 +5,7 @@
 *              ... and it just works.
 *
 ****************************************************/
-package de.cismet.commons.gui.protocol.impl;
+package de.cismet.commons.gui.protocol.test;
 
 import org.apache.log4j.Logger;
 
@@ -14,6 +14,8 @@ import java.util.List;
 import de.cismet.commons.gui.protocol.AbstractProtocolStep;
 import de.cismet.commons.gui.protocol.ProtocolHandler;
 import de.cismet.commons.gui.protocol.ProtocolStep;
+import de.cismet.commons.gui.protocol.impl.CommentProtocolStep;
+import de.cismet.commons.gui.protocol.impl.CommentProtocolStepImpl;
 
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 

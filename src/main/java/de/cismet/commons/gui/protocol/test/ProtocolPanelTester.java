@@ -10,10 +10,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.commons.gui.protocol;
+package de.cismet.commons.gui.protocol.test;
 
 import javax.swing.UIManager;
 
+import de.cismet.commons.gui.protocol.ProtocolHandler;
 import de.cismet.commons.gui.protocol.impl.CommentProtocolStepImpl;
 
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;

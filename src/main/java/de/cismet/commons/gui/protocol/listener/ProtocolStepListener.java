@@ -10,7 +10,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.commons.gui.protocol;
+package de.cismet.commons.gui.protocol.listener;
+
+import java.util.EventListener;
 
 /**
  * DOCUMENT ME!
@@ -18,11 +20,14 @@ package de.cismet.commons.gui.protocol;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class ProtocolStepAdapter implements ProtocolStepListener {
+public interface ProtocolStepListener extends EventListener {
 
     //~ Methods ----------------------------------------------------------------
 
-    @Override
-    public void parametersChanged(final ProtocolStepListenerEvent event) {
-    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  event  DOCUMENT ME!
+     */
+    void parametersChanged(final ProtocolStepListenerEvent event);
 }

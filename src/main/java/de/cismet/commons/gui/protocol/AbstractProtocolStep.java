@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import de.cismet.commons.gui.protocol.listener.ProtocolStepListener;
+import de.cismet.commons.gui.protocol.listener.ProtocolStepListenerEvent;
+
 /**
  * DOCUMENT ME!
  *
@@ -64,6 +67,15 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void init() {
+        setInited(false);
+        initParameters();
+        setInited(true);
+
+        fireParametersChanged(new ProtocolStepListenerEvent(this));
+    }
 
     /**
      * Is called before visualize() is called. E.g constructut and set serializable object properties (those annotated

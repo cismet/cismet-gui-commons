@@ -31,6 +31,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.cismet.commons.gui.protocol.listener.ProtocolHandlerListener;
+import de.cismet.commons.gui.protocol.listener.ProtocolHandlerListenerEvent;
+
 import de.cismet.tools.configuration.Configurable;
 import de.cismet.tools.configuration.NoWriteError;
 
@@ -182,7 +185,7 @@ public class ProtocolHandler implements Configurable {
      *
      * @return  DOCUMENT ME!
      */
-    public boolean recordStep(final AbstractProtocolStep protocolStep) {
+    public boolean recordStep(final ProtocolStep protocolStep) {
         return recordStep(protocolStep, true);
     }
 
@@ -194,7 +197,7 @@ public class ProtocolHandler implements Configurable {
      *
      * @return  DOCUMENT ME!
      */
-    public boolean recordStep(final AbstractProtocolStep protocolStep, final boolean checkIfRecordIsEnabled) {
+    public boolean recordStep(final ProtocolStep protocolStep, final boolean checkIfRecordIsEnabled) {
         if (!checkIfRecordIsEnabled || isRecordEnabled()) {
             synchronized (storage) {
                 storage.add(protocolStep);
@@ -207,13 +210,7 @@ public class ProtocolHandler implements Configurable {
 
                     @Override
                     public void run() {
-                        protocolStep.setInited(false);
-                        protocolStep.initParameters();
-                        protocolStep.setInited(true);
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("Parameters initialized, building GUI");
-                        }
-                        protocolStep.fireParametersChanged(new ProtocolStepListenerEvent(protocolStep));
+                        protocolStep.init();
                     }
                 }).start();
             if (LOG.isDebugEnabled()) {

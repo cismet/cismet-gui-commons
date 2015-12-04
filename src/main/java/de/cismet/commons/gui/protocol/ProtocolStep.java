@@ -82,6 +82,11 @@ public interface ProtocolStep {
 
     /**
      * DOCUMENT ME!
+     */
+    void init();
+
+    /**
+     * DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */

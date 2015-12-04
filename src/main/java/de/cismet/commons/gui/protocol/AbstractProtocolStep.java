@@ -65,6 +65,15 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
 
     //~ Methods ----------------------------------------------------------------
 
+    @Override
+    public void init() {
+        setInited(false);
+        initParameters();
+        setInited(true);
+
+        fireParametersChanged(new ProtocolStepListenerEvent(this));
+    }
+
     /**
      * Is called before visualize() is called. E.g constructut and set serializable object properties (those annotated
      * with @JsonProperty)

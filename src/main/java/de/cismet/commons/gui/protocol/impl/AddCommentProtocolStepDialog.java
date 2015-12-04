@@ -23,12 +23,12 @@ import de.cismet.commons.gui.protocol.ProtocolHandler;
 public class AddCommentProtocolStepDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JPanel panControls;
+    private javax.swing.JPanel panMain;
+    private javax.swing.JScrollPane scpComment;
+    private javax.swing.JTextPane txpComment;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -55,79 +55,96 @@ public class AddCommentProtocolStepDialog extends javax.swing.JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
-        jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        panMain = new javax.swing.JPanel();
+        scpComment = new javax.swing.JScrollPane();
+        txpComment = new javax.swing.JTextPane();
+        panControls = new javax.swing.JPanel();
+        btnCancel = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(org.openide.util.NbBundle.getMessage(AddCommentProtocolStepDialog.class, "AddCommentProtocolStepDialog.title")); // NOI18N
+        setTitle(org.openide.util.NbBundle.getMessage(
+                AddCommentProtocolStepDialog.class,
+                "AddCommentProtocolStepDialog.title")); // NOI18N
         setPreferredSize(new java.awt.Dimension(300, 200));
         setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jPanel2.setLayout(new java.awt.GridBagLayout());
+        panMain.setLayout(new java.awt.GridBagLayout());
 
-        jScrollPane2.setViewportView(jTextPane1);
+        scpComment.setViewportView(txpComment);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel2.add(jScrollPane2, gridBagConstraints);
+        panMain.add(scpComment, gridBagConstraints);
 
-        jPanel1.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
+        panControls.setLayout(new java.awt.GridLayout(1, 0, 5, 0));
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(AddCommentProtocolStepDialog.class, "AddCommentProtocolStepDialog.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton1);
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnCancel,
+            org.openide.util.NbBundle.getMessage(
+                AddCommentProtocolStepDialog.class,
+                "AddCommentProtocolStepDialog.btnCancel.text")); // NOI18N
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
 
-        org.openide.awt.Mnemonics.setLocalizedText(jButton5, org.openide.util.NbBundle.getMessage(AddCommentProtocolStepDialog.class, "AddCommentProtocolStepDialog.jButton5.text")); // NOI18N
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton5);
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnCancelActionPerformed(evt);
+                }
+            });
+        panControls.add(btnCancel);
+
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnAdd,
+            org.openide.util.NbBundle.getMessage(
+                AddCommentProtocolStepDialog.class,
+                "AddCommentProtocolStepDialog.btnAdd.text")); // NOI18N
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnAddActionPerformed(evt);
+                }
+            });
+        panControls.add(btnAdd);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        jPanel2.add(jPanel1, gridBagConstraints);
+        panMain.add(panControls, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jPanel2, gridBagConstraints);
+        getContentPane().add(panMain, gridBagConstraints);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton5ActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        ProtocolHandler.getInstance().recordStep(new CommentProtocolStepImpl(jTextPane1.getText()), false);
-        jTextPane1.setText("");
-        jTextPane1.requestFocus();
+    private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
+        ProtocolHandler.getInstance().recordStep(new CommentProtocolStepImpl(txpComment.getText()), false);
         dispose();
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }                                                                          //GEN-LAST:event_btnAddActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!

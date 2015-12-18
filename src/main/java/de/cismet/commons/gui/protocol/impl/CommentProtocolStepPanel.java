@@ -20,10 +20,10 @@ import de.cismet.commons.gui.protocol.AbstractProtocolStepPanel;
 public class CommentProtocolStepPanel extends AbstractProtocolStepPanel<CommentProtocolStep> {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblComment;
     private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel panMain;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -63,8 +63,8 @@ public class CommentProtocolStepPanel extends AbstractProtocolStepPanel<CommentP
 
         lblTitle = new javax.swing.JLabel();
         lblIcon = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        panMain = new javax.swing.JPanel();
+        lblComment = new javax.swing.JLabel();
 
         org.openide.awt.Mnemonics.setLocalizedText(
             lblTitle,
@@ -83,25 +83,25 @@ public class CommentProtocolStepPanel extends AbstractProtocolStepPanel<CommentP
 
         setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        panMain.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        panMain.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, htmlifyText(getProtocolStep().getMessage()));
-        jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblComment.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        org.openide.awt.Mnemonics.setLocalizedText(lblComment, htmlifyText(getProtocolStep().getMessage()));
+        lblComment.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(jLabel1, gridBagConstraints);
+        panMain.add(lblComment, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        add(jPanel1, gridBagConstraints);
+        add(panMain, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
 
     @Override

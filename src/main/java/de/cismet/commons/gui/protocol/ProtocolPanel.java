@@ -15,6 +15,9 @@ package de.cismet.commons.gui.protocol;
 import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 import org.jfree.ui.ExtensionFileFilter;
 
 import java.awt.Component;
@@ -24,6 +27,7 @@ import java.awt.Insets;
 import java.io.File;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.Action;
@@ -33,7 +37,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileFilter;
 
-import de.cismet.commons.gui.protocol.impl.CommentProtocolStepImpl;
+import de.cismet.commons.gui.protocol.listener.ProtocolHandlerAdapter;
+import de.cismet.commons.gui.protocol.listener.ProtocolHandlerListenerEvent;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -52,29 +57,40 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
     //~ Instance fields --------------------------------------------------------
 
+    @Getter(AccessLevel.PRIVATE)
     private final ProtocolHandler handler;
+
+    @Getter(AccessLevel.PRIVATE)
     private final FileFilter fileFilter = new ExtensionFileFilter(org.openide.util.NbBundle.getMessage(
                 ProtocolPanel.class,
                 "ProtocolPanel.filefilter.jsonfiledesc"),
             FILE_SUFFIX);
+
+    @Getter(AccessLevel.PRIVATE)
     private final Map<ProtocolStep, ProtocolStepPanelWrapper> protocolStepToWrapperMap =
         new HashMap<ProtocolStep, ProtocolStepPanelWrapper>();
 
+    @Getter(AccessLevel.PRIVATE)
+    private final GridBagConstraints wrapperConstraints = createWrapperConstraints();
+
+    @Getter(AccessLevel.PRIVATE)
+    private final GridBagConstraints fillerConstraints = createFillerConstraints();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToolBar.Separator jSeparator2;
-    private javax.swing.JToolBar.Separator jSeparator3;
-    private javax.swing.JToggleButton jToggleButton1;
-    private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JPanel panFiller;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnLoad;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JFileChooser fchMain;
+    private javax.swing.Box.Filler filToolbar;
+    private javax.swing.JPanel panMain;
     private javax.swing.JPanel panSteps;
+    private javax.swing.JPanel panStepsFiller;
+    private javax.swing.JPanel panToolbarFiller;
+    private javax.swing.JScrollPane scpSteps;
+    private javax.swing.JToolBar.Separator sep1;
+    private javax.swing.JToolBar.Separator sep2;
+    private javax.swing.JToggleButton tbtRecordOnOff;
+    private javax.swing.JToolBar tlbMain;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -92,30 +108,47 @@ public class ProtocolPanel extends javax.swing.JPanel {
      * @param  handler  DOCUMENT ME!
      */
     public ProtocolPanel(final ProtocolHandler handler) {
-        initComponents();
-
         if (handler != null) {
             this.handler = handler;
         } else {
             this.handler = ProtocolHandler.getInstance();
         }
-        this.handler.addProtocolHandlerListener(new ProtocolHandlerListenerImpl());
 
-        jToggleButton1.setSelected(this.handler.isRecordEnabled());
-        for (final ProtocolStep step : this.handler.getAllSteps()) {
-            addStep(step, true);
-        }
+        initComponents();
 
-        for (final ProtocolStepToolbarItem toolbarItem : this.handler.getToolbarItems()) {
-            if (toolbarItem instanceof Component) {
-                jToolBar1.add((Component)toolbarItem);
-            } else if (toolbarItem instanceof Action) {
-                jToolBar1.add((Action)toolbarItem);
-            }
-        }
+        getHandler().addProtocolHandlerListener(new ProtocolHandlerListenerImpl());
+
+        addSteps(getHandler().getAllSteps(), true);
+        addToolbarItems(getHandler().getToolbarItems());
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static GridBagConstraints createWrapperConstraints() {
+        final GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1;
+        constraints.gridx = 0;
+        constraints.gridy = GridBagConstraints.RELATIVE;
+        constraints.insets = new Insets(5, 5, 5, 5);
+        return constraints;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static GridBagConstraints createFillerConstraints() {
+        final GridBagConstraints constraints = createWrapperConstraints();
+        constraints.weighty = 1;
+        return constraints;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -126,140 +159,141 @@ public class ProtocolPanel extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jFileChooser1 = new javax.swing.JFileChooser();
-        jToolBar1 = new javax.swing.JToolBar();
-        jToggleButton1 = new javax.swing.JToggleButton();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
-        jButton3 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JToolBar.Separator();
-        jButton1 = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        filler1 = (javax.swing.Box.Filler)Box.createHorizontalGlue();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        fchMain = new javax.swing.JFileChooser();
+        tlbMain = new javax.swing.JToolBar();
+        tbtRecordOnOff = new javax.swing.JToggleButton();
+        sep1 = new javax.swing.JToolBar.Separator();
+        btnLoad = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        sep2 = new javax.swing.JToolBar.Separator();
+        btnClear = new javax.swing.JButton();
+        panToolbarFiller = new javax.swing.JPanel();
+        filToolbar = (javax.swing.Box.Filler)Box.createHorizontalGlue();
+        panMain = new javax.swing.JPanel();
+        scpSteps = new javax.swing.JScrollPane();
         panSteps = new javax.swing.JPanel();
-        panFiller = new javax.swing.JPanel();
+        panStepsFiller = new javax.swing.JPanel();
 
-        jFileChooser1.setFileFilter(fileFilter);
+        fchMain.setFileFilter(getFileFilter());
 
         setLayout(new java.awt.BorderLayout());
 
-        jToolBar1.setFloatable(false);
-        jToolBar1.setRollover(true);
-        jToolBar1.setFocusable(false);
+        tlbMain.setFloatable(false);
+        tlbMain.setRollover(true);
+        tlbMain.setFocusable(false);
 
-        jToggleButton1.setIcon(new javax.swing.ImageIcon(
+        tbtRecordOnOff.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/commons/gui/protocol/record_off.png")));                  // NOI18N
+        tbtRecordOnOff.setSelected(getHandler().isRecordEnabled());
         org.openide.awt.Mnemonics.setLocalizedText(
-            jToggleButton1,
-            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jToggleButton1.text")); // NOI18N
-        jToggleButton1.setToolTipText(org.openide.util.NbBundle.getMessage(
+            tbtRecordOnOff,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.tbtRecordOnOff.text")); // NOI18N
+        tbtRecordOnOff.setToolTipText(org.openide.util.NbBundle.getMessage(
                 ProtocolPanel.class,
-                "ProtocolPanel.jToggleButton1.toolTipText"));                                                // NOI18N
-        jToggleButton1.setBorderPainted(false);
-        jToggleButton1.setFocusPainted(false);
-        jToggleButton1.setFocusable(false);
-        jToggleButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jToggleButton1.setSelectedIcon(new javax.swing.ImageIcon(
+                "ProtocolPanel.tbtRecordOnOff.toolTipText"));                                                // NOI18N
+        tbtRecordOnOff.setBorderPainted(false);
+        tbtRecordOnOff.setFocusPainted(false);
+        tbtRecordOnOff.setFocusable(false);
+        tbtRecordOnOff.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbtRecordOnOff.setSelectedIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/commons/gui/protocol/record_on.png")));                   // NOI18N
-        jToggleButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+        tbtRecordOnOff.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tbtRecordOnOff.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jToggleButton1ActionPerformed(evt);
+                    tbtRecordOnOffActionPerformed(evt);
                 }
             });
-        jToolBar1.add(jToggleButton1);
-        jToolBar1.add(jSeparator2);
+        tlbMain.add(tbtRecordOnOff);
+        tlbMain.add(sep1);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/load.png"))); // NOI18N
+        btnLoad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/load.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
-            jButton3,
-            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton3.text"));                   // NOI18N
-        jButton3.setToolTipText(org.openide.util.NbBundle.getMessage(
+            btnLoad,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.btnLoad.text"));                   // NOI18N
+        btnLoad.setToolTipText(org.openide.util.NbBundle.getMessage(
                 ProtocolPanel.class,
-                "ProtocolPanel.jButton3.toolTipText"));                                                                  // NOI18N
-        jButton3.setFocusPainted(false);
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+                "ProtocolPanel.btnLoad.toolTipText"));                                                                  // NOI18N
+        btnLoad.setFocusPainted(false);
+        btnLoad.setFocusable(false);
+        btnLoad.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnLoad.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnLoad.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton3ActionPerformed(evt);
+                    btnLoadActionPerformed(evt);
                 }
             });
-        jToolBar1.add(jButton3);
+        tlbMain.add(btnLoad);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/save.png"))); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/save.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
-            jButton2,
-            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton2.text"));                   // NOI18N
-        jButton2.setToolTipText(org.openide.util.NbBundle.getMessage(
+            btnSave,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.btnSave.text"));                   // NOI18N
+        btnSave.setToolTipText(org.openide.util.NbBundle.getMessage(
                 ProtocolPanel.class,
-                "ProtocolPanel.jButton2.toolTipText"));                                                                  // NOI18N
-        jButton2.setFocusPainted(false);
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+                "ProtocolPanel.btnSave.toolTipText"));                                                                  // NOI18N
+        btnSave.setFocusPainted(false);
+        btnSave.setFocusable(false);
+        btnSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton2ActionPerformed(evt);
+                    btnSaveActionPerformed(evt);
                 }
             });
-        jToolBar1.add(jButton2);
-        jToolBar1.add(jSeparator3);
+        tlbMain.add(btnSave);
+        tlbMain.add(sep2);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(
+        btnClear.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/de/cismet/commons/gui/protocol/remove_all.png")));            // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
-            jButton1,
-            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.jButton1.text")); // NOI18N
-        jButton1.setToolTipText(org.openide.util.NbBundle.getMessage(
+            btnClear,
+            org.openide.util.NbBundle.getMessage(ProtocolPanel.class, "ProtocolPanel.btnClear.text")); // NOI18N
+        btnClear.setToolTipText(org.openide.util.NbBundle.getMessage(
                 ProtocolPanel.class,
-                "ProtocolPanel.jButton1.toolTipText"));                                                // NOI18N
-        jButton1.setFocusPainted(false);
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+                "ProtocolPanel.btnClear.toolTipText"));                                                // NOI18N
+        btnClear.setFocusPainted(false);
+        btnClear.setFocusable(false);
+        btnClear.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnClear.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                    jButton1ActionPerformed(evt);
+                    btnClearActionPerformed(evt);
                 }
             });
-        jToolBar1.add(jButton1);
+        tlbMain.add(btnClear);
 
-        jPanel1.setOpaque(false);
-        jPanel1.add(filler1);
+        panToolbarFiller.setOpaque(false);
+        panToolbarFiller.add(filToolbar);
 
-        jToolBar1.add(jPanel1);
+        tlbMain.add(panToolbarFiller);
 
-        jToolBar1.putClientProperty(Options.HEADER_STYLE_KEY, HeaderStyle.BOTH);
+        tlbMain.putClientProperty(Options.HEADER_STYLE_KEY, HeaderStyle.BOTH);
 
-        add(jToolBar1, java.awt.BorderLayout.NORTH);
+        add(tlbMain, java.awt.BorderLayout.NORTH);
 
-        jPanel4.setLayout(new java.awt.GridBagLayout());
+        panMain.setLayout(new java.awt.GridBagLayout());
 
         panSteps.setLayout(new java.awt.GridBagLayout());
 
-        panFiller.setPreferredSize(new java.awt.Dimension(100, 1));
+        panStepsFiller.setPreferredSize(new java.awt.Dimension(100, 1));
 
-        final javax.swing.GroupLayout panFillerLayout = new javax.swing.GroupLayout(panFiller);
-        panFiller.setLayout(panFillerLayout);
-        panFillerLayout.setHorizontalGroup(
-            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+        final javax.swing.GroupLayout panStepsFillerLayout = new javax.swing.GroupLayout(panStepsFiller);
+        panStepsFiller.setLayout(panStepsFillerLayout);
+        panStepsFillerLayout.setHorizontalGroup(
+            panStepsFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
                 100,
                 Short.MAX_VALUE));
-        panFillerLayout.setVerticalGroup(
-            panFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
+        panStepsFillerLayout.setVerticalGroup(
+            panStepsFillerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
                 0,
                 300,
                 Short.MAX_VALUE));
@@ -267,9 +301,9 @@ public class ProtocolPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
-        panSteps.add(panFiller, gridBagConstraints);
+        panSteps.add(panStepsFiller, gridBagConstraints);
 
-        jScrollPane1.setViewportView(panSteps);
+        scpSteps.setViewportView(panSteps);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -277,9 +311,9 @@ public class ProtocolPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel4.add(jScrollPane1, gridBagConstraints);
+        panMain.add(scpSteps, gridBagConstraints);
 
-        add(jPanel4, java.awt.BorderLayout.CENTER);
+        add(panMain, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -287,28 +321,28 @@ public class ProtocolPanel extends javax.swing.JPanel {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
-        handler.clearSteps();
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    private void btnClearActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnClearActionPerformed
+        getHandler().clearSteps();
+    }                                                                            //GEN-LAST:event_btnClearActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jToggleButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jToggleButton1ActionPerformed
-        handler.setRecordEnabled(jToggleButton1.isSelected());
-    }                                                                                  //GEN-LAST:event_jToggleButton1ActionPerformed
+    private void tbtRecordOnOffActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_tbtRecordOnOffActionPerformed
+        getHandler().setRecordEnabled(tbtRecordOnOff.isSelected());
+    }                                                                                  //GEN-LAST:event_tbtRecordOnOffActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
-        final int status = jFileChooser1.showSaveDialog(StaticSwingTools.getParentFrame(this));
+    private void btnSaveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnSaveActionPerformed
+        final int status = fchMain.showSaveDialog(StaticSwingTools.getParentFrame(this));
         if (status == JFileChooser.APPROVE_OPTION) {
-            final File selectedFile = jFileChooser1.getSelectedFile();
+            final File selectedFile = fchMain.getSelectedFile();
 
             new SwingWorker<Void, Void>() {
 
@@ -321,7 +355,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
                             } else {
                                 fileToSave = new File(selectedFile.getAbsolutePath() + "." + FILE_SUFFIX);
                             }
-                            handler.writeToFile(fileToSave);
+                            getHandler().writeToFile(fileToSave);
                         } catch (final Exception ex) {
                             LOG.error(ex, ex);
                         }
@@ -334,23 +368,23 @@ public class ProtocolPanel extends javax.swing.JPanel {
                 }.execute();
         } else if (status == JFileChooser.CANCEL_OPTION) {
         }
-    } //GEN-LAST:event_jButton2ActionPerformed
+    } //GEN-LAST:event_btnSaveActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
-        final int status = jFileChooser1.showOpenDialog(StaticSwingTools.getParentFrame(this));
+    private void btnLoadActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnLoadActionPerformed
+        final int status = fchMain.showOpenDialog(StaticSwingTools.getParentFrame(this));
         if (status == JFileChooser.APPROVE_OPTION) {
-            final File selectedFile = jFileChooser1.getSelectedFile();
+            final File selectedFile = fchMain.getSelectedFile();
             new SwingWorker<Void, Void>() {
 
                     @Override
                     protected Void doInBackground() throws Exception {
                         try {
-                            handler.readFromFile(selectedFile);
+                            getHandler().readFromFile(selectedFile);
                         } catch (final Exception ex) {
                             LOG.error(ex, ex);
                         }
@@ -363,7 +397,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
                 }.execute();
         } else if (status == JFileChooser.CANCEL_OPTION) {
         }
-    } //GEN-LAST:event_jButton3ActionPerformed
+    } //GEN-LAST:event_btnLoadActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -382,39 +416,68 @@ public class ProtocolPanel extends javax.swing.JPanel {
     /**
      * DOCUMENT ME!
      *
+     * @param  toolbarItems  DOCUMENT ME!
+     */
+    private void addToolbarItems(final List<ProtocolStepToolbarItem> toolbarItems) {
+        for (final ProtocolStepToolbarItem toolbarItem : toolbarItems) {
+            if (toolbarItem instanceof Component) {
+                tlbMain.add((Component)toolbarItem);
+            } else if (toolbarItem instanceof Action) {
+                tlbMain.add((Action)toolbarItem);
+            } else {
+                LOG.warn("toolbar item not added. was neither Component nor Action");
+            }
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  steps          DOCUMENT ME!
+     * @param  showImmediate  DOCUMENT ME!
+     */
+    private void addSteps(final List<ProtocolStep> steps, final boolean showImmediate) {
+        if (SwingUtilities.isEventDispatchThread()) {
+            for (final ProtocolStep step : steps) {
+                try {
+                    addStep(step, showImmediate);
+                } catch (final Exception ex) {
+                    LOG.warn("exception while adding step", ex);
+                }
+            }
+        } else {
+            SwingUtilities.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        addSteps(steps, showImmediate);
+                    }
+                });
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param  step           DOCUMENT ME!
      * @param  showImmediate  DOCUMENT ME!
      */
     private void addStep(final ProtocolStep step, final boolean showImmediate) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("adding GUI for protocol " + step.getMetaInfo().getKey()
-                        + "' and rendering it immediately: " + showImmediate);
-        }
-
         if (SwingUtilities.isEventDispatchThread()) {
-            final ProtocolStepPanelWrapper wrapper = new ProtocolStepPanelWrapper(
-                    step,
-                    showImmediate
-                            || step.isInited());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("adding GUI for protocol " + step.getMetaInfo().getKey()
+                            + "' and rendering it immediately: " + showImmediate);
+            }
 
-            panSteps.remove(panFiller);
-            final GridBagConstraints constraints = new GridBagConstraints();
-            constraints.fill = GridBagConstraints.BOTH;
-            constraints.weightx = 1;
-            constraints.gridx = 0;
-            constraints.gridy = GridBagConstraints.RELATIVE;
-            constraints.insets = new Insets(5, 5, 5, 5);
-//            wrapper.setPreferredSize(panSteps.getSize());
-            panSteps.add(wrapper, constraints);
-
-            constraints.weighty = 1;
-            panSteps.add(panFiller, constraints);
+            final ProtocolStepPanelWrapper wrapper = new ProtocolStepPanelWrapper(step, showImmediate);
+            panSteps.remove(panStepsFiller);
+            panSteps.add(wrapper, getWrapperConstraints());
+            panSteps.add(panStepsFiller, getFillerConstraints());
+            panSteps.revalidate();
 
             protocolStepToWrapperMap.put(step, wrapper);
 
-            panSteps.revalidate();
-
-            jScrollPane1.getVerticalScrollBar().setValue(jScrollPane1.getVerticalScrollBar().getMaximum());
+            scpSteps.getVerticalScrollBar().setValue(scpSteps.getVerticalScrollBar().getMaximum());
             repaint();
         } else {
             SwingUtilities.invokeLater(new Runnable() {
@@ -464,14 +527,13 @@ public class ProtocolPanel extends javax.swing.JPanel {
 
                     @Override
                     public void run() {
-                        jToggleButton1.setSelected(event.getSourceProtocolHander().isRecordEnabled());
+                        tbtRecordOnOff.setSelected(event.getSourceProtocolHander().isRecordEnabled());
                     }
                 });
         }
 
         @Override
         public void stepAdded(final ProtocolHandlerListenerEvent event) {
-            // -> don't render GUI after add! wait for initParameters()!
             addStep((ProtocolStep)event.getEventObject(), false);
         }
 
@@ -488,10 +550,7 @@ public class ProtocolPanel extends javax.swing.JPanel {
         @Override
         public void stepsRestored(final ProtocolHandlerListenerEvent event) {
             clearSteps();
-            for (final ProtocolStep step : event.getSourceProtocolHander().getAllSteps()) {
-                // -> render GUI after restore!
-                addStep(step, true);
-            }
+            addSteps(event.getSourceProtocolHander().getAllSteps(), true);
         }
     }
 }

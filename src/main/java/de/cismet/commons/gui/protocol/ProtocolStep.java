@@ -15,6 +15,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.Date;
 
+import de.cismet.commons.gui.protocol.listener.ProtocolStepListener;
+
 /**
  * DOCUMENT ME!
  *
@@ -79,6 +81,11 @@ public interface ProtocolStep {
      * @return  DOCUMENT ME!
      */
     ProtocolStepPanel visualize();
+
+    /**
+     * DOCUMENT ME!
+     */
+    void init();
 
     /**
      * DOCUMENT ME!

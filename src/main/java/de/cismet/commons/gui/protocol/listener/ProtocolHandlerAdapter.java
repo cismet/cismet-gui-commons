@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.commons.gui.protocol;
+package de.cismet.commons.gui.protocol.listener;
 
 /**
  * DOCUMENT ME!

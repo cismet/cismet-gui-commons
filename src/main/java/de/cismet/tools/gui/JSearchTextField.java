@@ -42,15 +42,9 @@ public class JSearchTextField extends JTextField {
 
     //~ Instance fields --------------------------------------------------------
 
-    @Getter
-    @Setter
-    private String emptyText;
-    @Getter
-    @Setter
-    private Icon searchIcon;
-    @Getter
-    @Setter
-    private Icon abortIcon;
+    @Getter @Setter private String emptyText;
+    @Getter @Setter private Icon searchIcon;
+    @Getter @Setter private Icon abortIcon;
 
     //~ Constructors -----------------------------------------------------------
 

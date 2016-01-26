@@ -44,8 +44,7 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
     //~ Instance fields --------------------------------------------------------
 
     @Setter(AccessLevel.PACKAGE)
-    @JsonIgnore
-    private transient boolean isInited;
+    @JsonIgnore private transient boolean isInited;
 
     @JsonProperty(required = true)
     private ProtocolStepMetaInfo metaInfo;

@@ -137,8 +137,9 @@ public class FXWebViewPanel extends JFXPanel {
                         final EventTarget target = evt.getCurrentTarget();
                         final HTMLAnchorElement anchorElement = (HTMLAnchorElement)target;
                         final String href = anchorElement.getHref();
-
-                        if ((href != null) && !href.endsWith("html") && !href.contains("#")) {
+                        final String targetWindow = anchorElement.getTarget();
+                        if (((targetWindow != null) && targetWindow.equalsIgnoreCase("_blank"))
+                                    || ((href != null) && !href.endsWith("html") && !href.contains("#"))) {
                             openInSystemBrowser(href);
                             evt.preventDefault();
                         }

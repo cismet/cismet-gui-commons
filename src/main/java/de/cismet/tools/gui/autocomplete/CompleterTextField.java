@@ -77,13 +77,13 @@ public class CompleterTextField extends JTextField {
         setDocument(pd);
     }
 
-    @Override
     /**
      * Warning: Calling setDocument on a completerTextField will remove the completion
      * mecanhism for this text field if the document is not derived from AbstractDocument.
      *
      *  Only AbstractDocuments support the required DocumentFilter API for completion.
      */
+    @Override
     public void setDocument(final Document doc) {
         super.setDocument(doc);
 

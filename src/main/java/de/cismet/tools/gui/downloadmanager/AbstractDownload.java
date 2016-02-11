@@ -202,10 +202,16 @@ public abstract class AbstractDownload extends Observable implements Download, R
     protected void determineDestinationFile(final String filename,
             final String extension) {
         final File directoryToSaveTo;
-        if ((directory != null) && (directory.trim().length() > 0)) {
-            directoryToSaveTo = new File(DownloadManager.instance().getDestinationDirectory(), directory);
+
+        if (isAbsolute(directory)) {
+            // the directory is a absolute path, so it should be used as destination directory
+            directoryToSaveTo = new File(directory);
         } else {
-            directoryToSaveTo = DownloadManager.instance().getDestinationDirectory();
+            if ((directory != null) && (directory.trim().length() > 0)) {
+                directoryToSaveTo = new File(DownloadManager.instance().getDestinationDirectory(), directory);
+            } else {
+                directoryToSaveTo = DownloadManager.instance().getDestinationDirectory();
+            }
         }
         if (log.isDebugEnabled()) {
             log.debug("Determined path '" + directoryToSaveTo + "' for file '" + filename + extension + "'.");
@@ -247,6 +253,9 @@ public abstract class AbstractDownload extends Observable implements Download, R
             }
 
             try {
+                if (!fileToSaveTo.getParentFile().exists()) {
+                    fileToSaveTo.getParentFile().mkdirs();
+                }
                 fileToSaveTo.createNewFile();
 
                 if (fileToSaveTo.exists() && fileToSaveTo.isFile() && fileToSaveTo.canWrite()) {
@@ -282,6 +291,22 @@ public abstract class AbstractDownload extends Observable implements Download, R
                 return;
             }
         }
+    }
+
+    /**
+     * Checks, if the given directory is absolute
+     *
+     * @param   directory  The directory to check
+     *
+     * @return  true, iff the directory is absolute
+     */
+    private boolean isAbsolute(final String directory) {
+        if ((directory != null) && (directory.trim().length() > 1)) {
+            final File path = new File(directory);
+            return path.isAbsolute();
+        }
+
+        return false;
     }
 
 //    @Override

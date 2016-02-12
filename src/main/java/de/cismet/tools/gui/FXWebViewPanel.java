@@ -217,6 +217,7 @@ public class FXWebViewPanel extends JFXPanel {
                 @Override
                 public void run() {
                     webEng.loadContent(htmlContent);
+                    webEng.setJavaScriptEnabled(true);
                 }
             });
     }

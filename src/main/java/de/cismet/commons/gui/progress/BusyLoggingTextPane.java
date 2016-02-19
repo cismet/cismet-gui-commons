@@ -149,23 +149,22 @@ public class BusyLoggingTextPane extends JTextPane {
      * @param  reason  DOCUMENT ME!
      */
     public void addMessage(final String msg, final Styles reason) {
-        synchronized (this) {
-            java.awt.EventQueue.invokeLater(new Runnable() {
+        if (!SwingUtilities.isEventDispatchThread()) {
+            SwingUtilities.invokeLater(new Runnable() {
 
                     @Override
                     public void run() {
-                        try {
-                            BusyLoggingTextPane.this.getStyledDocument()
-                                    .insertString(
-                                        BusyLoggingTextPane.this.getStyledDocument().getLength(),
-                                        msg
-                                        + "\n",
-                                        styles.get(reason));       // NOI18N
-                        } catch (BadLocationException ble) {
-                            LOG.error("error during Insert", ble); // NOI18N
-                        }
+                        addMessage(msg, reason);
                     }
                 });
+        } else {
+            synchronized (this) {
+                try {
+                    getStyledDocument().insertString(getStyledDocument().getLength(), msg + "\n", styles.get(reason)); // NOI18N
+                } catch (BadLocationException ble) {
+                    LOG.error("error during Insert", ble);                                                             // NOI18N
+                }
+            }
         }
     }
 

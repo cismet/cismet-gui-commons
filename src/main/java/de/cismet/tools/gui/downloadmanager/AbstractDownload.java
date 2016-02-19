@@ -294,7 +294,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
     }
 
     /**
-     * Checks, if the given directory is absolute
+     * Checks, if the given directory is absolute.
      *
      * @param   directory  The directory to check
      *

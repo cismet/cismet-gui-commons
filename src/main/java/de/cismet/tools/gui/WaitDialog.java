@@ -79,13 +79,31 @@ public class WaitDialog extends javax.swing.JDialog {
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * DOCUMENT ME!
+     * set the new progress to the given value.
      *
-     * @param  n  DOCUMENT ME!
+     * @param  n  the new progress
      */
     public void setProgress(final int n) {
         jProgressBar2.setValue(n);
         jProgressBar2.repaint();
+    }
+
+    /**
+     * Determines the current progress.
+     *
+     * @return  the current progress
+     */
+    public int getProgress() {
+        return jProgressBar2.getValue();
+    }
+
+    /**
+     * Increases the current progress by the given steps.
+     *
+     * @param  steps  DOCUMENT ME!
+     */
+    public void increaseProgress(final int steps) {
+        setProgress(getProgress() + steps);
     }
 
     /**

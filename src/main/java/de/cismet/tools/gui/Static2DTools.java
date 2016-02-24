@@ -685,4 +685,24 @@ public class Static2DTools {
         }
         return ret;
     }
+
+    /**
+     * Appends the second image to the first image.
+     *
+     * @param   base    the base image
+     * @param   append  the image that should be appended to the base
+     *
+     * @return  the appended image
+     */
+    public static BufferedImage appendImage(final Image base, final Image append) {
+        final int maxWidth = Math.max(base.getWidth(null), append.getWidth(null));
+        final int maxHeight = base.getHeight(null) + append.getHeight(null);
+        final BufferedImage image = new BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_ARGB);
+        final Graphics2D graphics2D = image.createGraphics();
+        graphics2D.drawImage(base, 0, 0, null);
+        graphics2D.drawImage(append, 0, base.getHeight(null), null);
+        graphics2D.dispose();
+
+        return image;
+    }
 }

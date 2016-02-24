@@ -391,6 +391,8 @@ public class DownloadManager implements Observer, Configurable {
     public void setDestinationDirectory(final File destinationDirectory) {
         this.destinationDirectory = destinationDirectory;
 
+        DownloadManagerDialog.getInstance().destinationDirectoryChanged();
+
         if (!destinationDirectory.isDirectory() || !destinationDirectory.canWrite()) {
             LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath() + "'.");
         }
@@ -615,6 +617,9 @@ public class DownloadManager implements Observer, Configurable {
         } else {
             DownloadManagerDialog.getInstance().setJobName(userTitle.getTextTrim());
         }
+
+        // refresh the destination path in the download manager dialog
+        DownloadManagerDialog.getInstance().destinationDirectoryChanged();
     }
 
     @Override

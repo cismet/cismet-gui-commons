@@ -635,7 +635,6 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
 
         setTitle(org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.title")); // NOI18N
         setMinimumSize(new java.awt.Dimension(423, 300));
-        setPreferredSize(new java.awt.Dimension(450, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         scpDownloadManagerPanel.setBorder(null);
@@ -778,6 +777,14 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
             closeWindow();
         }
     }                                                                            //GEN-LAST:event_btnCloseActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void destinationDirectoryChanged() {
+        lblDestinationDirectory.setText(DownloadManager.instance().getDestinationDirectory().getAbsolutePath()
+                    + File.separator);
+    }
 
     /**
      * An action listener.

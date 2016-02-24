@@ -163,4 +163,9 @@ public abstract class AbstractOptionsPanel extends JPanel implements OptionsPane
     @Override
     public void masterConfigure(final Element parent) {
     }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

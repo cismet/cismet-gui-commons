@@ -208,17 +208,36 @@ public class FXWebViewPanel extends JFXPanel {
      * @param  htmlContent  DOCUMENT ME!
      */
     public void loadContent(final String htmlContent) {
-        if (webEng == null) {
-            LOG.warn("JavaFX WebEnginge is not initialized. can not load html content: " + htmlContent);
-            return;
-        }
-        Platform.runLater(new Runnable() {
+        final Runnable loader = new Runnable() {
 
                 @Override
                 public void run() {
                     webEng.loadContent(htmlContent);
                     webEng.setJavaScriptEnabled(true);
                 }
-            });
+            };
+
+        new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (webEng == null) {
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("JavaFX WebEnginge is not initialized. Will wait for 1 sec and try again");
+                        }
+                        try {
+                            Thread.sleep(1000);
+                        } catch (Exception interuppted) {
+                        }
+                        if (webEng == null) {
+                            LOG.warn("JavaFX WebEnginge is not initialized. can not load html content: " + htmlContent);
+                        } else {
+                            Platform.runLater(loader);
+                        }
+                    } else {
+                        Platform.runLater(loader);
+                    }
+                }
+            }).start();
     }
 }

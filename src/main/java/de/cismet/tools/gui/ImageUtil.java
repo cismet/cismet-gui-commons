@@ -28,7 +28,10 @@ import org.jdesktop.swingx.graphics.ShadowRenderer;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
@@ -103,6 +106,31 @@ public final class ImageUtil {
     /**
      * DOCUMENT ME!
      *
+     * @param   origImage  DOCUMENT ME!
+     * @param   maxWidth   DOCUMENT ME!
+     * @param   maxHeight  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static Image resizeOnScale(final Image origImage, final int maxWidth, final int maxHeight) {
+        final int origWidth = origImage.getWidth(null);
+        final int origHeight = origImage.getHeight(null);
+        final double ratio = origWidth / (double)origHeight;
+        final int resizedWidth;
+        final int resizedHeight;
+        if (ratio > (maxWidth / maxHeight)) {
+            resizedWidth = maxWidth;
+            resizedHeight = (int)Math.round(maxWidth / ratio);
+        } else {
+            resizedWidth = (int)Math.round(maxHeight * ratio);
+            resizedHeight = maxHeight;
+        }
+        return origImage.getScaledInstance(resizedWidth, resizedHeight, Image.SCALE_SMOOTH);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
      * @param   in           DOCUMENT ME!
      * @param   shadowPixel  DOCUMENT ME!
      *
@@ -149,16 +177,32 @@ public final class ImageUtil {
      * @return  DOCUMENT ME!
      */
     public static BufferedImage rotateImage(final BufferedImage src, final double degrees) {
-        final AffineTransform affineTransform = AffineTransform.getRotateInstance(
-                Math.toRadians(degrees),
-                src.getWidth()
-                        / 2,
-                src.getHeight()
+        final float radianAngle = (float)Math.toRadians(degrees);
+        final float sin = (float)Math.abs(Math.sin(radianAngle));
+        final float cos = (float)Math.abs(Math.cos(radianAngle));
+
+        final int width = src.getWidth();
+        final int height = src.getHeight();
+        final int newWidth = (int)Math.round((width * cos) + (height * sin));
+        final int newHeight = (int)Math.round((height * cos) + (width * sin));
+
+        final AffineTransform transform = AffineTransform.getTranslateInstance((newWidth - width) / 2,
+                (newHeight - height)
                         / 2);
-        final BufferedImage rotatedImage = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
-        final Graphics2D g = (Graphics2D)rotatedImage.getGraphics();
-        g.setTransform(affineTransform);
-        g.drawImage(src, 0, 0, null);
-        return rotatedImage;
+        transform.rotate(radianAngle, width / 2, height / 2);
+
+        final BufferedImage result = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                    .getDefaultScreenDevice()
+                    .getDefaultConfiguration()
+                    .createCompatibleImage(newWidth, newHeight, Transparency.TRANSLUCENT);
+
+        final Graphics2D g = result.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g.drawRenderedImage(src, transform);
+        g.dispose();
+
+        return result;
     }
 }

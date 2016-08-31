@@ -212,8 +212,12 @@ public class FXWebViewPanel extends JFXPanel {
 
                 @Override
                 public void run() {
-                    webEng.loadContent(htmlContent);
-                    webEng.setJavaScriptEnabled(true);
+                    try {
+                        webEng.loadContent(htmlContent);
+                        webEng.setJavaScriptEnabled(true);
+                    } catch (Exception e) {
+                        LOG.error("Problem during the rendering of the htmlContent", e);
+                    }
                 }
             };
 

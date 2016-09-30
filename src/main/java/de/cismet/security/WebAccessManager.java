@@ -33,6 +33,8 @@ import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
 import de.cismet.commons.security.Tunnel;
 import de.cismet.commons.security.TunnelStore;
 
+import de.cismet.commons.security.handler.ExtendedAccessHandler;
+
 import de.cismet.netutil.Proxy;
 
 import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
@@ -57,7 +59,7 @@ import de.cismet.security.handler.WSSAccessHandler;
 //ToDo Multithreading
 //Problematik wenn unter der url mehrere services z.B. wms wfs wss sind
 //Todo url leichen weil statisch --> wenn versucht wird eine schon vorhandene URL hinzuzufügen --> wir im Moment  überschrieben
-public class WebAccessManager implements AccessHandler, TunnelStore {
+public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAccessHandler {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -376,6 +378,7 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
      * @throws  NoHandlerForURLException             DOCUMENT ME!
      * @throws  Exception                            DOCUMENT ME!
      */
+    @Override
     public InputStream doRequest(final URL url) throws MissingArgumentException,
         AccessMethodIsNotSupportedException,
         RequestFailedException,
@@ -632,6 +635,7 @@ public class WebAccessManager implements AccessHandler, TunnelStore {
      *
      * @return  true: the URL is accessible. Otherwise false
      */
+    @Override
     public boolean checkIfURLaccessible(final URL url) {
         boolean urlAccessible = false;
         // if the URL is accessible an InputStream is returned. Otherwise an Exception is thrown. As the URL might not

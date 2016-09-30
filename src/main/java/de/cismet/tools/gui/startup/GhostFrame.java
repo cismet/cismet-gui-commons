@@ -23,6 +23,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import de.cismet.tools.Static2DTools;
+
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**

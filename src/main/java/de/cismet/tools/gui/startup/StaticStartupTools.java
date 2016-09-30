@@ -42,6 +42,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import de.cismet.tools.Static2DTools;
+
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**

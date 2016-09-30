@@ -7,7 +7,6 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import de.cismet.tools.Static2DTools;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -40,6 +39,7 @@ import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import de.cismet.tools.Static2DTools;
 
 /**
  * DOCUMENT ME!

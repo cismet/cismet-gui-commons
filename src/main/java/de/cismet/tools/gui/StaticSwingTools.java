@@ -7,6 +7,7 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
+import de.cismet.tools.Static2DTools;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -27,7 +28,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.text.MessageFormat;
-import java.text.NumberFormat;
 
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +40,6 @@ import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import de.cismet.tools.gui.downloadmanager.DownloadManager;
 
 /**
  * DOCUMENT ME!

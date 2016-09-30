@@ -39,7 +39,7 @@ import javax.swing.ImageIcon;
 import de.cismet.commons.security.WebDavClient;
 import de.cismet.commons.security.WebDavHelper;
 
-import de.cismet.tools.gui.Static2DTools;
+import de.cismet.tools.Static2DTools;
 
 /**
  * DOCUMENT ME!

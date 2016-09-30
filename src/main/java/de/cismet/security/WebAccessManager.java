@@ -32,7 +32,6 @@ import de.cismet.commons.security.AccessHandler.ACCESS_HANDLER_TYPES;
 import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
 import de.cismet.commons.security.Tunnel;
 import de.cismet.commons.security.TunnelStore;
-
 import de.cismet.commons.security.handler.ExtendedAccessHandler;
 
 import de.cismet.netutil.Proxy;

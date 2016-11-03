@@ -37,6 +37,8 @@ import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.html.HTMLAnchorElement;
 
+import java.awt.EventQueue;
+
 import de.cismet.tools.BrowserLauncher;
 
 /**
@@ -154,9 +156,26 @@ public class FXWebViewPanel extends JFXPanel {
      * @param  url  DOCUMENT ME!
      */
     private void openInSystemBrowser(final String url) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Will Launch 2:" + url);
+        }
         try {
             if (url != null) {
-                BrowserLauncher.openURL(url);
+                final Thread t = new Thread() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                if (LOG.isDebugEnabled()) {
+                                    LOG.debug("Will Launch 1:" + url);
+                                }
+                                BrowserLauncher.openURL(url);
+                            } catch (Exception ex) {
+                                LOG.error(ex.getMessage(), ex);
+                            }
+                        }
+                    };
+                t.start();
             }
         } catch (Exception ex) {
             LOG.error(ex.getMessage(), ex);

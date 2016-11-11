@@ -62,8 +62,6 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
 
     //~ Static fields/initializers ---------------------------------------------
 
-    public static final String HEADER_CONTENTTYPE_KEY = "Content-Type";
-    public static final String HEADER_CONTENTTYPE_VALUE_POST = "application/x-www-form-urlencoded";
     private static WebAccessManager instance = null;
     private static final ReentrantReadWriteLock reLock = new ReentrantReadWriteLock();
     private static final Lock readLock = reLock.readLock();

@@ -13,6 +13,7 @@ package de.cismet.security;
 
 import java.awt.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
@@ -20,14 +21,20 @@ import java.io.StringReader;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import de.cismet.netutil.Proxy;
+import de.cismet.commons.security.AccessHandler;
+import de.cismet.commons.security.AccessHandler.ACCESS_HANDLER_TYPES;
+import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
+import de.cismet.commons.security.Tunnel;
+import de.cismet.commons.security.TunnelStore;
+import de.cismet.commons.security.handler.ExtendedAccessHandler;
 
-import de.cismet.security.AccessHandler.ACCESS_HANDLER_TYPES;
+import de.cismet.netutil.Proxy;
 
 import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
 import de.cismet.security.exceptions.MissingArgumentException;
@@ -35,6 +42,7 @@ import de.cismet.security.exceptions.NoHandlerForURLException;
 import de.cismet.security.exceptions.RequestFailedException;
 
 import de.cismet.security.handler.DefaultHTTPAccessHandler;
+import de.cismet.security.handler.FTPAccessHandler;
 import de.cismet.security.handler.HTTPBasedAccessHandler;
 import de.cismet.security.handler.WSSAccessHandler;
 
@@ -50,12 +58,9 @@ import de.cismet.security.handler.WSSAccessHandler;
 //ToDo Multithreading
 //Problematik wenn unter der url mehrere services z.B. wms wfs wss sind
 //Todo url leichen weil statisch --> wenn versucht wird eine schon vorhandene URL hinzuzufügen --> wir im Moment  überschrieben
-public class WebAccessManager implements AccessHandler {
+public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAccessHandler {
 
     //~ Static fields/initializers ---------------------------------------------
-
-    public static final String HEADER_CONTENTTYPE_KEY = "Content-Type";
-    public static final String HEADER_CONTENTTYPE_VALUE_POST = "application/x-www-form-urlencoded";
 
     private static WebAccessManager instance = null;
     private static final ReentrantReadWriteLock reLock = new ReentrantReadWriteLock();
@@ -72,6 +77,7 @@ public class WebAccessManager implements AccessHandler {
     private AccessHandler defaultHandler;
     private Properties serverAliasProps = new Properties();
     private Component topLevelComponent = null;
+    private Tunnel tunnel = null;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -131,6 +137,22 @@ public class WebAccessManager implements AccessHandler {
     }
 
     /**
+     * DOCUMENT ME!
+     */
+    public void resetCredentials() {
+        for (final AccessHandler wmsHandler : allHandlers.values()) {
+            // pruefen ob vom Typ HTTPBasedAccessHandler
+            if ((wmsHandler != null) && (wmsHandler instanceof HTTPBasedAccessHandler)) {
+                // proxy setzen
+                if (log.isDebugEnabled()) {
+                    log.debug("reset credentials"); // NOI18N
+                }
+                ((HTTPBasedAccessHandler)wmsHandler).resetCredentials();
+            }
+        }
+    }
+
+    /**
      * Returns the Proxy-Object of the HTTP-AccessHandler or (if it not exists) the Proxy-Object of the
      * WSS-AccessHandler or null if no proxy exists.
      *
@@ -154,6 +176,7 @@ public class WebAccessManager implements AccessHandler {
             }
         }
     }
+
     /**
      * ToDO make configurable.
      */
@@ -163,17 +186,20 @@ public class WebAccessManager implements AccessHandler {
         }
         final WSSAccessHandler wssHandler = new WSSAccessHandler();
         final DefaultHTTPAccessHandler httpHandler = new DefaultHTTPAccessHandler();
+        final FTPAccessHandler ftpHandler = new FTPAccessHandler();
         // SOAPAccessHandler soapAccessHandler = new SOAPAccessHandler();
         // SanyAccessHandler sanyAccessHandler = new SanyAccessHandler();
         defaultHandler = httpHandler;
         allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.WSS, wssHandler);
         allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.HTTP, httpHandler);
+        allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.FTP, ftpHandler);
         // allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.SOAP, soapAccessHandler);
         // allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.SANY, sanyAccessHandler);
         supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.WSS);
         supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.HTTP);
         supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.SOAP);
         supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.SANY);
+        supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.FTP);
     }
 
     /**
@@ -216,6 +242,7 @@ public class WebAccessManager implements AccessHandler {
             instance = new WebAccessManager();
         }
     }
+
     /**
      * overwrites at the moment.
      *
@@ -348,6 +375,7 @@ public class WebAccessManager implements AccessHandler {
      * @throws  NoHandlerForURLException             DOCUMENT ME!
      * @throws  Exception                            DOCUMENT ME!
      */
+    @Override
     public InputStream doRequest(final URL url) throws MissingArgumentException,
         AccessMethodIsNotSupportedException,
         RequestFailedException,
@@ -593,6 +621,63 @@ public class WebAccessManager implements AccessHandler {
             readLock.unlock();
         }
     }
+
+    /**
+     * Checks with a HEAD request, if an URL is accessible or not.
+     *
+     * <p>Note: The method might return false, even if the URL exists, because of network problems or permission issues
+     * etc...</p>
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  true: the URL is accessible. Otherwise false
+     */
+    @Override
+    public boolean checkIfURLaccessible(final URL url) {
+        boolean urlAccessible = false;
+        // if the URL is accessible an InputStream is returned. Otherwise an Exception is thrown. As the URL might not
+        // be accessible, the exceptions are only logged in the debug mode.
+        InputStream inputStream = null;
+        try {
+            inputStream = this.doRequest(url, "", AccessHandler.ACCESS_METHODS.HEAD_REQUEST);
+            urlAccessible = (inputStream != null) ? true : false;
+        } catch (final MissingArgumentException ex) {
+            if (log.isDebugEnabled()) {
+                log.debug("Could not read document from URL '" + url.toExternalForm() + "'.", ex);
+            }
+        } catch (final AccessMethodIsNotSupportedException ex) {
+            if (log.isDebugEnabled()) {
+                log.debug("Can't access document URL '" + url.toExternalForm()
+                            + "' with default access method.",
+                    ex);
+            }
+        } catch (final RequestFailedException ex) {
+            if (log.isDebugEnabled()) {
+                log.debug("Requesting document from URL '" + url.toExternalForm() + "' failed.",
+                    ex);
+            }
+        } catch (final NoHandlerForURLException ex) {
+            if (log.isDebugEnabled()) {
+                log.debug("Can't handle URL '" + url.toExternalForm() + "'.", ex);
+            }
+        } catch (final Exception ex) {
+            if (log.isDebugEnabled()) {
+                log.debug("An exception occurred while opening URL '" + url.toExternalForm()
+                            + "'.",
+                    ex);
+            }
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException ex) {
+                    log.warn("Could not close stream.", ex);
+                }
+            }
+        }
+        return urlAccessible;
+    }
+
     /**
      * TODO keine Funktionalität --> nur dummies zur kompatibilität.
      *
@@ -631,6 +716,7 @@ public class WebAccessManager implements AccessHandler {
     public void setTopLevelComponent(final Component topLevelComponent) {
         this.topLevelComponent = topLevelComponent;
     }
+
     /**
      * todo.
      *
@@ -642,6 +728,7 @@ public class WebAccessManager implements AccessHandler {
     public ACCESS_HANDLER_TYPES getHandlerType() {
         throw new UnsupportedOperationException("Not supported yet."); // NOI18N
     }
+
     /**
      * todo.
      *
@@ -654,5 +741,26 @@ public class WebAccessManager implements AccessHandler {
     @Override
     public boolean isAccessMethodSupported(final ACCESS_METHODS method) {
         throw new UnsupportedOperationException("Not supported yet."); // NOI18N
+    }
+
+    @Override
+    public Tunnel getTunnel() {
+        return tunnel;
+    }
+
+    @Override
+    public void setTunnel(final Tunnel tunnel) {
+        this.tunnel = tunnel;
+        final Collection<AccessHandler> c = allHandlers.values();
+        for (final AccessHandler a : c) {
+            if (a instanceof TunnelStore) {
+                ((TunnelStore)a).setTunnel(tunnel);
+            }
+        }
+        if (!c.contains(defaultHandler)) {
+            if (defaultHandler instanceof TunnelStore) {
+                ((TunnelStore)defaultHandler).setTunnel(tunnel);
+            }
+        }
     }
 }

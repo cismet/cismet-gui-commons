@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
@@ -47,7 +48,11 @@ public class MultipleDownload extends Observable implements Download, Observer {
      * @param  title      The title of the multiple download.
      */
     public MultipleDownload(final Collection<? extends Download> downloads, final String title) {
-        this.downloads = downloads;
+        if (downloads == null) {
+            this.downloads = new ArrayList<Download>();
+        } else {
+            this.downloads = downloads;
+        }
         this.title = title;
 
         for (final Download download : this.downloads) {
@@ -77,6 +82,17 @@ public class MultipleDownload extends Observable implements Download, Observer {
     @Override
     public State getStatus() {
         return status;
+    }
+
+    /**
+     * Set the status of the download and notify the observers about that change.
+     *
+     * @param  status  DOCUMENT ME!
+     */
+    public void setStatus(final State status) {
+        this.status = status;
+        setChanged();
+        notifyObservers();
     }
 
     @Override
@@ -140,6 +156,8 @@ public class MultipleDownload extends Observable implements Download, Observer {
                 downloadsCompleted++;
                 downloadsErroneous++;
                 status = State.RUNNING_WITH_ERROR;
+            } else if (download.getStatus() == State.ABORTED) {
+                downloadsCompleted++;
             }
 
             if (downloadsCompleted == downloads.size()) {

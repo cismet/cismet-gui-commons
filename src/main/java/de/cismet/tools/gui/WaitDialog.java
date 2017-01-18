@@ -7,6 +7,8 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
+import org.openide.util.Cancellable;
+
 import javax.swing.Icon;
 
 /**
@@ -17,7 +19,12 @@ import javax.swing.Icon;
  */
 public class WaitDialog extends javax.swing.JDialog {
 
+    //~ Instance fields --------------------------------------------------------
+
+    private final Cancellable cancellable;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
     private javax.swing.JProgressBar jProgressBar2;
     private javax.swing.JLabel labIcon;
     private javax.swing.JLabel labText;
@@ -34,8 +41,28 @@ public class WaitDialog extends javax.swing.JDialog {
      * @param  icon    DOCUMENT ME!
      */
     public WaitDialog(final java.awt.Frame parent, final boolean modal, final String text, final Icon icon) {
+        this(parent, modal, text, icon, null);
+    }
+
+    /**
+     * Creates new form ClipboardWaitDialog.
+     *
+     * @param  parent       DOCUMENT ME!
+     * @param  modal        DOCUMENT ME!
+     * @param  text         DOCUMENT ME!
+     * @param  icon         DOCUMENT ME!
+     * @param  cancellable  A cancel button will be shown, if this parameter is not null
+     */
+    public WaitDialog(final java.awt.Frame parent,
+            final boolean modal,
+            final String text,
+            final Icon icon,
+            final Cancellable cancellable) {
         super(parent, modal);
         initComponents();
+        if (cancellable == null) {
+            btnCancel.setVisible(false);
+        }
         if (icon != null) {
             labIcon.setIcon(icon);
         }
@@ -43,19 +70,40 @@ public class WaitDialog extends javax.swing.JDialog {
         if (text != null) {
             labText.setText(text);
         }
+
+        this.cancellable = cancellable;
+        pack();
         setAlwaysOnTop(true);
     }
 
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * DOCUMENT ME!
+     * set the new progress to the given value.
      *
-     * @param  n  DOCUMENT ME!
+     * @param  n  the new progress
      */
     public void setProgress(final int n) {
         jProgressBar2.setValue(n);
         jProgressBar2.repaint();
+    }
+
+    /**
+     * Determines the current progress.
+     *
+     * @return  the current progress
+     */
+    public int getProgress() {
+        return jProgressBar2.getValue();
+    }
+
+    /**
+     * Increases the current progress by the given steps.
+     *
+     * @param  steps  DOCUMENT ME!
+     */
+    public void increaseProgress(final int steps) {
+        setProgress(getProgress() + steps);
     }
 
     /**
@@ -64,8 +112,19 @@ public class WaitDialog extends javax.swing.JDialog {
      * @param  n  DOCUMENT ME!
      */
     public void setMax(final int n) {
+        jProgressBar2.setIndeterminate(false);
+        jProgressBar2.setStringPainted(true);
         jProgressBar2.setMinimum(0);
         jProgressBar2.setMaximum(n);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  text  DOCUMENT ME!
+     */
+    public void setText(final String text) {
+        labText.setText(text);
     }
 
     /**
@@ -74,51 +133,81 @@ public class WaitDialog extends javax.swing.JDialog {
      */
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
         labIcon = new javax.swing.JLabel();
         labText = new javax.swing.JLabel();
         jProgressBar2 = new javax.swing.JProgressBar();
+        btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setUndecorated(true);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 0);
+        getContentPane().add(labIcon, gridBagConstraints);
 
         labText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(labText, gridBagConstraints);
 
         jProgressBar2.setBorderPainted(false);
         jProgressBar2.setIndeterminate(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jProgressBar2, gridBagConstraints);
 
-        final org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-                layout.createSequentialGroup().add(labIcon).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(
-                                layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-                                    jProgressBar2,
-                                    org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-                                    235,
-                                    Short.MAX_VALUE).add(
-                                    labText,
-                                    org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-                                    235,
-                                    Short.MAX_VALUE)).addContainerGap()));
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-                layout.createSequentialGroup().addContainerGap().add(
-                    layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false).add(
-                        layout.createSequentialGroup().add(labText).addPreferredGap(
-                            org.jdesktop.layout.LayoutStyle.RELATED,
-                            org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-                            Short.MAX_VALUE).add(
-                            jProgressBar2,
-                            org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-                            org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-                            org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).add(labIcon)).addContainerGap(
-                    29,
-                    Short.MAX_VALUE)));
+        btnCancel.setText(org.openide.util.NbBundle.getMessage(
+                WaitDialog.class,
+                "WaitDialog.btnCancel.text",
+                new Object[] {})); // NOI18N
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnCancelActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        getContentPane().add(btnCancel, gridBagConstraints);
 
         pack();
     } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
+        if (cancellable != null) {
+            if (cancellable.cancel()) {
+                setVisible(false);
+            }
+        }
+    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!

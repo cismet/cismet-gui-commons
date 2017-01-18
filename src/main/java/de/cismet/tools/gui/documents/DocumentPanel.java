@@ -78,7 +78,7 @@ public class DocumentPanel extends javax.swing.JPanel {
                     final Object selection = lstDocuments.getSelectedValue();
                     if (selection != null) {
                         final Document d = (Document)selection;
-                        new Thread() {
+                        new Thread("DocumentPanel valueChanged()") {
 
                             @Override
                             public void run() {

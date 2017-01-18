@@ -24,6 +24,9 @@ import de.cismet.lookupoptions.OptionsPanelController;
 import de.cismet.tools.BrowserLauncher;
 import de.cismet.tools.StaticDebuggingTools;
 
+import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+
 /**
  * DOCUMENT ME!
  *
@@ -252,7 +255,8 @@ public class CismetDeveloperOptionsPanel extends AbstractOptionsPanel implements
      * @param  evt  DOCUMENT ME!
      */
     private void jButton3ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton3ActionPerformed
-        de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig.getSingletonInstance().setVisible(true);
+        final Log4JQuickConfig dialog = Log4JQuickConfig.getSingletonInstance();
+        StaticSwingTools.showDialog(this, dialog, true);
     }                                                                            //GEN-LAST:event_jButton3ActionPerformed
 
     /**

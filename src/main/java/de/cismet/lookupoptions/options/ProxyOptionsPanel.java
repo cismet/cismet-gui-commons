@@ -417,18 +417,23 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         final Element proxyUsernameElement = new Element(CONF_USERNAME);
         final Element proxyPasswordElement = new Element(CONF_PASSWORD);
         final Element proxyDomainElement = new Element(CONF_DOMAIN);
+        String pwEncrypted = null;
 
-        final String pwEncrypted = PasswordEncrypter.encryptString(password);
+        if (password != null) {
+            pwEncrypted = PasswordEncrypter.encryptString(password);
+        }
+
+        final String proxyTypeString = (proxyType != null) ? proxyType.toString() : null;
         if (LOG.isDebugEnabled()) {
-            LOG.debug("getConfiguration [type: " + proxyType.toString() // NOI18N
-                        + " | host: " + host   // NOI18N
-                        + " | port: " + port   // NOI18N
+            LOG.debug("getConfiguration [type: " + proxyTypeString // NOI18N
+                        + " | host: " + host // NOI18N
+                        + " | port: " + port // NOI18N
                         + " | username: " + username // NOI18N
                         + " | password: " + pwEncrypted // NOI18N
                         + " | domain: " + domain + " ]"); // NOI18N
         }
 
-        proxyTypeElement.addContent(proxyType.toString());
+        proxyTypeElement.addContent(proxyTypeString);
         proxyHostElement.addContent(host);
         proxyPortElement.addContent(Integer.toString(port));
         proxyUsernameElement.addContent(username);

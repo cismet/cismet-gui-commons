@@ -84,4 +84,11 @@ public interface OptionsPanelController extends Comparable<OptionsPanelControlle
      * @return  true if some option value has been changed
      */
     boolean isChanged();
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    boolean isEnabled();
 }

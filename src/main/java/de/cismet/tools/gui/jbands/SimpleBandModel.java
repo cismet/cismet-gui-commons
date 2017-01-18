@@ -8,6 +8,7 @@
 package de.cismet.tools.gui.jbands;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.cismet.tools.gui.jbands.interfaces.Band;
 import de.cismet.tools.gui.jbands.interfaces.BandListener;
@@ -26,7 +27,7 @@ public class SimpleBandModel implements BandModel, BandListener {
     //~ Instance fields --------------------------------------------------------
 
     private ArrayList<Band> bands = new ArrayList<Band>();
-    private ArrayList<BandModelListener> listeners = new ArrayList<BandModelListener>();
+    private final CopyOnWriteArrayList<BandModelListener> listeners = new CopyOnWriteArrayList<BandModelListener>();
     private double min = -1;
     private double max = -1;
 
@@ -34,8 +35,6 @@ public class SimpleBandModel implements BandModel, BandListener {
 
     @Override
     public Band getBand(final int bandNumber) {
-        assert (bandNumber > 0);
-        assert (bandNumber < bands.size());
         return bands.get(bandNumber);
     }
 
@@ -47,10 +46,15 @@ public class SimpleBandModel implements BandModel, BandListener {
     /**
      * DOCUMENT ME!
      *
-     * @param  band  DOCUMENT ME!
+     * @param   band  DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  DOCUMENT ME!
      */
     public void addBand(final Band band) {
-        assert (band != null);
+        if (band == null) {
+            throw new IllegalArgumentException("band must not be null");
+        }
+
         if (band instanceof BandModificationProvider) {
             ((BandModificationProvider)band).addBandListener(this);
         }
@@ -61,11 +65,16 @@ public class SimpleBandModel implements BandModel, BandListener {
     /**
      * DOCUMENT ME!
      *
-     * @param  band  DOCUMENT ME!
-     * @param  pos   DOCUMENT ME!
+     * @param   band  DOCUMENT ME!
+     * @param   pos   DOCUMENT ME!
+     *
+     * @throws  IllegalArgumentException  DOCUMENT ME!
      */
     public void insertBand(final Band band, final int pos) {
-        assert (band != null);
+        if (band == null) {
+            throw new IllegalArgumentException("band must not be null");
+        }
+
         bands.add(pos, band);
         fireBandModelChanged();
     }
@@ -78,8 +87,6 @@ public class SimpleBandModel implements BandModel, BandListener {
      * @return  DOCUMENT ME!
      */
     public int removeBand(final Band band) {
-        assert (band != null);
-        assert (bands.contains(band));
         final int pos = bands.indexOf(band);
         if (band instanceof BandModificationProvider) {
             ((BandModificationProvider)band).removeBandListener(this);
@@ -159,6 +166,17 @@ public class SimpleBandModel implements BandModel, BandListener {
      *
      * @param  e  DOCUMENT ME!
      */
+    public void fireBandModelSelectionChanged(final BandModelEvent e) {
+        for (final BandModelListener bml : listeners) {
+            bml.bandModelSelectionChanged(e);
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  e  DOCUMENT ME!
+     */
     public void fireBandModelValuesChanged(final BandModelEvent e) {
         for (final BandModelListener bml : listeners) {
             bml.bandModelValuesChanged(e);
@@ -201,6 +219,12 @@ public class SimpleBandModel implements BandModel, BandListener {
      */
     public void setMin(final double min) {
         this.min = min;
+
+        for (final Band tmp : bands) {
+            if (tmp instanceof BandModificationProvider) {
+                ((BandModificationProvider)tmp).setMin(min);
+            }
+        }
     }
 
     /**
@@ -210,5 +234,11 @@ public class SimpleBandModel implements BandModel, BandListener {
      */
     public void setMax(final double max) {
         this.max = max;
+
+        for (final Band tmp : bands) {
+            if (tmp instanceof BandModificationProvider) {
+                ((BandModificationProvider)tmp).setMax(max);
+            }
+        }
     }
 }

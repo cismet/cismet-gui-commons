@@ -27,7 +27,7 @@ import de.cismet.tools.configuration.NoWriteError;
 
 /**
  * The download manager manages all current downloads. New downloads are added to a collection, completed downloads are
- * removed. Erraneous downloads remain in the collection. The download manager observes all download objects for state
+ * removed. Erroneous downloads remain in the collection. The download manager observes all download objects for state
  * changed and informs the download manager panel via the DownloadListChangedListener interface.
  *
  * @author   jweintraut
@@ -41,6 +41,7 @@ public class DownloadManager implements Observer, Configurable {
     private static final String XML_CONF_ROOT = "downloads";
     private static final String XML_CONF_DIRECTORY = "directory";
     private static final String XML_CONF_PARALLEL_DOWNLOADS = "parallelDownloads";
+    private static final String XML_CONF_NOTIFICATION_DISPLAY_TIME = "notificationDisplayTime";
     private static final String XML_CONF_DIALOG = "dialog";
     private static final String XML_CONF_DIALOG_AKSFORTITLE = "askForTitle";
     private static final String XML_CONF_DIALOG_OPENAUTOMATICALLY = "openAutomatically";
@@ -53,6 +54,7 @@ public class DownloadManager implements Observer, Configurable {
     private File destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
                     + "cidsDownload");
     private int parallelDownloads = 2;
+    private int notificationDisplayTime = 3;
     private LinkedList<Download> downloads = new LinkedList<Download>();
     private List<Download> downloadsToStart = new LinkedList<Download>();
     private EventListenerList listeners = new EventListenerList();
@@ -60,6 +62,7 @@ public class DownloadManager implements Observer, Configurable {
     private volatile int countDownloadsRunning = 0;
     private int countDownloadsErroneous = 0;
     private int countDownloadsCompleted = 0;
+    private int countDownloadsCancelled = 0;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -100,6 +103,7 @@ public class DownloadManager implements Observer, Configurable {
 
         if (download instanceof MultipleDownload) {
             final MultipleDownload multipleDownload = (MultipleDownload)download;
+            downloadsToStart.add(multipleDownload);
 
             for (final Download singleDownload : multipleDownload.getDownloads()) {
                 singleDownload.addObserver(this);
@@ -124,6 +128,43 @@ public class DownloadManager implements Observer, Configurable {
     }
 
     /**
+     * Checks if the encapsulated downloads of a BackgroundTaskMultipleDownload have already been added to the
+     * DownloadManager. If a single download has not yet been added it is added and the observers will be notified.
+     *
+     * @param  backgroundTaskMultipleDownload  DOCUMENT ME!
+     */
+    public synchronized void addDownloadsSubsequently(
+            final BackgroundTaskMultipleDownload backgroundTaskMultipleDownload) {
+        if ((backgroundTaskMultipleDownload == null) || !downloads.contains(backgroundTaskMultipleDownload)) {
+            return;
+        }
+
+        boolean downloadsWereAdded = false;
+        for (final Download encapsulatedDownload : backgroundTaskMultipleDownload.getDownloads()) {
+            if (!downloads.contains(encapsulatedDownload)) {
+                encapsulatedDownload.addObserver(this);
+                encapsulatedDownload.addObserver(backgroundTaskMultipleDownload);
+
+                downloadsToStart.add(encapsulatedDownload);
+                downloadsWereAdded = true;
+            }
+        }
+
+        if (downloadsWereAdded) {
+            notifyDownloadListChanged(new DownloadListChangedEvent(
+                    this,
+                    backgroundTaskMultipleDownload,
+                    DownloadListChangedEvent.Action.ADDED_DOWNLOADS_SUBSEQUENTLY));
+            notifyDownloadListChanged(new DownloadListChangedEvent(
+                    this,
+                    backgroundTaskMultipleDownload,
+                    DownloadListChangedEvent.Action.CHANGED_COUNTERS));
+
+            startDownloads();
+        }
+    }
+
+    /**
      * Removes obsolete downloads. Only completed downloads are obsolete.
      */
     public synchronized void removeObsoleteDownloads() {
@@ -131,7 +172,8 @@ public class DownloadManager implements Observer, Configurable {
 
         for (final Download download : downloads) {
             if ((download.getStatus() == Download.State.COMPLETED)
-                        || (download.getStatus() == Download.State.COMPLETED_WITH_ERROR)) {
+                        || (download.getStatus() == Download.State.COMPLETED_WITH_ERROR)
+                        || (download.getStatus() == Download.State.ABORTED)) {
                 downloadsRemoved.add(download);
             }
         }
@@ -151,6 +193,10 @@ public class DownloadManager implements Observer, Configurable {
                 }
                 case COMPLETED: {
                     countDownloadsCompleted--;
+                    break;
+                }
+                case ABORTED: {
+                    countDownloadsCancelled--;
                     break;
                 }
             }
@@ -205,6 +251,10 @@ public class DownloadManager implements Observer, Configurable {
             }
             case COMPLETED: {
                 countDownloadsCompleted--;
+                break;
+            }
+            case ABORTED: {
+                countDownloadsCancelled--;
                 break;
             }
         }
@@ -283,6 +333,15 @@ public class DownloadManager implements Observer, Configurable {
      *
      * @return  DOCUMENT ME!
      */
+    public int getCountDownloadsCancelled() {
+        return countDownloadsCancelled;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
     public int getParallelDownloads() {
         return parallelDownloads;
     }
@@ -294,6 +353,24 @@ public class DownloadManager implements Observer, Configurable {
      */
     public void setParallelDownloads(final int parallelDownloads) {
         this.parallelDownloads = parallelDownloads;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public int getNotificationDisplayTime() {
+        return notificationDisplayTime;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  notificationDisplayTime  DOCUMENT ME!
+     */
+    public void setNotificationDisplayTime(final int notificationDisplayTime) {
+        this.notificationDisplayTime = notificationDisplayTime;
     }
 
     /**
@@ -314,6 +391,8 @@ public class DownloadManager implements Observer, Configurable {
     public void setDestinationDirectory(final File destinationDirectory) {
         this.destinationDirectory = destinationDirectory;
 
+        DownloadManagerDialog.getInstance().destinationDirectoryChanged();
+
         if (!destinationDirectory.isDirectory() || !destinationDirectory.canWrite()) {
             LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath() + "'.");
         }
@@ -332,6 +411,15 @@ public class DownloadManager implements Observer, Configurable {
 
     @Override
     public synchronized void update(final Observable o, final Object arg) {
+        if (arg != null) {
+            /*
+             * in this case we assume that there was an update that doesnt concern us here. E.G this could happen if the
+             * title of a download has changed and it wants to notify the its observers about it. This feature was
+             * introduced in issue cismet/cismet-gui-commons#29 and is used for example in the NasDownload
+             */
+            return;
+        }
+
         if (!(o instanceof Download)) {
             return;
         }
@@ -369,6 +457,20 @@ public class DownloadManager implements Observer, Configurable {
                 if (!(download instanceof MultipleDownload)) {
                     countDownloadsRunning++;
                 }
+
+                break;
+            }
+            case ABORTED: {
+                if (!(download instanceof MultipleDownload)) {
+                    countDownloadsRunning--;
+                }
+
+                if (downloads.contains(download)) {
+//                    countDownloadsCompleted++;
+                    countDownloadsCancelled++;
+                }
+
+                startDownloads();
 
                 break;
             }
@@ -411,9 +513,9 @@ public class DownloadManager implements Observer, Configurable {
 
     @Override
     public void configure(final Element parent) {
-        DownloadManagerDialog.setAskForJobname(true);
-        DownloadManagerDialog.setJobname("");
-        DownloadManagerDialog.setOpenAutomatically(true);
+        DownloadManagerDialog.getInstance().setAskForJobNameEnabled(true);
+        DownloadManagerDialog.getInstance().setJobName("");
+        DownloadManagerDialog.getInstance().setOpenAutomaticallyEnabled(true);
 
         destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
                         + "cidsDownload");
@@ -459,6 +561,20 @@ public class DownloadManager implements Observer, Configurable {
             }
         }
 
+        final Element notificationDisplayTime = downloads.getChild(XML_CONF_NOTIFICATION_DISPLAY_TIME);
+        if ((notificationDisplayTime == null) || (notificationDisplayTime.getTextTrim() == null)) {
+            LOG.warn("There is no display time for download notifications configured. Using default time '3' sec.");
+        } else {
+            try {
+                this.notificationDisplayTime = Integer.parseInt(notificationDisplayTime.getText());
+            } catch (NumberFormatException e) {
+                LOG.warn(
+                    "Configuration for display time of download notification is invalid. Using default value of '3' sec",
+                    e);
+                this.notificationDisplayTime = 3;
+            }
+        }
+
         final Element dialog = downloads.getChild(XML_CONF_DIALOG);
         if (dialog == null) {
             LOG.warn("The download dialog isn't configured. Using default values.");
@@ -471,7 +587,8 @@ public class DownloadManager implements Observer, Configurable {
                 "There is no configuration whether to ask for download titles or not. Using default value 'true'.");
         } else {
             final String value = askForTitle.getTextTrim();
-            DownloadManagerDialog.setAskForJobname("1".equals(value) || "true".equalsIgnoreCase(value));
+            DownloadManagerDialog.getInstance()
+                    .setAskForJobNameEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
         final Element openAutomatically = dialog.getChild(XML_CONF_DIALOG_OPENAUTOMATICALLY);
@@ -480,7 +597,8 @@ public class DownloadManager implements Observer, Configurable {
                 "There is no configuration whether to open downloads automatically or not. Using default value 'true'.");
         } else {
             final String value = openAutomatically.getTextTrim();
-            DownloadManagerDialog.setOpenAutomatically("1".equals(value) || "true".equalsIgnoreCase(value));
+            DownloadManagerDialog.getInstance()
+                    .setOpenAutomaticallyEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
         final Element closeAutomatically = dialog.getChild(XML_CONF_DIALOG_CLOSEAUTOMATICALLY);
@@ -489,15 +607,19 @@ public class DownloadManager implements Observer, Configurable {
                 "There is no configuration whether to close the download manager dialog automatically or not. Using default value 'true'.");
         } else {
             final String value = closeAutomatically.getTextTrim();
-            DownloadManagerDialog.setCloseAutomatically("1".equals(value) || "true".equalsIgnoreCase(value));
+            DownloadManagerDialog.getInstance()
+                    .setCloseAutomaticallyEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
         final Element userTitle = dialog.getChild(XML_CONF_DIALOG_USERTITLE);
         if ((userTitle == null) || (userTitle.getTextTrim() == null)) {
             LOG.warn("There is no user title for downloads configured. Using default value 'cidsDownload'.");
         } else {
-            DownloadManagerDialog.setJobname(userTitle.getTextTrim());
+            DownloadManagerDialog.getInstance().setJobName(userTitle.getTextTrim());
         }
+
+        // refresh the destination path in the download manager dialog
+        DownloadManagerDialog.getInstance().destinationDirectoryChanged();
     }
 
     @Override
@@ -518,16 +640,18 @@ public class DownloadManager implements Observer, Configurable {
         parallelDownloads.addContent(String.valueOf(this.parallelDownloads));
 
         final Element askForTitle = new Element(XML_CONF_DIALOG_AKSFORTITLE);
-        askForTitle.addContent(DownloadManagerDialog.isAskForJobname() ? "true" : "false");
+        askForTitle.addContent(DownloadManagerDialog.getInstance().isAskForJobNameEnabled() ? "true" : "false");
 
         final Element openAutomatically = new Element(XML_CONF_DIALOG_OPENAUTOMATICALLY);
-        openAutomatically.addContent(DownloadManagerDialog.isOpenAutomatically() ? "true" : "false");
+        openAutomatically.addContent(DownloadManagerDialog.getInstance().isOpenAutomaticallyEnabled() ? "true"
+                                                                                                      : "false");
 
         final Element closeAutomatically = new Element(XML_CONF_DIALOG_CLOSEAUTOMATICALLY);
-        closeAutomatically.addContent(DownloadManagerDialog.isCloseAutomatically() ? "true" : "false");
+        closeAutomatically.addContent(DownloadManagerDialog.getInstance().isCloseAutomaticallyEnabled() ? "true"
+                                                                                                        : "false");
 
         final Element userTitle = new Element(XML_CONF_DIALOG_USERTITLE);
-        userTitle.addContent(DownloadManagerDialog.getJobname());
+        userTitle.addContent(DownloadManagerDialog.getInstance().getJobName());
 
         dialog.addContent(askForTitle);
         dialog.addContent(openAutomatically);

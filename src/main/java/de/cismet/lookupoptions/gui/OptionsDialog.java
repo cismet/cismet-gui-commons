@@ -85,6 +85,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         initOptionsPanels();
         getRootPane().setDefaultButton(btnOk);
         setLocationRelativeTo(parent);
+        addWindowListener(this);
     }
 
     //~ Methods ----------------------------------------------------------------

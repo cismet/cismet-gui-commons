@@ -26,7 +26,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import de.cismet.security.exceptions.BadHttpStatusCodeException;
+import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -60,7 +60,7 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
     private javax.swing.JPanel pnlServerResponse;
     private javax.swing.JScrollPane scpRequestedURI;
     private javax.swing.JToggleButton togDetails;
-    private javax.swing.JTextArea txaRequestedURI;
+    protected javax.swing.JTextArea txaRequestedURI;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -229,9 +229,9 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
 
         scpRequestedURI.setBorder(null);
 
+        txaRequestedURI.setEditable(false);
         txaRequestedURI.setBackground(javax.swing.UIManager.getDefaults().getColor("Panel.background"));
         txaRequestedURI.setColumns(20);
-        txaRequestedURI.setEditable(false);
         txaRequestedURI.setLineWrap(true);
         txaRequestedURI.setRows(5);
         scpRequestedURI.setViewportView(txaRequestedURI);
@@ -295,7 +295,7 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
                         ex);
                 }
                 JOptionPane.showMessageDialog(
-                    this,
+                    StaticSwingTools.getParentFrameIfNotNull(this),
                     NbBundle.getMessage(
                         BadHttpStatusCodeExceptionPanel.class,
                         "BadHttpStatusCodeExceptionPanel.btnSaveResponseActionPerformed.JOptionPane.errorWhileSaving.message",

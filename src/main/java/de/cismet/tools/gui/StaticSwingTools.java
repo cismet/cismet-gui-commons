@@ -7,20 +7,18 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Frame;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,27 +27,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.text.MessageFormat;
-import java.text.NumberFormat;
 
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
-import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+
+import de.cismet.tools.Static2DTools;
 
 /**
  * DOCUMENT ME!
@@ -411,17 +401,21 @@ public class StaticSwingTools {
      * @param  sPane  DOCUMENT ME!
      */
     public static void setNiftyScrollBars(final JScrollPane sPane) {
-        Dimension d = sPane.getVerticalScrollBar().getPreferredSize();
-        sPane.getVerticalScrollBar().getComponent(0).setVisible(false);
-        sPane.getVerticalScrollBar().getComponent(1).setVisible(false);
-        sPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, d.height));
-        d = sPane.getHorizontalScrollBar().getPreferredSize();
-        sPane.getHorizontalScrollBar().getComponent(0).setVisible(false);
-        sPane.getHorizontalScrollBar().getComponent(1).setVisible(false);
-        sPane.getHorizontalScrollBar().setPreferredSize(new Dimension(d.width, 8));
-        sPane.setBackground(sPane.getViewport().getBackground());
-        sPane.getHorizontalScrollBar().setBackground(sPane.getViewport().getBackground());
-        sPane.getVerticalScrollBar().setBackground(sPane.getViewport().getBackground());
+        try {
+            Dimension d = sPane.getVerticalScrollBar().getPreferredSize();
+            sPane.getVerticalScrollBar().getComponent(0).setVisible(false);
+            sPane.getVerticalScrollBar().getComponent(1).setVisible(false);
+            sPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, d.height));
+            d = sPane.getHorizontalScrollBar().getPreferredSize();
+            sPane.getHorizontalScrollBar().getComponent(0).setVisible(false);
+            sPane.getHorizontalScrollBar().getComponent(1).setVisible(false);
+            sPane.getHorizontalScrollBar().setPreferredSize(new Dimension(d.width, 8));
+            sPane.setBackground(sPane.getViewport().getBackground());
+            sPane.getHorizontalScrollBar().setBackground(sPane.getViewport().getBackground());
+            sPane.getVerticalScrollBar().setBackground(sPane.getViewport().getBackground());
+        } catch (Exception e) {
+            log.warn("Cannot create the nifty scrollbars.", e);
+        }
     }
 
     /**
@@ -476,6 +470,22 @@ public class StaticSwingTools {
     }
 
     /**
+     * Returns the parent frame of the given component or the given component if there is no parent frame.
+     *
+     * @param   c  component whose parent frame shall be determined
+     *
+     * @return  parent frame or c if there is no parent frame
+     */
+    public static Component getParentFrameIfNotNull(final Component c) {
+        final Component parent = getParentFrame(c);
+        if (parent == null) {
+            return c;
+        }
+
+        return parent;
+    }
+
+    /**
      * DOCUMENT ME!
      *
      * @param   components  DOCUMENT ME!
@@ -527,17 +537,85 @@ public class StaticSwingTools {
         } else {
             if (isRelativeToParentFrame && (parent != null)) {
                 final Frame parentFrame = getParentFrame(parent);
+
+                // UGLY BUT IT WORKS - this part is for Windows users
+                // enforcing dialog to be set on top of other dialogs to prevent
+                // that the dialog becomes unreachable behind another modal dialog
+                dialog.setAlwaysOnTop(true);
+                dialog.toFront();
+                dialog.requestFocus();
+                dialog.setAlwaysOnTop(false);
+
                 if (parentFrame == null) {
-                    dialog.setLocationRelativeTo(parent);
+                    centerWindowOnScreen(dialog);
                 } else {
                     dialog.setLocationRelativeTo(parentFrame);
+                    dialog.setVisible(true);
                 }
             } else {
-                dialog.setLocationRelativeTo(parent);
+                centerWindowOnScreen(dialog);
             }
-
-            dialog.setVisible(true);
         }
+    }
+
+    /**
+     * Centers a Window instance on the screen on which the mouse pointer is located.
+     *
+     * @param  w  window instance to be centered
+     */
+    public static void centerWindowOnScreen(final Window w) {
+        final PointerInfo pInfo = MouseInfo.getPointerInfo();
+        final Point pointerLocation = pInfo.getLocation();
+
+        // determine screen boundaries w.r.t. the current mouse position
+        final GraphicsConfiguration[] cfgArr = pInfo.getDevice().getConfigurations();
+
+        Rectangle bounds = null;
+        for (int i = 0; i < cfgArr.length; i++) {
+            bounds = cfgArr[i].getBounds();
+
+            if (pointerLocation.x <= bounds.x) {
+                break;
+            }
+        }
+
+        // determine coordinates in the center of the current mouse location
+        final int x = bounds.x + ((bounds.width - w.getWidth()) / 2);
+        final int y = bounds.y + ((bounds.height - w.getHeight()) / 2);
+
+        // show window
+        w.setLocation(x, y);
+        w.setVisible(true);
+    }
+
+    /**
+     * Determines the bounds of a component to centers it on the screen on which the mouse pointer is located.
+     *
+     * @param   c  Component instance to be centered
+     *
+     * @return  The bounds of the component
+     */
+    public static Rectangle getCenterBoundsForComponent(final Component c) {
+        final PointerInfo pInfo = MouseInfo.getPointerInfo();
+        final Point pointerLocation = pInfo.getLocation();
+
+        // determine screen boundaries w.r.t. the current mouse position
+        final GraphicsConfiguration[] cfgArr = pInfo.getDevice().getConfigurations();
+
+        Rectangle bounds = null;
+        for (int i = 0; i < cfgArr.length; i++) {
+            bounds = cfgArr[i].getBounds();
+
+            if (pointerLocation.x <= bounds.x) {
+                break;
+            }
+        }
+
+        // determine coordinates in the center of the current mouse location
+        final int x = bounds.x + ((bounds.width - c.getWidth()) / 2);
+        final int y = bounds.y + ((bounds.height - c.getHeight()) / 2);
+
+        return new Rectangle(x, y, c.getWidth(), c.getHeight());
     }
 
     /**
@@ -658,5 +736,140 @@ public class StaticSwingTools {
                 EventQueue.getMostRecentEventTime(),
                 0);
         action.actionPerformed(actionEvent);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  cbo  DOCUMENT ME!
+     */
+    public static void decorateWithFixedAutoCompleteDecorator(final JComboBox cbo) {
+        AutoCompleteDecorator.decorate(cbo);
+        final JList pop = ((ComboPopup)cbo.getUI().getAccessibleChild(cbo, 0)).getList();
+        final JTextField txt = (JTextField)cbo.getEditor().getEditorComponent();
+
+        txt.addKeyListener(new KeyAdapter() {
+
+                @Override
+                public void keyReleased(final KeyEvent event) {
+                    if ((event.getKeyCode() == KeyEvent.VK_DOWN) || (event.getKeyCode() == KeyEvent.VK_UP)) {
+                        final Object selectedValue = pop.getSelectedValue();
+                        if (selectedValue != null) {
+                            txt.setText(String.valueOf(selectedValue));
+                        }
+                        txt.selectAll();
+                    }
+                }
+            });
+    }
+
+    /**
+     * A Method to make UIManger.put comands configurable via a json file.
+     *
+     * <p>The json File has to placed to <code>/de/cismet/tools/gui/uitweaks.json</code>.</p>
+     *
+     * <p>An example json file can be found on <a href="https://github.com/cismet/cismet-gui-commons/issues/39">
+     * GitHub</a>.</p>
+     */
+    public static void tweakUI() {
+        final ObjectMapper mapper = new ObjectMapper();
+        try {
+            final UITweaks config = mapper.readValue(UITweaks.class.getResourceAsStream(
+                        "/de/cismet/tools/gui/uitweaks.json"),
+                    UITweaks.class);
+            config.apply();
+        } catch (Exception e) {
+            log.warn("Problem during TweakingUI", e);
+        }
+    }
+
+    /**
+     * Opens a JFileChooser with a filter for the given file extensions and checks if the chosen file has the right
+     * extension. If not the first right extension is added.
+     *
+     * @param   currentDirectoryPath      The currebnt path that should be shown in the dialog
+     * @param   isSaveDialog              True, if a save dialog should be shown. Otherwise a open dialog will be shown
+     * @param   allowedFileExtension      all allowed file extensions or null, if every extension should be allowed
+     * @param   fileExtensionDescription  The description of the file extension.
+     * @param   parent                    the parent component of the dialog
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static File chooseFile(final String currentDirectoryPath,
+            final boolean isSaveDialog,
+            final String[] allowedFileExtension,
+            final String fileExtensionDescription,
+            final Component parent) {
+        JFileChooser fc;
+
+        try {
+            fc = new ConfirmationJFileChooser(currentDirectoryPath);
+        } catch (Exception bug) {
+            // Bug Workaround http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6544857
+            fc = new JFileChooser(currentDirectoryPath, new RestrictedFileSystemView());
+        }
+
+        final FileFilter fileFilter = new FileFilter() {
+
+                @Override
+                public boolean accept(final File f) {
+                    boolean fileAllowed = f.isDirectory();
+
+                    if (allowedFileExtension == null) {
+                        fileAllowed = true;
+                    } else if (!fileAllowed) {
+                        final String extension = (f.getName().contains(".")
+                                ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
+
+                        for (final String allowedExt : allowedFileExtension) {
+                            if (extension.equals(allowedExt)) {
+                                fileAllowed = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    return fileAllowed;
+                }
+
+                @Override
+                public String getDescription() {
+                    String description = fileExtensionDescription;
+
+                    if ((description == null) && (allowedFileExtension != null)) {
+                        for (final String allowedExt : allowedFileExtension) {
+                            if (description == null) {
+                                description = allowedExt;
+                            } else {
+                                description += ", " + allowedExt;
+                            }
+                        }
+                    } else {
+                        description += "";
+                    }
+
+                    return description;
+                }
+            };
+
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.setFileFilter(fileFilter);
+
+        final int state = (isSaveDialog ? fc.showSaveDialog(parent) : fc.showOpenDialog(parent));
+        if (log.isDebugEnabled()) {
+            log.debug("state:" + state); // NOI18N
+        }
+
+        if (state == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+
+            if (!fileFilter.accept(file)) {
+                file = new File(file.getAbsolutePath() + "." + allowedFileExtension[0]);
+            }
+
+            return file;
+        } else {
+            return null;
+        }
     }
 }

@@ -8,8 +8,16 @@
 package de.cismet.tools.gui.log4jquickconfig;
 
 import java.awt.Color;
+import java.awt.Frame;
 
 import java.util.Properties;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+
+import de.cismet.lookupoptions.options.CismetDeveloperOptionsPanel;
+
+import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -17,7 +25,7 @@ import java.util.Properties;
  * @author   thorsten.hell@cismet.de
  * @version  $Revision$, $Date$
  */
-public class Log4JQuickConfig extends javax.swing.JFrame {
+public class Log4JQuickConfig extends JDialog {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -62,6 +70,7 @@ public class Log4JQuickConfig extends javax.swing.JFrame {
      * Creates new form Log4JQuickConfig.
      */
     public Log4JQuickConfig() {
+        super((Frame)null, true);
         initComponents();
         gpnTitle.setLeftColor(new Color(49, 66, 122));
         gpnTitle.setRightColor(Color.white);
@@ -533,12 +542,42 @@ public class Log4JQuickConfig extends javax.swing.JFrame {
      * DOCUMENT ME!
      */
     public static void configure4LumbermillOnLocalhost() {
+        configure4LumbermillOnLocalhost("DEBUG");
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  level  DOCUMENT ME!
+     */
+    public static void configure4LumbermillOnLocalhost(final String level) {
+        configure4LumbermillOn("localhost", 4445);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  host  DOCUMENT ME!
+     * @param  port  DOCUMENT ME!
+     */
+    public static void configure4LumbermillOn(final String host, final int port) {
+        configure4LumbermillOn(host, port, "DEBUG");
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  host   DOCUMENT ME!
+     * @param  port   DOCUMENT ME!
+     * @param  level  DOCUMENT ME!
+     */
+    public static void configure4LumbermillOn(final String host, final int port, final String level) {
         final Properties p = new Properties();
-        p.put("log4j.appender.Remote", "org.apache.log4j.net.SocketAppender"); // NOI18N
-        p.put("log4j.appender.Remote.remoteHost", "localhost");                // NOI18N
-        p.put("log4j.appender.Remote.port", "4445");                           // NOI18N
-        p.put("log4j.appender.Remote.locationInfo", "true");                   // NOI18N
-        p.put("log4j.rootLogger", "DEBUG,Remote");                             // NOI18N
+        p.put("log4j.appender.Remote", "org.apache.log4j.net.SocketAppender");
+        p.put("log4j.appender.Remote.remoteHost", host);
+        p.put("log4j.appender.Remote.port", Integer.toString(port));
+        p.put("log4j.appender.Remote.locationInfo", "true");
+        p.put("log4j.rootLogger", level + ",Remote");
         org.apache.log4j.PropertyConfigurator.configure(p);
     }
 }

@@ -22,6 +22,7 @@ public class EmptyAbsoluteHeightedBand implements Band, BandAbsoluteHeightProvid
     //~ Instance fields --------------------------------------------------------
 
     final int height;
+    private boolean enabled = true;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -80,6 +81,15 @@ public class EmptyAbsoluteHeightedBand implements Band, BandAbsoluteHeightProvid
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  enabled  DOCUMENT ME!
+     */
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
     }
 }

@@ -55,7 +55,11 @@ public class OptionsClient implements Configurable {
             categoriesTable.put(category.getClass(), category);
         }
 
-        controllerList.addAll(Lookup.getDefault().lookupAll(OptionsPanelController.class));
+        for (final OptionsPanelController controller : Lookup.getDefault().lookupAll(OptionsPanelController.class)) {
+            if (controller.isEnabled()) {
+                controllerList.add(controller);
+            }
+        }
     }
 
     //~ Methods ----------------------------------------------------------------

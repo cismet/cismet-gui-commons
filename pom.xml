@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
+    <!-- 
+        FIXME: Replace deprecated cids-parent by cismet-parent
+    -->
     <parent>
         <groupId>de.cismet.cids</groupId>
         <artifactId>cids-parent</artifactId>
-        <version>2.4</version>
+        <version>5.0-SNAPSHOT</version>
     </parent>
 
     <groupId>de.cismet.commons</groupId>
@@ -15,15 +19,10 @@
     <properties>
         <names.cismet-gui-commons>cismet GUI Commons</names.cismet-gui-commons>
     </properties>
+    
     <name>${names.cismet-gui-commons}</name>
     <description>!!! description pending !!!</description>
-    <licenses>
-        <license>
-            <name>GNU Lesser General Public License</name>
-            <distribution>repo</distribution>
-            <url>http://www.gnu.org/licenses/lgpl-3.0.html</url>
-        </license>
-    </licenses>
+    
     <prerequisites>
         <maven>3</maven>
     </prerequisites>
@@ -32,37 +31,42 @@
         <connection>https://github.com/cismet/cismet-gui-commons.git</connection>
         <developerConnection>scm:git:git@github.com:cismet/cismet-gui-commons.git</developerConnection>
         <url>https://github.com/cismet/cismet-gui-commons</url>
-      <tag>HEAD</tag>
-  </scm>
-
-    <repositories>
-        <repository>
-            <id>cismet-repo</id>
-            <url>https://repo.cismet.de/repo</url>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-                <updatePolicy>daily</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-                <updatePolicy>interval:60</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
-
+        <tag>HEAD</tag>
+    </scm>
+    
+    <ciManagement>
+        <system>jenkins</system>
+        <url>https://ci.cismet.de/job/cismet-gui-commons/</url>
+    </ciManagement>
+    
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/cismet/cismet-gui-commons/issues</url>
+    </issueManagement>
+    
+    <!-- 
+        TODO define versions in dependency management section of ext-libs-bom 
+    -->
     <dependencies>
+        
+        <!-- BEGIN: cismet dependencies -->
         <dependency>
             <groupId>de.cismet.commons</groupId>
             <artifactId>cismet-commons</artifactId>
-            <version>4.0</version>
+            <version>5.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.cismet.commons</groupId>
             <artifactId>wss-bean</artifactId>
-            <version>4.0</version>
+            <version>5.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>de.cismet.custom</groupId>
+            <artifactId>beansbinding</artifactId>
+            <version>5.0-SNAPSHOT</version>
+        </dependency>
+        <!-- END: cismet dependencies -->
+        
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-dialogs</artifactId>
@@ -104,17 +108,16 @@
             <version>1.8.5</version>
         </dependency>
         <!-- groovy unmodelled dependencies end -->
-        <!--Swingx transitiv dependency from cismetCommons-->
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>swingx</artifactId>
+            <version>1.6</version>
+        </dependency>
         <!--Commons transitiv dependency from WSSBean-->
         <dependency>
             <groupId>com.l2fprod.common</groupId>
             <artifactId>l2fprod-common-buttonbar</artifactId>
             <version>7.3</version>
-        </dependency>
-        <dependency>
-            <groupId>de.cismet.custom</groupId>
-            <artifactId>beansbinding</artifactId>
-            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -133,11 +136,11 @@
             <type>jar</type>
         </dependency>
         <!-- this dependency is only necessary because of the outdated swingx version in combination with jalopy -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.jdesktop</groupId>
             <artifactId>swing-worker</artifactId>
             <version>1.1</version>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.xhtmlrenderer</groupId>
             <artifactId>core-renderer</artifactId>
@@ -160,6 +163,7 @@
             <version>3.3</version>
             <classifier>ftp</classifier>
         </dependency>
+        <!-- system dependencies are EVIL -->
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>javafx</artifactId>
@@ -175,13 +179,6 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12</version>
-            </plugin>
-        </plugins>
         <finalName>cismetGuiCommons</finalName>
     </build>
 </project>

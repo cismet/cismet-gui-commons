@@ -23,8 +23,6 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import com.sun.grizzly.util.AbstractThreadPool;
-
 import org.apache.log4j.Logger;
 
 import org.openide.util.NbBundle;

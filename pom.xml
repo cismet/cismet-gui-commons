@@ -321,6 +321,7 @@
                         <excludes>
                             <exclude>**/ClassPathInfoTest.java</exclude>
                             <exclude>**/MultiPagePictureReaderTest.java</exclude>
+                            <exclude>**/ExifReaderTest.java</exclude>
                         </excludes>
                     </configuration>
                 </plugin>

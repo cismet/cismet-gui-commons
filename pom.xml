@@ -22,10 +22,6 @@
     
     <name>${names.cismet-gui-commons}</name>
     <description>!!! description pending !!!</description>
-    
-    <prerequisites>
-        <maven>3</maven>
-    </prerequisites>
 
     <scm>
         <connection>https://github.com/cismet/cismet-gui-commons.git</connection>

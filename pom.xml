@@ -137,6 +137,10 @@
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>swingx</artifactId>
+        </dependency>
         <!-- END: managed dependencies -->
         
         <dependency>
@@ -172,11 +176,6 @@
             <version>1.8.5</version>
         </dependency>
         <!-- groovy unmodelled dependencies end -->
-        <dependency>
-            <groupId>org.swinglabs</groupId>
-            <artifactId>swingx</artifactId>
-            <version>1.6</version>
-        </dependency>
         <dependency>
             <groupId>com.l2fprod.common</groupId>
             <artifactId>l2fprod-common-buttonbar</artifactId>

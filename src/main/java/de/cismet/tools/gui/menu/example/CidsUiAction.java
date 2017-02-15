@@ -1,5 +1,11 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui.menu.example;
-
 
 import javax.swing.Action;
 
@@ -10,11 +16,14 @@ import javax.swing.Action;
  */
 
 /**
- *  This is a marker for cids ui actions
- * 
- * @author therter
+ * This is a marker for cids ui actions.
+ *
+ * @author   therter
+ * @version  $Revision$, $Date$
  */
 public interface CidsUiAction extends Action {
-    public final static String CIDS_ACTION_KEY = "CidsActionKey";
-    
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    String CIDS_ACTION_KEY = "CidsActionKey";
 }

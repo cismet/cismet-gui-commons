@@ -1,3 +1,10 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,68 +13,91 @@
 package de.cismet.tools.gui.menu.example;
 
 /**
+ * DOCUMENT ME!
  *
- * @author therter
+ * @author   therter
+ * @version  $Revision$, $Date$
  */
 public class Item {
+
+    //~ Instance fields --------------------------------------------------------
+
     private String actionKey;
     private String name;
     private String i18nKey;
     private Item[] items;
 
+    //~ Methods ----------------------------------------------------------------
+
     /**
-     * @return the actionKey
+     * DOCUMENT ME!
+     *
+     * @return  the actionKey
      */
     public String getActionKey() {
         return actionKey;
     }
 
     /**
-     * @param actionKey the actionKey to set
+     * DOCUMENT ME!
+     *
+     * @param  actionKey  the actionKey to set
      */
-    public void setActionKey(String actionKey) {
+    public void setActionKey(final String actionKey) {
         this.actionKey = actionKey;
     }
 
     /**
-     * @return the name
+     * DOCUMENT ME!
+     *
+     * @return  the name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @param name the name to set
+     * DOCUMENT ME!
+     *
+     * @param  name  the name to set
      */
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
     /**
-     * @return the i18nKey
+     * DOCUMENT ME!
+     *
+     * @return  the i18nKey
      */
     public String getI18nKey() {
         return i18nKey;
     }
 
     /**
-     * @param i18nKey the i18nKey to set
+     * DOCUMENT ME!
+     *
+     * @param  i18nKey  the i18nKey to set
      */
-    public void setI18nKey(String i18nKey) {
+    public void setI18nKey(final String i18nKey) {
         this.i18nKey = i18nKey;
     }
 
     /**
-     * @return the items
+     * DOCUMENT ME!
+     *
+     * @return  the items
      */
     public Item[] getItems() {
         return items;
     }
 
     /**
-     * @param items the items to set
+     * DOCUMENT ME!
+     *
+     * @param  items  the items to set
      */
-    public void setItems(Item[] items) {
+    public void setItems(final Item[] items) {
         this.items = items;
     }
 }

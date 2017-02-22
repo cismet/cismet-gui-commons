@@ -1396,17 +1396,21 @@ public class JBand extends JPanel implements ActionListener,
         final double max = bandMember.getMax();
         final double len = max - min;
         final double mid = min + (len / 2);
-        final double fac = mid / (maxValue);
+        final double fac = mid / (maxValue - minValue);
 
-        // soll dafür sorgen, dass die mitte de members genau in die Mitte der scrollpane gescrollt wird
-        // nicht adäquat aber vorerst ausreichend
-        final double facCorrected = 0.5 - ((0.5 - fac) * zoomFactor * 3);
+        // it will be assumed that scrollPane.getHorizontalScrollBar().getMinimum() == 0
+        final double maxScrollBarValue = scrollPane.getHorizontalScrollBar().getMaximum()
+                    - scrollPane.getHorizontalScrollBar().getVisibleAmount();
+        final double midOfMember = fac * scrollPane.getHorizontalScrollBar().getMaximum();
+        double halfVisibleAmountBeforeMid = midOfMember - (scrollPane.getHorizontalScrollBar().getVisibleAmount() / 2);
 
-        final double sblen = scrollPane.getHorizontalScrollBar().getMaximum()
-                    - scrollPane.getHorizontalScrollBar().getWidth();
+        if (halfVisibleAmountBeforeMid < scrollPane.getHorizontalScrollBar().getMinimum()) {
+            halfVisibleAmountBeforeMid = scrollPane.getHorizontalScrollBar().getMinimum();
+        } else if (halfVisibleAmountBeforeMid > maxScrollBarValue) {
+            halfVisibleAmountBeforeMid = maxScrollBarValue;
+        }
 
-        scrollPane.getHorizontalScrollBar().setValue((int)(sblen * facCorrected));
-//        scrollPane.scrollRectToVisible(rectangle);
+        scrollPane.getHorizontalScrollBar().setValue((int)(halfVisibleAmountBeforeMid));
     }
 
     //~ Inner Classes ----------------------------------------------------------

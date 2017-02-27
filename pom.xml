@@ -141,14 +141,32 @@
             <groupId>org.swinglabs</groupId>
             <artifactId>swingx</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>swing-layout</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-dialogs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-awt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+        </dependency>
         <!-- END: managed dependencies -->
         
         <!-- BEGIN: runtime dependencies -->
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-dialogs-i18n-de</artifactId>
-            <!-- RELEASE701 does not exist! -->
-            <version>RELEASE69</version>
             <scope>runtime</scope>
         </dependency>
         <!--
@@ -161,16 +179,7 @@
             <scope>runtime</scope>
         </dependency>
         <!-- END: runtime dependencies -->    
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-dialogs</artifactId>
-            <version>RELEASE701</version>
-        </dependency>
-        <dependency>
-            <groupId>org.swinglabs</groupId>
-            <artifactId>swing-layout</artifactId>
-            <version>1.0.3</version>
-        </dependency>
+        
         <dependency>
             <groupId>net.java.dev.fuse</groupId>
             <artifactId>fuse-core</artifactId>
@@ -208,23 +217,6 @@
             <version>3.3</version>
             <classifier>ftp</classifier>
         </dependency>
-
-        <!-- Used undeclared dependencies -->
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-util-lookup</artifactId>
-            <version>RELEASE701</version>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-awt</artifactId>
-            <version>RELEASE701</version>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-util</artifactId>
-            <version>RELEASE701</version>
-        </dependency>
         <dependency>
             <groupId>com.jhlabs</groupId>
             <artifactId>filters</artifactId>
@@ -239,6 +231,7 @@
             <artifactId>jcommon</artifactId>
             <version>1.0.15</version>
         </dependency>
+        
         <!-- BEGIN: Test Dependencies -->
         <dependency>
             <groupId>org.testng</groupId>

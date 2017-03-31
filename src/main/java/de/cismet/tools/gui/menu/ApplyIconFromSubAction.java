@@ -10,13 +10,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.tools.gui.menu.example;
+package de.cismet.tools.gui.menu;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
-
-import de.cismet.tools.gui.menu.CidsUiAction;
+import javax.swing.Action;
 
 /**
  * DOCUMENT ME!
@@ -24,24 +23,16 @@ import de.cismet.tools.gui.menu.CidsUiAction;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-@org.openide.util.lookup.ServiceProvider(service = CidsUiAction.class)
-public class InfoAction extends AbstractAction implements CidsUiAction {
-
-    //~ Constructors -----------------------------------------------------------
-
-    /**
-     * Creates a new InfoAction object.
-     */
-    public InfoAction() {
-        putValue(CidsUiAction.CIDS_ACTION_KEY, "info");
-        putValue(SHORT_DESCRIPTION, "Info Fenster");
-        putValue(NAME, "Info");
-    }
+public class ApplyIconFromSubAction extends AbstractAction implements CidsUiAction {
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        System.out.println("Info pressed");
+        if (e.getSource() instanceof Action) {
+            final Action a = (Action)e.getSource();
+            putValue(LARGE_ICON_KEY, a.getValue(LARGE_ICON_KEY));
+            putValue(SMALL_ICON, a.getValue(SMALL_ICON));
+        }
     }
 }

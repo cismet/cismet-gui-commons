@@ -1,70 +1,51 @@
 {
-	"mainMenu":
-        [
-            {
-                    "actionKey": null,
+    "mainMenu":
+            [
+                {
                     "name": "Datei",
-                    "i18nKey": null,
-                    "items": 
-                    [
-                            {
-                                    "actionKey": "newProject",
-                                    "name": null,
-                                    "i18nKey": "Menu.example",
-                                    "items": null
-                            },
-                            {
-                                    "actionKey": null,
+                    "items":
+                            [
+                                {"actionKey": "newProject", "i18nKey": "Menu.example"},
+                                {
                                     "name": "Neu",
-                                    "i18nKey": null,
-                                    "items": 
+                                    "items":
                                             [
-                                                {
-                                                        "actionKey": "newProject",
-                                                        "name": "Neuer Name",
-                                                        "i18nKey": "Menu.example",
-                                                        "items": null
-                                                }
+                                                {"actionKey": "newProject", "name": "Neuer Name", "i18nKey": "Menu.example"}
                                             ]
-                            },
-                            {
-                                    "actionKey": "exit",
-                                    "name": null,
-                                    "i18nKey": null,
-                                    "items": null
-                            }
-                    ]
-            },
-            {
-                    "actionKey": null,
+                                },
+                                {"actionKey": "exit"}
+                            ]
+                },
+                {
+                    "name": "Radio",
+                    "items":
+                            [
+                                {"actionKey": "newProject", "name": "Menü 1", "radio": "radioGroup"},
+                                {"actionKey": "newProject", "name": "Menü 2", "radio": "radioGroup"}
+                            ]
+                },
+                {
                     "name": "Hilfe",
-                    "i18nKey": null,
-                    "items": 
-                    [
-                            {
-                                    "actionKey": "info",
-                                    "name": null,
-                                    "i18nKey": null,
-                                    "items": null
-                            }
+                    "items":
+                            [
+                                {"actionKey": "info"}
+                            ]
+                }
+            ],
+    "mainToolbar":
+            [
+                {"actionKey": "newProject", "name": "ProjektToolbar"},
+                {"actionKey": "toolbarComponent"},
+                {
+                    "actionKey": "newProject", 
+                    "name": "aufklappbar",
+                    "items": [
+                        {"actionKey": "info", "name": "Untermenü", "toggle": true},
+                        {"actionKey": "exit"}
                     ]
-            }
-        ],
-        "mainToolbar": 
-                [
-                    {
-                            "actionKey": "newProject",
-                            "name": "ProjektToolbar",
-                            "i18nKey": null,
-                            "items": null
-                    },
-                    {
-                            "actionKey": "exit",
-                            "name": null,
-                            "i18nKey": null,
-                            "items": null
-                    }
-                ],
-	"mapToolbar": null
+                },
+                {"actionKey": "exit"}
+            ],
+    "mapToolbar": null
 }
 

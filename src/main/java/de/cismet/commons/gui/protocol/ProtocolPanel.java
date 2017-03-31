@@ -32,6 +32,8 @@ import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.Box;
+import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -40,6 +42,7 @@ import javax.swing.filechooser.FileFilter;
 import de.cismet.commons.gui.protocol.listener.ProtocolHandlerAdapter;
 import de.cismet.commons.gui.protocol.listener.ProtocolHandlerListenerEvent;
 
+import de.cismet.tools.gui.GUIWindow;
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -48,7 +51,8 @@ import de.cismet.tools.gui.StaticSwingTools;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class ProtocolPanel extends javax.swing.JPanel {
+@org.openide.util.lookup.ServiceProvider(service = GUIWindow.class)
+public class ProtocolPanel extends javax.swing.JPanel implements GUIWindow {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -508,6 +512,26 @@ public class ProtocolPanel extends javax.swing.JPanel {
                     }
                 });
         }
+    }
+
+    @Override
+    public JComponent getGuiComponent() {
+        return this;
+    }
+
+    @Override
+    public String getPermissionString() {
+        return GUIWindow.NO_PERMISSION;
+    }
+
+    @Override
+    public String getViewTitle() {
+        return "";
+    }
+
+    @Override
+    public Icon getViewIcon() {
+        return null;
     }
 
     //~ Inner Classes ----------------------------------------------------------

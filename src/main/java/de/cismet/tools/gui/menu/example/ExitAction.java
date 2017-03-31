@@ -16,13 +16,15 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import de.cismet.tools.gui.menu.CidsUiAction;
+
 /**
  * DOCUMENT ME!
  *
  * @author   therter
  * @version  $Revision$, $Date$
  */
-@org.openide.util.lookup.ServiceProvider(service = CidsUiAction.class)
+//@org.openide.util.lookup.ServiceProvider(service = CidsUiAction.class)
 public class ExitAction extends AbstractAction implements CidsUiAction {
 
     //~ Constructors -----------------------------------------------------------

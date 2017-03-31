@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.tools.gui.menu.example;
+package de.cismet.tools.gui.menu;
 
 /**
  * DOCUMENT ME!
@@ -23,8 +23,7 @@ public class Menu {
     //~ Instance fields --------------------------------------------------------
 
     private Item[] mainMenu;
-    private Item[] mainToolbar;
-    private Item[] mapToolbar;
+    private Toolbar[] toolbars;
 
     //~ Methods ----------------------------------------------------------------
 
@@ -49,36 +48,18 @@ public class Menu {
     /**
      * DOCUMENT ME!
      *
-     * @return  the mainToolbar
+     * @return  the toolbars
      */
-    public Item[] getMainToolbar() {
-        return mainToolbar;
+    public Toolbar[] getToolbars() {
+        return toolbars;
     }
 
     /**
      * DOCUMENT ME!
      *
-     * @param  mainToolbar  the mainToolbar to set
+     * @param  toolbars  the toolbars to set
      */
-    public void setMainToolbar(final Item[] mainToolbar) {
-        this.mainToolbar = mainToolbar;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  the mapToolbar
-     */
-    public Item[] getMapToolbar() {
-        return mapToolbar;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  mapToolbar  the mapToolbar to set
-     */
-    public void setMapToolbar(final Item[] mapToolbar) {
-        this.mapToolbar = mapToolbar;
+    public void setToolbars(final Toolbar[] toolbars) {
+        this.toolbars = toolbars;
     }
 }

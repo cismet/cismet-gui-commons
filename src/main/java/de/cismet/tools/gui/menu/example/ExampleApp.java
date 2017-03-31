@@ -12,23 +12,6 @@
  */
 package de.cismet.tools.gui.menu.example;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.openide.util.Lookup;
-import org.openide.util.NbBundle;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.JButton;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-
 /**
  * DOCUMENT ME!
  *
@@ -50,118 +33,13 @@ public class ExampleApp extends javax.swing.JFrame {
     public ExampleApp() {
         initComponents();
 
-        final Map<String, CidsUiAction> actionMap = new HashMap<String, CidsUiAction>();
-
-        final Collection<? extends CidsUiAction> actions = Lookup.getDefault().lookupAll(CidsUiAction.class);
-
-        final Collection<? extends CidsUiActionProvider> actionProvider = Lookup.getDefault()
-                    .lookupAll(CidsUiActionProvider.class);
-
-        for (final CidsUiAction action : actions) {
-            actionMap.put((String)action.getValue(CidsUiAction.CIDS_ACTION_KEY), action);
-        }
-
-        for (final CidsUiActionProvider provider : actionProvider) {
-            for (final CidsUiAction action : provider.getActions()) {
-                actionMap.put((String)action.getValue(CidsUiAction.CIDS_ACTION_KEY), action);
-            }
-        }
-
-        final ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(
-                        this.getClass().getResourceAsStream("MenuConfiguration.json")));
-            final Menu menu = mapper.readValue(reader, Menu.class);
-
-            final Item[] menuItems = menu.getMainMenu();
-
-            for (final Item tmp : menuItems) {
-                if (tmp.getActionKey() == null) {
-                    final JMenu m = new JMenu();
-
-                    if (tmp.getName() != null) {
-                        m.setText(tmp.getName());
-                    } else if (tmp.getI18nKey() != null) {
-                        m.setText(NbBundle.getMessage(ExampleApp.class, tmp.getI18nKey()));
-                    }
-                    jMenuBar1.add(m);
-                    addMenuItems(tmp.getItems(), m, actionMap);
-                }
-            }
-
-            final Item[] toolbarItems = menu.getMainToolbar();
-
-            for (final Item tmp : toolbarItems) {
-                if (tmp.getActionKey() != null) {
-                    final CidsUiAction action = actionMap.get(tmp.getActionKey());
-
-                    if (action != null) {
-                        final JButton button = jToolBar1.add(action);
-
-                        final String name = getActionName(tmp);
-
-                        if (name != null) {
-                            button.setText(name);
-                        }
-                    }
-                }
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+//        final ActionConfiguration config = new ActionConfiguration("MenuConfiguration.json");
+//
+//        config.configureMainMenu(jMenuBar1);
+//        config.configureMainToolbar(jToolBar1);
     }
 
     //~ Methods ----------------------------------------------------------------
-
-    /**
-     * Add the given items to the given menu.
-     *
-     * @param  items      DOCUMENT ME!
-     * @param  menu       DOCUMENT ME!
-     * @param  actionMap  DOCUMENT ME!
-     */
-    private void addMenuItems(final Item[] items, final JMenu menu, final Map<String, CidsUiAction> actionMap) {
-        for (final Item tmp : items) {
-            if (tmp.getActionKey() == null) {
-                final JMenu m = new JMenu(tmp.getName());
-                menu.add(m);
-                addMenuItems(tmp.getItems(), m, actionMap);
-            } else {
-                final String actionKey = tmp.getActionKey();
-                final CidsUiAction action = actionMap.get(actionKey);
-
-                if (action != null) {
-                    final JMenuItem menuItem = new JMenuItem(action);
-                    menu.add(menuItem);
-                    final String name = getActionName(tmp);
-
-                    if (name != null) {
-                        menuItem.setText(name);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Determines the name of the given item.
-     *
-     * @param   item  DOCUMENT ME!
-     *
-     * @return  the name of the given item
-     */
-    private String getActionName(final Item item) {
-        String name = null;
-
-        if (item.getName() != null) {
-            name = item.getName();
-        } else if (item.getI18nKey() != null) {
-            name = NbBundle.getMessage(ExampleApp.class, item.getI18nKey());
-        }
-
-        return name;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -233,7 +111,7 @@ public class ExampleApp extends javax.swing.JFrame {
                 public void run() {
                     final ExampleApp t = new ExampleApp();
 
-                    t.setSize(300, 300);
+                    t.setSize(450, 300);
                     t.setVisible(true);
                 }
             });

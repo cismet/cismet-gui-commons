@@ -165,9 +165,9 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
         // you have to modify the super component directly
         // otherwise there would be no chance to disable the component permanently
         if (localEnabled && (direction == DIRECTION_FORWARD)) {
-            if (historyModel.isForwardPossible()) {
+            if (getHistoryModel().isForwardPossible()) {
                 setEnabled(true);
-                final Vector poss = historyModel.getForwardPossibilities();
+                final Vector poss = getHistoryModel().getForwardPossibilities();
                 refreshPopup(poss);
             } else {
                 super.setEnabled(false);
@@ -182,9 +182,9 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
         // you have to modify the super component directly
         // otherwise there would be no chance to disable the component permanently
         if (localEnabled && (direction == DIRECTION_BACKWARD)) {
-            if (historyModel.isBackPossible()) {
+            if (getHistoryModel().isBackPossible()) {
                 setEnabled(true);
-                final Vector poss = historyModel.getBackPossibilities();
+                final Vector poss = getHistoryModel().getBackPossibilities();
                 refreshPopup(poss);
             } else {
                 super.setEnabled(false);
@@ -223,7 +223,7 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
     @Override
     public void setEnabled(final boolean enabled) {
         localEnabled = enabled;
-        if (historyModel != null) {
+        if (getHistoryModel() != null) {
             super.setEnabled(localEnabled);
         } else {
             super.setEnabled(false);
@@ -236,18 +236,18 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
             final JHistoryMenuItem source = (JHistoryMenuItem)e.getSource();
             for (int i = 0; i < (source.getPosition() - 1); ++i) {
                 if (direction == DIRECTION_BACKWARD) {
-                    historyModel.back(false);
+                    getHistoryModel().back(false);
                 } else if (direction == DIRECTION_FORWARD) {
-                    historyModel.forward(false);
+                    getHistoryModel().forward(false);
                 }
             }
             fireActionPerformed(new ActionEvent(this, 0, "JHistoryButtonMenuActionPerformed")); // NOI18N
         } else if ((e != null) && (e.getSource() instanceof JHistoryButton)) {                  // &&e.getActionCommand()!="JHistoryButtonMenuActionPerformed"
             Object o = null;
             if (direction == DIRECTION_BACKWARD) {
-                o = historyModel.back(true);
+                o = getHistoryModel().back(true);
             } else if (direction == DIRECTION_FORWARD) {
-                o = historyModel.forward(true);
+                o = getHistoryModel().forward(true);
             }
         }
     }
@@ -310,14 +310,14 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
          * Creates a new JHistoryLabel object.
          */
         public JHistoryLabel() {
-            historyModel.addHistoryModelListener(this);
+            getHistoryModel().addHistoryModelListener(this);
         }
 
         //~ Methods ------------------------------------------------------------
 
         @Override
         public void historyChanged() {
-            text = historyModel.getCurrentElement().toString();
+            text = getHistoryModel().getCurrentElement().toString();
             setText(text);
         }
 

@@ -10,7 +10,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.cismet.tools.gui.menu.example;
+package de.cismet.tools.gui.menu;
 
 /**
  * DOCUMENT ME!
@@ -26,6 +26,8 @@ public class Item {
     private String name;
     private String i18nKey;
     private Item[] items;
+    private boolean toggle;
+    private String radio;
 
     //~ Methods ----------------------------------------------------------------
 
@@ -99,5 +101,41 @@ public class Item {
      */
     public void setItems(final Item[] items) {
         this.items = items;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the toggle
+     */
+    public boolean isToggle() {
+        return toggle;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  toggle  the toggle to set
+     */
+    public void setToggle(final boolean toggle) {
+        this.toggle = toggle;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  the radio
+     */
+    public String getRadio() {
+        return radio;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  radio  the radio to set
+     */
+    public void setRadio(final String radio) {
+        this.radio = radio;
     }
 }

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "mainMenu":
             [
                 {
@@ -47,5 +48,74 @@
                 {"actionKey": "exit"}
             ],
     "mapToolbar": null
+=======
+	"mainMenu":
+        [
+            {
+                    "actionKey": null,
+                    "name": "Datei",
+                    "i18nKey": null,
+                    "items": 
+                    [
+                            {
+                                    "actionKey": "newProject",
+                                    "name": null,
+                                    "i18nKey": "Menu.example",
+                                    "items": null
+                            },
+                            {
+                                    "actionKey": null,
+                                    "name": "Neu",
+                                    "i18nKey": null,
+                                    "items": 
+                                            [
+                                                {
+                                                        "actionKey": "newProject",
+                                                        "name": "Neuer Name",
+                                                        "i18nKey": "Menu.example",
+                                                        "items": null
+                                                }
+                                            ]
+                            },
+                            {
+                                    "actionKey": "exit",
+                                    "name": null,
+                                    "i18nKey": null,
+                                    "items": null
+                            }
+                    ]
+            },
+            {
+                    "actionKey": null,
+                    "name": "Hilfe",
+                    "i18nKey": null,
+                    "items": 
+                    [
+                            {
+                                    "actionKey": "info",
+                                    "name": null,
+                                    "i18nKey": null,
+                                    "items": null
+                            }
+                    ]
+            }
+        ],
+        "mainToolbar": 
+                [
+                    {
+                            "actionKey": "newProject",
+                            "name": "ProjektToolbar",
+                            "i18nKey": null,
+                            "items": null
+                    },
+                    {
+                            "actionKey": "exit",
+                            "name": null,
+                            "i18nKey": null,
+                            "items": null
+                    }
+                ],
+	"mapToolbar": null
+>>>>>>> origin/feature/117_configurable_menus
 }
 

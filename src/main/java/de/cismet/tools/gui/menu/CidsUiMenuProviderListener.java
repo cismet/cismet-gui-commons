@@ -12,43 +12,27 @@
  */
 package de.cismet.tools.gui.menu;
 
-import javax.swing.JMenu;
-
 /**
  * DOCUMENT ME!
  *
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public interface CidsUiMenuProvider {
+public interface CidsUiMenuProviderListener {
 
     //~ Methods ----------------------------------------------------------------
 
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @param  e  DOCUMENT ME!
      */
-    String getMenuKey();
+    void menuItemAdded(CidsUiMenuProviderEvent e);
 
     /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
+     * @param  e  DOCUMENT ME!
      */
-    JMenu getMenu();
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  listener  DOCUMENT ME!
-     */
-    void addCidsUiMenuProviderListener(CidsUiMenuProviderListener listener);
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  listener  DOCUMENT ME!
-     */
-    void removeCidsUiMenuProviderListener(CidsUiMenuProviderListener listener);
+    void menuItemRemoved(CidsUiMenuProviderEvent e);
 }

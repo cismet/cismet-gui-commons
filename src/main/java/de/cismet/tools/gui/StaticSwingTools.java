@@ -872,4 +872,84 @@ public class StaticSwingTools {
             return null;
         }
     }
+
+    /**
+     * Opens a JFileChooser with a filter for the given file extensions and checks if the chosen file has the right
+     * extension. If not the first right extension is added.
+     *
+     * @param   currentDirectoryPath      The currebnt path that should be shown in the dialog
+     * @param   isSaveDialog              True, if a save dialog should be shown. Otherwise a open dialog will be shown
+     * @param   allowedFileExtension      all allowed file extensions or null, if every extension should be allowed
+     * @param   fileExtensionDescription  The descriptions for the allowed file extensions.
+     * @param   parent                    the parent component of the dialog
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static File chooseFileWithMultipleFilters(final String currentDirectoryPath,
+            final boolean isSaveDialog,
+            final String[] allowedFileExtension,
+            final String[] fileExtensionDescription,
+            final Component parent) {
+        JFileChooser fc;
+
+        try {
+            fc = new ConfirmationJFileChooser(currentDirectoryPath);
+        } catch (Exception bug) {
+            // Bug Workaround http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6544857
+            fc = new JFileChooser(currentDirectoryPath, new RestrictedFileSystemView());
+        }
+
+        for (int i = 0; i < allowedFileExtension.length; ++i) {
+            final String description;
+            final String ext = allowedFileExtension[i];
+
+            if ((fileExtensionDescription != null) && (i < fileExtensionDescription.length)) {
+                description = fileExtensionDescription[i];
+            } else {
+                description = allowedFileExtension[i];
+            }
+
+            final FileFilter fileFilter = new FileFilter() {
+
+                    @Override
+                    public boolean accept(final File f) {
+                        final boolean fileAllowed = f.isDirectory();
+                        final String extension = (f.getName().contains(".")
+                                ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
+
+                        return fileAllowed || extension.equals(ext);
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return description;
+                    }
+                };
+
+            fc.addChoosableFileFilter(fileFilter);
+
+            if (i == 0) {
+                fc.setFileFilter(fileFilter);
+            }
+        }
+
+        fc.setAcceptAllFileFilterUsed(false);
+
+        final int state = (isSaveDialog ? fc.showSaveDialog(parent) : fc.showOpenDialog(parent));
+        if (log.isDebugEnabled()) {
+            log.debug("state:" + state); // NOI18N
+        }
+
+        if (state == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+
+            if (!fc.accept(file)) {
+                file = new File(file.getAbsolutePath() + "." + allowedFileExtension[0]);
+            }
+
+            return file;
+        } else {
+            return null;
+        }
+    }
 }

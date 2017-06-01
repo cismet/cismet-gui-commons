@@ -36,6 +36,7 @@ public abstract class WaitingDialogThread<T> implements Runnable, Cancellable {
     //~ Instance fields --------------------------------------------------------
 
     protected WaitDialog wd;
+    protected boolean canceled = false;
 
     private int delay = 0;
     private volatile boolean isAlive = true;
@@ -48,7 +49,6 @@ public abstract class WaitingDialogThread<T> implements Runnable, Cancellable {
     private Exception thrownException;
     private final boolean cancellable;
     private Thread worker = null;
-    private boolean canceled = false;
 
     //~ Constructors -----------------------------------------------------------
 

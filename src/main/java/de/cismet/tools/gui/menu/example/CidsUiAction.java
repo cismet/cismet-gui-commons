@@ -23,7 +23,7 @@ import javax.swing.Action;
  */
 public interface CidsUiAction extends Action {
 
-    //~ Static fields/initializers ---------------------------------------------
+    //~ Instance fields --------------------------------------------------------
 
     String CIDS_ACTION_KEY = "CidsActionKey";
 }

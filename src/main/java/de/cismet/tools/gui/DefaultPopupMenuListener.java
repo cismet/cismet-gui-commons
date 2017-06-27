@@ -8,6 +8,7 @@
 package de.cismet.tools.gui;
 
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -99,7 +100,49 @@ public class DefaultPopupMenuListener extends MouseAdapter {
                 log.error("Error during on-the-fly-selection", ex);
             }
 
+            if (!clickOnTreePath(e) && !e.isControlDown() && !e.isShiftDown()) {
+                if (e.getSource() instanceof JTree) {
+                    final JTree currentTree = (JTree)e.getSource();
+                    currentTree.clearSelection();
+                }
+            }
+
             popupMenu.show((Component)e.getSource(), e.getX(), e.getY());
+        } else if ((e.getButton() == MouseEvent.BUTTON1) && !e.isControlDown() && !e.isShiftDown()) {
+            if (e.getSource() instanceof JTree) {
+                if (!clickOnTreePath(e)) {
+                    final JTree currentTree = (JTree)e.getSource();
+                    currentTree.clearSelection();
+                }
+            }
         }
+    }
+
+    /**
+     * checks, if the given mouse event occured on a valid tree path.
+     *
+     * @param   e  DOCUMENT ME!
+     *
+     * @return  true, iff the given mouse event occured on a valid tree path
+     */
+    private boolean clickOnTreePath(final MouseEvent e) {
+        if (e.getSource() instanceof JTree) {
+            final JTree currentTree = (JTree)e.getSource();
+            final TreePath tp = currentTree.getClosestPathForLocation(e.getX(), e.getY());
+
+            if (tp != null) {
+                final Rectangle bounds = currentTree.getPathBounds(tp);
+                final int x = e.getX();
+                final int y = e.getY();
+                final int x1 = (int)bounds.getX();
+                final int x2 = (int)(bounds.getX() + bounds.getWidth());
+                final int y1 = (int)bounds.getY();
+                final int y2 = (int)(bounds.getY() + bounds.getHeight());
+
+                return ((x >= x1) && (x <= x2)) && ((y >= y1) && (y <= y2));
+            }
+        }
+
+        return false;
     }
 }

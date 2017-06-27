@@ -12,6 +12,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
+import javax.swing.event.EventListenerList;
 
 /**
  * An implementation of a "popup menu button". See a short <a href="http://flexo.cismet.de/gadgets/JPopupMenuButton/">
@@ -41,16 +42,16 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
 
     protected boolean showPopupMenu = true;
 
-    JPopupMenu popupMenu = null;
+    protected JPopupMenu popupMenu = null;
 
-    boolean mouseInPopupArea = false;
-    Icon downArrow = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down.png"));   // NOI18N
-    Icon downArrow2 = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down2.png")); // NOI18N
-    Icon userDefinedIcon = null;
-    Icon userDefinedSelectedIcon = null;
+    protected boolean mouseInPopupArea = false;
+    protected Icon downArrow = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down.png"));   // NOI18N
+    protected Icon downArrow2 = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down2.png")); // NOI18N
+    protected Icon userDefinedIcon = null;
+    protected Icon userDefinedSelectedIcon = null;
 
-    private int arrowXOffset = 0;
-    private int arrowSelectedXOffset = 0;
+    protected int arrowXOffset = 0;
+    protected int arrowSelectedXOffset = 0;
 
     //~ Constructors -----------------------------------------------------------
 

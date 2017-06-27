@@ -865,6 +865,27 @@ public class StaticSwingTools {
 
             if (!fileFilter.accept(file)) {
                 file = new File(file.getAbsolutePath() + "." + allowedFileExtension[0]);
+
+                if (file.exists()) {
+                    final String message = org.openide.util.NbBundle.getMessage(
+                            ConfirmationJFileChooser.class,
+                            "ConfirmationJFileChooser.approveSelection.message");
+                    final String title = org.openide.util.NbBundle.getMessage(
+                            ConfirmationJFileChooser.class,
+                            "ConfirmationJFileChooser.approveSelection.title");
+
+                    final int result = JOptionPane.showConfirmDialog(
+                            parent,
+                            message,
+                            title,
+                            JOptionPane.YES_NO_CANCEL_OPTION);
+
+                    if (result == JOptionPane.YES_OPTION) {
+                        return file;
+                    } else {
+                        return null;
+                    }
+                }
             }
 
             return file;

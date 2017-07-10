@@ -38,6 +38,7 @@ import java.io.IOException;
 
 import java.net.URL;
 
+import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
 
 import javax.swing.JFrame;
@@ -168,6 +169,19 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
 
                 return creds;
             } else if (authscheme instanceof RFC2617Scheme) {
+                final String[] userPassword = addUserAndPasswordToUrlIfRequired(url.toString());
+
+                if (userPassword != null) {
+                    try {
+                        if (authenticate(userPassword[0], userPassword[1].toCharArray(), null)) {
+                            return creds;
+                        }
+                    } catch (Exception e) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Error during athentication with url user/password", e);
+                        }
+                    }
+                }
                 requestUsernamePassword();
 
                 return creds;
@@ -177,6 +191,32 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
                                 + authscheme.getSchemeName()));
             }
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private String[] addUserAndPasswordToUrlIfRequired(final String url) {
+        if (url.contains("@") && url.contains("://")
+                    && (url.indexOf("@") > url.indexOf("://"))) {
+            final String userPwd = url.substring(url.indexOf("://") + 3,
+                    url.indexOf("@"));
+
+            if (userPwd.contains(":")) {
+                final String[] userPassword = new String[2];
+
+                userPassword[0] = userPwd.substring(0, userPwd.indexOf(":"));
+                userPassword[1] = userPwd.substring(userPwd.indexOf(":") + 1);
+
+                return userPassword;
+            }
+        }
+
+        return null;
     }
 
     /**

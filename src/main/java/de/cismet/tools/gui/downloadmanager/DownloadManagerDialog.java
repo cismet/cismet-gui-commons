@@ -918,8 +918,13 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
                         if ((downloadToOpen != null)
                                     && (downloadToOpen.getFileToSaveTo() != null)
                                     && (downloadToOpen.getStatus() == State.COMPLETED)) {
-                            BrowserLauncher.openURLorFile(downloadToOpen.getFileToSaveTo().getAbsolutePath());
-                            downloadToOpenIter.remove();
+                            try {
+                                BrowserLauncher.openURLorFile(downloadToOpen.getFileToSaveTo().getAbsolutePath());
+                                downloadToOpenIter.remove();
+                            } catch (RuntimeException e) {
+                                downloadToOpenIter.remove();
+                                throw e;
+                            }
                         }
                     }
                 }

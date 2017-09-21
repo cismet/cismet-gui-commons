@@ -20,7 +20,7 @@
         <names.cismet-gui-commons>cismet GUI Commons</names.cismet-gui-commons>
     </properties>
     
-    <name>${names.cismet-gui-commons}</name>
+    <name>${names.cismet-gui-commons} [${project.version}]</name>
     <description>!!! description pending !!!</description>
 
     <scm>

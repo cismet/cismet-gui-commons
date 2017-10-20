@@ -12,7 +12,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.*;
-import javax.swing.event.EventListenerList;
 
 /**
  * An implementation of a "popup menu button". See a short <a href="http://flexo.cismet.de/gadgets/JPopupMenuButton/">
@@ -270,20 +269,5 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
      */
     public void setPopupMenu(final JPopupMenu pop) {
         popupMenu = pop;
-    }
-
-    /**
-     * Notifies all listeners that have registered interest for notification on this event type. The event instance is
-     * lazily created using the <code>event</code> parameter.
-     *
-     * @param  event  the <code>ActionEvent</code> object
-     *
-     * @see    EventListenerList
-     */
-    @Override
-    protected void fireActionPerformed(final ActionEvent event) {
-        if ((popupMenu == null) || (mouseInPopupArea == false)) {
-            super.fireActionPerformed(event);
-        }
     }
 }

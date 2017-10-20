@@ -809,48 +809,87 @@ public class StaticSwingTools {
             fc = new JFileChooser(currentDirectoryPath, new RestrictedFileSystemView());
         }
 
-        final FileFilter fileFilter = new FileFilter() {
+        FileFilter fileFilter;
 
-                @Override
-                public boolean accept(final File f) {
-                    boolean fileAllowed = f.isDirectory();
+        if ((allowedFileExtension != null) && (allowedFileExtension.length == 1)) {
+            fileFilter = new ExtensionAwareFileFilter() {
 
-                    if (allowedFileExtension == null) {
-                        fileAllowed = true;
-                    } else if (!fileAllowed) {
-                        final String extension = (f.getName().contains(".")
-                                ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
+                    @Override
+                    public boolean accept(final File f) {
+                        boolean fileAllowed = f.isDirectory();
 
-                        for (final String allowedExt : allowedFileExtension) {
-                            if (extension.equals(allowedExt)) {
+                        if (!fileAllowed) {
+                            final String extension = (f.getName().contains(".")
+                                    ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
+
+                            if (extension.equals(allowedFileExtension[0])) {
                                 fileAllowed = true;
-                                break;
                             }
                         }
+
+                        return fileAllowed;
                     }
 
-                    return fileAllowed;
-                }
+                    @Override
+                    public String getDescription() {
+                        String description = fileExtensionDescription;
 
-                @Override
-                public String getDescription() {
-                    String description = fileExtensionDescription;
+                        if (description == null) {
+                            description = allowedFileExtension[0];
+                        }
 
-                    if ((description == null) && (allowedFileExtension != null)) {
-                        for (final String allowedExt : allowedFileExtension) {
-                            if (description == null) {
-                                description = allowedExt;
-                            } else {
-                                description += ", " + allowedExt;
+                        return description;
+                    }
+
+                    @Override
+                    public String getExtension() {
+                        return allowedFileExtension[0];
+                    }
+                };
+        } else {
+            fileFilter = new FileFilter() {
+
+                    @Override
+                    public boolean accept(final File f) {
+                        boolean fileAllowed = f.isDirectory();
+
+                        if (allowedFileExtension == null) {
+                            fileAllowed = true;
+                        } else if (!fileAllowed) {
+                            final String extension = (f.getName().contains(".")
+                                    ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
+
+                            for (final String allowedExt : allowedFileExtension) {
+                                if (extension.equals(allowedExt)) {
+                                    fileAllowed = true;
+                                    break;
+                                }
                             }
                         }
-                    } else {
-                        description += "";
+
+                        return fileAllowed;
                     }
 
-                    return description;
-                }
-            };
+                    @Override
+                    public String getDescription() {
+                        String description = fileExtensionDescription;
+
+                        if ((description == null) && (allowedFileExtension != null)) {
+                            for (final String allowedExt : allowedFileExtension) {
+                                if (description == null) {
+                                    description = allowedExt;
+                                } else {
+                                    description += ", " + allowedExt;
+                                }
+                            }
+                        } else {
+                            description += "";
+                        }
+
+                        return description;
+                    }
+                };
+        }
 
         fc.setAcceptAllFileFilterUsed(false);
         fc.setFileFilter(fileFilter);
@@ -866,7 +905,7 @@ public class StaticSwingTools {
             if (!fileFilter.accept(file)) {
                 file = new File(file.getAbsolutePath() + "." + allowedFileExtension[0]);
 
-                if (file.exists()) {
+                if (file.exists() && ((allowedFileExtension == null) || (allowedFileExtension.length != 1))) {
                     final String message = org.openide.util.NbBundle.getMessage(
                             ConfirmationJFileChooser.class,
                             "ConfirmationJFileChooser.approveSelection.message");
@@ -930,7 +969,7 @@ public class StaticSwingTools {
                 description = allowedFileExtension[i];
             }
 
-            final FileFilter fileFilter = new FileFilter() {
+            final FileFilter fileFilter = new ExtensionAwareFileFilter() {
 
                     @Override
                     public boolean accept(final File f) {
@@ -944,6 +983,11 @@ public class StaticSwingTools {
                     @Override
                     public String getDescription() {
                         return description;
+                    }
+
+                    @Override
+                    public String getExtension() {
+                        return ext;
                     }
                 };
 
@@ -965,7 +1009,8 @@ public class StaticSwingTools {
             File file = fc.getSelectedFile();
 
             if (!fc.accept(file)) {
-                file = new File(file.getAbsolutePath() + "." + allowedFileExtension[0]);
+                final ExtensionAwareFileFilter ff = (ExtensionAwareFileFilter)fc.getFileFilter();
+                file = new File(file.getAbsolutePath() + "." + ff.getExtension());
             }
 
             return file;

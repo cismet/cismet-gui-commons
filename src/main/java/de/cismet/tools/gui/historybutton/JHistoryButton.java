@@ -291,6 +291,21 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
     public void historyActionPerformed() {
     }
 
+    /**
+     * Notifies all listeners that have registered interest for notification on this event type. The event instance is
+     * lazily created using the <code>event</code> parameter.
+     *
+     * @param  event  the <code>ActionEvent</code> object
+     *
+     * @see    EventListenerList
+     */
+    @Override
+    protected void fireActionPerformed(final ActionEvent event) {
+        if ((popupMenu == null) || (mouseInPopupArea == false)) {
+            super.fireActionPerformed(event);
+        }
+    }
+
     //~ Inner Classes ----------------------------------------------------------
 
     /**

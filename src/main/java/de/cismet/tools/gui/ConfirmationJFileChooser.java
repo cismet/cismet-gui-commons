@@ -15,6 +15,7 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 
 /**
@@ -84,7 +85,13 @@ public class ConfirmationJFileChooser extends JFileChooser {
 
     @Override
     public void approveSelection() {
-        final File f = getSelectedFile();
+        File f = getSelectedFile();
+        final FileFilter ff = getFileFilter();
+
+        if (!accept(f) && (ff instanceof ExtensionAwareFileFilter)) {
+            f = new File(f.getAbsolutePath() + "." + ((ExtensionAwareFileFilter)ff).getExtension());
+        }
+
         if (f.exists() && (getDialogType() == SAVE_DIALOG)) {
             final String message = org.openide.util.NbBundle.getMessage(
                     ConfirmationJFileChooser.class,

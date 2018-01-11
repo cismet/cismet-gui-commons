@@ -52,6 +52,8 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
     protected int arrowXOffset = 0;
     protected int arrowSelectedXOffset = 0;
 
+    protected boolean fireOnArrow = false;
+
     //~ Constructors -----------------------------------------------------------
 
     /**
@@ -155,6 +157,24 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
      */
     @Override
     public void mouseEntered(final java.awt.event.MouseEvent e) {
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public boolean isFireOnArrow() {
+        return fireOnArrow;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  fireOnArrow  DOCUMENT ME!
+     */
+    public void setFireOnArrow(final boolean fireOnArrow) {
+        this.fireOnArrow = fireOnArrow;
     }
 
     /**
@@ -269,5 +289,20 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
      */
     public void setPopupMenu(final JPopupMenu pop) {
         popupMenu = pop;
+    }
+
+    /**
+     * Notifies all listeners that have registered interest for notification on this event type. The event instance is
+     * lazily created using the <code>event</code> parameter.
+     *
+     * @param  event  the <code>ActionEvent</code> object
+     *
+     * @see    EventListenerList
+     */
+    @Override
+    protected void fireActionPerformed(final ActionEvent event) {
+        if (isFireOnArrow() || (popupMenu == null) || (mouseInPopupArea == false)) {
+            super.fireActionPerformed(event);
+        }
     }
 }

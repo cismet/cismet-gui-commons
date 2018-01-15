@@ -67,12 +67,12 @@
             <dependency>
                 <groupId>de.cismet.commons</groupId>
                 <artifactId>wss-bean</artifactId>
-                <version>5.0</version>
+                <version>6.0</version>
             </dependency>
             <dependency>
                 <groupId>de.cismet.custom</groupId>
                 <artifactId>beansbinding</artifactId>
-                <version>5.0</version>
+                <version>6.0</version>
             </dependency>
             <!-- END: cismet dependencies -->
         </dependencies>

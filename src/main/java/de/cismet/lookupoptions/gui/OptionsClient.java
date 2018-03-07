@@ -16,13 +16,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
 
-import de.cismet.connectioncontext.ClientConnectionContextStore;
-
 import de.cismet.lookupoptions.OptionsCategory;
 import de.cismet.lookupoptions.OptionsPanelController;
 
 import de.cismet.tools.configuration.Configurable;
 import de.cismet.tools.configuration.NoWriteError;
+import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * This class provides some methods for interaction between the options dialog and the OptionsCategory- and
@@ -57,10 +56,9 @@ public class OptionsClient implements Configurable {
         }
 
         for (final OptionsPanelController controller : Lookup.getDefault().lookupAll(OptionsPanelController.class)) {
-            if (controller instanceof ClientConnectionContextStore) {
-                ((ClientConnectionContextStore)controller).setConnectionContext(new OptionsConnectionContext(
+            if (controller instanceof ConnectionContextStore) {
+                ((ConnectionContextStore)controller).initWithConnectionContext(new OptionsConnectionContext(
                         controller.getClass().getSimpleName()));
-                ((ClientConnectionContextStore)controller).initAfterConnectionContext();
             }
             if (controller.isEnabled()) {
                 controllerList.add(controller);

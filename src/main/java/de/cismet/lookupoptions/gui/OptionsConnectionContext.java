@@ -12,7 +12,7 @@
  */
 package de.cismet.lookupoptions.gui;
 
-import de.cismet.connectioncontext.ClientConnectionContext;
+import de.cismet.connectioncontext.ConnectionContext;
 
 /**
  * DOCUMENT ME!
@@ -20,7 +20,7 @@ import de.cismet.connectioncontext.ClientConnectionContext;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public class OptionsConnectionContext extends ClientConnectionContext {
+public class OptionsConnectionContext extends ConnectionContext {
 
     //~ Constructors -----------------------------------------------------------
 

@@ -69,13 +69,12 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
 
     //~ Instance fields --------------------------------------------------------
 
-    private final HashMap<URL, AccessHandler> handlerMapping = new HashMap<URL, AccessHandler>();
-    private final HashMap<ACCESS_HANDLER_TYPES, AccessHandler> allHandlers =
-        new HashMap<ACCESS_HANDLER_TYPES, AccessHandler>();
+    private final HashMap<URL, AccessHandler> handlerMapping = new HashMap<>();
+    private final HashMap<ACCESS_HANDLER_TYPES, AccessHandler> allHandlers = new HashMap<>();
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    private ArrayList<ACCESS_HANDLER_TYPES> supportedHandlerTypes = new ArrayList<ACCESS_HANDLER_TYPES>();
+    private final ArrayList<ACCESS_HANDLER_TYPES> supportedHandlerTypes = new ArrayList<>();
     private AccessHandler defaultHandler;
-    private Properties serverAliasProps = new Properties();
+    private final Properties serverAliasProps = new Properties();
     private Component topLevelComponent = null;
     private Tunnel tunnel = null;
 

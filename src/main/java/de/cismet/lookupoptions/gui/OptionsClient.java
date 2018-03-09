@@ -16,12 +16,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
 
+import de.cismet.connectioncontext.ConnectionContextStore;
+import de.cismet.connectioncontext.OptionsConnectionContext;
+
 import de.cismet.lookupoptions.OptionsCategory;
 import de.cismet.lookupoptions.OptionsPanelController;
 
 import de.cismet.tools.configuration.Configurable;
 import de.cismet.tools.configuration.NoWriteError;
-import de.cismet.connectioncontext.ConnectionContextStore;
 
 /**
  * This class provides some methods for interaction between the options dialog and the OptionsCategory- and

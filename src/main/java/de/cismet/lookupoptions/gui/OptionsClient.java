@@ -16,6 +16,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
 
+import de.cismet.connectioncontext.ConnectionContextStore;
+import de.cismet.connectioncontext.OptionsConnectionContext;
+
 import de.cismet.lookupoptions.OptionsCategory;
 import de.cismet.lookupoptions.OptionsPanelController;
 
@@ -33,15 +36,14 @@ public class OptionsClient implements Configurable {
 
     //~ Static fields/initializers ---------------------------------------------
 
-    private static OptionsClient instance = new OptionsClient();
+    private static final OptionsClient INSTANCE = new OptionsClient();
     private static final String CONFIGURATION = "cismetLookupOptions"; // NOI18N
 
     //~ Instance fields --------------------------------------------------------
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    private Hashtable<Class<? extends OptionsCategory>, OptionsCategory> categoriesTable =
-        new Hashtable<Class<? extends OptionsCategory>, OptionsCategory>();
-    private ArrayList<OptionsPanelController> controllerList = new ArrayList<OptionsPanelController>();
+    private final Hashtable<Class<? extends OptionsCategory>, OptionsCategory> categoriesTable = new Hashtable<>();
+    private final ArrayList<OptionsPanelController> controllerList = new ArrayList<>();
 
     //~ Constructors -----------------------------------------------------------
 
@@ -56,6 +58,10 @@ public class OptionsClient implements Configurable {
         }
 
         for (final OptionsPanelController controller : Lookup.getDefault().lookupAll(OptionsPanelController.class)) {
+            if (controller instanceof ConnectionContextStore) {
+                ((ConnectionContextStore)controller).initWithConnectionContext(new OptionsConnectionContext(
+                        controller.getClass().getSimpleName()));
+            }
             if (controller.isEnabled()) {
                 controllerList.add(controller);
             }
@@ -70,7 +76,7 @@ public class OptionsClient implements Configurable {
      * @return  DOCUMENT ME!
      */
     public static OptionsClient getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     /**

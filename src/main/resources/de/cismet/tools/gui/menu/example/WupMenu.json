@@ -1,0 +1,38 @@
+{
+    "mainMenu":
+            [
+                {
+                    "name": "Navigator",
+                    "items":
+                            [
+                                {"actionKey": "newProject", "i18nKey": "Menu.example"},
+                                {
+                                    "name": "Neu",
+                                    "items":
+                                            [
+                                                {"actionKey": "newProject", "name": "Neuer Name", "i18nKey": "Menu.example"}
+                                            ]
+                                },
+                                {"actionKey": "exit"}
+                            ]
+                },
+                {
+                    "name": "Radio",
+                    "items":
+                            [
+                                {"actionKey": "newProject", "name": "Menü 1", "radio": "radioGroup"},
+                                {"actionKey": "newProject", "name": "Menü 2", "radio": "radioGroup"}
+                            ]
+                },
+                {
+                    "name": "Hilfe",
+                    "items":
+                            [
+                                {"actionKey": "info"}
+                            ]
+                }
+            ],
+    "mainToolbar": null,
+    "mapToolbar": null
+}
+

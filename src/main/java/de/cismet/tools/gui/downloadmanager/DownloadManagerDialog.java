@@ -923,7 +923,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
                                 downloadToOpenIter.remove();
                             } catch (RuntimeException e) {
                                 downloadToOpenIter.remove();
-                                throw e;
+                                LOG.warn("Cannot open download");
                             }
                         }
                     }

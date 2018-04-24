@@ -223,7 +223,16 @@ public abstract class WaitingDialogThread<T> implements Runnable, Cancellable {
 
         if (shouldBeSetVisible) {
             // show the waiting dialog
-            StaticSwingTools.showDialog(wd);
+            try {
+                StaticSwingTools.showDialog(wd);
+            } catch (Exception e) {
+                LOG.error("Error while showing waiting dialog. Try again", e);
+                try {
+                    StaticSwingTools.showDialog(wd);
+                } catch (Exception ex) {
+                    LOG.error("Error while showing waiting dialog", ex);
+                }
+            }
         }
 
         if (!canceled) {

@@ -364,14 +364,14 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
         client.getState().setCredentials(new AuthScope(url.getHost(), AuthScope.ANY_PORT, AuthScope.ANY_REALM), creds);
         method.setDoAuthentication(true);
 
-        int statuscode = 0;
+        int statuscode = 200;
 
         try {
             statuscode = client.executeMethod(method);
         } catch (IOException ex) {
         }
 
-        if (statuscode == HttpStatus.SC_OK) {
+        if (statuscode != HttpStatus.SC_UNAUTHORIZED) {
             method.releaseConnection();
 
             return true;

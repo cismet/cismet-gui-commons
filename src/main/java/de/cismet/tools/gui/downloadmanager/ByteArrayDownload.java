@@ -21,7 +21,7 @@ public class ByteArrayDownload extends AbstractDownload {
 
     //~ Instance fields --------------------------------------------------------
 
-    private final transient byte[] content;
+    private transient byte[] content;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -87,9 +87,18 @@ public class ByteArrayDownload extends AbstractDownload {
             }
         }
 
+        cleanup();
+
         if (status == State.RUNNING) {
             status = State.COMPLETED;
             stateChanged();
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    private void cleanup() {
+        content = null;
     }
 }

@@ -17,6 +17,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -95,6 +96,27 @@ public class StaticSwingTools {
             row--;
         }
         tree.setSelectionPath(p);
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  button     DOCUMENT ME!
+     * @param  keyStroke  DOCUMENT ME!
+     * @param  rootPane   DOCUMENT ME!
+     */
+    public static void doClickButtonOnKeyStroke(final JButton button,
+            final KeyStroke keyStroke,
+            final JRootPane rootPane) {
+        rootPane.registerKeyboardAction(new ActionListener() {
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    button.doClick();
+                }
+            },
+            keyStroke,
+            JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     /**

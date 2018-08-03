@@ -13,9 +13,6 @@ import java.awt.Frame;
 import java.util.Properties;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
-
-import de.cismet.lookupoptions.options.CismetDeveloperOptionsPanel;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.event.KeyEvent;
@@ -556,7 +553,7 @@ public class Log4JQuickConfig extends JDialog {
      * @param  level  DOCUMENT ME!
      */
     public static void configure4LumbermillOnLocalhost(final String level) {
-        configure4LumbermillOn("localhost", 4445);
+        configure4LumbermillOn("localhost", 4445, level);
     }
 
     /**

@@ -9,14 +9,14 @@ package de.cismet.tools.gui.log4jquickconfig;
 
 import java.awt.Color;
 import java.awt.Frame;
+import java.awt.event.KeyEvent;
 
 import java.util.Properties;
 
 import javax.swing.JDialog;
+import javax.swing.KeyStroke;
 
 import de.cismet.tools.gui.StaticSwingTools;
-import java.awt.event.KeyEvent;
-import javax.swing.KeyStroke;
 
 /**
  * DOCUMENT ME!
@@ -74,9 +74,14 @@ public class Log4JQuickConfig extends JDialog {
         gpnTitle.setLeftColor(new Color(49, 66, 122));
         gpnTitle.setRightColor(Color.white);
         getRootPane().setDefaultButton(cmdConfig);
-        StaticSwingTools.doClickButtonOnKeyStroke(cmdConfig, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), getRootPane());
-        StaticSwingTools.doClickButtonOnKeyStroke(cmdCancel, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), getRootPane());        
-        
+        StaticSwingTools.doClickButtonOnKeyStroke(
+            cmdConfig,
+            KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+            getRootPane());
+        StaticSwingTools.doClickButtonOnKeyStroke(
+            cmdCancel,
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            getRootPane());
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -423,16 +428,16 @@ public class Log4JQuickConfig extends JDialog {
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void chkFileActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFileActionPerformed
+    private void chkFileActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkFileActionPerformed
         txtFile.setEnabled(chkFile.isSelected());
-    }//GEN-LAST:event_chkFileActionPerformed
+    }                                                                           //GEN-LAST:event_chkFileActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdConfigActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdConfigActionPerformed
+    private void cmdConfigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdConfigActionPerformed
         final Properties p = new Properties();
         p.put("log4j.appender.Remote", "org.apache.log4j.net.SocketAppender");    // NOI18N
         p.put("log4j.appender.Remote.remoteHost", txtHost.getText());             // NOI18N
@@ -476,43 +481,43 @@ public class Log4JQuickConfig extends JDialog {
         p.put("log4j.rootLogger", level + "," + target); // NOI18N
         org.apache.log4j.PropertyConfigurator.configure(p);
         this.hide();
-    }//GEN-LAST:event_cmdConfigActionPerformed
+    }                                                    //GEN-LAST:event_cmdConfigActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
+    private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
         this.hide();
-    }//GEN-LAST:event_cmdCancelActionPerformed
+    }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtFileActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFileActionPerformed
+    private void txtFileActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtFileActionPerformed
 // TODO add your handling code here:
-    }//GEN-LAST:event_txtFileActionPerformed
+    } //GEN-LAST:event_txtFileActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txtHostActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHostActionPerformed
+    private void txtHostActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtHostActionPerformed
 // TODO add your handling code here:
-    }//GEN-LAST:event_txtHostActionPerformed
+    } //GEN-LAST:event_txtHostActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void rdbWarnActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbWarnActionPerformed
+    private void rdbWarnActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_rdbWarnActionPerformed
 // TODO add your handling code here:
-    }//GEN-LAST:event_rdbWarnActionPerformed
+    } //GEN-LAST:event_rdbWarnActionPerformed
 
     /**
      * DOCUMENT ME!

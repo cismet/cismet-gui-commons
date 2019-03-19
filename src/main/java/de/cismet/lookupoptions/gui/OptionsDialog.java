@@ -15,6 +15,7 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -27,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -35,8 +37,6 @@ import de.cismet.lookupoptions.OptionsCategory;
 import de.cismet.lookupoptions.OptionsPanelController;
 
 import de.cismet.tools.gui.StaticSwingTools;
-import java.awt.event.KeyEvent;
-import javax.swing.KeyStroke;
 
 /*
  * OptionsDialog.java
@@ -87,7 +87,10 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         initOptionsPanels();
         getRootPane().setDefaultButton(btnOk);
         StaticSwingTools.doClickButtonOnKeyStroke(btnOk, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), getRootPane());
-        StaticSwingTools.doClickButtonOnKeyStroke(btnClose, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), getRootPane());        
+        StaticSwingTools.doClickButtonOnKeyStroke(
+            btnClose,
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            getRootPane());
         setLocationRelativeTo(parent);
         addWindowListener(this);
     }
@@ -326,7 +329,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+    private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCloseActionPerformed
         try {
             optionsClient.cancelAll();
         } catch (Throwable t) {
@@ -336,14 +339,14 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         } finally {
             dispose();
         }
-    }//GEN-LAST:event_btnCloseActionPerformed
+    }                                                                            //GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnOkActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnOkActionPerformed
         try {
             optionsClient.applyAll();
         } catch (Throwable t) {
@@ -353,20 +356,20 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         } finally {
             dispose();
         }
-    }//GEN-LAST:event_btnOkActionPerformed
+    }                                                                         //GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnHelpActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHelpActionPerformed
+    private void btnHelpActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHelpActionPerformed
         final OptionsPanelController controller = selectedControllerPerCategory.get(selectedCategory);
         final String help = controller.getHelp();
         final HelpDialog dialog = new HelpDialog((JFrame)getParent(), true);
         dialog.setContent(help);
         StaticSwingTools.showDialog(dialog);
-    }//GEN-LAST:event_btnHelpActionPerformed
+    }                                                                           //GEN-LAST:event_btnHelpActionPerformed
 
     /**
      * DOCUMENT ME!

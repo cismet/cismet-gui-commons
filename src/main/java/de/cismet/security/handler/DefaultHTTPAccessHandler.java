@@ -186,7 +186,7 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
                                 final ByteArrayOutputStream baos = new ByteArrayOutputStream();
                                 final ObjectOutputStream oos = new ObjectOutputStream(baos);
 
-                                oos.writeObject(httpMethod.getRequestHeaders());
+                                oos.writeObject(httpMethod.getResponseHeaders());
 
                                 oos.flush();
                                 oos.close();

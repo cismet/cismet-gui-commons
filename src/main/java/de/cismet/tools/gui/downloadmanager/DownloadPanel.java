@@ -151,7 +151,6 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         }
 
         sepDownloadPanels.setVisible(!hideSeparator);
-        initIcon();
 
         updateComponents();
     }
@@ -293,7 +292,6 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTime, gridBagConstraints);
 
-        jxlOpenFile.setText((download.getFileToSaveTo() != null) ? download.getFileToSaveTo().getAbsolutePath() : "");
         jxlOpenFile.addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
@@ -445,6 +443,8 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
      * Modifies the components in order to visualize the current state of this panel's download.
      */
     private void updateComponents() {
+        initIcon();
+
         switch (download.getStatus()) {
             case WAITING: {
                 prbProgress.setVisible(false);
@@ -473,6 +473,8 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
                 lblTitle.setText(download.getTitle());
                 lblMessage.setVisible(false);
                 btnCancel.setVisible(false);
+                jxlOpenFile.setText((download.getFileToSaveTo() != null) ? download.getFileToSaveTo()
+                                .getAbsolutePath() : "");
                 jxlOpenFile.setVisible(download.getFileToSaveTo() != null);
                 mniOpenFile.setEnabled(download.getFileToSaveTo() != null);
                 mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);

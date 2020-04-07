@@ -23,6 +23,8 @@
  */
 package de.cismet.tools.gui;
 
+import org.apache.log4j.Logger;
+
 import org.jdesktop.swingx.graphics.ShadowRenderer;
 
 import java.awt.Color;
@@ -35,7 +37,12 @@ import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import java.io.File;
+
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+
+import de.cismet.tools.ExifReader;
 
 /**
  * DOCUMENT ME!
@@ -44,6 +51,10 @@ import javax.swing.JComponent;
  * @version  $Revision$, $Date$
  */
 public final class ImageUtil {
+
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static Logger LOG = Logger.getLogger(ImageUtil.class);
 
     //~ Methods ----------------------------------------------------------------
 
@@ -204,5 +215,109 @@ public final class ImageUtil {
         g.dispose();
 
         return result;
+    }
+
+    /**
+     * Converts the given Image object to a BufferedImage object.
+     *
+     * @param   image  then image object
+     *
+     * @return  the BufferedImage object
+     */
+    public static BufferedImage toBufferedImage(final Image image) {
+        if (image instanceof BufferedImage) {
+            return (BufferedImage)image;
+        }
+
+        final BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
+                image.getHeight(null),
+                BufferedImage.TYPE_INT_ARGB);
+
+        final Graphics2D bGr = bufferedImage.createGraphics();
+        bGr.drawImage(image, 0, 0, null);
+        bGr.dispose();
+
+        return bufferedImage;
+    }
+
+    /**
+     * Creates a horizontally mirrored image of the given image.
+     *
+     * @param   image  the image to mirror
+     *
+     * @return  the horizontally mirrored image
+     */
+    public static BufferedImage toHorizontallyMirroredImage(final BufferedImage image) {
+        final BufferedImage mirroredImage = new BufferedImage(image.getWidth(),
+                image.getHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+
+        for (int x = 0; x < image.getWidth(); ++x) {
+            for (int y = 0; y < image.getHeight(); ++y) {
+                mirroredImage.setRGB(image.getWidth() - x, y, image.getRGB(x, y));
+            }
+        }
+
+        return mirroredImage;
+    }
+
+    /**
+     * Creates a vertically mirrored image of the given image.
+     *
+     * @param   image  the image to mirror
+     *
+     * @return  the vertically mirrored image
+     */
+    public static BufferedImage toVerticallyMirroredImage(final BufferedImage image) {
+        final BufferedImage mirroredImage = new BufferedImage(image.getWidth(),
+                image.getHeight(),
+                BufferedImage.TYPE_INT_ARGB);
+
+        for (int x = 0; x < image.getWidth(); ++x) {
+            for (int y = 0; y < image.getHeight(); ++y) {
+                mirroredImage.setRGB(x, image.getHeight() - y, image.getRGB(x, y));
+            }
+        }
+
+        return mirroredImage;
+    }
+
+    /**
+     * Loads the given image file and change the rotation mirroring according to the exif information.
+     *
+     * @param   imageFile  the image to adjust
+     *
+     * @return  the adjust image
+     */
+    public static Image loadImageAccordingToExifOrientation(final File imageFile) {
+        Double rotation = null;
+        ExifReader.Mirrored mirrored = ExifReader.Mirrored.NONE;
+
+        try {
+            final ExifReader reader = new ExifReader(imageFile);
+
+            rotation = reader.getOrientationRotation();
+            mirrored = reader.getKindOfMirrored();
+        } catch (Exception e) {
+            LOG.error("Error while reading exif information", e);
+        }
+
+        Image image = new ImageIcon(imageFile.getAbsolutePath()).getImage();
+
+        if (image != null) {
+            if ((rotation != null) && (rotation != 0.0)) {
+                image = ImageUtil.rotateImage(toBufferedImage(image), rotation);
+            }
+
+            if (!mirrored.equals(ExifReader.Mirrored.NONE)) {
+                if (mirrored.equals(ExifReader.Mirrored.HORIZONTAL)) {
+                    image = toHorizontallyMirroredImage(toBufferedImage(image));
+                } else {
+                    image = toVerticallyMirroredImage(toBufferedImage(image));
+                }
+            }
+        }
+
+        return image;
     }
 }

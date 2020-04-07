@@ -254,7 +254,7 @@ public final class ImageUtil {
 
         for (int x = 0; x < image.getWidth(); ++x) {
             for (int y = 0; y < image.getHeight(); ++y) {
-                mirroredImage.setRGB(image.getWidth() - x, y, image.getRGB(x, y));
+                mirroredImage.setRGB(image.getWidth() - x - 1, y, image.getRGB(x, y));
             }
         }
 
@@ -275,7 +275,7 @@ public final class ImageUtil {
 
         for (int x = 0; x < image.getWidth(); ++x) {
             for (int y = 0; y < image.getHeight(); ++y) {
-                mirroredImage.setRGB(x, image.getHeight() - y, image.getRGB(x, y));
+                mirroredImage.setRGB(x, image.getHeight() - y - 1, image.getRGB(x, y));
             }
         }
 

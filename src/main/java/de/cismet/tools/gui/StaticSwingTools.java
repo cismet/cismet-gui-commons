@@ -783,14 +783,6 @@ public class StaticSwingTools {
                     }
                 }
             });
-        cbo.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    final Object selectedValue = pop.getSelectedValue();
-                    txt.setText((selectedValue != null) ? String.valueOf(selectedValue) : "");
-                }
-            });
     }
 
     /**

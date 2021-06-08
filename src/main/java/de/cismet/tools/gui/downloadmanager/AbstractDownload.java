@@ -339,16 +339,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
             return false;
         }
 
-        final AbstractDownload other = (AbstractDownload)obj;
-
-        boolean result = true;
-
-        if ((this.fileToSaveTo == null) ? (other.fileToSaveTo != null)
-                                        : (!this.fileToSaveTo.equals(other.fileToSaveTo))) {
-            result &= false;
-        }
-
-        return result;
+        return this == obj;
     }
 
     @Override

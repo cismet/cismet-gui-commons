@@ -177,7 +177,7 @@ public class TreeTableModelAdapter extends AbstractTableModel {
      */
     protected Object nodeForRow(final int row) {
         final TreePath treePath = tree.getPathForRow(row);
-        return treePath.getLastPathComponent();
+        return (treePath != null) ? treePath.getLastPathComponent() : null;
     }
 
     @Override

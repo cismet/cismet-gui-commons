@@ -7,8 +7,6 @@
 ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
-import org.openide.util.Cancellable;
-
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
@@ -17,9 +15,11 @@ import de.cismet.commons.security.WebDavClient;
 /**
  * DOCUMENT ME!
  *
- * @author   therter
- * @version  $Revision$, $Date$
+ * @author      therter
+ * @version     $Revision$, $Date$
+ * @Deprecated  better use the webdavdownloadaction so that the client dont have to know the credentials
  */
+@Deprecated
 public class WebDavDownload extends AbstractCancellableDownload {
 
     //~ Static fields/initializers ---------------------------------------------

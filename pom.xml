@@ -190,11 +190,6 @@
             <version>0.4</version>
         </dependency>
         <dependency>
-            <groupId>net.dev.java</groupId>
-            <artifactId>pdf-renderer</artifactId>
-            <version>unknown</version>
-        </dependency>
-        <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>1.8.5</version>

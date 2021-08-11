@@ -75,6 +75,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     private transient String username;
     private transient String password;
     private transient String domain;
+    private transient String excludedHosts;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel jPanel1;
@@ -129,6 +130,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             username = proxy.getUsername();
             password = proxy.getPassword();
             domain = proxy.getDomain();
+            excludedHosts = proxy.getExcludedHosts();
         } else if ((System.getProperty(Proxy.SYSTEM_PROXY_HOST) != null)
                     && (System.getProperty(Proxy.PROXY_PORT) != null)) {
             proxyType = ProxyTypes.SYSTEM;
@@ -184,7 +186,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         }
 
         // hier werden die Werte in dem Proxy gesetzt
-        setProxy(useProxy, host, port, username, password, domain);
+        setProxy(useProxy, host, port, username, password, excludedHosts, domain);
     }
 
     /**
@@ -224,20 +226,22 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     /**
      * Applies the proxy settings for the WebAccessManager and for the proxy of the java http protocol handler.
      *
-     * @param  isActivated  Should the proxy be used
-     * @param  host         Proxy Host
-     * @param  port         Proxy Port
-     * @param  username     Proxy Username
-     * @param  password     Proxy Password
-     * @param  domain       Proxy Domain
+     * @param  isActivated    Should the proxy be used
+     * @param  host           Proxy Host
+     * @param  port           Proxy Port
+     * @param  username       Proxy Username
+     * @param  password       Proxy Password
+     * @param  domain         Proxy Domain
+     * @param  excludedHosts  DOCUMENT ME!
      */
     private void setProxy(final boolean isActivated,
             final String host,
             final int port,
             final String username,
             final String password,
-            final String domain) {
-        final Proxy newProxy = new Proxy(host, port, username, password, domain, true);
+            final String domain,
+            final String excludedHosts) {
+        final Proxy newProxy = new Proxy(host, port, username, password, domain, excludedHosts, true);
         if (isActivated) {
             Proxy.toPreferences(newProxy);
             WebAccessManager.getInstance().setHttpProxy(newProxy);
@@ -257,6 +261,9 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             if (newProxy.getDomain() != null) {
                 System.setProperty(Proxy.SYSTEM_PROXY_DOMAIN, newProxy.getDomain());
             }
+            if (newProxy.getExcludedHosts() != null) {
+                System.setProperty(Proxy.SYSTEM_PROXY_EXCLUDEDHOSTS, newProxy.getExcludedHosts());
+            }
         } else {
             Proxy.toPreferences(null);
             WebAccessManager.getInstance().setHttpProxy(null);
@@ -268,6 +275,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             System.clearProperty(Proxy.SYSTEM_PROXY_USERNAME);
             System.clearProperty(Proxy.SYSTEM_PROXY_PASSWORD);
             System.clearProperty(Proxy.SYSTEM_PROXY_DOMAIN);
+            System.clearProperty(Proxy.SYSTEM_PROXY_EXCLUDEDHOSTS);
         }
     }
 
@@ -278,7 +286,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
      */
     public Proxy getProxy() {
         applyChanges();
-        return new Proxy(host, port, username, password, domain, ProxyTypes.MANUAL.equals(proxyType));
+        return new Proxy(host, port, username, password, domain, excludedHosts, ProxyTypes.MANUAL.equals(proxyType));
     }
 
     /**

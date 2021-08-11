@@ -31,6 +31,8 @@ import de.cismet.netutil.Proxy;
 import de.cismet.security.GUICredentialsProvider;
 import de.cismet.security.WebAccessManager;
 
+import de.cismet.tools.WildcardUtils;
+
 /**
  * DOCUMENT ME!
  *
@@ -66,17 +68,43 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
     //~ Methods ----------------------------------------------------------------
 
     /**
+     * DOCUMENT ME!
+     *
+     * @param   url             DOCUMENT ME!
+     * @param   exclusionRules  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static boolean isExcluded(final URL url, final String exclusionRules) {
+        if (exclusionRules == null) {
+            return false;
+        }
+        final String host = url.getHost();
+
+        for (final String rule : exclusionRules.split(",")) {
+            if (rule != null) {
+                if (WildcardUtils.testForMatch(host, rule.trim())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    /**
      * Returns a configured HttpClient with (if set) proxy settings.
+     *
+     * @param   url  DOCUMENT ME!
      *
      * @return  configured HttpClient
      */
-    protected HttpClient getConfiguredHttpClient() {
+    protected HttpClient getConfiguredHttpClientForUrl(final URL url) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("getConfiguredHttpClient"); // NOI18N
         }
 
         final HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
-        if (proxy != null) {
+        if ((proxy != null) && !isExcluded(url, proxy.getExcludedHosts())) {
             client.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
 
             // proxy needs authentication
@@ -122,7 +150,7 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
         if (LOG.isDebugEnabled()) {
             LOG.debug("getSecurityEnabledHttpClient"); // NOI18N
         }
-        final HttpClient client = getConfiguredHttpClient();
+        final HttpClient client = getConfiguredHttpClientForUrl(url);
         client.getParams().setParameter(CredentialsProvider.PROVIDER, getCredentialProvider(url));
 
         return client;

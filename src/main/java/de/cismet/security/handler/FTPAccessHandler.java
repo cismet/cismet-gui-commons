@@ -28,6 +28,7 @@ import de.cismet.commons.security.Tunnel;
 import de.cismet.commons.security.handler.AbstractAccessHandler;
 
 import de.cismet.netutil.Proxy;
+import de.cismet.netutil.ProxyHandler;
 
 import static org.apache.commons.net.ftp.FTP.BINARY_FILE_TYPE;
 
@@ -55,9 +56,11 @@ public class FTPAccessHandler extends AbstractAccessHandler {
 
     /**
      * Creates a new FTPAccessHandler object.
+     *
+     * @param  proxy  DOCUMENT ME!
      */
-    public FTPAccessHandler() {
-        this.proxy = Proxy.fromSystem();
+    public FTPAccessHandler(final Proxy proxy) {
+        this.proxy = proxy;
     }
 
     //~ Methods ----------------------------------------------------------------

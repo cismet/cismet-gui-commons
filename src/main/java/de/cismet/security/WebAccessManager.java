@@ -20,7 +20,6 @@ import java.io.StringReader;
 
 import java.net.URL;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
@@ -33,8 +32,10 @@ import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
 import de.cismet.commons.security.Tunnel;
 import de.cismet.commons.security.TunnelStore;
 import de.cismet.commons.security.handler.ExtendedAccessHandler;
+import de.cismet.commons.security.handler.ProxyCabaple;
 
 import de.cismet.netutil.Proxy;
+import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
 import de.cismet.security.exceptions.MissingArgumentException;
@@ -58,9 +59,11 @@ import de.cismet.security.handler.WSSAccessHandler;
 //ToDo Multithreading
 //Problematik wenn unter der url mehrere services z.B. wms wfs wss sind
 //Todo url leichen weil statisch --> wenn versucht wird eine schon vorhandene URL hinzuzufügen --> wir im Moment  überschrieben
-public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAccessHandler {
+public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAccessHandler, ProxyHandler.Listener {
 
     //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(WebAccessManager.class);
 
     private static WebAccessManager instance = null;
     private static final ReentrantReadWriteLock reLock = new ReentrantReadWriteLock();
@@ -71,8 +74,7 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
 
     private final HashMap<URL, AccessHandler> handlerMapping = new HashMap<>();
     private final HashMap<ACCESS_HANDLER_TYPES, AccessHandler> allHandlers = new HashMap<>();
-    private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
-    private final ArrayList<ACCESS_HANDLER_TYPES> supportedHandlerTypes = new ArrayList<>();
+//    private final ArrayList<ACCESS_HANDLER_TYPES> supportedHandlerTypes = new ArrayList<>();
     private AccessHandler defaultHandler;
     private final Properties serverAliasProps = new Properties();
     private Component topLevelComponent = null;
@@ -84,10 +86,18 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
      * Creates a new WebAccessManager object.
      */
     private WebAccessManager() {
-        initHandlers();
+        final Proxy proxy = ProxyHandler.getInstance().getProxy();
+        initHandlers(proxy);
+        setProxy(proxy);
+        ProxyHandler.getInstance().addListener(this);
     }
 
     //~ Methods ----------------------------------------------------------------
+
+    @Override
+    public void proxyChanged(final ProxyHandler.Event event) {
+        setProxy(event.getNewProxy());
+    }
 
     /**
      * Sets the Proxy-Object of the HTTP- and the WSS-AccessHandler. Does nothing if no HTTP-AccessHandler and no
@@ -95,27 +105,11 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
      *
      * @param  proxy  DOCUMENT ME!
      */
-    public void setHttpProxy(final Proxy proxy) {
-        // HTTP-Handler holen
-        final AccessHandler httpHandler = allHandlers.get(AccessHandler.ACCESS_HANDLER_TYPES.HTTP);
-        // pruefen ob vom Typ HTTPBasedAccessHandler
-        if ((httpHandler != null) && (httpHandler instanceof HTTPBasedAccessHandler)) {
-            // proxy setzen
-            if (log.isDebugEnabled()) {
-                log.debug("set Proxy in httpHandler"); // NOI18N
+    private void setProxy(final Proxy proxy) {
+        for (final AccessHandler accessHandler : allHandlers.values()) {
+            if (accessHandler instanceof ProxyCabaple) {
+                ((ProxyCabaple)accessHandler).setProxy(proxy);
             }
-            ((HTTPBasedAccessHandler)httpHandler).setProxy(proxy);
-        }
-
-        // WSS-Handler holen
-        final AccessHandler wssHandler = allHandlers.get(AccessHandler.ACCESS_HANDLER_TYPES.WSS);
-        // pruefen ob vom Typ WSSAccessHandler
-        if ((wssHandler != null) && (wssHandler instanceof WSSAccessHandler)) {
-            // proxy setzen
-            if (log.isDebugEnabled()) {
-                log.debug("set Proxy in wssHandler"); // NOI18N
-            }
-            ((WSSAccessHandler)wssHandler).setProxy(proxy);
         }
     }
 
@@ -128,8 +122,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
         // pruefen ob vom Typ WSSAccessHandler
         if ((wssHandler != null) && (wssHandler instanceof WSSAccessHandler)) {
             // proxy setzen
-            if (log.isDebugEnabled()) {
-                log.debug("reset WSS credentials"); // NOI18N
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("reset WSS credentials"); // NOI18N
             }
             ((WSSAccessHandler)wssHandler).resetCredentials();
         }
@@ -143,8 +137,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
             // pruefen ob vom Typ HTTPBasedAccessHandler
             if ((wmsHandler != null) && (wmsHandler instanceof HTTPBasedAccessHandler)) {
                 // proxy setzen
-                if (log.isDebugEnabled()) {
-                    log.debug("reset credentials"); // NOI18N
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("reset credentials"); // NOI18N
                 }
                 ((HTTPBasedAccessHandler)wmsHandler).resetCredentials();
             }
@@ -178,27 +172,26 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
 
     /**
      * ToDO make configurable.
+     *
+     * @param  proxy  DOCUMENT ME!
      */
-    private void initHandlers() {
-        if (log.isDebugEnabled()) {
-            log.debug("initHandlers"); // NOI18N
+    private void initHandlers(final Proxy proxy) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("initHandlers"); // NOI18N
         }
-        final WSSAccessHandler wssHandler = new WSSAccessHandler();
-        final DefaultHTTPAccessHandler httpHandler = new DefaultHTTPAccessHandler();
-        final FTPAccessHandler ftpHandler = new FTPAccessHandler();
-        // SOAPAccessHandler soapAccessHandler = new SOAPAccessHandler();
-        // SanyAccessHandler sanyAccessHandler = new SanyAccessHandler();
-        defaultHandler = httpHandler;
-        allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.WSS, wssHandler);
-        allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.HTTP, httpHandler);
-        allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.FTP, ftpHandler);
-        // allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.SOAP, soapAccessHandler);
-        // allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.SANY, sanyAccessHandler);
-        supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.WSS);
-        supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.HTTP);
-        supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.SOAP);
-        supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.SANY);
-        supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.FTP);
+        allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.HTTP, new DefaultHTTPAccessHandler(proxy));
+        allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.WSS, new WSSAccessHandler(proxy));
+        allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.FTP, new FTPAccessHandler(proxy));
+
+        // allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.SOAP, new SOAPAccessHandler());
+        // allHandlers.put(AccessHandler.ACCESS_HANDLER_TYPES.SANY, new SanyAccessHandler());
+// supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.WSS);
+// supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.HTTP);
+// supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.SOAP);
+// supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.SANY);
+// supportedHandlerTypes.add(ACCESS_HANDLER_TYPES.FTP);
+
+        defaultHandler = allHandlers.get(AccessHandler.ACCESS_HANDLER_TYPES.HTTP);
     }
 
     /**
@@ -323,14 +316,14 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
         try {
             final AccessHandler handler = handlerMapping.get(url);
             if (handler == null) {
-                if (log.isDebugEnabled()) {
-                    log.debug("no handler found  for url --> try to extract base");         // NOI18N
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("no handler found  for url --> try to extract base");         // NOI18N
                 }
                 final String urlString = url.toString();
                 URL baseURL = null;
                 if (urlString.indexOf('?') != -1) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("there are parameter appended to the url try to remove"); // NOI18N
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("there are parameter appended to the url try to remove"); // NOI18N
                     }
                     try {
                         baseURL = new URL(urlString.substring(0, urlString.indexOf('?')));
@@ -380,8 +373,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
         RequestFailedException,
         NoHandlerForURLException,
         Exception {
-        if (log.isDebugEnabled()) {
-            log.debug("URL: " + url + "... trying to retrieve parameters automatically by HTTP_GET");       // NOI18N
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("URL: " + url + "... trying to retrieve parameters automatically by HTTP_GET");       // NOI18N
         }
         URL serviceURL;
         String requestParameter;
@@ -389,15 +382,15 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
             final String urlString = url.toString();
             if (urlString.indexOf('?') != -1) {
                 serviceURL = new URL(urlString.substring(0, urlString.indexOf('?')));                       // NOI18N
-                if (log.isDebugEnabled()) {
-                    log.debug("service URL: " + serviceURL);                                                // NOI18N
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("service URL: " + serviceURL);                                                // NOI18N
                 }
                 if ((urlString.indexOf('?') + 1) < urlString.length()) {                                    // NOI18N
                     requestParameter = urlString.substring(urlString.indexOf('?') + 1, urlString.length()); // NOI18N
                     if (requestParameter.toLowerCase().contains("service=wss")) {                           // NOI18N
                         // TODO muss auch wfs fähig sein
-                        if (log.isDebugEnabled()) {
-                            log.debug("query default WMS");                       // NOI18N
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("query default WMS");                       // NOI18N
                         }
                         requestParameter = "REQUEST=GetCapabilities&service=WMS"; // NOI18N
                     }
@@ -405,18 +398,18 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
                     requestParameter = "";                                        // NOI18N
                 }
 
-                if (log.isDebugEnabled()) {
-                    log.debug("requestParameter: " + requestParameter);               // NOI18N
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("requestParameter: " + requestParameter);               // NOI18N
                 }
             } else {
-                log.warn("Not able to parse requestparameter (no ?) trying without"); // NOI18N
+                LOG.warn("Not able to parse requestparameter (no ?) trying without"); // NOI18N
                 serviceURL = url;
                 requestParameter = "";                                                // NOI18N
             }
         } catch (Exception ex) {
             // final String errorMessage = "Exception während dem bestimmen der Request Parameter";
             final String errorMessage = "Request parameters coud not be parsed: " + ex.getMessage(); // NOI18N
-            log.error(errorMessage);
+            LOG.error(errorMessage);
             throw new RequestFailedException(errorMessage, ex);
         }
         return doRequest(serviceURL, new StringReader(requestParameter), AccessHandler.ACCESS_METHODS.GET_REQUEST);
@@ -444,8 +437,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
         RequestFailedException,
         NoHandlerForURLException,
         Exception {
-        if (log.isDebugEnabled()) {
-            log.debug("Requestparameter: " + requestParameter); // NOI18N
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Requestparameter: " + requestParameter); // NOI18N
         }
         return doRequest(url, new StringReader(requestParameter), accessMethod);
     }
@@ -505,11 +498,11 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
         if (url == null) {
             throw new MissingArgumentException("URL is null.");                        // NOI18N
         } else if (accessMethod == null) {
-            log.warn("No access method specified. Calling handler's default method."); // NOI18N
+            LOG.warn("No access method specified. Calling handler's default method."); // NOI18N
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug("Request URL: '" + url.toString() + "'."); // NOI18N
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Request URL: '" + url.toString() + "'."); // NOI18N
         }
 
         final AccessHandler handler;
@@ -517,13 +510,13 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
             handler = handlerMapping.get(url);
 
             if (handler != null) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Handler for URL '" + url + "' available."); // NOI18N
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Handler for URL '" + url + "' available."); // NOI18N
                 }
 
                 if (handler.isAccessMethodSupported(accessMethod)) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Handler supports access method '" + accessMethod + "'."); // NOI18N
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Handler supports access method '" + accessMethod + "'."); // NOI18N
                     }
 
                     return handler.doRequest(url, requestParameter, accessMethod, options);
@@ -534,8 +527,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
                 }
             } else {
                 // TODO Default handler
-                if (log.isInfoEnabled()) {
-                    log.info("No handler for URL available. Using DefaultHandler."); // NOI18N
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("No handler for URL available. Using DefaultHandler."); // NOI18N
                 }
 
                 if (defaultHandler != null) {
@@ -545,12 +538,12 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
                 }
             }
         } catch (Exception ex) {
-            log.error("Error while doRequest.", ex);                                     // NOI18N
+            LOG.error("Error while doRequest.", ex);                                     // NOI18N
 
             throw ex;
         } finally {
-            if (log.isDebugEnabled()) {
-                log.debug("Releasing lock."); // NOI18N
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Releasing lock."); // NOI18N
             }
 
             readLock.unlock();
@@ -571,8 +564,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
             throw new MissingArgumentException("URL is null."); // NOI18N
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug("Request URL: '" + url.toString() + "'."); // NOI18N
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Request URL: '" + url.toString() + "'."); // NOI18N
         }
 
         final AccessHandler handler;
@@ -580,13 +573,13 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
             handler = handlerMapping.get(url);
 
             if (handler != null) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Handler for URL '" + url + "' available."); // NOI18N
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Handler for URL '" + url + "' available."); // NOI18N
                 }
 
                 if (handler.isAccessMethodSupported(ACCESS_METHODS.POST_REQUEST)) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Handler supports access method + '" + ACCESS_METHODS.POST_REQUEST + "'."); // NOI18N
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Handler supports access method + '" + ACCESS_METHODS.POST_REQUEST + "'."); // NOI18N
                     }
 
                     return handler.doRequest(url, requestParameter, options);
@@ -598,8 +591,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
             } else {
                 // TODO Default handler
 
-                if (log.isInfoEnabled()) {
-                    log.info("No handler for URL available. Using default handler."); // NOI18N
+                if (LOG.isInfoEnabled()) {
+                    LOG.info("No handler for URL available. Using default handler."); // NOI18N
                 }
 
                 if (defaultHandler != null) {
@@ -609,12 +602,12 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
                 }
             }
         } catch (Exception ex) {
-            log.error("Error while doRequest.", ex);                                     // NOI18N
+            LOG.error("Error while doRequest.", ex);                                     // NOI18N
 
             throw ex;
         } finally {
-            if (log.isDebugEnabled()) {
-                log.debug("Releasing lock."); // NOI18N
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Releasing lock."); // NOI18N
             }
 
             readLock.unlock();
@@ -641,27 +634,27 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
             inputStream = this.doRequest(url, "", AccessHandler.ACCESS_METHODS.HEAD_REQUEST);
             urlAccessible = (inputStream != null) ? true : false;
         } catch (final MissingArgumentException ex) {
-            if (log.isDebugEnabled()) {
-                log.debug("Could not read document from URL '" + url.toExternalForm() + "'.", ex);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Could not read document from URL '" + url.toExternalForm() + "'.", ex);
             }
         } catch (final AccessMethodIsNotSupportedException ex) {
-            if (log.isDebugEnabled()) {
-                log.debug("Can't access document URL '" + url.toExternalForm()
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't access document URL '" + url.toExternalForm()
                             + "' with default access method.",
                     ex);
             }
         } catch (final RequestFailedException ex) {
-            if (log.isDebugEnabled()) {
-                log.debug("Requesting document from URL '" + url.toExternalForm() + "' failed.",
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Requesting document from URL '" + url.toExternalForm() + "' failed.",
                     ex);
             }
         } catch (final NoHandlerForURLException ex) {
-            if (log.isDebugEnabled()) {
-                log.debug("Can't handle URL '" + url.toExternalForm() + "'.", ex);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Can't handle URL '" + url.toExternalForm() + "'.", ex);
             }
         } catch (final Exception ex) {
-            if (log.isDebugEnabled()) {
-                log.debug("An exception occurred while opening URL '" + url.toExternalForm()
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("An exception occurred while opening URL '" + url.toExternalForm()
                             + "'.",
                     ex);
             }
@@ -670,7 +663,7 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
                 try {
                     inputStream.close();
                 } catch (IOException ex) {
-                    log.warn("Could not close stream.", ex);
+                    LOG.warn("Could not close stream.", ex);
                 }
             }
         }

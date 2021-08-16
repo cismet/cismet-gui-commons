@@ -39,6 +39,8 @@ import de.cismet.commons.security.TunnelStore;
 import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
 import de.cismet.commons.security.exceptions.CannotReadFromURLException;
 
+import de.cismet.netutil.Proxy;
+
 /**
  * DOCUMENT ME!
  *
@@ -59,6 +61,17 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private Tunnel tunnel = null;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new DefaultHTTPAccessHandler object.
+     *
+     * @param  proxy  DOCUMENT ME!
+     */
+    public DefaultHTTPAccessHandler(final Proxy proxy) {
+        super(proxy);
+    }
 
     //~ Methods ----------------------------------------------------------------
 

@@ -12,13 +12,13 @@ import org.apache.log4j.Logger;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
+import javax.swing.SwingUtilities;
+
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
 
 import de.cismet.netutil.Proxy;
 import de.cismet.netutil.ProxyHandler;
-
-import de.cismet.security.WebAccessManager;
 
 /**
  * OptionsPanel for the Proxy Options.
@@ -40,9 +40,8 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             ProxyOptionsPanel.class,
             "ProxyOptionsPanel.OptionController.name"); // NOI18N
 
-    //~ Instance fields --------------------------------------------------------
-
-    private boolean stillConfigured = false;
+    // Variables declaration - do not modify
+    // NOI18N
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -82,11 +81,18 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         super(OPTION_NAME, NetworkOptionsCategory.class);
         initComponents();
 
+        update();
         ProxyHandler.getInstance().addListener(new ProxyHandler.Listener() {
 
                 @Override
                 public void proxyChanged(final ProxyHandler.Event event) {
-                    updateFields(event.getNewProxy());
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                updateFields(event.getNewProxy());
+                            }
+                        });
                 }
             });
     }
@@ -107,8 +113,8 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
      * DOCUMENT ME!
      */
     @Override
-    public void update() {
-        updateFields(WebAccessManager.getInstance().getHttpProxy());
+    public final void update() {
+        updateFields(ProxyHandler.getInstance().getProxy());
     }
 
     /**
@@ -117,16 +123,17 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     @Override
     public void applyChanges() {
         if (rdoManualProxy.isSelected()) {
-            setProxy(new Proxy(
-                    txtHost.getText().trim(),
-                    (int)spiPort.getValue(),
-                    txtUsername.getText(),
-                    String.valueOf(pwdPassword.getPassword()),
-                    txtDomain.getText(),
-                    txtExcludedHosts.getText().replaceAll("\n", ","),
-                    rdoManualProxy.isSelected()));
+            ProxyHandler.getInstance()
+                    .setProxy(new Proxy(
+                            txtHost.getText().trim(),
+                            (int)spiPort.getValue(),
+                            txtUsername.getText(),
+                            String.valueOf(pwdPassword.getPassword()),
+                            txtDomain.getText(),
+                            txtExcludedHosts.getText().replaceAll("\n", ","),
+                            rdoManualProxy.isSelected()));
         } else {
-            setProxy(null);
+            ProxyHandler.getInstance().setProxy(null);
         }
     }
 
@@ -164,15 +171,6 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     @Override
     public String getTooltip() {
         return org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.getTooltip().text"); // NOI18N
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  proxy  DOCUMENT ME!
-     */
-    public void setProxy(final Proxy proxy) {
-        ProxyHandler.getInstance().setProxy(proxy);
     }
 
     /**

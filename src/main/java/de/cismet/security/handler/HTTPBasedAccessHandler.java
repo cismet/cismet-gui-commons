@@ -83,7 +83,7 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler imple
 
         final HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
         if (((proxy != null) && (proxy.getHost() != null) && (proxy.getPort() > 0)
-                        && proxy.isEnabled() && proxy.isEnabledFor((url != null) ? url.getHost() : null))) {
+                        && proxy.isValid() && proxy.isEnabledFor((url != null) ? url.getHost() : null))) {
             client.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
 
             // proxy needs authentication

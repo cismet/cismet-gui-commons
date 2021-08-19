@@ -12,6 +12,9 @@ import org.apache.log4j.Logger;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
+import java.util.Objects;
+import java.util.regex.Pattern;
+
 import javax.swing.SwingUtilities;
 
 import de.cismet.lookupoptions.AbstractOptionsPanel;
@@ -64,6 +67,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     private javax.swing.JPasswordField pwdPassword;
     private javax.swing.JRadioButton rdoManualProxy;
     private javax.swing.JRadioButton rdoNoProxy;
+    private javax.swing.JRadioButton rdoPreconfiguredProxy;
     private javax.swing.JSpinner spiPort;
     private javax.swing.JTextField txtDomain;
     private javax.swing.JTextArea txtExcludedHosts;
@@ -81,6 +85,10 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         super(OPTION_NAME, NetworkOptionsCategory.class);
         initComponents();
 
+        final Proxy preconfiguredProxy = ProxyHandler.getInstance().getPreconfiguredProxy();
+        if ((preconfiguredProxy == null) || !preconfiguredProxy.isValid()) {
+            jPanel2.remove(rdoPreconfiguredProxy);
+        }
         update();
         ProxyHandler.getInstance().addListener(new ProxyHandler.Listener() {
 
@@ -90,7 +98,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
                             @Override
                             public void run() {
-                                updateFields(event.getNewProxy());
+                                updateFields(event.getNewMode(), event.getNewProxy());
                             }
                         });
                 }
@@ -114,7 +122,24 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
      */
     @Override
     public final void update() {
-        updateFields(ProxyHandler.getInstance().getProxy());
+        final ProxyHandler.Mode mode = ProxyHandler.getInstance().getMode();
+        if (mode != null) {
+            switch (mode) {
+                case MANUAL: {
+                    rdoManualProxyActionPerformed(null);
+                    break;
+                }
+                case PRECONFIGURED: {
+                    rdoPreconfiguredProxyActionPerformed(null);
+                    break;
+                }
+                default: {
+                    rdoNoProxyActionPerformed(null);
+                }
+            }
+        } else {
+            rdoNoProxyActionPerformed(null);
+        }
     }
 
     /**
@@ -122,18 +147,45 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
      */
     @Override
     public void applyChanges() {
-        if (rdoManualProxy.isSelected()) {
-            ProxyHandler.getInstance()
-                    .setProxy(new Proxy(
-                            txtHost.getText().trim(),
-                            (int)spiPort.getValue(),
-                            txtUsername.getText(),
-                            String.valueOf(pwdPassword.getPassword()),
-                            txtDomain.getText(),
-                            txtExcludedHosts.getText().replaceAll("\n", "|"),
-                            rdoManualProxy.isSelected()));
+        final ProxyHandler.Mode selectedMode = getSelectedMode();
+        if (selectedMode != null) {
+            switch (selectedMode) {
+                case MANUAL: {
+                    ProxyHandler.getInstance()
+                            .useManualProxy(new Proxy(
+                                    txtHost.getText().trim(),
+                                    (int)spiPort.getValue(),
+                                    txtUsername.getText(),
+                                    String.valueOf(pwdPassword.getPassword()),
+                                    txtDomain.getText(),
+                                    txtExcludedHosts.getText().replaceAll(Pattern.quote("\n"), "|")));
+                    break;
+                }
+                case PRECONFIGURED: {
+                    ProxyHandler.getInstance().usePreconfiguredProxy();
+                    break;
+                }
+                default: {
+                    ProxyHandler.getInstance().useNoProxy();
+                }
+            }
         } else {
-            ProxyHandler.getInstance().setProxy(null);
+            ProxyHandler.getInstance().useNoProxy();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private ProxyHandler.Mode getSelectedMode() {
+        if (rdoPreconfiguredProxy.isSelected()) {
+            return ProxyHandler.Mode.PRECONFIGURED;
+        } else if (rdoManualProxy.isSelected()) {
+            return ProxyHandler.Mode.MANUAL;
+        } else {
+            return ProxyHandler.Mode.NO_PROXY;
         }
     }
 
@@ -144,23 +196,29 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
      */
     @Override
     public boolean isChanged() {
+        final ProxyHandler.Mode mode = ProxyHandler.getInstance().getMode();
         final Proxy proxy = ProxyHandler.getInstance().getProxy();
-        final String host = (proxy != null) ? proxy.getHost() : "";
-        final int port = (proxy != null) ? proxy.getPort() : 0;
-        final String username = (proxy != null) ? proxy.getUsername() : "";
-        final String password = (proxy != null) ? proxy.getPassword() : "";
-        final String domain = (proxy != null) ? proxy.getDomain() : "";
-        final String excludeHosts = (proxy != null) ? proxy.getExcludedHosts() : "";
-        final boolean enabled = (proxy != null) && proxy.isEnabled() && (proxy.getHost() != null)
-                    && (proxy.getPort() > 0);
 
-        return ((rdoNoProxy.isSelected() && enabled) || (rdoManualProxy.isSelected() && !enabled)
-                        || !txtHost.getText().equals(host)
-                        || !((int)spiPort.getValue() == port)
-                        || !txtUsername.getText().equals(username)
-                        || !String.valueOf(pwdPassword.getPassword()).equals(password)
-                        || !txtDomain.getText().equals(domain)
-                        || !txtExcludedHosts.getText().replaceAll("\n", "|").equals(excludeHosts));
+        final ProxyHandler.Mode selectedMode = getSelectedMode();
+        if (!Objects.equals(mode, selectedMode)) {
+            return true;
+        } else if (ProxyHandler.Mode.MANUAL.equals(selectedMode)) {
+            final String host = (proxy != null) ? proxy.getHost() : "";
+            final int port = (proxy != null) ? proxy.getPort() : 0;
+            final String username = (proxy != null) ? proxy.getUsername() : "";
+            final String password = (proxy != null) ? proxy.getPassword() : "";
+            final String domain = (proxy != null) ? proxy.getDomain() : "";
+            final String excludeHosts = (proxy != null) ? proxy.getExcludedHosts() : "";
+
+            return (!txtHost.getText().equals(host)
+                            || !((int)spiPort.getValue() == port)
+                            || !txtUsername.getText().equals(username)
+                            || !String.valueOf(pwdPassword.getPassword()).equals(password)
+                            || !txtDomain.getText().equals(domain)
+                            || !txtExcludedHosts.getText().replaceAll("Pattern.quote(\n)", "|").equals(excludeHosts));
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -176,18 +234,21 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     /**
      * DOCUMENT ME!
      *
+     * @param  mode   DOCUMENT ME!
      * @param  proxy  DOCUMENT ME!
      */
-    private void updateFields(final Proxy proxy) {
-        final boolean enabled = (proxy != null) && proxy.isEnabled();
-        rdoManualProxy.setSelected(enabled);
-        rdoNoProxy.setSelected(!enabled);
+    private void updateFields(final ProxyHandler.Mode mode, final Proxy proxy) {
+        final boolean enabled = (proxy != null) && proxy.isValid();
+        rdoManualProxy.setSelected(ProxyHandler.Mode.MANUAL.equals(mode));
+        rdoPreconfiguredProxy.setSelected(ProxyHandler.Mode.PRECONFIGURED.equals(mode));
+        rdoNoProxy.setSelected((mode == null) || ProxyHandler.Mode.NO_PROXY.equals(mode));
+
         txtHost.setText(enabled ? proxy.getHost() : null);
         spiPort.setValue(enabled ? proxy.getPort() : 0);
         txtUsername.setText(enabled ? proxy.getUsername() : null);
         pwdPassword.setText(enabled ? proxy.getPassword() : null);
         txtExcludedHosts.setText((enabled && (proxy.getExcludedHosts() != null))
-                ? proxy.getExcludedHosts().replaceAll("|", "\n") : null);
+                ? proxy.getExcludedHosts().replaceAll(Pattern.quote("|"), "\n") : null);
         txtDomain.setText(enabled ? proxy.getDomain() : null);
     }
 
@@ -205,6 +266,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         rdoNoProxy = new javax.swing.JRadioButton();
+        rdoPreconfiguredProxy = new javax.swing.JRadioButton();
         rdoManualProxy = new javax.swing.JRadioButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -236,20 +298,47 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         jPanel2.setLayout(new java.awt.GridLayout(0, 1));
 
         buttonGroup1.add(rdoNoProxy);
-        rdoNoProxy.setSelected(true);
         rdoNoProxy.setText(org.openide.util.NbBundle.getMessage(
                 ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.rdoNoProxy.text"));         // NOI18N
+                "ProxyOptionsPanel.rdoNoProxy.text")); // NOI18N
+        rdoNoProxy.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    rdoNoProxyActionPerformed(evt);
+                }
+            });
         jPanel2.add(rdoNoProxy);
         rdoNoProxy.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
                         ProxyOptionsPanel.class,
                         "ProxyOptionsPanel.rdoNoProxy.text")); // NOI18N
 
+        buttonGroup1.add(rdoPreconfiguredProxy);
+        rdoPreconfiguredProxy.setSelected(true);
+        rdoPreconfiguredProxy.setText(org.openide.util.NbBundle.getMessage(
+                ProxyOptionsPanel.class,
+                "ProxyOptionsPanel.rdoPreconfiguredProxy.text")); // NOI18N
+        rdoPreconfiguredProxy.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    rdoPreconfiguredProxyActionPerformed(evt);
+                }
+            });
+        jPanel2.add(rdoPreconfiguredProxy);
+
         buttonGroup1.add(rdoManualProxy);
         rdoManualProxy.setText(org.openide.util.NbBundle.getMessage(
                 ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.rdoManualProxy.text"));         // NOI18N
+                "ProxyOptionsPanel.rdoManualProxy.text")); // NOI18N
+        rdoManualProxy.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    rdoManualProxyActionPerformed(evt);
+                }
+            });
         jPanel2.add(rdoManualProxy);
         rdoManualProxy.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
@@ -587,4 +676,31 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
         bindingGroup.bind();
     } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void rdoPreconfiguredProxyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_rdoPreconfiguredProxyActionPerformed
+        updateFields(ProxyHandler.Mode.PRECONFIGURED, ProxyHandler.getInstance().getPreconfiguredProxy());
+    }                                                                                         //GEN-LAST:event_rdoPreconfiguredProxyActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void rdoManualProxyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_rdoManualProxyActionPerformed
+        updateFields(ProxyHandler.Mode.MANUAL, ProxyHandler.getInstance().getManualProxy());
+    }                                                                                  //GEN-LAST:event_rdoManualProxyActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void rdoNoProxyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_rdoNoProxyActionPerformed
+        updateFields(ProxyHandler.Mode.NO_PROXY, null);
+    }                                                                              //GEN-LAST:event_rdoNoProxyActionPerformed
 }

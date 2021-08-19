@@ -130,7 +130,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
                             txtUsername.getText(),
                             String.valueOf(pwdPassword.getPassword()),
                             txtDomain.getText(),
-                            txtExcludedHosts.getText().replaceAll("\n", ","),
+                            txtExcludedHosts.getText().replaceAll("\n", "|"),
                             rdoManualProxy.isSelected()));
         } else {
             ProxyHandler.getInstance().setProxy(null);
@@ -160,7 +160,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
                         || !txtUsername.getText().equals(username)
                         || !String.valueOf(pwdPassword.getPassword()).equals(password)
                         || !txtDomain.getText().equals(domain)
-                        || !txtExcludedHosts.getText().replaceAll("\n", ",").equals(excludeHosts));
+                        || !txtExcludedHosts.getText().replaceAll("\n", "|").equals(excludeHosts));
     }
 
     /**
@@ -187,7 +187,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         txtUsername.setText(enabled ? proxy.getUsername() : null);
         pwdPassword.setText(enabled ? proxy.getPassword() : null);
         txtExcludedHosts.setText((enabled && (proxy.getExcludedHosts() != null))
-                ? proxy.getExcludedHosts().replaceAll(",", "\n") : null);
+                ? proxy.getExcludedHosts().replaceAll("|", "\n") : null);
         txtDomain.setText(enabled ? proxy.getDomain() : null);
     }
 

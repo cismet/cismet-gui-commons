@@ -28,7 +28,6 @@ import de.cismet.commons.security.handler.AbstractAccessHandler;
 import de.cismet.commons.security.handler.ProxyCabaple;
 
 import de.cismet.netutil.Proxy;
-import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.security.GUICredentialsProvider;
 import de.cismet.security.WebAccessManager;

@@ -14,6 +14,7 @@ package de.cismet.security.handler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
@@ -71,6 +72,8 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
      */
     public DefaultHTTPAccessHandler(final Proxy proxy) {
         super(proxy);
+
+        AuthPolicy.registerAuthScheme(AuthPolicy.NTLM, JcifsNtlmScheme.class);
     }
 
     //~ Methods ----------------------------------------------------------------

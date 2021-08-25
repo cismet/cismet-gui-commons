@@ -95,7 +95,15 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
                             @Override
                             public void run() {
-                                updateFields(event.getNewMode(), event.getNewProxy());
+                                final ProxyHandler.Mode mode = event.getNewMode();
+                                // dont using the simpler methode ".getNewProxy()" because we don't want
+                                // the expanded proxy-credentials (from conf) to be filled in here
+                                updateFields(
+                                    mode,
+                                    ProxyHandler.Mode.MANUAL.equals(mode)
+                                        ? ProxyHandler.getInstance().getManualProxy()
+                                        : (ProxyHandler.Mode.PRECONFIGURED.equals(mode)
+                                            ? ProxyHandler.getInstance().getPreconfiguredProxy() : null));
                             }
                         });
                 }
@@ -182,12 +190,12 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     @Override
     public boolean isChanged() {
         final ProxyHandler.Mode mode = ProxyHandler.getInstance().getMode();
-        final Proxy proxy = ProxyHandler.getInstance().getProxy();
-
         final ProxyHandler.Mode selectedMode = getSelectedMode();
         if (!Objects.equals(mode, selectedMode)) {
             return true;
         } else if (ProxyHandler.Mode.MANUAL.equals(selectedMode)) {
+            final Proxy proxy = ProxyHandler.getInstance().getManualProxy();
+
             final String host = (proxy != null) ? proxy.getHost() : "";
             final int port = (proxy != null) ? proxy.getPort() : 0;
             final String username = (proxy != null) ? proxy.getUsername() : "";
@@ -549,10 +557,10 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
                 cbEnabled.isSelected(),
                 txtHost.getText().trim(),
                 (int)spiPort.getValue(),
+                txtExcludedHosts.getText().replaceAll(Pattern.quote("\n"), "|"),
                 txtUsername.getText(),
                 String.valueOf(pwdPassword.getPassword()),
-                txtDomain.getText(),
-                txtExcludedHosts.getText().replaceAll(Pattern.quote("\n"), "|"));
+                txtDomain.getText());
     }
     /**
      * DOCUMENT ME!

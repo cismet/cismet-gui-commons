@@ -11,6 +11,10 @@
  */
 package de.cismet.security;
 
+import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
+import org.apache.commons.io.IOUtils;
+
 import java.awt.Component;
 
 import java.io.IOException;
@@ -45,6 +49,7 @@ import de.cismet.security.exceptions.RequestFailedException;
 import de.cismet.security.handler.DefaultHTTPAccessHandler;
 import de.cismet.security.handler.FTPAccessHandler;
 import de.cismet.security.handler.HTTPBasedAccessHandler;
+import de.cismet.security.handler.SecondaryJksSSLSocketFactory;
 import de.cismet.security.handler.WSSAccessHandler;
 
 /**
@@ -90,6 +95,22 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
         initHandlers(proxy);
         setProxy(proxy);
         ProxyHandler.getInstance().addListener(this);
+
+        try(final InputStream jksInputStream = getClass().getClassLoader().getResourceAsStream("de/cismet/security/secondary.jks");
+                    final InputStream pwInputStream = getClass().getClassLoader().getResourceAsStream("de/cismet/security/secondary.pw");
+            ) {
+            if ((jksInputStream != null) && (pwInputStream != null)) {
+                final String pw = IOUtils.toString(pwInputStream, "UTF-8");
+                Protocol.registerProtocol(
+                    "https",
+                    new Protocol(
+                        "https",
+                        (ProtocolSocketFactory)new SecondaryJksSSLSocketFactory(jksInputStream, pw),
+                        443));
+            }
+        } catch (final Exception ex) {
+            LOG.error(ex, ex);
+        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -755,4 +776,10 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
             }
         }
     }
+
+    public static void main(String[] args) throws Exception {
+        WebAccessManager.getInstance().setProxy(new Proxy(true, "localhost", 9090, null, "102-cismet", "Irgendwas 2021!", "stadt"));
+        System.out.println(IOUtils.toString(WebAccessManager.getInstance().doRequest(new URL("https://boxy.cismet.de")), "UTF-8")); 
+    }
+
 }

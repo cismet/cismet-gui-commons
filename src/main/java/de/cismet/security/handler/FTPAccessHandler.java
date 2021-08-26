@@ -28,7 +28,6 @@ import de.cismet.commons.security.Tunnel;
 import de.cismet.commons.security.handler.AbstractAccessHandler;
 
 import de.cismet.netutil.Proxy;
-import de.cismet.netutil.ProxyHandler;
 
 import static org.apache.commons.net.ftp.FTP.BINARY_FILE_TYPE;
 

@@ -55,9 +55,11 @@ public class FTPAccessHandler extends AbstractAccessHandler {
 
     /**
      * Creates a new FTPAccessHandler object.
+     *
+     * @param  proxy  DOCUMENT ME!
      */
-    public FTPAccessHandler() {
-        this.proxy = Proxy.fromSystem();
+    public FTPAccessHandler(final Proxy proxy) {
+        this.proxy = proxy;
     }
 
     //~ Methods ----------------------------------------------------------------

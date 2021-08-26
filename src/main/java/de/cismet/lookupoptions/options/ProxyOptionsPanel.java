@@ -9,21 +9,19 @@ package de.cismet.lookupoptions.options;
 
 import org.apache.log4j.Logger;
 
-import org.jdom.Element;
-
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
+
+import java.util.Objects;
+import java.util.regex.Pattern;
+
+import javax.swing.SwingUtilities;
 
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
 
 import de.cismet.netutil.Proxy;
-
-import de.cismet.security.WebAccessManager;
-
-import de.cismet.tools.PasswordEncrypter;
-
-import de.cismet.tools.configuration.NoWriteError;
+import de.cismet.netutil.ProxyHandler;
 
 /**
  * OptionsPanel for the Proxy Options.
@@ -43,54 +41,38 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
     private static final String OPTION_NAME = org.openide.util.NbBundle.getMessage(
             ProxyOptionsPanel.class,
-            "ProxyOptionsPanel.OptionController.name");              // NOI18N
-    private static final String CONFIGURATION = "ProxyOptionsPanel"; // NOI18N
-    private static final String CONF_TYPE = "ProxyType";             // NOI18N
-    private static final String CONF_HOST = "ProxyHost";             // NOI18N
-    private static final String CONF_PORT = "ProxyPort";             // NOI18N
-    private static final String CONF_USERNAME = "ProxyUsername";     // NOI18N
-    private static final String CONF_PASSWORD = "ProxyPassword";     // NOI18N
-    private static final String CONF_DOMAIN = "ProxyDomain";         // NOI18N
+            "ProxyOptionsPanel.OptionController.name"); // NOI18N
 
-    //~ Enums ------------------------------------------------------------------
+    // Variables declaration - do not modify
+    // NOI18N
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @version  $Revision$, $Date$
-     */
-    private static enum ProxyTypes {
-
-        //~ Enum constants -----------------------------------------------------
-
-        NO, SYSTEM, MANUAL
-    }
-
-    //~ Instance fields --------------------------------------------------------
-
-    private boolean stillConfigured = false;
-    private ProxyTypes proxyType;
-    private String host;
-    private int port;
-    private transient String username;
-    private transient String password;
-    private transient String domain;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox cbEnabled;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel labHost;
-    private javax.swing.JLabel labPort;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDomain;
+    private javax.swing.JLabel lblExcludedHosts;
+    private javax.swing.JLabel lblHost;
     private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblPort;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JPasswordField pwdPassword;
     private javax.swing.JRadioButton rdoManualProxy;
-    private javax.swing.JRadioButton rdoNoProxy;
+    private javax.swing.JRadioButton rdoPreconfiguredProxy;
+    private javax.swing.JSpinner spiPort;
     private javax.swing.JTextField txtDomain;
+    private javax.swing.JTextArea txtExcludedHosts;
     private javax.swing.JTextField txtHost;
-    private javax.swing.JTextField txtPort;
     private javax.swing.JTextField txtUsername;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -101,6 +83,31 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     public ProxyOptionsPanel() {
         super(OPTION_NAME, NetworkOptionsCategory.class);
         initComponents();
+
+        final Proxy preconfiguredProxy = ProxyHandler.getInstance().getPreconfiguredProxy();
+        jPanel2.setVisible((preconfiguredProxy != null) && preconfiguredProxy.isValid());
+        update();
+        ProxyHandler.getInstance().addListener(new ProxyHandler.Listener() {
+
+                @Override
+                public void proxyChanged(final ProxyHandler.Event event) {
+                    SwingUtilities.invokeLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                final ProxyHandler.Mode mode = event.getNewMode();
+                                // dont using the simpler methode ".getNewProxy()" because we don't want
+                                // the expanded proxy-credentials (from conf) to be filled in here
+                                updateFields(
+                                    mode,
+                                    ProxyHandler.Mode.MANUAL.equals(mode)
+                                        ? ProxyHandler.getInstance().getManualProxy()
+                                        : (ProxyHandler.Mode.PRECONFIGURED.equals(mode)
+                                            ? ProxyHandler.getInstance().getPreconfiguredProxy() : null));
+                            }
+                        });
+                }
+            });
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -119,40 +126,18 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
      * DOCUMENT ME!
      */
     @Override
-    public void update() {
-        // read proxy values
-        final Proxy proxy = WebAccessManager.getInstance().getHttpProxy();
-        if (proxy != null) {
-            proxyType = ProxyTypes.MANUAL;
-            host = proxy.getHost();
-            port = proxy.getPort();
-            username = proxy.getUsername();
-            password = proxy.getPassword();
-            domain = proxy.getDomain();
-        } else if ((System.getProperty(Proxy.SYSTEM_PROXY_HOST) != null)
-                    && (System.getProperty(Proxy.PROXY_PORT) != null)) {
-            proxyType = ProxyTypes.SYSTEM;
-        } else {
-            proxyType = ProxyTypes.NO;
-        }
-
-        // update components
-        switch (proxyType) {
-            case MANUAL: {
-                rdoManualProxy.setSelected(true);
-                txtHost.setText(host);
-                if (port > 0) {
-                    txtPort.setText(Integer.toString(port));
-                } else {
-                    txtPort.setText(""); // NOI18N
+    public final void update() {
+        final ProxyHandler.Mode mode = ProxyHandler.getInstance().getMode();
+        if (mode != null) {
+            switch (mode) {
+                case MANUAL: {
+                    rdoManualProxyActionPerformed(null);
+                    break;
                 }
-                txtUsername.setText(username);
-                pwdPassword.setText(password);
-                txtDomain.setText(domain);
-                break;
-            }
-            default: {
-                rdoNoProxy.setSelected(true);
+                case PRECONFIGURED: {
+                    rdoPreconfiguredProxyActionPerformed(null);
+                    break;
+                }
             }
         }
     }
@@ -162,29 +147,39 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
      */
     @Override
     public void applyChanges() {
-        boolean useProxy;
-        if (rdoManualProxy.isSelected()) {
-            useProxy = true;
-            proxyType = ProxyTypes.MANUAL;
-            host = txtHost.getText().trim();
-            try {
-                port = Integer.valueOf(txtPort.getText().trim());
-            } catch (final NumberFormatException ex) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("error while parsing port, setting port = 0", ex); // NOI18N
+        final ProxyHandler.Mode selectedMode = getSelectedMode();
+        if (selectedMode != null) {
+            switch (selectedMode) {
+                case MANUAL: {
+                    ProxyHandler.getInstance().useManualProxy(getProxyFromFields());
+                    break;
                 }
-                port = 0;
+                case PRECONFIGURED: {
+                    ProxyHandler.getInstance().usePreconfiguredProxy();
+                    break;
+                }
+                default: {
+                    ProxyHandler.getInstance().useNoProxy();
+                }
             }
-            username = txtUsername.getText();
-            password = String.valueOf(pwdPassword.getPassword());
-            domain = txtDomain.getText();
         } else {
-            proxyType = ProxyTypes.NO;
-            useProxy = false;
+            ProxyHandler.getInstance().useNoProxy();
         }
+    }
 
-        // hier werden die Werte in dem Proxy gesetzt
-        setProxy(useProxy, host, port, username, password, domain);
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private ProxyHandler.Mode getSelectedMode() {
+        if (rdoPreconfiguredProxy.isSelected()) {
+            return ProxyHandler.Mode.PRECONFIGURED;
+        } else if (rdoManualProxy.isSelected()) {
+            return ProxyHandler.Mode.MANUAL;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -194,21 +189,29 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
      */
     @Override
     public boolean isChanged() {
-        int intPort;
-        try {
-            intPort = Integer.valueOf(txtPort.getText());
-        } catch (final NumberFormatException ex) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("error while parsing port, assuming port = 0", ex); // NOI18N
-            }
-            intPort = 0;
+        final ProxyHandler.Mode mode = ProxyHandler.getInstance().getMode();
+        final ProxyHandler.Mode selectedMode = getSelectedMode();
+        if (!Objects.equals(mode, selectedMode)) {
+            return true;
+        } else if (ProxyHandler.Mode.MANUAL.equals(selectedMode)) {
+            final Proxy proxy = ProxyHandler.getInstance().getManualProxy();
+
+            final String host = (proxy != null) ? proxy.getHost() : "";
+            final int port = (proxy != null) ? proxy.getPort() : 0;
+            final String username = (proxy != null) ? proxy.getUsername() : "";
+            final String password = (proxy != null) ? proxy.getPassword() : "";
+            final String domain = (proxy != null) ? proxy.getDomain() : "";
+            final String excludeHosts = (proxy != null) ? proxy.getExcludedHosts() : "";
+
+            return (!txtHost.getText().equals(host)
+                            || !((int)spiPort.getValue() == port)
+                            || !txtUsername.getText().equals(username)
+                            || !String.valueOf(pwdPassword.getPassword()).equals(password)
+                            || !txtDomain.getText().equals(domain)
+                            || !txtExcludedHosts.getText().replaceAll("Pattern.quote(\n)", "|").equals(excludeHosts));
+        } else {
+            return false;
         }
-        return ((rdoNoProxy.isSelected() && (proxyType != ProxyTypes.NO))
-                        || (rdoManualProxy.isSelected() && (proxyType != ProxyTypes.MANUAL))
-                        || !txtHost.getText().equals(host)
-                        || (intPort != port) || !txtUsername.getText().equals(username)
-                        || !String.valueOf(pwdPassword.getPassword()).equals(password)
-                        || !txtDomain.getText().equals(domain));
     }
 
     /**
@@ -222,232 +225,40 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     }
 
     /**
-     * Applies the proxy settings for the WebAccessManager and for the proxy of the java http protocol handler.
-     *
-     * @param  isActivated  Should the proxy be used
-     * @param  host         Proxy Host
-     * @param  port         Proxy Port
-     * @param  username     Proxy Username
-     * @param  password     Proxy Password
-     * @param  domain       Proxy Domain
-     */
-    private void setProxy(final boolean isActivated,
-            final String host,
-            final int port,
-            final String username,
-            final String password,
-            final String domain) {
-        final Proxy newProxy = new Proxy(host, port, username, password, domain, true);
-        if (isActivated) {
-            Proxy.toPreferences(newProxy);
-            WebAccessManager.getInstance().setHttpProxy(newProxy);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("set proxy in system-property: " + newProxy); // NOI18N
-            }
-            System.setProperty(Proxy.SYSTEM_PROXY_HOST, newProxy.getHost());
-            System.setProperty(Proxy.SYSTEM_PROXY_PORT, String.valueOf(newProxy.getPort()));
-            if (newProxy.getUsername() != null) {
-                System.setProperty(Proxy.SYSTEM_PROXY_USERNAME, newProxy.getUsername());
-            }
-            if (newProxy.getPassword() != null) {
-                System.setProperty(
-                    Proxy.SYSTEM_PROXY_PASSWORD,
-                    PasswordEncrypter.encryptString(newProxy.getPassword()));
-            }
-            if (newProxy.getDomain() != null) {
-                System.setProperty(Proxy.SYSTEM_PROXY_DOMAIN, newProxy.getDomain());
-            }
-        } else {
-            Proxy.toPreferences(null);
-            WebAccessManager.getInstance().setHttpProxy(null);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("clear proxy in system-property");            // NOI18N
-            }
-            System.clearProperty(Proxy.SYSTEM_PROXY_HOST);
-            System.clearProperty(Proxy.SYSTEM_PROXY_PORT);
-            System.clearProperty(Proxy.SYSTEM_PROXY_USERNAME);
-            System.clearProperty(Proxy.SYSTEM_PROXY_PASSWORD);
-            System.clearProperty(Proxy.SYSTEM_PROXY_DOMAIN);
-        }
-    }
-
-    /**
      * DOCUMENT ME!
      *
-     * @return  DOCUMENT ME!
-     */
-    public Proxy getProxy() {
-        applyChanges();
-        return new Proxy(host, port, username, password, domain, ProxyTypes.MANUAL.equals(proxyType));
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
+     * @param  mode   DOCUMENT ME!
      * @param  proxy  DOCUMENT ME!
      */
-    public void setProxy(final Proxy proxy) {
-        if ((proxy == null) || (proxy.getHost() == null) || (proxy.getPort() < 1)) {
-            rdoNoProxy.setSelected(true);
-            txtHost.setText(null);
-            txtPort.setText(null);
-            txtUsername.setText(null);
-            pwdPassword.setText(null);
-            txtDomain.setText(null);
-        } else {
-            if (proxy.isEnabled()) {
-                rdoManualProxy.setSelected(true);
-            } else {
-                rdoNoProxy.setSelected(true);
-            }
-            txtHost.setText(proxy.getHost());
-            txtPort.setText(Integer.toString(proxy.getPort()));
-            txtUsername.setText(proxy.getUsername());
-            pwdPassword.setText(proxy.getPassword());
-            txtDomain.setText(proxy.getDomain());
-        }
-        applyChanges();
-    }
+    private void updateFields(final ProxyHandler.Mode mode, final Proxy proxy) {
+        cbEnabled.setEnabled(ProxyHandler.Mode.MANUAL.equals(mode));
+        final boolean enabledFields = ProxyHandler.Mode.MANUAL.equals(mode) && (proxy != null) && proxy.isEnabled();
+        jPanel1.setEnabled(enabledFields);
+        lblHost.setEnabled(enabledFields);
+        txtHost.setEnabled(enabledFields);
+        lblPort.setEnabled(enabledFields);
+        spiPort.setEnabled(enabledFields);
+        lblUsername.setEnabled(enabledFields);
+        txtUsername.setEnabled(enabledFields);
+        lblPassword.setEnabled(enabledFields);
+        pwdPassword.setEnabled(enabledFields);
+        lblDomain.setEnabled(enabledFields);
+        txtDomain.setEnabled(enabledFields);
+        jPanel7.setEnabled(enabledFields);
+        lblExcludedHosts.setEnabled(enabledFields);
+        txtExcludedHosts.setEnabled(enabledFields);
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  parent  DOCUMENT ME!
-     */
-    @Override
-    public void configure(final Element parent) {
-        final Proxy proxy = Proxy.fromPreferences();
-        if (proxy != null) {
-            setProxy(proxy);
-            stillConfigured = true;
-        }
-        if (!stillConfigured) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Configure ProxyOptionPanels"); // NOI18N
-            }
-            try {
-                String elementProxyType = null;
-                String elementProxyHost = null;
-                String elementProxyPort = null;
-                String elementProxyUsername = null;
-                String elementProxyPassword = null;
-                String elementProxyDomain = null;
-                if (parent != null) {
-                    final Element conf = parent.getChild(CONFIGURATION);
-                    if (conf != null) {
-                        elementProxyType = conf.getChildText(CONF_TYPE);
-                        elementProxyHost = conf.getChildText(CONF_HOST);
-                        elementProxyPort = conf.getChildText(CONF_PORT);
-                        elementProxyUsername = conf.getChildText(CONF_USERNAME);
-                        elementProxyPassword = conf.getChildText(CONF_PASSWORD);
-                        elementProxyDomain = conf.getChildText(CONF_DOMAIN);
-                    }
-                }
-                if ((elementProxyType != null) && elementProxyType.equals(ProxyTypes.MANUAL.toString())) {
-                    proxyType = ProxyTypes.MANUAL;
-                } else {
-                    proxyType = ProxyTypes.NO;
-                }
+        rdoManualProxy.setSelected(ProxyHandler.Mode.MANUAL.equals(mode));
+        rdoPreconfiguredProxy.setSelected(ProxyHandler.Mode.PRECONFIGURED.equals(mode));
 
-                host = elementProxyHost;
-                username = elementProxyUsername;
-                password = PasswordEncrypter.decryptString(elementProxyPassword);
-                domain = elementProxyDomain;
-
-                try {
-                    port = Integer.valueOf(elementProxyPort);
-                } catch (final NumberFormatException ex) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("cannot parse port from configuration element", ex); // NOI18N
-                    }
-                    port = 0;
-                }
-            } catch (final Exception ex) {
-                LOG.error("error during ProxyOptionPanel configuration", ex);          // NOI18N
-            }
-
-            // hier werden die Werte in der GUI gesetzt
-            txtHost.setText(host);
-            txtUsername.setText(username);
-            pwdPassword.setText(password);
-            txtDomain.setText(domain);
-            if (port > 0) {
-                txtPort.setText(Integer.toString(port));
-            } else {
-                txtPort.setText(""); // NOI18N
-            }
-
-            switch (proxyType) {
-                case MANUAL: {
-                    rdoManualProxy.setSelected(true);
-                    break;
-                }
-                default: {
-                    rdoNoProxy.setSelected(true);
-                }
-            }
-
-            stillConfigured = true;
-        } else {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("skip Configure ProxyOptionPanels - still configured"); // NOI18N
-            }
-        }
-
-        applyChanges();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     *
-     * @throws  NoWriteError  DOCUMENT ME!
-     */
-    @Override
-    public Element getConfiguration() throws NoWriteError {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("ProxyOptionPanels - getConfiguration"); // NOI18N
-        }
-        final Element conf = new Element(CONFIGURATION);
-
-        final Element proxyTypeElement = new Element(CONF_TYPE);
-        final Element proxyHostElement = new Element(CONF_HOST);
-        final Element proxyPortElement = new Element(CONF_PORT);
-        final Element proxyUsernameElement = new Element(CONF_USERNAME);
-        final Element proxyPasswordElement = new Element(CONF_PASSWORD);
-        final Element proxyDomainElement = new Element(CONF_DOMAIN);
-        String pwEncrypted = null;
-
-        if (password != null) {
-            pwEncrypted = PasswordEncrypter.encryptString(password);
-        }
-
-        final String proxyTypeString = (proxyType != null) ? proxyType.toString() : null;
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("getConfiguration [type: " + proxyTypeString // NOI18N
-                        + " | host: " + host // NOI18N
-                        + " | port: " + port // NOI18N
-                        + " | username: " + username // NOI18N
-                        + " | password: " + pwEncrypted // NOI18N
-                        + " | domain: " + domain + " ]"); // NOI18N
-        }
-
-        proxyTypeElement.addContent(proxyTypeString);
-        proxyHostElement.addContent(host);
-        proxyPortElement.addContent(Integer.toString(port));
-        proxyUsernameElement.addContent(username);
-        proxyPasswordElement.addContent(pwEncrypted);
-        proxyDomainElement.addContent(domain);
-
-        conf.addContent(proxyTypeElement);
-        conf.addContent(proxyHostElement);
-        conf.addContent(proxyPortElement);
-        conf.addContent(proxyUsernameElement);
-        conf.addContent(proxyPasswordElement);
-        conf.addContent(proxyDomainElement);
-
-        return conf;
+        cbEnabled.setSelected((proxy != null) ? proxy.isEnabled() : false);
+        txtHost.setText((proxy != null) ? proxy.getHost() : null);
+        spiPort.setValue((proxy != null) ? proxy.getPort() : 0);
+        txtUsername.setText((proxy != null) ? proxy.getUsername() : null);
+        pwdPassword.setText((proxy != null) ? proxy.getPassword() : null);
+        txtExcludedHosts.setText(((proxy != null) && (proxy.getExcludedHosts() != null))
+                ? proxy.getExcludedHosts().replaceAll(Pattern.quote("|"), "\n") : null);
+        txtDomain.setText((proxy != null) ? proxy.getDomain() : null);
     }
 
     /**
@@ -457,257 +268,327 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
+        java.awt.GridBagConstraints gridBagConstraints;
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        labHost = new javax.swing.JLabel();
-        txtHost = new javax.swing.JTextField();
-        txtPort = new javax.swing.JTextField();
-        labPort = new javax.swing.JLabel();
-        rdoNoProxy = new javax.swing.JRadioButton();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        rdoPreconfiguredProxy = new javax.swing.JRadioButton();
         rdoManualProxy = new javax.swing.JRadioButton();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        cbEnabled = new javax.swing.JCheckBox();
+        lblHost = new javax.swing.JLabel();
+        txtHost = new javax.swing.JTextField();
+        lblPort = new javax.swing.JLabel();
+        spiPort = new javax.swing.JSpinner();
         jPanel1 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
         lblUsername = new javax.swing.JLabel();
-        lblPassword = new javax.swing.JLabel();
-        lblDomain = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
-        txtDomain = new javax.swing.JTextField();
+        lblPassword = new javax.swing.JLabel();
         pwdPassword = new javax.swing.JPasswordField();
+        lblDomain = new javax.swing.JLabel();
+        txtDomain = new javax.swing.JTextField();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        lblExcludedHosts = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtExcludedHosts = new javax.swing.JTextArea();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767));
 
-        labHost.setText(org.openide.util.NbBundle.getMessage(
+        setLayout(new java.awt.GridBagLayout());
+
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jPanel2.setLayout(new java.awt.GridLayout(0, 1));
+
+        buttonGroup1.add(rdoPreconfiguredProxy);
+        rdoPreconfiguredProxy.setSelected(true);
+        rdoPreconfiguredProxy.setText(org.openide.util.NbBundle.getMessage(
                 ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.labHost.text")); // NOI18N
+                "ProxyOptionsPanel.rdoPreconfiguredProxy.text")); // NOI18N
+        rdoPreconfiguredProxy.addActionListener(new java.awt.event.ActionListener() {
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                rdoManualProxy,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                labHost,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                rdoManualProxy,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                txtHost,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                rdoManualProxy,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                txtPort,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        labPort.setText(org.openide.util.NbBundle.getMessage(
-                ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.labPort.text")); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                rdoManualProxy,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                labPort,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        buttonGroup1.add(rdoNoProxy);
-        rdoNoProxy.setText(org.openide.util.NbBundle.getMessage(
-                ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.rdoNoProxy.text")); // NOI18N
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    rdoPreconfiguredProxyActionPerformed(evt);
+                }
+            });
+        jPanel2.add(rdoPreconfiguredProxy);
 
         buttonGroup1.add(rdoManualProxy);
         rdoManualProxy.setText(org.openide.util.NbBundle.getMessage(
                 ProxyOptionsPanel.class,
                 "ProxyOptionsPanel.rdoManualProxy.text")); // NOI18N
+        rdoManualProxy.addActionListener(new java.awt.event.ActionListener() {
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.jPanel1.border.title"))); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                rdoManualProxy,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                jPanel1,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        lblUsername.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.lblUsername.text")); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                rdoManualProxy,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                lblUsername,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        lblPassword.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.lblPassword.text")); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                rdoManualProxy,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                lblPassword,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        lblDomain.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.lblDomain.text")); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                rdoManualProxy,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                lblDomain,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        txtUsername.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.txtUsername.text")); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                rdoManualProxy,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                txtUsername,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        txtDomain.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.txtDomain.text")); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                rdoManualProxy,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                txtDomain,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        pwdPassword.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.pwdPassword.text")); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                rdoManualProxy,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                pwdPassword,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
-
-        final javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                jPanel1Layout.createSequentialGroup().addContainerGap().addGroup(
-                    jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                        lblUsername).addComponent(lblPassword).addComponent(lblDomain)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(
-                        txtDomain,
-                        javax.swing.GroupLayout.Alignment.LEADING,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        252,
-                        Short.MAX_VALUE).addComponent(
-                        txtUsername,
-                        javax.swing.GroupLayout.Alignment.LEADING,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        252,
-                        Short.MAX_VALUE).addComponent(
-                        pwdPassword,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        252,
-                        Short.MAX_VALUE)).addContainerGap()));
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                jPanel1Layout.createSequentialGroup().addGroup(
-                    jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        lblUsername).addComponent(
-                        txtUsername,
-                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        lblPassword).addComponent(
-                        pwdPassword,
-                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(
-                        lblDomain).addComponent(
-                        txtDomain,
-                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.PREFERRED_SIZE))));
-
-        final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                layout.createSequentialGroup().addContainerGap().addGroup(
-                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                        layout.createSequentialGroup().addComponent(
-                            jPanel1,
-                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                            Short.MAX_VALUE).addContainerGap()).addGroup(
-                        layout.createSequentialGroup().addGroup(
-                            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                                rdoNoProxy).addComponent(rdoManualProxy)).addGap(179, 179, 179)).addGroup(
-                        layout.createSequentialGroup().addComponent(labHost).addPreferredGap(
-                            javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                            txtHost,
-                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                            217,
-                            Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(labPort).addPreferredGap(
-                            javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                            txtPort,
-                            javax.swing.GroupLayout.PREFERRED_SIZE,
-                            70,
-                            javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap()))));
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                layout.createSequentialGroup().addContainerGap().addComponent(rdoNoProxy).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(rdoManualProxy).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addGroup(
-                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(labHost)
-                                .addComponent(
-                                    txtHost,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                                    javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(
-                        txtPort,
-                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.PREFERRED_SIZE).addComponent(labPort)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(
-                    jPanel1,
-                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    Short.MAX_VALUE)));
-
-        labHost.getAccessibleContext()
-                .setAccessibleName(org.openide.util.NbBundle.getMessage(
-                        ProxyOptionsPanel.class,
-                        "ProxyOptionsPanel.labHost.text"));        // NOI18N
-        labPort.getAccessibleContext()
-                .setAccessibleName(org.openide.util.NbBundle.getMessage(
-                        ProxyOptionsPanel.class,
-                        "ProxyOptionsPanel.labPort.text"));        // NOI18N
-        rdoNoProxy.getAccessibleContext()
-                .setAccessibleName(org.openide.util.NbBundle.getMessage(
-                        ProxyOptionsPanel.class,
-                        "ProxyOptionsPanel.rdoNoProxy.text"));     // NOI18N
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    rdoManualProxyActionPerformed(evt);
+                }
+            });
+        jPanel2.add(rdoManualProxy);
         rdoManualProxy.getAccessibleContext()
                 .setAccessibleName(org.openide.util.NbBundle.getMessage(
                         ProxyOptionsPanel.class,
                         "ProxyOptionsPanel.rdoManualProxy.text")); // NOI18N
 
-        bindingGroup.bind();
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        jPanel3.add(jPanel2, gridBagConstraints);
+
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        cbEnabled.setText(org.openide.util.NbBundle.getMessage(
+                ProxyOptionsPanel.class,
+                "ProxyOptionsPanel.cbEnabled.text")); // NOI18N
+        cbEnabled.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    cbEnabledActionPerformed(evt);
+                }
+            });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 15);
+        jPanel5.add(cbEnabled, gridBagConstraints);
+
+        lblHost.setText(org.openide.util.NbBundle.getMessage(
+                ProxyOptionsPanel.class,
+                "ProxyOptionsPanel.lblHost.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel5.add(lblHost, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel5.add(txtHost, gridBagConstraints);
+
+        lblPort.setText(org.openide.util.NbBundle.getMessage(
+                ProxyOptionsPanel.class,
+                "ProxyOptionsPanel.lblPort.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        jPanel5.add(lblPort, gridBagConstraints);
+
+        spiPort.setModel(new javax.swing.SpinnerNumberModel(0, 0, 65535, 1));
+        spiPort.setEditor(new javax.swing.JSpinner.NumberEditor(spiPort, "0"));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel5.add(spiPort, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel4.add(jPanel5, gridBagConstraints);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.jPanel1.border.title"))); // NOI18N
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jPanel6.setLayout(new java.awt.GridBagLayout());
+
+        lblUsername.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.lblUsername.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel6.add(lblUsername, gridBagConstraints);
+
+        txtUsername.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.txtUsername.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        jPanel6.add(txtUsername, gridBagConstraints);
+
+        lblPassword.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.lblPassword.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel6.add(lblPassword, gridBagConstraints);
+
+        pwdPassword.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.pwdPassword.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        jPanel6.add(pwdPassword, gridBagConstraints);
+
+        lblDomain.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.lblDomain.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel6.add(lblDomain, gridBagConstraints);
+
+        txtDomain.setText(NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.txtDomain.text")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        jPanel6.add(txtDomain, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jPanel6, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        jPanel4.add(jPanel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel3.add(jPanel4, gridBagConstraints);
+
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                org.openide.util.NbBundle.getMessage(
+                    ProxyOptionsPanel.class,
+                    "ProxyOptionsPanel.jPanel7.border.title"))); // NOI18N
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
+        jPanel8.setLayout(new java.awt.GridBagLayout());
+
+        lblExcludedHosts.setText(NbBundle.getMessage(
+                ProxyOptionsPanel.class,
+                "ProxyOptionsPanel.lblExcludedHosts.text"));        // NOI18N
+        lblExcludedHosts.setToolTipText(org.openide.util.NbBundle.getMessage(
+                ProxyOptionsPanel.class,
+                "ProxyOptionsPanel.lblExcludedHosts.toolTipText")); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(7, 0, 0, 0);
+        jPanel8.add(lblExcludedHosts, gridBagConstraints);
+
+        txtExcludedHosts.setColumns(20);
+        txtExcludedHosts.setRows(5);
+        jScrollPane1.setViewportView(txtExcludedHosts);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        jPanel8.add(jScrollPane1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel7.add(jPanel8, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        jPanel3.add(jPanel7, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 1.0;
+        jPanel3.add(filler1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        add(jPanel3, gridBagConstraints);
     } // </editor-fold>//GEN-END:initComponents
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private Proxy getProxyFromFields() {
+        return new Proxy(
+                cbEnabled.isSelected(),
+                txtHost.getText().trim(),
+                (int)spiPort.getValue(),
+                txtExcludedHosts.getText().replaceAll(Pattern.quote("\n"), "|"),
+                txtUsername.getText(),
+                String.valueOf(pwdPassword.getPassword()),
+                txtDomain.getText());
+    }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void rdoPreconfiguredProxyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_rdoPreconfiguredProxyActionPerformed
+        ProxyHandler.getInstance().setManualProxy(getProxyFromFields());
+        updateFields(ProxyHandler.Mode.PRECONFIGURED, ProxyHandler.getInstance().getPreconfiguredProxy());
+    }                                                                                         //GEN-LAST:event_rdoPreconfiguredProxyActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void rdoManualProxyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_rdoManualProxyActionPerformed
+        updateFields(ProxyHandler.Mode.MANUAL, ProxyHandler.getInstance().getManualProxy());
+    }                                                                                  //GEN-LAST:event_rdoManualProxyActionPerformed
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void cbEnabledActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cbEnabledActionPerformed
+        final Proxy proxy = ProxyHandler.getInstance().getManualProxy();
+        proxy.setEnabled(cbEnabled.isSelected());
+        updateFields(getSelectedMode(), proxy);
+    }                                                                             //GEN-LAST:event_cbEnabledActionPerformed
 }

@@ -76,6 +76,17 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
     // private UsernamePasswordCredentials credentials;
     private ReentrantLock lock = new ReentrantLock();
 
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new WSSAccessHandler object.
+     *
+     * @param  proxy  DOCUMENT ME!
+     */
+    public WSSAccessHandler(final Proxy proxy) {
+        super(proxy);
+    }
+
     //~ Methods ----------------------------------------------------------------
 
     @Override

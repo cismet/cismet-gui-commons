@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.cismet.commons.security.handler.AbstractAccessHandler;
+import de.cismet.commons.security.handler.ProxyCabaple;
 
 import de.cismet.netutil.Proxy;
 
@@ -37,7 +38,7 @@ import de.cismet.security.WebAccessManager;
  * @author   spuhl
  * @version  $Revision$, $Date$
  */
-public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
+public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler implements ProxyCabaple {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -54,13 +55,15 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
 
     /**
      * Sets the SystemProxy by default.
+     *
+     * @param  proxy  DOCUMENT ME!
      */
-    protected HTTPBasedAccessHandler() {
+    protected HTTPBasedAccessHandler(final Proxy proxy) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("HTTPBasedAccessHandler"); // NOI18N
         }
-        httpCredentialsForURLS = new HashMap<String, GUICredentialsProvider>();
-        proxy = Proxy.fromSystem();
+        httpCredentialsForURLS = new HashMap<>();
+        this.proxy = proxy;
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -68,15 +71,18 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
     /**
      * Returns a configured HttpClient with (if set) proxy settings.
      *
+     * @param   url  DOCUMENT ME!
+     *
      * @return  configured HttpClient
      */
-    protected HttpClient getConfiguredHttpClient() {
+    protected HttpClient getConfiguredHttpClientForUrl(final URL url) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("getConfiguredHttpClient"); // NOI18N
         }
 
         final HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
-        if (proxy != null) {
+        if (((proxy != null) && (proxy.getHost() != null) && (proxy.getPort() > 0)
+                        && proxy.isValid() && proxy.isEnabledFor((url != null) ? url.getHost() : null))) {
             client.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
 
             // proxy needs authentication
@@ -107,6 +113,7 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
      *
      * @param  proxy  DOCUMENT ME!
      */
+    @Override
     public void setProxy(final Proxy proxy) {
         this.proxy = proxy;
     }
@@ -122,7 +129,7 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
         if (LOG.isDebugEnabled()) {
             LOG.debug("getSecurityEnabledHttpClient"); // NOI18N
         }
-        final HttpClient client = getConfiguredHttpClient();
+        final HttpClient client = getConfiguredHttpClientForUrl(url);
         client.getParams().setParameter(CredentialsProvider.PROVIDER, getCredentialProvider(url));
 
         return client;

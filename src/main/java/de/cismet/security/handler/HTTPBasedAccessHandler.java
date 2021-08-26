@@ -25,13 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.cismet.commons.security.handler.AbstractAccessHandler;
+import de.cismet.commons.security.handler.ProxyCabaple;
 
 import de.cismet.netutil.Proxy;
 
 import de.cismet.security.GUICredentialsProvider;
 import de.cismet.security.WebAccessManager;
-
-import de.cismet.tools.WildcardUtils;
 
 /**
  * DOCUMENT ME!
@@ -39,7 +38,7 @@ import de.cismet.tools.WildcardUtils;
  * @author   spuhl
  * @version  $Revision$, $Date$
  */
-public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
+public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler implements ProxyCabaple {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -56,41 +55,19 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
 
     /**
      * Sets the SystemProxy by default.
+     *
+     * @param  proxy  DOCUMENT ME!
      */
-    protected HTTPBasedAccessHandler() {
+    protected HTTPBasedAccessHandler(final Proxy proxy) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("HTTPBasedAccessHandler"); // NOI18N
         }
-        httpCredentialsForURLS = new HashMap<String, GUICredentialsProvider>();
-        proxy = Proxy.fromSystem();
+        httpCredentialsForURLS = new HashMap<>();
+        this.proxy = proxy;
     }
 
     //~ Methods ----------------------------------------------------------------
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param   url             DOCUMENT ME!
-     * @param   exclusionRules  DOCUMENT ME!
-     *
-     * @return  DOCUMENT ME!
-     */
-    private static boolean isExcluded(final URL url, final String exclusionRules) {
-        if (exclusionRules == null) {
-            return false;
-        }
-        final String host = url.getHost();
-
-        for (final String rule : exclusionRules.split(",")) {
-            if (rule != null) {
-                if (WildcardUtils.testForMatch(host, rule.trim())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    
     /**
      * Returns a configured HttpClient with (if set) proxy settings.
      *
@@ -104,7 +81,8 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
         }
 
         final HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
-        if ((proxy != null) && !isExcluded(url, proxy.getExcludedHosts())) {
+        if (((proxy != null) && (proxy.getHost() != null) && (proxy.getPort() > 0)
+                        && proxy.isValid() && proxy.isEnabledFor((url != null) ? url.getHost() : null))) {
             client.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
 
             // proxy needs authentication
@@ -135,6 +113,7 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler {
      *
      * @param  proxy  DOCUMENT ME!
      */
+    @Override
     public void setProxy(final Proxy proxy) {
         this.proxy = proxy;
     }

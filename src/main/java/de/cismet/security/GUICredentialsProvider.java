@@ -333,7 +333,7 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
         final HttpClient client = new HttpClient();
         final Proxy proxy = WebAccessManager.getInstance().getHttpProxy();
 
-        if ((proxy != null) && proxy.isEnabled()) {                             // NOI18N
+        if ((proxy != null) && proxy.isValid()) {                               // NOI18N
             if (log.isDebugEnabled()) {
                 log.debug("proxyIs Set");                                       // NOI18N
                 log.debug("ProxyHost:" + System.getProperty("http.proxyHost")); // NOI18N

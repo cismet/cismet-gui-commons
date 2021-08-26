@@ -424,6 +424,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
      */
     @Override
     public void windowClosed(final WindowEvent e) {
+        optionsClient.update(selectedCategory.getClass());
     }
 
     /**
@@ -451,7 +452,6 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
      */
     @Override
     public void windowActivated(final WindowEvent e) {
-        optionsClient.update(selectedCategory.getClass());
     }
 
     /**

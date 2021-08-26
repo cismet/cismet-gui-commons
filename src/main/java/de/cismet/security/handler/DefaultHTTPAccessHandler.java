@@ -14,6 +14,7 @@ package de.cismet.security.handler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
@@ -39,6 +40,8 @@ import de.cismet.commons.security.TunnelStore;
 import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
 import de.cismet.commons.security.exceptions.CannotReadFromURLException;
 
+import de.cismet.netutil.Proxy;
+
 /**
  * DOCUMENT ME!
  *
@@ -59,6 +62,19 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private Tunnel tunnel = null;
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new DefaultHTTPAccessHandler object.
+     *
+     * @param  proxy  DOCUMENT ME!
+     */
+    public DefaultHTTPAccessHandler(final Proxy proxy) {
+        super(proxy);
+
+        AuthPolicy.registerAuthScheme(AuthPolicy.NTLM, JcifsNtlmScheme.class);
+    }
 
     //~ Methods ----------------------------------------------------------------
 

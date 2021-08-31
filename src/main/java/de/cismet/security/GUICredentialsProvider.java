@@ -38,12 +38,12 @@ import java.io.IOException;
 
 import java.net.URL;
 
-import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
 
 import javax.swing.JFrame;
 
 import de.cismet.netutil.Proxy;
+import de.cismet.netutil.ProxyHandler;
 
 import de.cismet.tools.gui.StaticSwingTools;
 
@@ -66,7 +66,6 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
     private UsernamePasswordCredentials creds;
     private Component parent;
     private JFrame parentFrame;
-    private boolean isAuthenticationDone = false;
     private boolean isAuthenticationCanceled = false;
     private URL url;
     private Object dummy = new Object();
@@ -268,7 +267,10 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
             }
 
             final JXLoginPane.JXLoginDialog dialog = new JXLoginPane.JXLoginDialog((JFrame)parent, login);
-
+//            SwingUtilities.invokeLater(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
             try {
                 ((JXPanel)((JXPanel)login.getComponent(1)).getComponent(1)).getComponent(3).requestFocus();
             } catch (Exception skip) {
@@ -276,8 +278,13 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
 
             dialog.setAlwaysOnTop(true);
             dialog.setVisible(true);
-
-            if (!isAuthenticationDone) {
+//                    }
+//                });
+//            while ((JXLoginPane.Status.NOT_STARTED == dialog.getStatus())
+//                        || (JXLoginPane.Status.IN_PROGRESS == dialog.getStatus())) {
+//                Thread.sleep(100);
+//            }
+            if (JXLoginPane.Status.SUCCEEDED != dialog.getStatus()) {
                 isAuthenticationCanceled = true;
                 throw (new CredentialsNotAvailableException());
             }
@@ -294,21 +301,18 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
 
         if (testConnection(new UsernamePasswordCredentials(name, new String(password)))) {
             if (log.isDebugEnabled()) {
-                log.debug("Credentials are valid for URL: " + url.toString()); // NOI18N
+                log.debug("Credentials are valid for URL: " + url.toString());     // NOI18N
             }
             usernames.removeUserName(name);
             usernames.saveUserNames();
             usernames.addUserName(name);
             usernames.saveUserNames();
-            isAuthenticationDone = true;
             setUsernamePassword(new UsernamePasswordCredentials(name, new String(password)));
-
             return true;
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("Credentials are not valid for URL: " + url.toString()); // NOI18N
             }
-
             return false;
         }
     }
@@ -331,15 +335,15 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
      */
     public boolean testConnection(final UsernamePasswordCredentials creds) {
         final HttpClient client = new HttpClient();
-        final Proxy proxy = WebAccessManager.getInstance().getHttpProxy();
+        final Proxy proxy = ProxyHandler.getInstance().getProxy();
 
-        if ((proxy != null) && proxy.isValid()) {                               // NOI18N
+        if ((proxy != null) && proxy.isValid() && proxy.isEnabledFor(url.getHost())) { // NOI18N
             if (log.isDebugEnabled()) {
-                log.debug("proxyIs Set");                                       // NOI18N
-                log.debug("ProxyHost:" + System.getProperty("http.proxyHost")); // NOI18N
+                log.debug("proxyIs Set");                                              // NOI18N
+                log.debug("ProxyHost:" + System.getProperty("http.proxyHost"));        // NOI18N
             }
             if (log.isDebugEnabled()) {
-                log.debug("ProxyPort:" + System.getProperty("http.proxyPort")); // NOI18N
+                log.debug("ProxyPort:" + System.getProperty("http.proxyPort"));        // NOI18N
             }
 
             try {

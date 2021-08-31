@@ -96,8 +96,10 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
         setProxy(proxy);
         ProxyHandler.getInstance().addListener(this);
 
-        try(final InputStream jksInputStream = getClass().getClassLoader().getResourceAsStream("de/cismet/security/secondary.jks");
-                    final InputStream pwInputStream = getClass().getClassLoader().getResourceAsStream("de/cismet/security/secondary.pw");
+        try(final InputStream jksInputStream = getClass().getClassLoader().getResourceAsStream(
+                            "de/cismet/security/secondary.jks");
+                    final InputStream pwInputStream = getClass().getClassLoader().getResourceAsStream(
+                            "de/cismet/security/secondary.pw");
             ) {
             if ((jksInputStream != null) && (pwInputStream != null)) {
                 final String pw = IOUtils.toString(pwInputStream, "UTF-8");
@@ -777,9 +779,18 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        WebAccessManager.getInstance().setProxy(new Proxy(true, "localhost", 9090, null, "102-cismet", "Irgendwas 2021!", "stadt"));
-        System.out.println(IOUtils.toString(WebAccessManager.getInstance().doRequest(new URL("https://boxy.cismet.de")), "UTF-8")); 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   args  DOCUMENT ME!
+     *
+     * @throws  Exception  DOCUMENT ME!
+     */
+    public static void main(final String[] args) throws Exception {
+        WebAccessManager.getInstance()
+                .setProxy(new Proxy(true, "localhost", 9090, null, "102-cismet", "Irgendwas 2021!", "stadt"));
+        System.out.println(IOUtils.toString(
+                WebAccessManager.getInstance().doRequest(new URL("https://boxy.cismet.de")),
+                "UTF-8"));
     }
-
 }

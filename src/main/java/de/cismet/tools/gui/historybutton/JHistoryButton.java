@@ -205,17 +205,12 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
             }
             popupMenu.removeAll();
 
-            for (int i = possibilities.size() - 1; i >= 0; --i) {
+            final int tooMuch = possibilities.size() - maxHistoryMenuLength;
+            for (int i = possibilities.size() - 1; i >= Math.max(tooMuch, 0); --i) {
                 final Object o = possibilities.get(i);
                 final JHistoryMenuItem item = new JHistoryMenuItem(o, possibilities.size() - i);
                 popupMenu.add(item);
                 item.addActionListener(this);
-            }
-            if (possibilities.size() > maxHistoryMenuLength) {
-                final int tooMuch = possibilities.size() - maxHistoryMenuLength;
-                for (int i = 0; i < tooMuch; ++i) {
-                    popupMenu.remove(possibilities.size() - 1 - i);
-                }
             }
         }
     }

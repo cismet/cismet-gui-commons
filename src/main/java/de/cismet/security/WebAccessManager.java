@@ -560,13 +560,9 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
                     throw new NoHandlerForURLException("No default handler available."); // NOI18N
                 }
             }
-        } catch (Exception ex) {
-            LOG.error("Error while doRequest.", ex);                                     // NOI18N
-
-            throw ex;
         } finally {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Releasing lock."); // NOI18N
+                LOG.debug("Releasing lock.");                                            // NOI18N
             }
 
             readLock.unlock();
@@ -649,13 +645,11 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
      */
     @Override
     public boolean checkIfURLaccessible(final URL url) {
-        boolean urlAccessible = false;
+        final boolean urlAccessible = false;
         // if the URL is accessible an InputStream is returned. Otherwise an Exception is thrown. As the URL might not
         // be accessible, the exceptions are only logged in the debug mode.
-        InputStream inputStream = null;
-        try {
-            inputStream = this.doRequest(url, "", AccessHandler.ACCESS_METHODS.HEAD_REQUEST);
-            urlAccessible = (inputStream != null) ? true : false;
+        try(final InputStream inputStream = this.doRequest(url, "", AccessHandler.ACCESS_METHODS.HEAD_REQUEST)) {
+            return inputStream != null;
         } catch (final MissingArgumentException ex) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Could not read document from URL '" + url.toExternalForm() + "'.", ex);
@@ -681,16 +675,8 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
                             + "'.",
                     ex);
             }
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException ex) {
-                    LOG.warn("Could not close stream.", ex);
-                }
-            }
         }
-        return urlAccessible;
+        return false;
     }
 
     /**

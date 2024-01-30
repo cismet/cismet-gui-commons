@@ -1,17 +1,140 @@
+/***************************************************
+*
+* cismet GmbH, Saarbruecken, Germany
+*
+*              ... and it just works.
+*
+****************************************************/
 package de.cismet.tools.gui;
 
+import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 
-import de.cismet.tools.BrowserLauncher;
-import java.awt.Component;
-import java.awt.Frame;
-import java.io.IOException;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+
+import java.io.IOException;
+
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+
+import de.cismet.tools.BrowserLauncher;
+
+/**
+ * DOCUMENT ME!
+ *
+ * @version  $Revision$, $Date$
+ */
 @Getter
 @Setter
 public class ContinueOrExitDialog extends javax.swing.JDialog {
 
+    //~ Static fields/initializers ---------------------------------------------
+
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ContinueOrExitDialog.class);
+
+    //~ Instance fields --------------------------------------------------------
+
+    private String contentTitle;
+    private String content;
+    private String continueButtonText;
+    private String exitButtonText;
+    private Integer contentWidth;
+
+    private boolean showContinueButton = true;
+    private boolean showExitButton = true;
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnContinue;
+    private javax.swing.JButton btnExit;
+    private javax.swing.Box.Filler fllButtons;
+    private javax.swing.JPanel panButtons;
+    private javax.swing.JPanel panCenter;
+    private javax.swing.JPanel panContent;
+    private javax.swing.JPanel panMain;
+    private javax.swing.JPanel panSouth;
+    private javax.swing.JScrollPane scpContent;
+    private javax.swing.JTextPane txpContent;
+    // End of variables declaration//GEN-END:variables
+
+    //~ Constructors -----------------------------------------------------------
+
+    /**
+     * Creates a new ContinueOrExitDialog object.
+     */
+    public ContinueOrExitDialog() {
+        this((Frame)null);
+    }
+
+    /**
+     * Creates a new ContinueOrExitDialog object.
+     *
+     * @param  component  DOCUMENT ME!
+     */
+    public ContinueOrExitDialog(final Component component) {
+        this((Frame)StaticSwingTools.getParentFrame(component));
+    }
+
+    /**
+     * Creates a new ContinueOrExitDialog object.
+     *
+     * @param  parent  DOCUMENT ME!
+     */
+    public ContinueOrExitDialog(final Frame parent) {
+        super(parent, true);
+    }
+
+    /**
+     * Creates a new ContinueOrExitDialog object.
+     *
+     * @param  parent              DOCUMENT ME!
+     * @param  contentTitle        DOCUMENT ME!
+     * @param  content             DOCUMENT ME!
+     * @param  continueButtonText  DOCUMENT ME!
+     * @param  exitButtonText      DOCUMENT ME!
+     */
+    public ContinueOrExitDialog(final Component parent,
+            final String contentTitle,
+            final String content,
+            final String continueButtonText,
+            final String exitButtonText) {
+        this(parent);
+        setContentTitle(contentTitle);
+        setContent(content);
+        setContinueButtonText(continueButtonText);
+        setExitButtonText(exitButtonText);
+    }
+
+    /**
+     * Creates a new ContinueOrExitDialog object.
+     *
+     * @param  parent              DOCUMENT ME!
+     * @param  contentTitle        DOCUMENT ME!
+     * @param  content             DOCUMENT ME!
+     * @param  continueButtonText  DOCUMENT ME!
+     * @param  exitButtonText      DOCUMENT ME!
+     */
+    public ContinueOrExitDialog(final Frame parent,
+            final String contentTitle,
+            final String content,
+            final String continueButtonText,
+            final String exitButtonText) {
+        this(parent);
+        setContentTitle(contentTitle);
+        setContent(content);
+        setContinueButtonText(continueButtonText);
+        setExitButtonText(exitButtonText);
+    }
+
+    //~ Methods ----------------------------------------------------------------
+
+    /**
+     * DOCUMENT ME!
+     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -31,8 +154,6 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(ContinueOrExitDialog.class, "ContinueOrExitDialog.title")); // NOI18N
         setAlwaysOnTop(true);
-        setMaximumSize(new java.awt.Dimension(800, 600));
-        setMinimumSize(new java.awt.Dimension(300, 150));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         panMain.setLayout(new java.awt.BorderLayout());
@@ -109,15 +230,30 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnExitActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         doExit();
     }//GEN-LAST:event_btnExitActionPerformed
 
-    private void btnContinueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinueActionPerformed
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void btnContinueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinueActionPerformed
         doContinue();
     }//GEN-LAST:event_btnContinueActionPerformed
 
-    private void txpContentHyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_txpContentHyperlinkUpdate
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  evt  DOCUMENT ME!
+     */
+    private void txpContentHyperlinkUpdate(final javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_txpContentHyperlinkUpdate
         if (evt.getEventType() == javax.swing.event.HyperlinkEvent.EventType.ACTIVATED) {
             try {
                 BrowserLauncher.openURL(evt.getDescription());
@@ -127,103 +263,137 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txpContentHyperlinkUpdate
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnContinue;
-    private javax.swing.JButton btnExit;
-    private javax.swing.Box.Filler fllButtons;
-    private javax.swing.JPanel panButtons;
-    private javax.swing.JPanel panCenter;
-    private javax.swing.JPanel panContent;
-    private javax.swing.JPanel panMain;
-    private javax.swing.JPanel panSouth;
-    private javax.swing.JScrollPane scpContent;
-    private javax.swing.JTextPane txpContent;
-    // End of variables declaration//GEN-END:variables
-
-    private final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(ContinueOrExitDialog.class);
-    
-    private String contentTitle;
-    private String content;
-    private String continueButtonText;
-    private String exitButtonText;
-    
-    private boolean showContinueButton = true;
-    private boolean showExitButton = true;
-
-    public ContinueOrExitDialog() {
-        this((Frame)null);
-    }
-
-    public ContinueOrExitDialog(final Component component) {
-        this((Frame)StaticSwingTools.getParentFrame(component));
-    }
-
-    public ContinueOrExitDialog(final Frame parent) {
-        super(parent, true);
-    }
-        
-    public ContinueOrExitDialog(final Component parent, final String contentTitle, final String content, final String continueButtonText, final String exitButtonText) {
-        this(parent);
-        setContentTitle(contentTitle);
-        setContent(content);
-        setContinueButtonText(continueButtonText);
-        setExitButtonText(exitButtonText);        
-    }
-
-    public ContinueOrExitDialog(final Frame parent, final String contentTitle, final String content, final String continueButtonText, final String exitButtonText) {
-        this(parent);
-        setContentTitle(contentTitle);
-        setContent(content);
-        setContinueButtonText(continueButtonText);
-        setExitButtonText(exitButtonText);        
-    }    
-
-    public static final void doShow(final Component component, final String contentTitle, final String content, final String continueButtonText, final String exitButtonText) throws IOException {        
-        final ContinueOrExitDialog instance = new ContinueOrExitDialog(component);
-        instance.setContentTitle(contentTitle);
-        instance.setContent(content);
-        instance.setContinueButtonText(continueButtonText);
-        instance.setExitButtonText(exitButtonText);        
-        instance.doShow();
-    }
-    
+    /**
+     * DOCUMENT ME!
+     *
+     * @throws  IOException  DOCUMENT ME!
+     */
     public final void doShow() throws IOException {
-        LOG.debug(String.format("%s.doShow()", ContinueOrExitDialog.class.getName()));
-        
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("%s.doShow()", ContinueOrExitDialog.class.getName()));
+        }
+
         initComponents();
-        
-        setTitle(getContentTitle());        
+
+        setTitle(getContentTitle());
         txpContent.setText(getContent());
 
         panButtons.removeAll();
         if (getContinueButtonText() != null) {
+            btnContinue.setText(getContinueButtonText());
             panButtons.add(btnContinue);
         }
         if (getExitButtonText() != null) {
+            btnExit.setText(getExitButtonText());
             panButtons.add(btnExit);
         }
-        
         pack();
         
+        final Dimension buttonExitSize = btnExit.getSize();
+        final Dimension buttonContinueSize = btnContinue.getSize();
+
+        final int buttonWidth = Math.max(buttonExitSize.width, buttonContinueSize.width);
+        final int buttonHeight = Math.max(buttonExitSize.height, buttonContinueSize.height);
+
+        
+        final int minContentWidth = buttonWidth * 2 + 10;
+        final int maxContentWidth = 600;
+        final int contentWidth = Math.max(minContentWidth, this.contentWidth != null ? this.contentWidth : Math.min((buttonWidth * 3) + 10, maxContentWidth));
+        final int contentHeight = determineHeight(txpContent, contentWidth);
+        
+        final int maxDialogHeigth = 500;
+        final int dialogWidth = contentWidth + 40;
+        final int dialogHeight = Math.min(contentHeight + buttonHeight + 70, maxDialogHeigth);
+        
+        setPreferredSize(new Dimension(dialogWidth, dialogHeight));
+
+        pack();
         StaticSwingTools.showDialog(this, true);
     }
 
+    /**
+     * Creating an "offscreen" EditorPane with the same text and contentType
+     * than the original one, for calculating the Preferred Height for a 
+     * given Width.
+     *
+     * @param   editorPane  DOCUMENT ME!
+     * @param   newWidth    DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private static int determineHeight(final JEditorPane editorPaneOrig, final int newWidth) {
+        final JEditorPane editorPane = new JEditorPane();
+        editorPane.setContentType(editorPaneOrig.getContentType());
+        editorPane.setText(editorPaneOrig.getText());
+        editorPane.setSize(new Dimension(newWidth, Integer.MAX_VALUE));
+        return editorPane.getPreferredSize().height;
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        final Dimension preferred = super.getPreferredSize();
+        final Dimension maximum = getMaximumSize();
+        final int width = Math.min(preferred.width, maximum.width);
+        final int height = Math.min(preferred.height, maximum.height);
+        return new Dimension(width, height);
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
     private void doContinue() {
-        LOG.debug(String.format("%s.doContinue()", ContinueOrExitDialog.class.getName()));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("%s.doContinue()", ContinueOrExitDialog.class.getName()));
+        }
         dispose();
     }
 
+    /**
+     * DOCUMENT ME!
+     */
     private void doExit() {
-        LOG.debug(String.format("%s.doExit()", ContinueOrExitDialog.class.getName()));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("%s.doExit()", ContinueOrExitDialog.class.getName()));
+        }
         System.exit(0);
     }
 
-    public static void main(String[] args) throws IOException {
-        final String contentTitle = "Title from ConfAttr";
-        final String content = "<html><head><style>body { font-family: 'Arial', sans-serif; }</style></head><body>This is a <a href='http://www.cismet.de'>test link</a>.<br/><br/>Fingers crossed ! :)";
-        final String continueButtonText = null;
-        final String exitButtonText = "exit";
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   args  DOCUMENT ME!
+     *
+     * @throws  IOException  DOCUMENT ME!
+     */
+    public static void main(final String[] args) throws IOException {
+        final String contentTitle = "LagIS - Wichtiger Hinweis";
 
-        ContinueOrExitDialog.doShow(null, contentTitle, content, continueButtonText, exitButtonText);        
+        final Font font = new JLabel().getFont();
+
+        final String test = ""
+                    + "<p>Sie sind in einer Nutzergruppe, die ausschließlich lesenden Zugriff auf die LagIS Daten hat. In Zukunft soll dazu die Applikation <a href='http://lagis-online.s10222.wuppertal-intra.de/lagis-desktop/#/login'>LagIS-Desktop</a> genutzt werden.</p>"
+                    + "<p>Sollten Sie Fragen zur Applikation haben, wenden Sie sich bitte an Ilmo Gimmler oder Michael Stosch.</p>"
+                    + "<p>Für eine Übergangszeit ist die Java Anwendung noch verfügbar.</p>";
+        //final String test = "Mini-Text";
+        final String content = String.format(
+                "<html><html><body style='font-family: %s; font-size: %dpt; margin: 0px'>%s",
+                font.getFamily(),
+                font.getSize(),
+                test);
+        final String continueButtonText = "Weiter mit der Java Anwendung";
+        final String exitButtonText = "Java Anwendung schließen";
+
+        try {
+            javax.swing.UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
+        } catch (Exception e) {
+            LOG.warn("Fehler beim Einstellen des Look&Feels's!", e);
+        }
+        final ContinueOrExitDialog instance = new ContinueOrExitDialog();
+        instance.setContentTitle(contentTitle);
+        instance.setContent(content);
+        instance.setContinueButtonText(continueButtonText);
+        instance.setExitButtonText(exitButtonText);
+        instance.setContentWidth(400);
+        instance.doShow();        
     }
 }

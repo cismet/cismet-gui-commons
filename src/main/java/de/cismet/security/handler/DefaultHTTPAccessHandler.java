@@ -11,9 +11,11 @@
  */
 package de.cismet.security.handler;
 
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
@@ -180,7 +182,20 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
                 try {
                     httpMethod.setDoAuthentication(true);
 
-                    final int statuscode = client.executeMethod(httpMethod);
+                    int statuscode = client.executeMethod(httpMethod);
+
+                    if ((statuscode == HttpStatus.SC_MOVED_PERMANENTLY) || (statuscode == 308)) {
+                        final Header location = httpMethod.getResponseHeader("location");
+
+                        if ((location != null) && (location.getValue() != null)
+                                    && (!location.getValue().equals(""))) {
+                            final String newLocation = location.getValue();
+
+                            httpMethod.setURI(new URI(newLocation, false));
+                            statuscode = client.executeMethod(httpMethod);
+                        }
+                    }
+
                     switch (statuscode) {
                         case (HttpStatus.SC_UNAUTHORIZED): {
                             if (log.isInfoEnabled()) {

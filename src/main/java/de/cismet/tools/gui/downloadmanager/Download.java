@@ -33,7 +33,7 @@ public interface Download {
 
         //~ Enum constants -----------------------------------------------------
 
-        WAITING, RUNNING, RUNNING_WITH_ERROR, COMPLETED, COMPLETED_WITH_ERROR, ABORTED
+        WAITING, RUNNING, RUNNING_WITH_ERROR, COMPLETED, COMPLETED_WITH_ERROR, ABORTED, RUNNING_WITH_PROGRESS
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -49,6 +49,16 @@ public interface Download {
      * @return  The state of the download.
      */
     State getStatus();
+
+    /**
+     * If the state can be set to RUNNING_WITH_PROGRESS, than this method should be implemented and should return the
+     * current progress in percent.
+     *
+     * @return  the current progress in percent
+     */
+    default int getProgress() {
+        return -1;
+    }
 
     /**
      * A download can be observed for state changes. Thus a download implementation should extend Observable. This

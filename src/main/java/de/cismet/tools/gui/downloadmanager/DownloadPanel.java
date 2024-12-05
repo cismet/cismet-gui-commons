@@ -92,6 +92,8 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         this.small = small;
 
         initComponents();
+        prbProgress.setMinimum(0);
+        prbProgress.setMaximum(100);
 
         if (this.small) {
             setMaximumSize(new java.awt.Dimension(2147483647, 44));
@@ -459,6 +461,20 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
             }
             case RUNNING: {
                 prbProgress.setVisible(true);
+                prbProgress.setIndeterminate(true);
+                lblTitle.setText(download.getTitle());
+                lblMessage.setVisible(false);
+                jxlOpenFile.setVisible(false);
+                mniOpenFile.setEnabled(false);
+                mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
+                mniRemove.setEnabled(false);
+                lblTitle.setForeground(SystemColor.textText);
+                break;
+            }
+            case RUNNING_WITH_PROGRESS: {
+                prbProgress.setVisible(true);
+                prbProgress.setIndeterminate(false);
+                prbProgress.setValue(download.getProgress());
                 lblTitle.setText(download.getTitle());
                 lblMessage.setVisible(false);
                 jxlOpenFile.setVisible(false);

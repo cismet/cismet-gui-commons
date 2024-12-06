@@ -146,7 +146,9 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
         scpContent = new javax.swing.JScrollPane();
         txpContent = new javax.swing.JTextPane();
         panSouth = new javax.swing.JPanel();
-        fllButtons = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        fllButtons = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0));
         panButtons = new javax.swing.JPanel();
         btnExit = new javax.swing.JButton();
         btnContinue = new javax.swing.JButton();
@@ -168,10 +170,12 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
         txpContent.setContentType("text/html"); // NOI18N
         txpContent.setOpaque(false);
         txpContent.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
-            public void hyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {
-                txpContentHyperlinkUpdate(evt);
-            }
-        });
+
+                @Override
+                public void hyperlinkUpdate(final javax.swing.event.HyperlinkEvent evt) {
+                    txpContentHyperlinkUpdate(evt);
+                }
+            });
         scpContent.setViewportView(txpContent);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -197,20 +201,28 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
 
         panButtons.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
-        org.openide.awt.Mnemonics.setLocalizedText(btnExit, org.openide.util.NbBundle.getMessage(ContinueOrExitDialog.class, "ContinueOrExitDialog.btnExit.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnExit,
+            org.openide.util.NbBundle.getMessage(ContinueOrExitDialog.class, "ContinueOrExitDialog.btnExit.text")); // NOI18N
         btnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExitActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnExitActionPerformed(evt);
+                }
+            });
         panButtons.add(btnExit);
 
-        org.openide.awt.Mnemonics.setLocalizedText(btnContinue, org.openide.util.NbBundle.getMessage(ContinueOrExitDialog.class, "ContinueOrExitDialog.btnContinue.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(
+            btnContinue,
+            org.openide.util.NbBundle.getMessage(ContinueOrExitDialog.class, "ContinueOrExitDialog.btnContinue.text")); // NOI18N
         btnContinue.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnContinueActionPerformed(evt);
-            }
-        });
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    btnContinueActionPerformed(evt);
+                }
+            });
         panButtons.add(btnContinue);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -228,32 +240,32 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
         getContentPane().add(panMain, gridBagConstraints);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnExitActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+    private void btnExitActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnExitActionPerformed
         doExit();
-    }//GEN-LAST:event_btnExitActionPerformed
+    }                                                                           //GEN-LAST:event_btnExitActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void btnContinueActionPerformed(final java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinueActionPerformed
+    private void btnContinueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnContinueActionPerformed
         doContinue();
-    }//GEN-LAST:event_btnContinueActionPerformed
+    }                                                                               //GEN-LAST:event_btnContinueActionPerformed
 
     /**
      * DOCUMENT ME!
      *
      * @param  evt  DOCUMENT ME!
      */
-    private void txpContentHyperlinkUpdate(final javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_txpContentHyperlinkUpdate
+    private void txpContentHyperlinkUpdate(final javax.swing.event.HyperlinkEvent evt) { //GEN-FIRST:event_txpContentHyperlinkUpdate
         if (evt.getEventType() == javax.swing.event.HyperlinkEvent.EventType.ACTIVATED) {
             try {
                 BrowserLauncher.openURL(evt.getDescription());
@@ -261,7 +273,7 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
                 LOG.error(ex, ex);
             }
         }
-    }//GEN-LAST:event_txpContentHyperlinkUpdate
+    }                                                                                    //GEN-LAST:event_txpContentHyperlinkUpdate
 
     /**
      * DOCUMENT ME!
@@ -288,23 +300,24 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
             panButtons.add(btnExit);
         }
         pack();
-        
+
         final Dimension buttonExitSize = btnExit.getSize();
         final Dimension buttonContinueSize = btnContinue.getSize();
 
         final int buttonWidth = Math.max(buttonExitSize.width, buttonContinueSize.width);
         final int buttonHeight = Math.max(buttonExitSize.height, buttonContinueSize.height);
 
-        
-        final int minContentWidth = buttonWidth * 2 + 10;
+        final int minContentWidth = (buttonWidth * 2) + 10;
         final int maxContentWidth = 600;
-        final int contentWidth = Math.max(minContentWidth, this.contentWidth != null ? this.contentWidth : Math.min((buttonWidth * 3) + 10, maxContentWidth));
+        final int contentWidth = Math.max(
+                minContentWidth,
+                (this.contentWidth != null) ? this.contentWidth : Math.min((buttonWidth * 3) + 10, maxContentWidth));
         final int contentHeight = determineHeight(txpContent, contentWidth);
-        
+
         final int maxDialogHeigth = 500;
         final int dialogWidth = contentWidth + 40;
         final int dialogHeight = Math.min(contentHeight + buttonHeight + 70, maxDialogHeigth);
-        
+
         setPreferredSize(new Dimension(dialogWidth, dialogHeight));
 
         pack();
@@ -312,12 +325,11 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
     }
 
     /**
-     * Creating an "offscreen" EditorPane with the same text and contentType
-     * than the original one, for calculating the Preferred Height for a 
-     * given Width.
+     * Creating an "offscreen" EditorPane with the same text and contentType than the original one, for calculating the
+     * Preferred Height for a given Width.
      *
-     * @param   editorPane  DOCUMENT ME!
-     * @param   newWidth    DOCUMENT ME!
+     * @param   editorPaneOrig  DOCUMENT ME!
+     * @param   newWidth        DOCUMENT ME!
      *
      * @return  DOCUMENT ME!
      */
@@ -374,7 +386,7 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
                     + "<p>Sie sind in einer Nutzergruppe, die ausschließlich lesenden Zugriff auf die LagIS Daten hat. In Zukunft soll dazu die Applikation <a href='http://lagis-online.s10222.wuppertal-intra.de/lagis-desktop/#/login'>LagIS-Desktop</a> genutzt werden.</p>"
                     + "<p>Sollten Sie Fragen zur Applikation haben, wenden Sie sich bitte an Ilmo Gimmler oder Michael Stosch.</p>"
                     + "<p>Für eine Übergangszeit ist die Java Anwendung noch verfügbar.</p>";
-        //final String test = "Mini-Text";
+        // final String test = "Mini-Text";
         final String content = String.format(
                 "<html><html><body style='font-family: %s; font-size: %dpt; margin: 0px'>%s",
                 font.getFamily(),
@@ -394,6 +406,6 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
         instance.setContinueButtonText(continueButtonText);
         instance.setExitButtonText(exitButtonText);
         instance.setContentWidth(400);
-        instance.doShow();        
+        instance.doShow();
     }
 }

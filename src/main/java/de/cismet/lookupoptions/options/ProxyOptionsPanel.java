@@ -43,6 +43,10 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             ProxyOptionsPanel.class,
             "ProxyOptionsPanel.OptionController.name"); // NOI18N
 
+    //~ Instance fields --------------------------------------------------------
+
+    private final ProxyHandler.Listener proxyListener;
+
     // Variables declaration - do not modify
     // NOI18N
 
@@ -87,7 +91,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         final Proxy preconfiguredProxy = ProxyHandler.getInstance().getPreconfiguredProxy();
         jPanel2.setVisible((preconfiguredProxy != null) && preconfiguredProxy.isValid());
         update();
-        ProxyHandler.getInstance().addListener(new ProxyHandler.Listener() {
+        proxyListener = new ProxyHandler.Listener() {
 
                 @Override
                 public void proxyChanged(final ProxyHandler.Event event) {
@@ -107,7 +111,8 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
                             }
                         });
                 }
-            });
+            };
+        ProxyHandler.getInstance().addListener(proxyListener);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -120,6 +125,13 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     @Override
     public int getOrder() {
         return 1;
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void dispose() {
+        ProxyHandler.getInstance().removeListener(proxyListener);
     }
 
     /**

@@ -32,8 +32,13 @@ import java.io.Reader;
 import java.net.BindException;
 import java.net.URL;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 import de.cismet.commons.security.AccessHandler.ACCESS_HANDLER_TYPES;
 import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
@@ -59,6 +64,7 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
             ACCESS_METHODS.POST_REQUEST
         };
     public static final ACCESS_HANDLER_TYPES ACCESS_HANDLER_TYPE = ACCESS_HANDLER_TYPES.HTTP;
+    private static final String USER_AGENT_HEADER_KEY = "User-Agent";
 
     //~ Instance fields --------------------------------------------------------
 
@@ -181,7 +187,7 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
             while (!hasBound) {
                 try {
                     httpMethod.setDoAuthentication(true);
-
+                    httpMethod.addRequestHeader(new Header(USER_AGENT_HEADER_KEY, "wunda"));
                     int statuscode = client.executeMethod(httpMethod);
 
                     if ((statuscode == HttpStatus.SC_MOVED_PERMANENTLY) || (statuscode == 308)) {
@@ -259,11 +265,15 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
             final HashMap<String, String> options) throws Exception {
         final HttpClient client = getSecurityEnabledHttpClient(url);
         final PostMethod postMethod = new PostMethod(url.toString());
-        log.fatal("request2", new Exception());
+        boolean hasUserAgent = false;
+
         postMethod.setRequestEntity(new InputStreamRequestEntity(requestParameter));
 
         if ((options != null) && !options.isEmpty()) {
             for (final Entry<String, String> option : options.entrySet()) {
+                if (option.getKey().equalsIgnoreCase(USER_AGENT_HEADER_KEY)) {
+                    hasUserAgent = true;
+                }
                 postMethod.addRequestHeader(option.getKey(), option.getValue());
             }
         }
@@ -271,6 +281,10 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
         while (!hasBound) {
             try {
                 postMethod.setDoAuthentication(true);
+                // some urls are not reachable without a user agent
+                if (!hasUserAgent) {
+                    postMethod.addRequestHeader(new Header(USER_AGENT_HEADER_KEY, "wunda"));
+                }
 
                 final int statuscode = client.executeMethod(postMethod);
                 hasBound = true;

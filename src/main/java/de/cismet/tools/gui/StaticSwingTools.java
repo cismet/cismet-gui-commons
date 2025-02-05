@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
+import org.openide.util.Exceptions;
+
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -23,6 +25,8 @@ import java.awt.event.KeyEvent;
 
 import java.io.File;
 import java.io.IOException;
+
+import java.lang.reflect.InvocationTargetException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -605,9 +609,26 @@ public class StaticSwingTools {
         final int x = bounds.x + ((bounds.width - w.getWidth()) / 2);
         final int y = bounds.y + ((bounds.height - w.getHeight()) / 2);
 
-        // show window
-        w.setLocation(x, y);
-        w.setVisible(true);
+        if (!EventQueue.isDispatchThread()) {
+            try {
+                EventQueue.invokeAndWait(new Thread("centerWindowOnScreen") {
+
+                        @Override
+                        public void run() {
+                            // show window
+                            w.setLocation(x, y);
+                            w.setVisible(true);
+                        }
+                    });
+            } catch (InterruptedException | InvocationTargetException ex) {
+                log.error("Error while center window on screen", ex);
+                // nothing to do
+            }
+        } else {
+            // show window
+            w.setLocation(x, y);
+            w.setVisible(true);
+        }
     }
 
     /**

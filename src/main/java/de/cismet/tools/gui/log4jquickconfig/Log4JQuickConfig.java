@@ -7,6 +7,20 @@
 ****************************************************/
 package de.cismet.tools.gui.log4jquickconfig;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.builder.api.AppenderComponentBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
+import org.apache.logging.log4j.core.config.builder.api.RootLoggerComponentBuilder;
+import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
+import org.apache.logging.log4j.core.config.builder.impl.DefaultConfigurationBuilder;
+
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -438,50 +452,85 @@ public class Log4JQuickConfig extends JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void cmdConfigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdConfigActionPerformed
-        final Properties p = new Properties();
-        p.put("log4j.appender.Remote", "org.apache.log4j.net.SocketAppender");    // NOI18N
-        p.put("log4j.appender.Remote.remoteHost", txtHost.getText());             // NOI18N
-        p.put("log4j.appender.Remote.port", txtPort.getText());                   // NOI18N
-        p.put("log4j.appender.Remote.locationInfo", "true");                      // NOI18N
+        // remove all old appenders
+        LoggerContext ctx = (LoggerContext)LogManager.getContext(false);
+        final Configuration config = ctx.getConfiguration();
 
-        p.put("log4j.appender.File", "org.apache.log4j.FileAppender");      // NOI18N
-        p.put("log4j.appender.File.file", txtFile.getText());               // NOI18N
-        p.put("log4j.appender.File.layout", "org.apache.log4j.HTMLLayout"); // NOI18N
-        p.put("log4j.appender.File.append", "true");                        // NOI18N
+        // Remove all appenders
+        for (final Appender appender : config.getAppenders().values()) {
+            ctx.getLogger("root").removeAppender(appender);
+        }
 
-        p.put("log4j.appender.cismetConsole", "org.apache.log4j.ConsoleAppender");          // NOI18N
-        p.put("log4j.appender.cismetConsole.layout", "org.apache.log4j.PatternLayout");     // NOI18N
-        p.put("log4j.appender.cismetConsole.layout.ConversionPattern", "%-5p [%t] - %m%n"); // NOI18N
+        // Reconfigure Log4j2 to apply changes
+        ctx.updateLoggers();
 
-        String level = "DEBUG";         // NOI18N
-        String target = "";             // NOI18N
-        if (chkSockets.isSelected()) {
-            target += "Remote,";        // NOI18N
-        }
-        if (chkFile.isSelected()) {
-            target += "File,";          // NOI18N
-        }
-        if (chkConsole.isSelected()) {
-            target += "cismetConsole,"; // NOI18N
-        }
-        target = target.substring(0, target.length() - 1);
+        // add new appenders
+        Level level = Level.DEBUG;
 
         if (rdbInfo.isSelected()) {
-            level = "INFO";     // NOI18N
+            level = Level.INFO;
         } else if (rdbWarn.isSelected()) {
-            level = "WARN";     // NOI18N
+            level = Level.WARN;
         } else if (rdbError.isSelected()) {
-            level = "ERROR";    // NOI18N
+            level = Level.ERROR;
         } else if (rdbFatal.isSelected()) {
-            level = "FATAL";    // NOI18N
+            level = Level.FATAL;
         } else if (rdbDisable.isSelected()) {
-            level = "DISABLED"; // NOI18N
+            level = Level.OFF;
         }
 
-        p.put("log4j.rootLogger", level + "," + target); // NOI18N
-        org.apache.log4j.PropertyConfigurator.configure(p);
+        final ConfigurationBuilder<?> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
+
+        // Define appenders
+        if (chkSockets.isSelected()) {
+            final AppenderComponentBuilder socketAppender = builder.newAppender("Remote", "Socket")
+                        .addAttribute("host", txtHost.getText())
+                        .addAttribute("port", Integer.parseInt(txtPort.getText()));
+            socketAppender.add(builder.newLayout("JsonLayout"));
+            builder.add(socketAppender);
+        }
+
+        if (chkFile.isSelected()) {
+            final AppenderComponentBuilder fileAppender = builder.newAppender("File", "File")
+                        .addAttribute("fileName", txtFile.getText())
+                        .addAttribute("append", true);
+            fileAppender.add(builder.newLayout("HtmlLayout"));
+            builder.add(fileAppender);
+        }
+
+        if (chkConsole.isSelected()) {
+            final AppenderComponentBuilder consoleAppender = builder.newAppender("Console", "Console");
+            consoleAppender.add(builder.newLayout("PatternLayout").addAttribute(
+                    "pattern",
+                    "[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5level %logger{36} - %msg%n"));
+            builder.add(consoleAppender);
+        }
+
+        // Configure Root Logger
+        final RootLoggerComponentBuilder rootLogger = builder.newRootLogger(level);
+
+        // Define appenders
+        if (chkSockets.isSelected()) {
+            rootLogger.add(builder.newAppenderRef("Remote"));
+        }
+
+        if (chkFile.isSelected()) {
+            rootLogger.add(builder.newAppenderRef("File"));
+        }
+
+        if (chkConsole.isSelected()) {
+            rootLogger.add(builder.newAppenderRef("Console"));
+        }
+
+        builder.add(rootLogger);
+
+        // Apply Configuration
+        ctx = (LoggerContext)LogManager.getContext(false);
+        final Configuration conf = builder.build();
+        ctx.start(conf);
+
         this.hide();
-    }                                                    //GEN-LAST:event_cmdConfigActionPerformed
+    } //GEN-LAST:event_cmdConfigActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -579,12 +628,26 @@ public class Log4JQuickConfig extends JDialog {
      * @param  level  DOCUMENT ME!
      */
     public static void configure4LumbermillOn(final String host, final int port, final String level) {
-        final Properties p = new Properties();
-        p.put("log4j.appender.Remote", "org.apache.log4j.net.SocketAppender");
-        p.put("log4j.appender.Remote.remoteHost", host);
-        p.put("log4j.appender.Remote.port", Integer.toString(port));
-        p.put("log4j.appender.Remote.locationInfo", "true");
-        p.put("log4j.rootLogger", level + ",Remote");
-        org.apache.log4j.PropertyConfigurator.configure(p);
+        final ConfigurationBuilder<BuiltConfiguration> builder = new DefaultConfigurationBuilder<>();
+
+        builder.setStatusLevel(Level.WARN);
+        builder.setConfigurationName("DynamicConfig");
+
+        // Define appenders
+        final AppenderComponentBuilder socketAppender = builder.newAppender("Remote", "Socket")
+                    .addAttribute("host", host)
+                    .addAttribute("port", port);
+        socketAppender.add(builder.newLayout("JsonLayout"));
+        builder.add(socketAppender);
+
+        // Define root logger
+        final RootLoggerComponentBuilder rootLogger = builder.newRootLogger(level);
+
+        builder.add(rootLogger);
+
+        // Build and apply the configuration
+        final LoggerContext ctx = (LoggerContext)LogManager.getContext(false);
+        final Configuration conf = builder.build();
+        ctx.start(conf);
     }
 }

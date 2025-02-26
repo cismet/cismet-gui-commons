@@ -7,7 +7,7 @@
 ****************************************************/
 package de.cismet.tools.gui;
 
-import java.util.Properties;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 
 /**
  * DOCUMENT ME!
@@ -193,20 +193,12 @@ public class NewJFrame extends javax.swing.JFrame {
      * DOCUMENT ME!
      */
     private void configLog4J() {
-        final Properties p = new Properties();
-        p.put("log4j.appender.Remote", "org.apache.log4j.net.SocketAppender"); // NOI18N
-        p.put("log4j.appender.Remote.remoteHost", "localhost");                // NOI18N
-        p.put("log4j.appender.Remote.port", "4445");                           // NOI18N
-        p.put("log4j.appender.Remote.locationInfo", "true");                   // NOI18N
-
         if (cbxDebug.isSelected()) {
-            p.put("log4j.rootLogger", "DEBUG,Remote"); // NOI18N
+            Log4JQuickConfig.configure4LumbermillOnLocalhost("DEBUG");
         } else if (cbxError.isSelected()) {
-            p.put("log4j.rootLogger", "ERROR,Remote"); // NOI18N
+            Log4JQuickConfig.configure4LumbermillOnLocalhost("ERROR");
         } else {
-            p.put("log4j.rootLogger", "DEBUG,Remote"); // NOI18N
-            p.put("log4j.rootLogger", "FATAL,Remote"); // NOI18N
+            Log4JQuickConfig.configure4LumbermillOnLocalhost("DEBUG");
         }
-        org.apache.log4j.PropertyConfigurator.configure(p);
     }
 }

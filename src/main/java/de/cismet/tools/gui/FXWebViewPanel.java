@@ -58,6 +58,8 @@ public class FXWebViewPanel extends JFXPanel {
     protected WebEngine webEng = null;
     protected WebView webView;
     protected Scene scene;
+    private String lastUrl = null;
+    private String lastContent = null;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -212,11 +214,44 @@ public class FXWebViewPanel extends JFXPanel {
             LOG.warn("JavaFX WebEnginge is not initialized. can not load url: " + url);
             return;
         }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("FXWebViewPanel: load url" + String.valueOf(url));
+        }
         Platform.runLater(new Runnable() {
 
                 @Override
                 public void run() {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("FXWebViewPanel: load url in runLater: " + String.valueOf(url));
+                    }
+                    lastContent = null;
+                    lastUrl = url;
                     webEng.load(url);
+                }
+            });
+    }
+
+    /**
+     * DOCUMENT ME!
+     */
+    public void refresh() {
+        Platform.runLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("FXWebViewPanel: reload url in runLater:");
+                    }
+                    webEng.getLoadWorker().cancel();
+                    webEng.load("about:blank");
+                    webEng.reload();
+
+                    if (lastUrl != null) {
+                        webEng.load(lastUrl);
+                    }
+                    if (lastContent != null) {
+                        webEng.loadContent(lastContent);
+                    }
                 }
             });
     }
@@ -232,6 +267,8 @@ public class FXWebViewPanel extends JFXPanel {
                 @Override
                 public void run() {
                     try {
+                        lastContent = htmlContent;
+                        lastUrl = null;
                         webEng.loadContent(htmlContent);
                         webEng.setJavaScriptEnabled(true);
                     } catch (Exception e) {

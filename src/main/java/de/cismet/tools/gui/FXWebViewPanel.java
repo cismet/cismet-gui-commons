@@ -240,11 +240,13 @@ public class FXWebViewPanel extends JFXPanel {
                 @Override
                 public void run() {
                     if (LOG.isDebugEnabled()) {
-                        LOG.debug("FXWebViewPanel: reload url in runLater:");
+                        LOG.warn("FXWebViewPanel: reload url in runLater");
                     }
-                    webEng.getLoadWorker().cancel();
-                    webEng.load("about:blank");
-                    webEng.reload();
+                    scene = createBrowserScene();
+                    FXWebViewPanel.this.setScene(scene);
+//                    webEng.getLoadWorker().cancel();
+//                    webEng.load("about:blank");
+//                    webEng.reload();
 
                     if (lastUrl != null) {
                         webEng.load(lastUrl);

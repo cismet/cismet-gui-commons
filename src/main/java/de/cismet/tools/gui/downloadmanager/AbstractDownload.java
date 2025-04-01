@@ -64,10 +64,10 @@ public abstract class AbstractDownload extends Observable implements Download, R
         final int initialParallelDownloads = (DownloadManager.instance().getParallelDownloads() == 0)
             ? 10 : DownloadManager.instance().getParallelDownloads();
         final ThreadGroup threadGroup = new ThreadGroup(parent, "DownloadThreadPool");
-        downloadThreadPool = CismetExecutors.newCachedLimitedThreadPool(
-                initialParallelDownloads,
-                new CismetThreadFactory(threadGroup, "DownloadThreadPool", null),
-                new DownloadRejectExecutionHandler());
+        downloadThreadPool = CismetExecutors.newCachedThreadPool(new CismetThreadFactory(
+                    threadGroup,
+                    "DownloadThreadPool",
+                    null));
     }
 
     protected static final Logger log = Logger.getLogger(AbstractDownload.class);

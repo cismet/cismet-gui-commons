@@ -27,6 +27,8 @@ import java.util.prefs.Preferences;
 
 import javax.swing.JFrame;
 
+import de.cismet.tools.gui.DialogOpenedEvent;
+import de.cismet.tools.gui.DialogSupport;
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -185,6 +187,9 @@ public abstract class PasswordDialog extends LoginService {
         }
         login.setVisible(true);
         dialog.setAlwaysOnTop(true);
+        dialog.toFront();
+        dialog.setAlwaysOnTop(false);
+        DialogSupport.fireNewDialogOpened(new DialogOpenedEvent(dialog));
         dialog.setVisible(true);
 
         if (!isAuthenticationDone) {

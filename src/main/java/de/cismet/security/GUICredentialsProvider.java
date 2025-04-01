@@ -45,6 +45,8 @@ import javax.swing.JFrame;
 import de.cismet.netutil.Proxy;
 import de.cismet.netutil.ProxyHandler;
 
+import de.cismet.tools.gui.DialogOpenedEvent;
+import de.cismet.tools.gui.DialogSupport;
 import de.cismet.tools.gui.StaticSwingTools;
 
 /**
@@ -277,6 +279,9 @@ public class GUICredentialsProvider extends LoginService implements CredentialsP
             }
 
             dialog.setAlwaysOnTop(true);
+            dialog.toFront();
+            dialog.setAlwaysOnTop(false);
+            DialogSupport.fireNewDialogOpened(new DialogOpenedEvent(dialog));
             dialog.setVisible(true);
 //                    }
 //                });

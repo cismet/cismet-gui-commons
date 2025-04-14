@@ -37,8 +37,6 @@ import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.html.HTMLAnchorElement;
 
-import java.awt.EventQueue;
-
 import de.cismet.tools.BrowserLauncher;
 
 /**
@@ -224,6 +222,8 @@ public class FXWebViewPanel extends JFXPanel {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("FXWebViewPanel: load url in runLater: " + String.valueOf(url));
                     }
+                    scene = createBrowserScene();
+                    FXWebViewPanel.this.setScene(scene);
                     lastContent = null;
                     lastUrl = url;
                     webEng.load(url);
@@ -244,9 +244,6 @@ public class FXWebViewPanel extends JFXPanel {
                     }
                     scene = createBrowserScene();
                     FXWebViewPanel.this.setScene(scene);
-//                    webEng.getLoadWorker().cancel();
-//                    webEng.load("about:blank");
-//                    webEng.reload();
 
                     if (lastUrl != null) {
                         webEng.load(lastUrl);
@@ -269,6 +266,8 @@ public class FXWebViewPanel extends JFXPanel {
                 @Override
                 public void run() {
                     try {
+                        scene = createBrowserScene();
+                        FXWebViewPanel.this.setScene(scene);
                         lastContent = htmlContent;
                         lastUrl = null;
                         webEng.loadContent(htmlContent);

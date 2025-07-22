@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.Collection;
@@ -74,6 +75,7 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
     private static final ReentrantReadWriteLock reLock = new ReentrantReadWriteLock();
     private static final Lock readLock = reLock.readLock();
     private static final Lock writeLock = reLock.writeLock();
+    private static String jws;
 
     //~ Instance fields --------------------------------------------------------
 
@@ -256,6 +258,15 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
         if (instance == null) {
             instance = new WebAccessManager();
         }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  jws  DOCUMENT ME!
+     */
+    public static void setJwsToken(final String jws) {
+        WebAccessManager.jws = jws;
     }
 
     /**
@@ -542,7 +553,7 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
                         LOG.debug("Handler supports access method '" + accessMethod + "'."); // NOI18N
                     }
 
-                    return handler.doRequest(url, requestParameter, accessMethod, options);
+                    return handler.doRequest(getUrlWithCredentials(url), requestParameter, accessMethod, options);
                 } else {
                     throw new AccessMethodIsNotSupportedException("The access method '" + accessMethod
                                 + "' is not supported by handler '" // NOI18N
@@ -555,7 +566,10 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
                 }
 
                 if (defaultHandler != null) {
-                    return defaultHandler.doRequest(url, requestParameter, accessMethod, options);
+                    return defaultHandler.doRequest(getUrlWithCredentials(url),
+                            requestParameter,
+                            accessMethod,
+                            options);
                 } else {
                     throw new NoHandlerForURLException("No default handler available."); // NOI18N
                 }
@@ -566,6 +580,25 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
             }
 
             readLock.unlock();
+        }
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private URL getUrlWithCredentials(final URL url) {
+        if (jws != null) {
+            try {
+                return new URL(url.toString().replace("$(user-jwt)", jws));
+            } catch (MalformedURLException e) {
+                return url;
+            }
+        } else {
+            return url;
         }
     }
 
@@ -601,7 +634,7 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
                         LOG.debug("Handler supports access method + '" + ACCESS_METHODS.POST_REQUEST + "'."); // NOI18N
                     }
 
-                    return handler.doRequest(url, requestParameter, options);
+                    return handler.doRequest(getUrlWithCredentials(url), requestParameter, options);
                 } else {
                     throw new AccessMethodIsNotSupportedException("The access method '" + ACCESS_METHODS.POST_REQUEST
                                 + "' is not supported by handler '" // NOI18N
@@ -615,7 +648,7 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
                 }
 
                 if (defaultHandler != null) {
-                    return defaultHandler.doRequest(url, requestParameter, options);
+                    return defaultHandler.doRequest(getUrlWithCredentials(url), requestParameter, options);
                 } else {
                     throw new NoHandlerForURLException("No default handler available."); // NOI18N
                 }

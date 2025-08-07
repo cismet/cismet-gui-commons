@@ -44,6 +44,7 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
     private String continueButtonText;
     private String exitButtonText;
     private Integer contentWidth;
+    private ContinueOrExitDialogAction action;
 
     private boolean showContinueButton = true;
     private boolean showExitButton = true;
@@ -91,6 +92,36 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
     /**
      * Creates a new ContinueOrExitDialog object.
      *
+     * @param  action  DOCUMENT ME!
+     */
+    public ContinueOrExitDialog(final ContinueOrExitDialogAction action) {
+        this((Frame)null, action);
+    }
+
+    /**
+     * Creates a new ContinueOrExitDialog object.
+     *
+     * @param  component  DOCUMENT ME!
+     * @param  action     DOCUMENT ME!
+     */
+    public ContinueOrExitDialog(final Component component, final ContinueOrExitDialogAction action) {
+        this((Frame)StaticSwingTools.getParentFrame(component), action);
+    }
+
+    /**
+     * Creates a new ContinueOrExitDialog object.
+     *
+     * @param  parent  DOCUMENT ME!
+     * @param  action  DOCUMENT ME!
+     */
+    public ContinueOrExitDialog(final Frame parent, final ContinueOrExitDialogAction action) {
+        super(parent, true);
+        this.action = action;
+    }
+
+    /**
+     * Creates a new ContinueOrExitDialog object.
+     *
      * @param  parent              DOCUMENT ME!
      * @param  contentTitle        DOCUMENT ME!
      * @param  content             DOCUMENT ME!
@@ -128,6 +159,30 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
         setContent(content);
         setContinueButtonText(continueButtonText);
         setExitButtonText(exitButtonText);
+    }
+
+    /**
+     * Creates a new ContinueOrExitDialog object.
+     *
+     * @param  parent              DOCUMENT ME!
+     * @param  contentTitle        DOCUMENT ME!
+     * @param  content             DOCUMENT ME!
+     * @param  continueButtonText  DOCUMENT ME!
+     * @param  exitButtonText      DOCUMENT ME!
+     * @param  action              DOCUMENT ME!
+     */
+    public ContinueOrExitDialog(final Frame parent,
+            final String contentTitle,
+            final String content,
+            final String continueButtonText,
+            final String exitButtonText,
+            final ContinueOrExitDialogAction action) {
+        this(parent);
+        setContentTitle(contentTitle);
+        setContent(content);
+        setContinueButtonText(continueButtonText);
+        setExitButtonText(exitButtonText);
+        setAction(action);
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -248,7 +303,13 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void btnExitActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnExitActionPerformed
-        doExit();
+        if (action != null) {
+            action.actionPerformed(new ContinueOrExitDialogActionEvent(
+                    this,
+                    ContinueOrExitDialogActionEvent.Action.EXIT_ACTION));
+        } else {
+            doExit();
+        }
     }                                                                           //GEN-LAST:event_btnExitActionPerformed
 
     /**
@@ -257,7 +318,13 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void btnContinueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnContinueActionPerformed
-        doContinue();
+        if (action != null) {
+            action.actionPerformed(new ContinueOrExitDialogActionEvent(
+                    this,
+                    ContinueOrExitDialogActionEvent.Action.CONTINUE_ACTION));
+        } else {
+            doContinue();
+        }
     }                                                                               //GEN-LAST:event_btnContinueActionPerformed
 
     /**

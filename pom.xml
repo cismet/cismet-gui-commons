@@ -206,7 +206,7 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>1.8.5</version>
+            <version>2.4.4</version>
         </dependency>
         <!-- groovy unmodelled dependencies end -->
         <dependency>
@@ -222,7 +222,7 @@
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
-            <version>3.3</version>
+            <version>3.9.0</version>
             <classifier>ftp</classifier>
         </dependency>
         <dependency>

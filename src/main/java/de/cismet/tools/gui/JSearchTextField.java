@@ -1,14 +1,11 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -22,10 +19,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-
 import javax.swing.Icon;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * DOCUMENT ME!
@@ -42,9 +40,17 @@ public class JSearchTextField extends JTextField {
 
     //~ Instance fields --------------------------------------------------------
 
-    @Getter @Setter private String emptyText;
-    @Getter @Setter private Icon searchIcon;
-    @Getter @Setter private Icon abortIcon;
+    @Getter
+    @Setter
+    private String emptyText;
+
+    @Getter
+    @Setter
+    private Icon searchIcon;
+
+    @Getter
+    @Setter
+    private Icon abortIcon;
 
     //~ Constructors -----------------------------------------------------------
 
@@ -57,54 +63,57 @@ public class JSearchTextField extends JTextField {
 
         this.emptyText = "";
 
-        this.addMouseListener(new MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final MouseEvent e) {
-                    if (searchIcon != null) {
-                        final int mouseX = e.getX();
-                        if (mouseX < (getMargin().left)) {
-                            fireActionPerformed();
+        this.addMouseListener(
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(final MouseEvent e) {
+                        if (searchIcon != null) {
+                            final int mouseX = e.getX();
+                            if (mouseX < (getMargin().left)) {
+                                fireActionPerformed();
+                            }
+                        }
+                        if (abortIcon != null) {
+                            final int mouseX = e.getX();
+                            if (mouseX > (getWidth() - getMargin().right)) {
+                                setText("");
+                            }
                         }
                     }
-                    if (abortIcon != null) {
-                        final int mouseX = e.getX();
-                        if (mouseX > (getWidth() - getMargin().right)) {
+                }
+            );
+        this.addMouseMotionListener(
+                new MouseMotionAdapter() {
+                    @Override
+                    public void mouseMoved(final MouseEvent e) {
+                        if (searchIcon != null) {
+                            final int mouseX = e.getX();
+                            if (mouseX < (getMargin().left)) {
+                                setCursor(new Cursor(Cursor.HAND_CURSOR));
+                                return;
+                            }
+                        }
+                        if ((abortIcon != null) && !getText().isEmpty()) {
+                            final int mouseX = e.getX();
+                            if (mouseX > (getWidth() - getMargin().right)) {
+                                setCursor(new Cursor(Cursor.HAND_CURSOR));
+                                return;
+                            }
+                        }
+                        setCursor(new Cursor(Cursor.TEXT_CURSOR));
+                    }
+                }
+            );
+        this.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyPressed(final KeyEvent e) {
+                        if (KeyEvent.VK_ESCAPE == e.getExtendedKeyCode()) {
                             setText("");
                         }
                     }
                 }
-            });
-        this.addMouseMotionListener(new MouseMotionAdapter() {
-
-                @Override
-                public void mouseMoved(final MouseEvent e) {
-                    if (searchIcon != null) {
-                        final int mouseX = e.getX();
-                        if (mouseX < (getMargin().left)) {
-                            setCursor(new Cursor(Cursor.HAND_CURSOR));
-                            return;
-                        }
-                    }
-                    if ((abortIcon != null) && !getText().isEmpty()) {
-                        final int mouseX = e.getX();
-                        if (mouseX > (getWidth() - getMargin().right)) {
-                            setCursor(new Cursor(Cursor.HAND_CURSOR));
-                            return;
-                        }
-                    }
-                    setCursor(new Cursor(Cursor.TEXT_CURSOR));
-                }
-            });
-        this.addKeyListener(new KeyAdapter() {
-
-                @Override
-                public void keyPressed(final KeyEvent e) {
-                    if (KeyEvent.VK_ESCAPE == e.getExtendedKeyCode()) {
-                        setText("");
-                    }
-                }
-            });
+            );
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -140,7 +149,7 @@ public class JSearchTextField extends JTextField {
         setMargin(margin);
 
         if ((getText() == null) || getText().isEmpty()) {
-            final Graphics2D g2d = (Graphics2D)g;
+            final Graphics2D g2d = (Graphics2D) g;
 
             final Font font = g2d.getFont();
             final Color color = g2d.getColor();

@@ -1,21 +1,19 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
@@ -73,7 +71,7 @@ public class DefaultPopupMenuListener extends MouseAdapter {
         if (e.isPopupTrigger()) {
             try {
                 if (e.getSource() instanceof JTree) {
-                    final JTree currentTree = (JTree)e.getSource();
+                    final JTree currentTree = (JTree) e.getSource();
                     final TreePath[] paths = currentTree.getSelectionPaths();
                     final List<TreePath> pathList = new ArrayList<TreePath>();
 
@@ -102,16 +100,16 @@ public class DefaultPopupMenuListener extends MouseAdapter {
 
             if (!clickOnTreePath(e) && !e.isControlDown() && !e.isShiftDown()) {
                 if (e.getSource() instanceof JTree) {
-                    final JTree currentTree = (JTree)e.getSource();
+                    final JTree currentTree = (JTree) e.getSource();
                     currentTree.clearSelection();
                 }
             }
 
-            popupMenu.show((Component)e.getSource(), e.getX(), e.getY());
+            popupMenu.show((Component) e.getSource(), e.getX(), e.getY());
         } else if ((e.getButton() == MouseEvent.BUTTON1) && !e.isControlDown() && !e.isShiftDown()) {
             if (e.getSource() instanceof JTree) {
                 if (!clickOnTreePath(e)) {
-                    final JTree currentTree = (JTree)e.getSource();
+                    final JTree currentTree = (JTree) e.getSource();
                     currentTree.clearSelection();
                 }
             }
@@ -127,17 +125,17 @@ public class DefaultPopupMenuListener extends MouseAdapter {
      */
     private boolean clickOnTreePath(final MouseEvent e) {
         if (e.getSource() instanceof JTree) {
-            final JTree currentTree = (JTree)e.getSource();
+            final JTree currentTree = (JTree) e.getSource();
             final TreePath tp = currentTree.getClosestPathForLocation(e.getX(), e.getY());
 
             if (tp != null) {
                 final Rectangle bounds = currentTree.getPathBounds(tp);
                 final int x = e.getX();
                 final int y = e.getY();
-                final int x1 = (int)bounds.getX();
-                final int x2 = (int)(bounds.getX() + bounds.getWidth());
-                final int y1 = (int)bounds.getY();
-                final int y2 = (int)(bounds.getY() + bounds.getHeight());
+                final int x1 = (int) bounds.getX();
+                final int x2 = (int) (bounds.getX() + bounds.getWidth());
+                final int y1 = (int) bounds.getY();
+                final int y2 = (int) (bounds.getY() + bounds.getHeight());
 
                 return ((x >= x1) && (x <= x2)) && ((y >= y1) && (y <= y2));
             }

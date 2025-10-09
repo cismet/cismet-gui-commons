@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * DownloadManagerDialog.java
  *
@@ -12,25 +12,18 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import org.apache.log4j.Logger;
-
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
-
-import org.openide.util.NbBundle;
-
+import de.cismet.tools.BrowserLauncher;
+import de.cismet.tools.gui.StaticSwingTools;
+import de.cismet.tools.gui.downloadmanager.Download.State;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Frame;
-
 import java.io.File;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
-
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -38,11 +31,10 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
-
-import de.cismet.tools.BrowserLauncher;
-
-import de.cismet.tools.gui.StaticSwingTools;
-import de.cismet.tools.gui.downloadmanager.Download.State;
+import org.apache.log4j.Logger;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
+import org.openide.util.NbBundle;
 
 /**
  * This dialog contains a DownloadManagerPanel to visualise the list of current downloads. Additionally there are
@@ -94,6 +86,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
     private javax.swing.JSeparator sepJobnameControls;
     private javax.swing.JTextField txtJobname;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -102,13 +95,12 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
      * Creates new form DownloadManagerDialog.
      */
     private DownloadManagerDialog() {
-        super((Frame)null, false);
-
+        super((Frame) null, false);
         initComponents();
 
         bindingGroup.unbind();
         if (txtJobname.getDocument() instanceof AbstractDocument) {
-            ((AbstractDocument)txtJobname.getDocument()).setDocumentFilter(new UserDirectoryFilter());
+            ((AbstractDocument) txtJobname.getDocument()).setDocumentFilter(new UserDirectoryFilter());
         }
         bindingGroup.bind();
 
@@ -202,7 +194,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
      * @return  DOCUMENT ME!
      */
     public boolean showAskingForUserTitleDialog(final Component parent) {
-        final Frame parentFrame = (parent instanceof Frame) ? (Frame)parent : StaticSwingTools.getParentFrame(parent);
+        final Frame parentFrame = (parent instanceof Frame) ? (Frame) parent : StaticSwingTools.getParentFrame(parent);
 
         final boolean close = !isVisible();
         show(parentFrame);
@@ -282,15 +274,17 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         } else {
             final Exception ex = download.getCaughtException();
             final org.jdesktop.swingx.error.ErrorInfo ei = new ErrorInfo(
-                    NbBundle.getMessage(
-                        DownloadPanel.class,
-                        "DownloadManagerDialog.showExceptionDialog(Download).error.title"),
-                    ex.getMessage(),
-                    null,
-                    null,
-                    ex,
-                    Level.ALL,
-                    null);
+                NbBundle.getMessage(
+                    DownloadPanel.class,
+                    "DownloadManagerDialog.showExceptionDialog(Download).error.title"
+                ),
+                ex.getMessage(),
+                null,
+                null,
+                ex,
+                Level.ALL,
+                null
+            );
             JXErrorPane.showDialog(StaticSwingTools.getParentFrameIfNotNull(this), ei);
         }
     }
@@ -309,13 +303,14 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
      */
     public void closeWindow() {
         if (!SwingUtilities.isEventDispatchThread()) {
-            SwingUtilities.invokeLater(new Runnable() {
-
+            SwingUtilities.invokeLater(
+                new Runnable() {
                     @Override
                     public void run() {
                         closeWindow();
                     }
-                });
+                }
+            );
         } else {
             if (dlgJobname.isVisible() || dlgExceptionDialog.isVisible()) {
                 closeMainDialogAfterClosingSubDialog = true;
@@ -466,20 +461,23 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         btnClearList = new javax.swing.JButton();
         lblDownloadsTotalKey = new javax.swing.JLabel();
         lblDownloadsTotalValue = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        filler1 =
+            new javax.swing.Box.Filler(
                 new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 32767));
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767)
+            );
 
-        dlgJobname.setTitle(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.dlgJobname.title")); // NOI18N
+        dlgJobname.setTitle(
+            org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.dlgJobname.title")
+        ); // NOI18N
         dlgJobname.setMinimumSize(new java.awt.Dimension(400, 180));
         dlgJobname.setModal(true);
         dlgJobname.getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        lblJobname.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.lblJobname.text")); // NOI18N
+        lblJobname.setText(
+            org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.lblJobname.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -489,16 +487,17 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         dlgJobname.getContentPane().add(lblJobname, gridBagConstraints);
 
-        txtJobname.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.txtJobname.text")); // NOI18N
-        txtJobname.addActionListener(new java.awt.event.ActionListener() {
-
+        txtJobname.setText(
+            org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.txtJobname.text")
+        ); // NOI18N
+        txtJobname.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     txtJobnameActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -511,28 +510,30 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
 
         pnlJobnameControls.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.TRAILING));
 
-        btnOK.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.btnOK.text")); // NOI18N
-        btnOK.addActionListener(new java.awt.event.ActionListener() {
-
+        btnOK.setText(
+            org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.btnOK.text")
+        ); // NOI18N
+        btnOK.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnOKActionPerformed(evt);
                 }
-            });
+            }
+        );
         pnlJobnameControls.add(btnOK);
 
-        btnCancel.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.btnCancel.text")); // NOI18N
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-
+        btnCancel.setText(
+            org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.btnCancel.text")
+        ); // NOI18N
+        btnCancel.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnCancelActionPerformed(evt);
                 }
-            });
+            }
+        );
         pnlJobnameControls.add(btnCancel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -553,8 +554,9 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         dlgJobname.getContentPane().add(sepJobnameControls, gridBagConstraints);
 
-        lblDestinationDirectory.setText(DownloadManager.instance().getDestinationDirectory().getAbsolutePath()
-                    + File.separator);
+        lblDestinationDirectory.setText(
+            DownloadManager.instance().getDestinationDirectory().getAbsolutePath() + File.separator
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -564,11 +566,12 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         dlgJobname.getContentPane().add(lblDestinationDirectory, gridBagConstraints);
 
         final org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
-                txtJobname,
-                org.jdesktop.beansbinding.ELProperty.create("${text}"),
-                lblUserDirectory,
-                org.jdesktop.beansbinding.BeanProperty.create("text"));
+            org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ,
+            txtJobname,
+            org.jdesktop.beansbinding.ELProperty.create("${text}"),
+            lblUserDirectory,
+            org.jdesktop.beansbinding.BeanProperty.create("text")
+        );
         binding.setSourceNullValue("Nothing entered");
         binding.setSourceUnreadableValue("Unreadable");
         bindingGroup.addBinding(binding);
@@ -582,9 +585,12 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
         dlgJobname.getContentPane().add(lblUserDirectory, gridBagConstraints);
 
-        lblUserDirectoryLabel.setText(org.openide.util.NbBundle.getMessage(
+        lblUserDirectoryLabel.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerDialog.class,
-                "DownloadManagerDialog.lblUserDirectoryLabel.text")); // NOI18N
+                "DownloadManagerDialog.lblUserDirectoryLabel.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -594,9 +600,12 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         dlgJobname.getContentPane().add(lblUserDirectoryLabel, gridBagConstraints);
 
-        dlgExceptionDialog.setTitle(org.openide.util.NbBundle.getMessage(
+        dlgExceptionDialog.setTitle(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerDialog.class,
-                "DownloadManagerDialog.dlgExceptionDialog.title")); // NOI18N
+                "DownloadManagerDialog.dlgExceptionDialog.title"
+            )
+        ); // NOI18N
         dlgExceptionDialog.setModal(true);
         dlgExceptionDialog.getContentPane().setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -616,16 +625,17 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         gridBagConstraints.weighty = 0.1;
         dlgExceptionDialog.getContentPane().add(pnlExceptionDialogContainer, gridBagConstraints);
 
-        btnClose.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.btnClose.text")); // NOI18N
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-
+        btnClose.setText(
+            org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.btnClose.text")
+        ); // NOI18N
+        btnClose.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnCloseActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -656,38 +666,47 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
 
         pnlControls.setLayout(new java.awt.GridBagLayout());
 
-        btnClearList.setMnemonic(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.btnClearList.mnemonic").charAt(0));
-        btnClearList.setText(org.openide.util.NbBundle.getMessage(
-                DownloadManagerDialog.class,
-                "DownloadManagerDialog.btnClearList.text")); // NOI18N
+        btnClearList.setMnemonic(
+            org.openide.util.NbBundle
+                .getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.btnClearList.mnemonic")
+                .charAt(0)
+        );
+        btnClearList.setText(
+            org.openide.util.NbBundle.getMessage(DownloadManagerDialog.class, "DownloadManagerDialog.btnClearList.text")
+        ); // NOI18N
         btnClearList.setEnabled(false);
         btnClearList.setFocusPainted(false);
-        btnClearList.addActionListener(new java.awt.event.ActionListener() {
-
+        btnClearList.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnClearListActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControls.add(btnClearList, gridBagConstraints);
 
-        lblDownloadsTotalKey.setText(org.openide.util.NbBundle.getMessage(
+        lblDownloadsTotalKey.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerDialog.class,
-                "DownloadManagerDialog.lblDownloadsTotalKey.text")); // NOI18N
+                "DownloadManagerDialog.lblDownloadsTotalKey.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlControls.add(lblDownloadsTotalKey, gridBagConstraints);
 
         lblDownloadsTotalValue.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        lblDownloadsTotalValue.setText(org.openide.util.NbBundle.getMessage(
+        lblDownloadsTotalValue.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerDialog.class,
-                "DownloadManagerDialog.lblDownloadsTotalValue.text")); // NOI18N
+                "DownloadManagerDialog.lblDownloadsTotalValue.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.ipadx = 20;
@@ -717,7 +736,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
      */
     private void btnClearListActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnClearListActionPerformed
         DownloadManager.instance().removeObsoleteDownloads();
-    }                                                                                //GEN-LAST:event_btnClearListActionPerformed
+    } //GEN-LAST:event_btnClearListActionPerformed
 
     /**
      * An action listener.
@@ -737,7 +756,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         if (closeMainDialogAfterClosingSubDialog) {
             closeWindow();
         }
-    }                                                                         //GEN-LAST:event_btnOKActionPerformed
+    } //GEN-LAST:event_btnOKActionPerformed
 
     /**
      * An action listener.
@@ -751,7 +770,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         if (closeMainDialogAfterClosingSubDialog) {
             closeWindow();
         }
-    }                                                                              //GEN-LAST:event_txtJobnameActionPerformed
+    } //GEN-LAST:event_txtJobnameActionPerformed
 
     /**
      * An action listener.
@@ -764,7 +783,7 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         if (closeMainDialogAfterClosingSubDialog) {
             closeWindow();
         }
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    } //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -776,14 +795,15 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         if (closeMainDialogAfterClosingSubDialog) {
             closeWindow();
         }
-    }                                                                            //GEN-LAST:event_btnCloseActionPerformed
+    } //GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * DOCUMENT ME!
      */
     public void destinationDirectoryChanged() {
-        lblDestinationDirectory.setText(DownloadManager.instance().getDestinationDirectory().getAbsolutePath()
-                    + File.separator);
+        lblDestinationDirectory.setText(
+            DownloadManager.instance().getDestinationDirectory().getAbsolutePath() + File.separator
+        );
     }
 
     /**
@@ -894,52 +914,61 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         }
 
         switch (event.getAction()) {
-            case ADDED: {
-                final Collection<Download> downloads = event.getDownloads();
-                if (openAutomaticallyEnabled) {
-                    downloadsToOpen.addAll(downloads);
+            case ADDED:
+                {
+                    final Collection<Download> downloads = event.getDownloads();
+                    if (openAutomaticallyEnabled) {
+                        downloadsToOpen.addAll(downloads);
+                    }
                 }
-            }
-            case CHANGED_COUNTERS: {
-                final int countDownloadsErraneous = DownloadManager.instance().getCountDownloadsErroneous();
-                final int countDownloadsCompleted = DownloadManager.instance().getCountDownloadsCompleted();
-                final int countDownloadsCancelled = DownloadManager.instance().getCountDownloadsCancelled();
-                final int countDownloadsTotal = DownloadManager.instance().getCountDownloadsTotal();
+            case CHANGED_COUNTERS:
+                {
+                    final int countDownloadsErraneous = DownloadManager.instance().getCountDownloadsErroneous();
+                    final int countDownloadsCompleted = DownloadManager.instance().getCountDownloadsCompleted();
+                    final int countDownloadsCancelled = DownloadManager.instance().getCountDownloadsCancelled();
+                    final int countDownloadsTotal = DownloadManager.instance().getCountDownloadsTotal();
 
-                lblDownloadsTotalValue.setText(String.valueOf(countDownloadsTotal));
-                btnClearList.setEnabled((countDownloadsCompleted + countDownloadsErraneous + countDownloadsCancelled)
-                            > 0);
+                    lblDownloadsTotalValue.setText(String.valueOf(countDownloadsTotal));
+                    btnClearList.setEnabled(
+                        (countDownloadsCompleted + countDownloadsErraneous + countDownloadsCancelled) > 0
+                    );
 
-                if (openAutomaticallyEnabled) {
-                    final Iterator<Download> downloadToOpenIter = downloadsToOpen.iterator();
-                    while (downloadToOpenIter.hasNext()) {
-                        final Download downloadToOpen = downloadToOpenIter.next();
+                    if (openAutomaticallyEnabled) {
+                        final Iterator<Download> downloadToOpenIter = downloadsToOpen.iterator();
+                        while (downloadToOpenIter.hasNext()) {
+                            final Download downloadToOpen = downloadToOpenIter.next();
 
-                        if ((downloadToOpen != null)
-                                    && (downloadToOpen.getFileToSaveTo() != null)
-                                    && (downloadToOpen.getStatus() == State.COMPLETED)) {
-                            try {
-                                BrowserLauncher.openURLorFile(downloadToOpen.getFileToSaveTo().getAbsolutePath());
-                                downloadToOpenIter.remove();
-                            } catch (RuntimeException e) {
-                                downloadToOpenIter.remove();
-                                LOG.warn("Cannot open download");
+                            if (
+                                (downloadToOpen != null) &&
+                                (downloadToOpen.getFileToSaveTo() != null) &&
+                                (downloadToOpen.getStatus() == State.COMPLETED)
+                            ) {
+                                try {
+                                    BrowserLauncher.openURLorFile(downloadToOpen.getFileToSaveTo().getAbsolutePath());
+                                    downloadToOpenIter.remove();
+                                } catch (RuntimeException e) {
+                                    downloadToOpenIter.remove();
+                                    LOG.warn("Cannot open download");
+                                }
                             }
                         }
                     }
-                }
 
-                // The second condition ensures that the dialog isn't closed after the list was cleared
-                if (closeAutomaticallyEnabled && (countDownloadsTotal > 0)
-                            && (countDownloadsTotal == countDownloadsCompleted)) {
-                    closeWindow();
+                    // The second condition ensures that the dialog isn't closed after the list was cleared
+                    if (
+                        closeAutomaticallyEnabled &&
+                        (countDownloadsTotal > 0) &&
+                        (countDownloadsTotal == countDownloadsCompleted)
+                    ) {
+                        closeWindow();
+                    }
                 }
-            }
         }
     }
 
     //J-
     private class UserDirectoryFilter extends DocumentFilter {
+
         /*
          * Most filesystems allow all characters (except NUL) for filenames.
          * NTFS doesn't allow NUL \ / : * ? " < > |
@@ -948,7 +977,8 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         private static final String FILTER = "[^\u0000\\\\/:*?\"<>|]*";
 
         @Override
-        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+        public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+            throws BadLocationException {
             if (string != null && string.length() > 0) {
                 if (!string.matches(FILTER)) {
                     return;
@@ -959,7 +989,8 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
         }
 
         @Override
-        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+            throws BadLocationException {
             if (text != null && text.length() > 0) {
                 if (!text.matches(FILTER)) {
                     return;
@@ -968,7 +999,6 @@ public class DownloadManagerDialog extends javax.swing.JDialog implements Downlo
 
             super.replace(fb, offset, length, text, attrs);
         }
-
     }
     //J+
 }

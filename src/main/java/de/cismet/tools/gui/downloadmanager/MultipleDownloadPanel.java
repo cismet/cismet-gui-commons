@@ -1,20 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * MultipleDownloadPanel.java
  *
  * Created on 13.07.2011, 11:57:37
  */
 package de.cismet.tools.gui.downloadmanager;
-
-import org.apache.log4j.Logger;
-
-import org.openide.util.NbBundle;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -24,18 +20,18 @@ import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.SystemColor;
 import java.awt.geom.Path2D;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import org.apache.log4j.Logger;
+import org.openide.util.NbBundle;
 
 /**
  * A subclass of JPanel which visualises one MultipleDownload.
@@ -66,6 +62,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
     private javax.swing.JSeparator sepDownloadPanels;
     private javax.swing.JSeparator sepSingleDownloadsPanel;
     private javax.swing.JToggleButton tbtDownloads;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -105,35 +102,40 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         sepDownloadPanels = new javax.swing.JSeparator();
         tbtDownloads = new javax.swing.JToggleButton();
 
-        mniRemove.setText(org.openide.util.NbBundle.getMessage(
-                MultipleDownloadPanel.class,
-                "MultipleDownloadPanel.mniRemove.text")); // NOI18N
-        mniRemove.addActionListener(new java.awt.event.ActionListener() {
-
+        mniRemove.setText(
+            org.openide.util.NbBundle.getMessage(MultipleDownloadPanel.class, "MultipleDownloadPanel.mniRemove.text")
+        ); // NOI18N
+        mniRemove.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     mniRemoveActionPerformed(evt);
                 }
-            });
+            }
+        );
         popContextMenu.add(mniRemove);
 
         setComponentPopupMenu(popContextMenu);
         setMaximumSize(new java.awt.Dimension(2147483647, 54));
         setMinimumSize(new java.awt.Dimension(193, 54));
-        addMouseListener(new java.awt.event.MouseAdapter() {
-
+        addMouseListener(
+            new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(final java.awt.event.MouseEvent evt) {
                     formMouseClicked(evt);
                 }
-            });
+            }
+        );
         setLayout(new java.awt.GridBagLayout());
 
-        lblIcon.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/multiple_closed.png"))); // NOI18N
-        lblIcon.setText(org.openide.util.NbBundle.getMessage(
-                MultipleDownloadPanel.class,
-                "MultipleDownloadPanel.lblIcon.text"));                                                             // NOI18N
+        lblIcon.setIcon(
+            new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/multiple_closed.png")
+            )
+        ); // NOI18N
+        lblIcon.setText(
+            org.openide.util.NbBundle.getMessage(MultipleDownloadPanel.class, "MultipleDownloadPanel.lblIcon.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -148,9 +150,9 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         add(lblTitle, gridBagConstraints);
 
         lblMessage.setBackground(new java.awt.Color(255, 102, 0));
-        lblMessage.setText(org.openide.util.NbBundle.getMessage(
-                MultipleDownloadPanel.class,
-                "MultipleDownloadPanel.lblMessage.text")); // NOI18N
+        lblMessage.setText(
+            org.openide.util.NbBundle.getMessage(MultipleDownloadPanel.class, "MultipleDownloadPanel.lblMessage.text")
+        ); // NOI18N
         lblMessage.setMaximumSize(new java.awt.Dimension(32767, 15));
         lblMessage.setMinimumSize(new java.awt.Dimension(10, 15));
         lblMessage.setPreferredSize(new java.awt.Dimension(8, 15));
@@ -167,9 +169,12 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         prbProgress.setMaximumSize(new java.awt.Dimension(32767, 15));
         prbProgress.setMinimumSize(new java.awt.Dimension(10, 15));
         prbProgress.setPreferredSize(new java.awt.Dimension(146, 15));
-        prbProgress.setString(org.openide.util.NbBundle.getMessage(
+        prbProgress.setString(
+            org.openide.util.NbBundle.getMessage(
                 MultipleDownloadPanel.class,
-                "MultipleDownloadPanel.prbProgress.string")); // NOI18N
+                "MultipleDownloadPanel.prbProgress.string"
+            )
+        ); // NOI18N
         prbProgress.setStringPainted(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -187,23 +192,30 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         gridBagConstraints.weighty = 1.0;
         add(sepDownloadPanels, gridBagConstraints);
 
-        tbtDownloads.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/listDownloads.png")));          // NOI18N
-        tbtDownloads.setText(org.openide.util.NbBundle.getMessage(
-                MultipleDownloadPanel.class,
-                "MultipleDownloadPanel.tbtDownloads.text"));                                                     // NOI18N
+        tbtDownloads.setIcon(
+            new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/listDownloads.png")
+            )
+        ); // NOI18N
+        tbtDownloads.setText(
+            org.openide.util.NbBundle.getMessage(MultipleDownloadPanel.class, "MultipleDownloadPanel.tbtDownloads.text")
+        ); // NOI18N
         tbtDownloads.setBorderPainted(false);
         tbtDownloads.setContentAreaFilled(false);
         tbtDownloads.setFocusPainted(false);
-        tbtDownloads.setSelectedIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/listDownloads_selected.png"))); // NOI18N
-        tbtDownloads.addActionListener(new java.awt.event.ActionListener() {
-
+        tbtDownloads.setSelectedIcon(
+            new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/listDownloads_selected.png")
+            )
+        ); // NOI18N
+        tbtDownloads.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     tbtDownloadsActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -222,7 +234,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         } else {
             showSingleDownloads();
         }
-    }                                                                                //GEN-LAST:event_tbtDownloadsActionPerformed
+    } //GEN-LAST:event_tbtDownloadsActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -241,7 +253,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
                 }
             }
         }
-    }                                                                    //GEN-LAST:event_formMouseClicked
+    } //GEN-LAST:event_formMouseClicked
 
     /**
      * DOCUMENT ME!
@@ -250,7 +262,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
      */
     private void mniRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniRemoveActionPerformed
         DownloadManager.instance().removeDownload(download);
-    }                                                                             //GEN-LAST:event_mniRemoveActionPerformed
+    } //GEN-LAST:event_mniRemoveActionPerformed
 
     /**
      * As soon as a download changes its state, this method is called by the download (Observer pattern).
@@ -275,91 +287,114 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
      */
     private void updateComponents() {
         switch (download.getStatus()) {
-            case WAITING: {
-                if (download instanceof BackgroundTaskMultipleDownload) {
+            case WAITING:
+                {
+                    if (download instanceof BackgroundTaskMultipleDownload) {
+                        lblMessage.setVisible(false);
+                        prbProgress.setIndeterminate(true);
+                        prbProgress.setString(
+                            NbBundle.getMessage(
+                                MultipleDownloadPanel.class,
+                                "MultipleDownloadPanel.prbProgress.string.waiting.BackgroundTaskMultipleDownload"
+                            )
+                        );
+                        prbProgress.setVisible(true);
+                    } else {
+                        mniRemove.setEnabled(true);
+                        prbProgress.setVisible(false);
+                        lblMessage.setVisible(true);
+                    }
+
+                    break;
+                }
+            case RUNNING:
+                {
                     lblMessage.setVisible(false);
-                    prbProgress.setIndeterminate(true);
-                    prbProgress.setString(NbBundle.getMessage(
-                            MultipleDownloadPanel.class,
-                            "MultipleDownloadPanel.prbProgress.string.waiting.BackgroundTaskMultipleDownload"));
+                    mniRemove.setEnabled(false);
+                    lblTitle.setForeground(SystemColor.textText);
+
                     prbProgress.setVisible(true);
-                } else {
-                    mniRemove.setEnabled(true);
-                    prbProgress.setVisible(false);
-                    lblMessage.setVisible(true);
+                    // set the maximum of prbProgress because it is now known for BackgroundTaskMultipleDownload
+                    prbProgress.setMaximum(download.getDownloadsTotal());
+                    if (download.getDownloadsCompleted() == 0) {
+                        prbProgress.setIndeterminate(true);
+                        prbProgress.setString(
+                            NbBundle.getMessage(
+                                MultipleDownloadPanel.class,
+                                "MultipleDownloadPanel.prbProgress.string.running.allRunning"
+                            )
+                        );
+                    } else {
+                        prbProgress.setIndeterminate(false);
+                        prbProgress.setString(
+                            NbBundle.getMessage(
+                                MultipleDownloadPanel.class,
+                                "MultipleDownloadPanel.prbProgress.string.running",
+                                download.getDownloadsCompleted(),
+                                download.getDownloadsTotal()
+                            )
+                        );
+                        prbProgress.setValue(download.getDownloadsCompleted());
+                    }
+                    break;
                 }
+            case RUNNING_WITH_ERROR:
+                {
+                    lblMessage.setVisible(false);
+                    mniRemove.setEnabled(false);
+                    lblTitle.setForeground(SystemColor.textText);
 
-                break;
-            }
-            case RUNNING: {
-                lblMessage.setVisible(false);
-                mniRemove.setEnabled(false);
-                lblTitle.setForeground(SystemColor.textText);
-
-                prbProgress.setVisible(true);
-                // set the maximum of prbProgress because it is now known for BackgroundTaskMultipleDownload
-                prbProgress.setMaximum(download.getDownloadsTotal());
-                if (download.getDownloadsCompleted() == 0) {
-                    prbProgress.setIndeterminate(true);
-                    prbProgress.setString(NbBundle.getMessage(
+                    prbProgress.setVisible(true);
+                    prbProgress.setString(
+                        NbBundle.getMessage(
                             MultipleDownloadPanel.class,
-                            "MultipleDownloadPanel.prbProgress.string.running.allRunning"));
-                } else {
-                    prbProgress.setIndeterminate(false);
-                    prbProgress.setString(NbBundle.getMessage(
-                            MultipleDownloadPanel.class,
-                            "MultipleDownloadPanel.prbProgress.string.running",
+                            "MultipleDownloadPanel.prbProgress.string.running_with_error",
                             download.getDownloadsCompleted(),
-                            download.getDownloadsTotal()));
+                            download.getDownloadsTotal(),
+                            download.getDownloadsErroneous()
+                        )
+                    );
                     prbProgress.setValue(download.getDownloadsCompleted());
+                    prbProgress.setBackground(Color.pink);
+                    setBackground(Color.pink);
+                    break;
                 }
-                break;
-            }
-            case RUNNING_WITH_ERROR: {
-                lblMessage.setVisible(false);
-                mniRemove.setEnabled(false);
-                lblTitle.setForeground(SystemColor.textText);
+            case COMPLETED:
+                {
+                    prbProgress.setVisible(false);
+                    mniRemove.setEnabled(true);
+                    lblTitle.setForeground(SystemColor.textInactiveText);
+                    download.deleteObserver(this);
 
-                prbProgress.setVisible(true);
-                prbProgress.setString(NbBundle.getMessage(
-                        MultipleDownloadPanel.class,
-                        "MultipleDownloadPanel.prbProgress.string.running_with_error",
-                        download.getDownloadsCompleted(),
-                        download.getDownloadsTotal(),
-                        download.getDownloadsErroneous()));
-                prbProgress.setValue(download.getDownloadsCompleted());
-                prbProgress.setBackground(Color.pink);
-                setBackground(Color.pink);
-                break;
-            }
-            case COMPLETED: {
-                prbProgress.setVisible(false);
-                mniRemove.setEnabled(true);
-                lblTitle.setForeground(SystemColor.textInactiveText);
-                download.deleteObserver(this);
+                    lblMessage.setVisible(true);
+                    lblMessage.setText(
+                        NbBundle.getMessage(
+                            MultipleDownloadPanel.class,
+                            "MultipleDownloadPanel.lblMessage.text.completed",
+                            download.getDownloadsCompleted()
+                        )
+                    );
+                    break;
+                }
+            case COMPLETED_WITH_ERROR:
+                {
+                    prbProgress.setVisible(false);
+                    mniRemove.setEnabled(true);
+                    lblTitle.setForeground(SystemColor.textInactiveText);
+                    setBackground(Color.pink);
+                    download.deleteObserver(this);
 
-                lblMessage.setVisible(true);
-                lblMessage.setText(NbBundle.getMessage(
-                        MultipleDownloadPanel.class,
-                        "MultipleDownloadPanel.lblMessage.text.completed",
-                        download.getDownloadsCompleted()));
-                break;
-            }
-            case COMPLETED_WITH_ERROR: {
-                prbProgress.setVisible(false);
-                mniRemove.setEnabled(true);
-                lblTitle.setForeground(SystemColor.textInactiveText);
-                setBackground(Color.pink);
-                download.deleteObserver(this);
-
-                lblMessage.setVisible(true);
-                lblMessage.setText(NbBundle.getMessage(
-                        MultipleDownloadPanel.class,
-                        "MultipleDownloadPanel.lblMessage.text.completed_with_error",
-                        download.getDownloadsCompleted(),
-                        download.getDownloadsErroneous()));
-                break;
-            }
+                    lblMessage.setVisible(true);
+                    lblMessage.setText(
+                        NbBundle.getMessage(
+                            MultipleDownloadPanel.class,
+                            "MultipleDownloadPanel.lblMessage.text.completed_with_error",
+                            download.getDownloadsCompleted(),
+                            download.getDownloadsErroneous()
+                        )
+                    );
+                    break;
+                }
         }
     }
 
@@ -386,8 +421,11 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         }
 
         tbtDownloads.setSelected(true);
-        lblIcon.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/fallback_multiple.png")));
+        lblIcon.setIcon(
+            new ImageIcon(
+                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/fallback_multiple.png")
+            )
+        );
 
         remove(sepDownloadPanels);
 
@@ -435,8 +473,11 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         }
 
         tbtDownloads.setSelected(false);
-        lblIcon.setIcon(new ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/multiple_closed.png")));
+        lblIcon.setIcon(
+            new ImageIcon(
+                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/multiple_closed.png")
+            )
+        );
 
         remove(sepDownloadPanels);
         remove(sepSingleDownloadsPanel);
@@ -459,6 +500,7 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
         revalidate();
         repaint();
     }
+
     /**
      * DOCUMENT ME!
      */
@@ -478,9 +520,10 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
             final Download singleDownload = iterDownloads.next();
             if (!downloadsInSingleDownloadsPanel.containsKey(singleDownload)) {
                 final DownloadPanel pnlSingleDownloadPanel = new DownloadPanel(
-                        singleDownload,
-                        true,
-                        !iterDownloads.hasNext());
+                    singleDownload,
+                    true,
+                    !iterDownloads.hasNext()
+                );
                 singleDownload.addObserver(pnlSingleDownloadPanel);
 
                 if (i == (download.getDownloads().size() - 1)) {
@@ -525,10 +568,11 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
          * @version  $Revision$, $Date$
          */
         enum Position {
-
             //~ Enum constants -------------------------------------------------
 
-            FIRST, NORMAL, LAST
+            FIRST,
+            NORMAL,
+            LAST,
         }
 
         //~ Instance fields ----------------------------------------------------
@@ -570,19 +614,15 @@ public class MultipleDownloadPanel extends javax.swing.JPanel implements Observe
                 return;
             }
 
-            final Graphics2D g2d = (Graphics2D)g;
+            final Graphics2D g2d = (Graphics2D) g;
 
             g2d.setColor(parent.getBackground());
             g2d.fillRect(0, 0, getWidth(), getHeight());
 
             g2d.setColor(SystemColor.textInactiveText);
-            g2d.setStroke(new BasicStroke(
-                    1,
-                    BasicStroke.CAP_BUTT,
-                    BasicStroke.JOIN_MITER,
-                    10,
-                    new float[] { 1, 1 },
-                    0));
+            g2d.setStroke(
+                new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10, new float[] { 1, 1 }, 0)
+            );
             final Path2D shape = new Path2D.Float();
 
             if (position == Position.FIRST) {

@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands;
 
 /**
@@ -25,8 +25,7 @@ public class BandEvent {
     /**
      * Creates a new BandEvent object.
      */
-    public BandEvent() {
-    }
+    public BandEvent() {}
 
     /**
      * Creates a new BandEvent object.

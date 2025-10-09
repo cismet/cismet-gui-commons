@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,32 +12,24 @@
  */
 package de.cismet.tools.gui;
 
+import de.cismet.tools.BrowserLauncher;
 import javafx.application.Platform;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-
 import javafx.concurrent.Worker;
-
 import javafx.embed.swing.JFXPanel;
-
 import javafx.geometry.Insets;
-
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-
 import org.apache.log4j.Logger;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.html.HTMLAnchorElement;
-
-import de.cismet.tools.BrowserLauncher;
 
 /**
  * DOCUMENT ME!
@@ -66,14 +58,15 @@ public class FXWebViewPanel extends JFXPanel {
      */
     public FXWebViewPanel() {
         Platform.setImplicitExit(false);
-        Platform.runLater(new Runnable() {
-
+        Platform.runLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     scene = createBrowserScene();
                     FXWebViewPanel.this.setScene(scene);
                 }
-            });
+            }
+        );
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -85,35 +78,46 @@ public class FXWebViewPanel extends JFXPanel {
      */
     private Scene createBrowserScene() {
         webView = new WebView();
-//         disabling the context menue
+        //         disabling the context menue
         webView.setContextMenuEnabled(false);
 
         webEng = webView.getEngine();
         webEng.setJavaScriptEnabled(true);
         // Log errors that happen in the web engine
-        webEng.getLoadWorker().exceptionProperty().addListener(new ChangeListener<Throwable>() {
-
-                @Override
-                public void changed(final ObservableValue<? extends Throwable> ov,
+        webEng
+            .getLoadWorker()
+            .exceptionProperty()
+            .addListener(
+                new ChangeListener<Throwable>() {
+                    @Override
+                    public void changed(
+                        final ObservableValue<? extends Throwable> ov,
                         final Throwable t,
-                        final Throwable t1) {
-                    LOG.error("Error in WebEngine Load Worker", t);
-                }
-            });
-        // every time a new document was loaded, we need to add listeners to the a elements in that document, that check
-        // if that link represents a non hml document we want to open in the system browser
-        webEng.getLoadWorker().stateProperty().addListener(
-            new ChangeListener<Worker.State>() {
-
-                @Override
-                public void changed(final ObservableValue ov,
-                        final Worker.State oldState,
-                        final Worker.State newState) {
-                    if (newState == Worker.State.SUCCEEDED) {
-                        addClickListenerToLinks();
+                        final Throwable t1
+                    ) {
+                        LOG.error("Error in WebEngine Load Worker", t);
                     }
                 }
-            });
+            );
+        // every time a new document was loaded, we need to add listeners to the a elements in that document, that check
+        // if that link represents a non hml document we want to open in the system browser
+        webEng
+            .getLoadWorker()
+            .stateProperty()
+            .addListener(
+                new ChangeListener<Worker.State>() {
+                    @Override
+                    public void changed(
+                        final ObservableValue ov,
+                        final Worker.State oldState,
+                        final Worker.State newState
+                    ) {
+                        if (newState == Worker.State.SUCCEEDED) {
+                            addClickListenerToLinks();
+                        }
+                    }
+                }
+            );
 
         final BorderPane pane = new BorderPane();
         pane.setPadding(new Insets(5));
@@ -131,22 +135,27 @@ public class FXWebViewPanel extends JFXPanel {
         final NodeList nodeList = webEng.getDocument().getElementsByTagName("a");
         for (int i = 0; i < nodeList.getLength(); i++) {
             final Node node = nodeList.item(i);
-            final EventTarget eventTarget = (EventTarget)node;
-            eventTarget.addEventListener("click", new EventListener() {
-
+            final EventTarget eventTarget = (EventTarget) node;
+            eventTarget.addEventListener(
+                "click",
+                new EventListener() {
                     @Override
                     public void handleEvent(final Event evt) {
                         final EventTarget target = evt.getCurrentTarget();
-                        final HTMLAnchorElement anchorElement = (HTMLAnchorElement)target;
+                        final HTMLAnchorElement anchorElement = (HTMLAnchorElement) target;
                         final String href = anchorElement.getHref();
                         final String targetWindow = anchorElement.getTarget();
-                        if (((targetWindow != null) && targetWindow.equalsIgnoreCase("_blank"))
-                                    || ((href != null) && !href.endsWith("html") && !href.contains("#"))) {
+                        if (
+                            ((targetWindow != null) && targetWindow.equalsIgnoreCase("_blank")) ||
+                            ((href != null) && !href.endsWith("html") && !href.contains("#"))
+                        ) {
                             openInSystemBrowser(href);
                             evt.preventDefault();
                         }
                     }
-                }, false);
+                },
+                false
+            );
         }
     }
 
@@ -162,19 +171,18 @@ public class FXWebViewPanel extends JFXPanel {
         try {
             if (url != null) {
                 final Thread t = new Thread() {
-
-                        @Override
-                        public void run() {
-                            try {
-                                if (LOG.isDebugEnabled()) {
-                                    LOG.debug("Will Launch 1:" + url);
-                                }
-                                BrowserLauncher.openURL(url);
-                            } catch (Exception ex) {
-                                LOG.error(ex.getMessage(), ex);
+                    @Override
+                    public void run() {
+                        try {
+                            if (LOG.isDebugEnabled()) {
+                                LOG.debug("Will Launch 1:" + url);
                             }
+                            BrowserLauncher.openURL(url);
+                        } catch (Exception ex) {
+                            LOG.error(ex.getMessage(), ex);
                         }
-                    };
+                    }
+                };
                 t.start();
             }
         } catch (Exception ex) {
@@ -215,8 +223,8 @@ public class FXWebViewPanel extends JFXPanel {
         if (LOG.isDebugEnabled()) {
             LOG.debug("FXWebViewPanel: load url" + String.valueOf(url));
         }
-        Platform.runLater(new Runnable() {
-
+        Platform.runLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     if (LOG.isDebugEnabled()) {
@@ -228,15 +236,16 @@ public class FXWebViewPanel extends JFXPanel {
                     lastUrl = url;
                     webEng.load(url);
                 }
-            });
+            }
+        );
     }
 
     /**
      * DOCUMENT ME!
      */
     public void refresh() {
-        Platform.runLater(new Runnable() {
-
+        Platform.runLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     if (LOG.isDebugEnabled()) {
@@ -252,7 +261,8 @@ public class FXWebViewPanel extends JFXPanel {
                         webEng.loadContent(lastContent);
                     }
                 }
-            });
+            }
+        );
     }
 
     /**
@@ -262,24 +272,23 @@ public class FXWebViewPanel extends JFXPanel {
      */
     public void loadContent(final String htmlContent) {
         final Runnable loader = new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        scene = createBrowserScene();
-                        FXWebViewPanel.this.setScene(scene);
-                        lastContent = htmlContent;
-                        lastUrl = null;
-                        webEng.loadContent(htmlContent);
-                        webEng.setJavaScriptEnabled(true);
-                    } catch (Exception e) {
-                        LOG.error("Problem during the rendering of the htmlContent", e);
-                    }
+            @Override
+            public void run() {
+                try {
+                    scene = createBrowserScene();
+                    FXWebViewPanel.this.setScene(scene);
+                    lastContent = htmlContent;
+                    lastUrl = null;
+                    webEng.loadContent(htmlContent);
+                    webEng.setJavaScriptEnabled(true);
+                } catch (Exception e) {
+                    LOG.error("Problem during the rendering of the htmlContent", e);
                 }
-            };
+            }
+        };
 
-        new Thread(new Runnable() {
-
+        new Thread(
+            new Runnable() {
                 @Override
                 public void run() {
                     if (webEng == null) {
@@ -288,8 +297,7 @@ public class FXWebViewPanel extends JFXPanel {
                         }
                         try {
                             Thread.sleep(1000);
-                        } catch (Exception interuppted) {
-                        }
+                        } catch (Exception interuppted) {}
                         if (webEng == null) {
                             LOG.warn("JavaFX WebEnginge is not initialized. can not load html content: " + htmlContent);
                         } else {
@@ -299,6 +307,8 @@ public class FXWebViewPanel extends JFXPanel {
                         Platform.runLater(loader);
                     }
                 }
-            }).start();
+            }
+        )
+            .start();
     }
 }

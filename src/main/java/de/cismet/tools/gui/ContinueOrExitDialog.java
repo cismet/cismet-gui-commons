@@ -1,28 +1,23 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
-
-import lombok.Getter;
-import lombok.Setter;
-
+import de.cismet.tools.BrowserLauncher;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
-
 import java.io.IOException;
-
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
-
-import de.cismet.tools.BrowserLauncher;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * DOCUMENT ME!
@@ -60,6 +55,7 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
     private javax.swing.JPanel panSouth;
     private javax.swing.JScrollPane scpContent;
     private javax.swing.JTextPane txpContent;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -68,7 +64,7 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
      * Creates a new ContinueOrExitDialog object.
      */
     public ContinueOrExitDialog() {
-        this((Frame)null);
+        this((Frame) null);
     }
 
     /**
@@ -77,7 +73,7 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
      * @param  component  DOCUMENT ME!
      */
     public ContinueOrExitDialog(final Component component) {
-        this((Frame)StaticSwingTools.getParentFrame(component));
+        this((Frame) StaticSwingTools.getParentFrame(component));
     }
 
     /**
@@ -95,7 +91,7 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
      * @param  action  DOCUMENT ME!
      */
     public ContinueOrExitDialog(final ContinueOrExitDialogAction action) {
-        this((Frame)null, action);
+        this((Frame) null, action);
     }
 
     /**
@@ -105,7 +101,7 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
      * @param  action     DOCUMENT ME!
      */
     public ContinueOrExitDialog(final Component component, final ContinueOrExitDialogAction action) {
-        this((Frame)StaticSwingTools.getParentFrame(component), action);
+        this((Frame) StaticSwingTools.getParentFrame(component), action);
     }
 
     /**
@@ -128,11 +124,13 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
      * @param  continueButtonText  DOCUMENT ME!
      * @param  exitButtonText      DOCUMENT ME!
      */
-    public ContinueOrExitDialog(final Component parent,
-            final String contentTitle,
-            final String content,
-            final String continueButtonText,
-            final String exitButtonText) {
+    public ContinueOrExitDialog(
+        final Component parent,
+        final String contentTitle,
+        final String content,
+        final String continueButtonText,
+        final String exitButtonText
+    ) {
         this(parent);
         setContentTitle(contentTitle);
         setContent(content);
@@ -149,11 +147,13 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
      * @param  continueButtonText  DOCUMENT ME!
      * @param  exitButtonText      DOCUMENT ME!
      */
-    public ContinueOrExitDialog(final Frame parent,
-            final String contentTitle,
-            final String content,
-            final String continueButtonText,
-            final String exitButtonText) {
+    public ContinueOrExitDialog(
+        final Frame parent,
+        final String contentTitle,
+        final String content,
+        final String continueButtonText,
+        final String exitButtonText
+    ) {
         this(parent);
         setContentTitle(contentTitle);
         setContent(content);
@@ -171,12 +171,14 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
      * @param  exitButtonText      DOCUMENT ME!
      * @param  action              DOCUMENT ME!
      */
-    public ContinueOrExitDialog(final Frame parent,
-            final String contentTitle,
-            final String content,
-            final String continueButtonText,
-            final String exitButtonText,
-            final ContinueOrExitDialogAction action) {
+    public ContinueOrExitDialog(
+        final Frame parent,
+        final String contentTitle,
+        final String content,
+        final String continueButtonText,
+        final String exitButtonText,
+        final ContinueOrExitDialogAction action
+    ) {
         this(parent);
         setContentTitle(contentTitle);
         setContent(content);
@@ -201,9 +203,12 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
         scpContent = new javax.swing.JScrollPane();
         txpContent = new javax.swing.JTextPane();
         panSouth = new javax.swing.JPanel();
-        fllButtons = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        fllButtons =
+            new javax.swing.Box.Filler(
                 new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 0));
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 0)
+            );
         panButtons = new javax.swing.JPanel();
         btnExit = new javax.swing.JButton();
         btnContinue = new javax.swing.JButton();
@@ -224,13 +229,14 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
         txpContent.setEditable(false);
         txpContent.setContentType("text/html"); // NOI18N
         txpContent.setOpaque(false);
-        txpContent.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
-
+        txpContent.addHyperlinkListener(
+            new javax.swing.event.HyperlinkListener() {
                 @Override
                 public void hyperlinkUpdate(final javax.swing.event.HyperlinkEvent evt) {
                     txpContentHyperlinkUpdate(evt);
                 }
-            });
+            }
+        );
         scpContent.setViewportView(txpContent);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -258,26 +264,30 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             btnExit,
-            org.openide.util.NbBundle.getMessage(ContinueOrExitDialog.class, "ContinueOrExitDialog.btnExit.text")); // NOI18N
-        btnExit.addActionListener(new java.awt.event.ActionListener() {
-
+            org.openide.util.NbBundle.getMessage(ContinueOrExitDialog.class, "ContinueOrExitDialog.btnExit.text")
+        ); // NOI18N
+        btnExit.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnExitActionPerformed(evt);
                 }
-            });
+            }
+        );
         panButtons.add(btnExit);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             btnContinue,
-            org.openide.util.NbBundle.getMessage(ContinueOrExitDialog.class, "ContinueOrExitDialog.btnContinue.text")); // NOI18N
-        btnContinue.addActionListener(new java.awt.event.ActionListener() {
-
+            org.openide.util.NbBundle.getMessage(ContinueOrExitDialog.class, "ContinueOrExitDialog.btnContinue.text")
+        ); // NOI18N
+        btnContinue.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnContinueActionPerformed(evt);
                 }
-            });
+            }
+        );
         panButtons.add(btnContinue);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -304,13 +314,13 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
      */
     private void btnExitActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnExitActionPerformed
         if (action != null) {
-            action.actionPerformed(new ContinueOrExitDialogActionEvent(
-                    this,
-                    ContinueOrExitDialogActionEvent.Action.EXIT_ACTION));
+            action.actionPerformed(
+                new ContinueOrExitDialogActionEvent(this, ContinueOrExitDialogActionEvent.Action.EXIT_ACTION)
+            );
         } else {
             doExit();
         }
-    }                                                                           //GEN-LAST:event_btnExitActionPerformed
+    } //GEN-LAST:event_btnExitActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -319,13 +329,13 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
      */
     private void btnContinueActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnContinueActionPerformed
         if (action != null) {
-            action.actionPerformed(new ContinueOrExitDialogActionEvent(
-                    this,
-                    ContinueOrExitDialogActionEvent.Action.CONTINUE_ACTION));
+            action.actionPerformed(
+                new ContinueOrExitDialogActionEvent(this, ContinueOrExitDialogActionEvent.Action.CONTINUE_ACTION)
+            );
         } else {
             doContinue();
         }
-    }                                                                               //GEN-LAST:event_btnContinueActionPerformed
+    } //GEN-LAST:event_btnContinueActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -340,7 +350,7 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
                 LOG.error(ex, ex);
             }
         }
-    }                                                                                    //GEN-LAST:event_txpContentHyperlinkUpdate
+    } //GEN-LAST:event_txpContentHyperlinkUpdate
 
     /**
      * DOCUMENT ME!
@@ -377,8 +387,9 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
         final int minContentWidth = (buttonWidth * 2) + 10;
         final int maxContentWidth = 600;
         final int contentWidth = Math.max(
-                minContentWidth,
-                (this.contentWidth != null) ? this.contentWidth : Math.min((buttonWidth * 3) + 10, maxContentWidth));
+            minContentWidth,
+            (this.contentWidth != null) ? this.contentWidth : Math.min((buttonWidth * 3) + 10, maxContentWidth)
+        );
         final int contentHeight = determineHeight(txpContent, contentWidth);
 
         final int maxDialogHeigth = 500;
@@ -449,16 +460,18 @@ public class ContinueOrExitDialog extends javax.swing.JDialog {
 
         final Font font = new JLabel().getFont();
 
-        final String test = ""
-                    + "<p>Sie sind in einer Nutzergruppe, die ausschließlich lesenden Zugriff auf die LagIS Daten hat. In Zukunft soll dazu die Applikation <a href='http://lagis-online.s10222.wuppertal-intra.de/lagis-desktop/#/login'>LagIS-Desktop</a> genutzt werden.</p>"
-                    + "<p>Sollten Sie Fragen zur Applikation haben, wenden Sie sich bitte an Ilmo Gimmler oder Michael Stosch.</p>"
-                    + "<p>Für eine Übergangszeit ist die Java Anwendung noch verfügbar.</p>";
+        final String test =
+            "" +
+            "<p>Sie sind in einer Nutzergruppe, die ausschließlich lesenden Zugriff auf die LagIS Daten hat. In Zukunft soll dazu die Applikation <a href='http://lagis-online.s10222.wuppertal-intra.de/lagis-desktop/#/login'>LagIS-Desktop</a> genutzt werden.</p>" +
+            "<p>Sollten Sie Fragen zur Applikation haben, wenden Sie sich bitte an Ilmo Gimmler oder Michael Stosch.</p>" +
+            "<p>Für eine Übergangszeit ist die Java Anwendung noch verfügbar.</p>";
         // final String test = "Mini-Text";
         final String content = String.format(
-                "<html><html><body style='font-family: %s; font-size: %dpt; margin: 0px'>%s",
-                font.getFamily(),
-                font.getSize(),
-                test);
+            "<html><html><body style='font-family: %s; font-size: %dpt; margin: 0px'>%s",
+            font.getFamily(),
+            font.getSize(),
+            test
+        );
         final String continueButtonText = "Weiter mit der Java Anwendung";
         final String exitButtonText = "Java Anwendung schließen";
 

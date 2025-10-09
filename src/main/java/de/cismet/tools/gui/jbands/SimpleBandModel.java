@@ -1,20 +1,19 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands;
-
-import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.cismet.tools.gui.jbands.interfaces.Band;
 import de.cismet.tools.gui.jbands.interfaces.BandListener;
 import de.cismet.tools.gui.jbands.interfaces.BandModel;
 import de.cismet.tools.gui.jbands.interfaces.BandModelListener;
 import de.cismet.tools.gui.jbands.interfaces.BandModificationProvider;
+import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * DOCUMENT ME!
@@ -56,7 +55,7 @@ public class SimpleBandModel implements BandModel, BandListener {
         }
 
         if (band instanceof BandModificationProvider) {
-            ((BandModificationProvider)band).addBandListener(this);
+            ((BandModificationProvider) band).addBandListener(this);
         }
         bands.add(band);
         fireBandModelChanged();
@@ -89,7 +88,7 @@ public class SimpleBandModel implements BandModel, BandListener {
     public int removeBand(final Band band) {
         final int pos = bands.indexOf(band);
         if (band instanceof BandModificationProvider) {
-            ((BandModificationProvider)band).removeBandListener(this);
+            ((BandModificationProvider) band).removeBandListener(this);
         }
         bands.remove(band);
         fireBandModelChanged();
@@ -222,7 +221,7 @@ public class SimpleBandModel implements BandModel, BandListener {
 
         for (final Band tmp : bands) {
             if (tmp instanceof BandModificationProvider) {
-                ((BandModificationProvider)tmp).setMin(min);
+                ((BandModificationProvider) tmp).setMin(min);
             }
         }
     }
@@ -237,7 +236,7 @@ public class SimpleBandModel implements BandModel, BandListener {
 
         for (final Band tmp : bands) {
             if (tmp instanceof BandModificationProvider) {
-                ((BandModificationProvider)tmp).setMax(max);
+                ((BandModificationProvider) tmp).setMax(max);
             }
         }
     }

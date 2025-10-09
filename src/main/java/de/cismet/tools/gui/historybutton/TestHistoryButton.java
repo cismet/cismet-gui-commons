@@ -1,19 +1,19 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * TestHistoryButton.java
  *
  * Created on 14. Juli 2005, 10:02
  */
 package de.cismet.tools.gui.historybutton;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.UIManager;
 
 /**
@@ -52,6 +52,7 @@ public class TestHistoryButton extends javax.swing.JFrame {
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JTextField txtUrl;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -62,39 +63,39 @@ public class TestHistoryButton extends javax.swing.JFrame {
     public TestHistoryButton() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
         initComponents();
         final JHistoryButton hbBack = JHistoryButton.getDefaultJHistoryButton(
-                JHistoryButton.DIRECTION_BACKWARD,
-                JHistoryButton.ICON_SIZE_16,
-                historyModel);
+            JHistoryButton.DIRECTION_BACKWARD,
+            JHistoryButton.ICON_SIZE_16,
+            historyModel
+        );
         // hbBack.setRolloverIcon(new
         // javax.swing.ImageIcon(this.getClass().getResource("/de/cismet/tools/gui/historybutton/res/forward16.png")));
         final JHistoryButton hbForward = JHistoryButton.getDefaultJHistoryButton(
-                JHistoryButton.DIRECTION_FORWARD,
-                JHistoryButton.ICON_SIZE_16,
-                historyModel);
+            JHistoryButton.DIRECTION_FORWARD,
+            JHistoryButton.ICON_SIZE_16,
+            historyModel
+        );
         toolBar.add(hbBack, 0);
         toolBar.add(hbForward, 1);
-        historyModel.addHistoryModelListener(new HistoryModelListener() {
-
+        historyModel.addHistoryModelListener(
+            new HistoryModelListener() {
                 @Override
                 public void historyChanged() {
                     txtUrl.setText(historyModel.getCurrentElement().toString());
                 }
 
                 @Override
-                public void forwardStatusChanged() {
-                }
+                public void forwardStatusChanged() {}
 
                 @Override
-                public void backStatusChanged() {
-                }
+                public void backStatusChanged() {}
+
                 @Override
-                public void historyActionPerformed() {
-                }
-            });
+                public void historyActionPerformed() {}
+            }
+        );
         historyModel.addToHistory("http://www.google.de/"); // NOI18N
     }
 
@@ -130,124 +131,127 @@ public class TestHistoryButton extends javax.swing.JFrame {
         contentsMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
 
-        jMenuItem1.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.jMenuItem1.text")); // NOI18N
+        jMenuItem1.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.jMenuItem1.text")
+        ); // NOI18N
         popupMenu.add(jMenuItem1);
 
-        jMenuItem2.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.jMenuItem2.text")); // NOI18N
+        jMenuItem2.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.jMenuItem2.text")
+        ); // NOI18N
         popupMenu.add(jMenuItem2);
 
-        jMenuItem3.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.jMenuItem3.text")); // NOI18N
+        jMenuItem3.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.jMenuItem3.text")
+        ); // NOI18N
         popupMenu.add(jMenuItem3);
 
-        jButton1.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.jButton1.text")); // NOI18N
+        jButton1.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.jButton1.text")
+        ); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.jLabel1.text")); // NOI18N
+        jLabel1.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.jLabel1.text")
+        ); // NOI18N
         toolBar.add(jLabel1);
 
-        txtUrl.addActionListener(new java.awt.event.ActionListener() {
-
+        txtUrl.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     txtUrlActionPerformed(evt);
                 }
-            });
+            }
+        );
         toolBar.add(txtUrl);
 
         cmdGo.setText(org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.cmdGo.text")); // NOI18N
-        cmdGo.addActionListener(new java.awt.event.ActionListener() {
-
+        cmdGo.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     cmdGoActionPerformed(evt);
                 }
-            });
+            }
+        );
         toolBar.add(cmdGo);
 
         getContentPane().add(toolBar, java.awt.BorderLayout.NORTH);
 
-        fileMenu.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.fileMenu.text")); // NOI18N
+        fileMenu.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.fileMenu.text")
+        ); // NOI18N
 
-        openMenuItem.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.openMenuItem.text")); // NOI18N
+        openMenuItem.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.openMenuItem.text")
+        ); // NOI18N
         fileMenu.add(openMenuItem);
 
-        saveMenuItem.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.saveMenuItem.text")); // NOI18N
+        saveMenuItem.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.saveMenuItem.text")
+        ); // NOI18N
         fileMenu.add(saveMenuItem);
 
-        saveAsMenuItem.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.saveAsMenuItem.text")); // NOI18N
+        saveAsMenuItem.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.saveAsMenuItem.text")
+        ); // NOI18N
         fileMenu.add(saveAsMenuItem);
 
-        exitMenuItem.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.exitMenuItem.text")); // NOI18N
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-
+        exitMenuItem.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.exitMenuItem.text")
+        ); // NOI18N
+        exitMenuItem.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     exitMenuItemActionPerformed(evt);
                 }
-            });
+            }
+        );
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
 
-        editMenu.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.editMenu.text")); // NOI18N
+        editMenu.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.editMenu.text")
+        ); // NOI18N
 
-        cutMenuItem.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.cutMenuItem.text")); // NOI18N
+        cutMenuItem.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.cutMenuItem.text")
+        ); // NOI18N
         editMenu.add(cutMenuItem);
 
-        copyMenuItem.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.copyMenuItem.text")); // NOI18N
+        copyMenuItem.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.copyMenuItem.text")
+        ); // NOI18N
         editMenu.add(copyMenuItem);
 
-        pasteMenuItem.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.pasteMenuItem.text")); // NOI18N
+        pasteMenuItem.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.pasteMenuItem.text")
+        ); // NOI18N
         editMenu.add(pasteMenuItem);
 
-        deleteMenuItem.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.deleteMenuItem.text")); // NOI18N
+        deleteMenuItem.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.deleteMenuItem.text")
+        ); // NOI18N
         editMenu.add(deleteMenuItem);
 
         menuBar.add(editMenu);
 
-        helpMenu.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.helpMenu.text")); // NOI18N
+        helpMenu.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.helpMenu.text")
+        ); // NOI18N
 
-        contentsMenuItem.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.contentsMenuItem.text")); // NOI18N
+        contentsMenuItem.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.contentsMenuItem.text")
+        ); // NOI18N
         helpMenu.add(contentsMenuItem);
 
-        aboutMenuItem.setText(org.openide.util.NbBundle.getMessage(
-                TestHistoryButton.class,
-                "TestHistoryButton.aboutMenuItem.text")); // NOI18N
+        aboutMenuItem.setText(
+            org.openide.util.NbBundle.getMessage(TestHistoryButton.class, "TestHistoryButton.aboutMenuItem.text")
+        ); // NOI18N
         helpMenu.add(aboutMenuItem);
 
         menuBar.add(helpMenu);
@@ -265,7 +269,7 @@ public class TestHistoryButton extends javax.swing.JFrame {
      */
     private void txtUrlActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtUrlActionPerformed
         historyModel.addToHistory(txtUrl.getText());
-    }                                                                          //GEN-LAST:event_txtUrlActionPerformed
+    } //GEN-LAST:event_txtUrlActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -273,7 +277,7 @@ public class TestHistoryButton extends javax.swing.JFrame {
      * @param  evt  DOCUMENT ME!
      */
     private void cmdGoActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdGoActionPerformed
-// TODO add your handling code here:
+        // TODO add your handling code here:
     } //GEN-LAST:event_cmdGoActionPerformed
 
     /**
@@ -283,7 +287,7 @@ public class TestHistoryButton extends javax.swing.JFrame {
      */
     private void exitMenuItemActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
-    }                                                                                //GEN-LAST:event_exitMenuItemActionPerformed
+    } //GEN-LAST:event_exitMenuItemActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -291,12 +295,13 @@ public class TestHistoryButton extends javax.swing.JFrame {
      * @param  args  the command line arguments
      */
     public static void main(final String[] args) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
+        java.awt.EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     new TestHistoryButton().setVisible(true);
                 }
-            });
+            }
+        );
     }
 }

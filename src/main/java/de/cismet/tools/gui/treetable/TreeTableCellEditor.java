@@ -1,11 +1,12 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.treetable;
+
 /*
  * $Id: TreeTableCellEditor.java,v 1.1.1.1 2009-08-14 11:22:08 spuhl Exp $
  *
@@ -16,9 +17,7 @@ package de.cismet.tools.gui.treetable;
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-
 import java.util.EventObject;
-
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
 import javax.swing.JTable;
@@ -61,7 +60,7 @@ public class TreeTableCellEditor extends DefaultCellEditor {
     //~ Instance fields --------------------------------------------------------
 
     private final JTreeTable treeTable; // immutable
-    private final JTree tree;           // immutable
+    private final JTree tree; // immutable
 
     //~ Constructors -----------------------------------------------------------
 
@@ -79,11 +78,11 @@ public class TreeTableCellEditor extends DefaultCellEditor {
             throw new IllegalArgumentException("null treeTable"); // NOI18N
         }
         if (tree == null) {
-            throw new IllegalArgumentException("null tree");      // NOI18N
+            throw new IllegalArgumentException("null tree"); // NOI18N
         }
 
         this.treeTable = treeTable; // immutable
-        this.tree = tree;           // immutable
+        this.tree = tree; // immutable
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -103,13 +102,14 @@ public class TreeTableCellEditor extends DefaultCellEditor {
      * @return  DOCUMENT ME!
      */
     @Override
-    public Component getTableCellEditorComponent(final JTable table,
-            final Object value,
-            final boolean isSelected,
-            final int row,
-            final int column) {
-        final Component component = super.getTableCellEditorComponent(table, value,
-                isSelected, row, column);
+    public Component getTableCellEditorComponent(
+        final JTable table,
+        final Object value,
+        final boolean isSelected,
+        final int row,
+        final int column
+    ) {
+        final Component component = super.getTableCellEditorComponent(table, value, isSelected, row, column);
 
         // boolean isRootVisible = tree.isRootVisible();
         final Rectangle bounds = tree.getRowBounds(row);
@@ -119,19 +119,18 @@ public class TreeTableCellEditor extends DefaultCellEditor {
             final Object node = tree.getPathForRow(row).getLastPathComponent();
             Icon icon;
             if (tree.getModel().isLeaf(node)) {
-                icon = ((DefaultTreeCellRenderer)tcr).getLeafIcon();
+                icon = ((DefaultTreeCellRenderer) tcr).getLeafIcon();
             } else if (tree.isExpanded(row)) {
-                icon = ((DefaultTreeCellRenderer)tcr).getOpenIcon();
+                icon = ((DefaultTreeCellRenderer) tcr).getOpenIcon();
             } else {
-                icon = ((DefaultTreeCellRenderer)tcr).getClosedIcon();
+                icon = ((DefaultTreeCellRenderer) tcr).getClosedIcon();
             }
 
             if (icon != null) {
-                offset += ((DefaultTreeCellRenderer)tcr).getIconTextGap()
-                            + icon.getIconWidth();
+                offset += ((DefaultTreeCellRenderer) tcr).getIconTextGap() + icon.getIconWidth();
             }
         }
-        ((TreeTableTextField)getComponent()).offset = offset;
+        ((TreeTableTextField) getComponent()).offset = offset;
         // ((TreeTableTextField) getComponent()).selectAll();
         return component;
     }
@@ -151,20 +150,20 @@ public class TreeTableCellEditor extends DefaultCellEditor {
         } else if (e instanceof MouseEvent) {
             for (int counter = treeTable.getColumnCount() - 1; counter >= 0; counter--) {
                 if (treeTable.getColumnClass(counter) == TreeTableModel.class) {
-                    if (((MouseEvent)e).getClickCount() >= clickCountToStart) {
+                    if (((MouseEvent) e).getClickCount() >= clickCountToStart) {
                         return true;
                     } else {
-                        final MouseEvent me = (MouseEvent)e;
+                        final MouseEvent me = (MouseEvent) e;
                         final MouseEvent newME = new MouseEvent(
-                                tree,
-                                me.getID(),
-                                me.getWhen(),
-                                me.getModifiers(),
-                                me.getX()
-                                        - treeTable.getCellRect(0, counter, true).x,
-                                me.getY(),
-                                me.getClickCount(),
-                                me.isPopupTrigger());
+                            tree,
+                            me.getID(),
+                            me.getWhen(),
+                            me.getModifiers(),
+                            me.getX() - treeTable.getCellRect(0, counter, true).x,
+                            me.getY(),
+                            me.getClickCount(),
+                            me.isPopupTrigger()
+                        );
                         tree.dispatchEvent(newME);
                         return false;
                     }
@@ -172,7 +171,7 @@ public class TreeTableCellEditor extends DefaultCellEditor {
             }
             // RG: Fix Issue 49 -- Move cell expansion/collapse logic to
             // JXTreeTable.editCellAt();
-            return (((MouseEvent)e).getClickCount() >= clickCountToStart);
+            return (((MouseEvent) e).getClickCount() >= clickCountToStart);
         }
 
         // e is some other type of event...

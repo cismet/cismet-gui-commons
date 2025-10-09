@@ -1,27 +1,22 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.wizard.converter;
 
-import org.openide.WizardDescriptor;
-import org.openide.util.NbBundle;
-
-import java.awt.Component;
-
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-
-import java.util.List;
-import java.util.ResourceBundle;
-
 import de.cismet.commons.converter.Converter;
-
 import de.cismet.commons.gui.l10n.Localizable;
 import de.cismet.commons.gui.wizard.AbstractWizardPanel;
+import java.awt.Component;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.List;
+import java.util.ResourceBundle;
+import org.openide.WizardDescriptor;
+import org.openide.util.NbBundle;
 
 /**
  * Basic ConverterChooser panel implementation.
@@ -36,7 +31,7 @@ public abstract class AbstractConverterChooseWizardPanel extends AbstractWizardP
     public static final String PROP_CONVERTER = "__prop_converter__"; // NOI18N
 
     /** Special property without value for the wizard panel. used to indicate that this step has become active. */
-    public static final String PROPERTY_INIT = "__property_init__";                                            // NOI18N
+    public static final String PROPERTY_INIT = "__property_init__"; // NOI18N
 
     //~ Instance fields --------------------------------------------------------
 
@@ -63,14 +58,14 @@ public abstract class AbstractConverterChooseWizardPanel extends AbstractWizardP
 
     @Override
     protected void read(final WizardDescriptor wizard) {
-        converter = (Converter)wizard.getProperty(PROP_CONVERTER);
+        converter = (Converter) wizard.getProperty(PROP_CONVERTER);
 
         propCSupport.firePropertyChange(PROPERTY_INIT, null, null);
 
         wizard.putProperty(
             WizardDescriptor.PROP_INFO_MESSAGE,
-            getText(
-                "AbstractConverterChooseWizardPanel.read(WizardDescriptor).wizard.putProperty(String,String)")); // NOI18N
+            getText("AbstractConverterChooseWizardPanel.read(WizardDescriptor).wizard.putProperty(String,String)")
+        ); // NOI18N
     }
 
     @Override

@@ -1,18 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import java.awt.AWTEvent;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
-
 import java.io.PrintStream;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,7 +33,8 @@ public final class EventDispatchThreadHangMonitor extends EventQueue {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
-            EventDispatchThreadHangMonitor.class);
+        EventDispatchThreadHangMonitor.class
+    );
 
     private static final EventQueue INSTANCE = new EventDispatchThreadHangMonitor();
 

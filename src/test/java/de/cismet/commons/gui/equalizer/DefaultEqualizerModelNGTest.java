@@ -1,22 +1,21 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.equalizer;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static org.testng.Assert.*;
 
 /**
  * DOCUMENT ME!
@@ -31,8 +30,7 @@ public class DefaultEqualizerModelNGTest {
     /**
      * Creates a new DefaultEqualizerModelNGTest object.
      */
-    public DefaultEqualizerModelNGTest() {
-    }
+    public DefaultEqualizerModelNGTest() {}
 
     //~ Methods ----------------------------------------------------------------
 
@@ -42,8 +40,7 @@ public class DefaultEqualizerModelNGTest {
      * @throws  Exception  DOCUMENT ME!
      */
     @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
+    public static void setUpClass() throws Exception {}
 
     /**
      * DOCUMENT ME!
@@ -51,8 +48,7 @@ public class DefaultEqualizerModelNGTest {
      * @throws  Exception  DOCUMENT ME!
      */
     @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
+    public static void tearDownClass() throws Exception {}
 
     /**
      * DOCUMENT ME!
@@ -60,8 +56,7 @@ public class DefaultEqualizerModelNGTest {
      * @throws  Exception  DOCUMENT ME!
      */
     @BeforeMethod
-    public void setUpMethod() throws Exception {
-    }
+    public void setUpMethod() throws Exception {}
 
     /**
      * DOCUMENT ME!
@@ -69,8 +64,7 @@ public class DefaultEqualizerModelNGTest {
      * @throws  Exception  DOCUMENT ME!
      */
     @AfterMethod
-    public void tearDownMethod() throws Exception {
-    }
+    public void tearDownMethod() throws Exception {}
 
     /**
      * DOCUMENT ME!
@@ -109,11 +103,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test(expectedExceptions = { IllegalArgumentException.class })
     public void testDefaultEqualizerModel_valueNotWithinRange2() {
-        new DefaultEqualizerModel(Arrays.asList(
+        new DefaultEqualizerModel(
+            Arrays.asList(
                 new EqualizerCategory("test1", -1),
                 new EqualizerCategory("test2", 7),
-                new EqualizerCategory("test3", -6)),
-            new Range(-5, 7));
+                new EqualizerCategory("test3", -6)
+            ),
+            new Range(-5, 7)
+        );
     }
 
     /**
@@ -121,11 +118,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test(expectedExceptions = { IllegalArgumentException.class })
     public void testDefaultEqualizerModel_duplicateCatName() {
-        new DefaultEqualizerModel(Arrays.asList(
+        new DefaultEqualizerModel(
+            Arrays.asList(
                 new EqualizerCategory("test1", -1),
                 new EqualizerCategory("test2", 7),
-                new EqualizerCategory("test1", -5)),
-            new Range(-5, 7));
+                new EqualizerCategory("test1", -5)
+            ),
+            new Range(-5, 7)
+        );
     }
 
     /**
@@ -133,11 +133,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
     public void testGetEqualizerCategory_indexTooLow() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         instance.getEqualizerCategory(-1);
     }
 
@@ -146,11 +149,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
     public void testGetEqualizerCategory_indexTooHigh() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         instance.getEqualizerCategory(3);
     }
 
@@ -159,11 +165,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test
     public void testGetEqualizerCategory() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         assertEquals(instance.getEqualizerCategory(0), "test1");
         assertEquals(instance.getEqualizerCategory(2), "test3");
     }
@@ -173,11 +182,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test
     public void testGetEqualizerCategoryCount() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
 
         assertEquals(instance.getEqualizerCategoryCount(), 3);
     }
@@ -187,11 +199,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
     public void testGetValueAt_indexTooLow() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         instance.getValueAt(-1);
     }
 
@@ -200,11 +215,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
     public void testGetValueAt_indexTooHigh() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         instance.getValueAt(3);
     }
 
@@ -213,11 +231,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test
     public void testGetValueAt() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         assertEquals(instance.getValueAt(0), -1);
         assertEquals(instance.getValueAt(2), -5);
     }
@@ -227,11 +248,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSetValueAt_notWithinRange() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         instance.setValueAt(2, 8);
     }
 
@@ -240,11 +264,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
     public void testSetValueAt_indexTooLow() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         instance.setValueAt(-1, 8);
     }
 
@@ -253,11 +280,14 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
     public void testSetValueAt_indexTooHigh() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         instance.setValueAt(3, 8);
     }
 
@@ -266,45 +296,57 @@ public class DefaultEqualizerModelNGTest {
      */
     @Test(dependsOnMethods = "testGetValueAt")
     public void testSetValueAt() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         instance.setValueAt(0, 1);
         instance.setValueAt(2, 4);
 
         assertEquals(instance.getValueAt(0), 1);
         assertEquals(instance.getValueAt(2), 4);
     }
-    
+
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testCheckValueWithinRange_notWithinRange1() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         instance.checkValueWithinRange(8);
     }
-    
+
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testCheckValueWithinRange_notWithinRange2() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         instance.checkValueWithinRange(-6);
     }
-    
+
     @Test
     public void testCheckValueWithinRange() {
-        final DefaultEqualizerModel instance = new DefaultEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", -1),
-                    new EqualizerCategory("test2", 7),
-                    new EqualizerCategory("test3", -5)),
-                new Range(-5, 7));
+        final DefaultEqualizerModel instance = new DefaultEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", -1),
+                new EqualizerCategory("test2", 7),
+                new EqualizerCategory("test3", -5)
+            ),
+            new Range(-5, 7)
+        );
         instance.checkValueWithinRange(0);
         instance.checkValueWithinRange(2);
         instance.checkValueWithinRange(-5);

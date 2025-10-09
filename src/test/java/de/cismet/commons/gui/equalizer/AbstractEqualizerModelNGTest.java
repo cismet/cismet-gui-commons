@@ -1,21 +1,19 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.equalizer;
 
+import static org.testng.Assert.*;
+
+import java.lang.reflect.Field;
+import java.util.Set;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import java.lang.reflect.Field;
-
-import java.util.Set;
-
-import static org.testng.Assert.*;
 
 /**
  * DOCUMENT ME!
@@ -184,37 +182,37 @@ public class AbstractEqualizerModelNGTest {
             final Field field = AbstractEqualizerModel.class.getDeclaredField("listeners");
             field.setAccessible(true);
 
-            return ((Set)field.get(this)).size();
+            return ((Set) field.get(this)).size();
         }
 
         @Override
         public Range getRange() {
-            throw new UnsupportedOperationException("Not supported yet.");    // To change body of generated methods,
-                                                                              // choose Tools | Templates.
+            throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods,
+            // choose Tools | Templates.
         }
 
         @Override
         public String getEqualizerCategory(final int index) {
-            throw new UnsupportedOperationException("Not supported yet.");    // To change body of generated methods,
-                                                                              // choose Tools | Templates.
+            throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods,
+            // choose Tools | Templates.
         }
 
         @Override
         public int getEqualizerCategoryCount() {
-            throw new UnsupportedOperationException("Not supported yet.");    // To change body of generated methods,
-                                                                              // choose Tools | Templates.
+            throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods,
+            // choose Tools | Templates.
         }
 
         @Override
         public int getValueAt(final int index) {
-            throw new UnsupportedOperationException("Not supported yet.");    // To change body of generated methods,
-                                                                              // choose Tools | Templates.
+            throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods,
+            // choose Tools | Templates.
         }
 
         @Override
         public void setValueAt(final int index, final int value) {
-            throw new UnsupportedOperationException("Not supported yet.");    // To change body of generated methods,
-                                                                              // choose Tools | Templates.
+            throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods,
+            // choose Tools | Templates.
         }
     }
 }

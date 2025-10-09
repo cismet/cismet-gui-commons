@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.autocomplete;
 
 import javax.swing.JComboBox;
@@ -78,7 +78,7 @@ public class ComboCompleterFilter extends AbstractCompleterFilter {
 
     @Override
     public JTextField getTextField() {
-        return (JTextField)this.combo.getEditor().getEditorComponent();
+        return (JTextField) this.combo.getEditor().getEditorComponent();
     }
 
     /**
@@ -99,7 +99,7 @@ public class ComboCompleterFilter extends AbstractCompleterFilter {
             return null;
         }
 
-        final JTextField tf = (JTextField)combo.getEditor().getEditorComponent();
+        final JTextField tf = (JTextField) combo.getEditor().getEditorComponent();
         final PlainDocument pd = new PlainDocument();
         final ComboCompleterFilter filter = new ComboCompleterFilter(combo);
         pd.setDocumentFilter(filter);
@@ -108,11 +108,13 @@ public class ComboCompleterFilter extends AbstractCompleterFilter {
     }
 
     @Override
-    public void replace(final FilterBypass filterBypass,
-            final int offset,
-            final int length,
-            final String string,
-            final AttributeSet attributeSet) throws BadLocationException {
+    public void replace(
+        final FilterBypass filterBypass,
+        final int offset,
+        final int length,
+        final String string,
+        final AttributeSet attributeSet
+    ) throws BadLocationException {
         // TODO: DANGER??
         if (combo.isFocusOwner() || getTextField().isFocusOwner() || (getTextField().getText().length() < 1)) {
             super.replace(filterBypass, offset, length, string, attributeSet);
@@ -130,7 +132,7 @@ public class ComboCompleterFilter extends AbstractCompleterFilter {
 
     @Override
     public void remove(final FilterBypass filterBypass, final int offset, final int length)
-            throws BadLocationException {
+        throws BadLocationException {
         super.remove(filterBypass, offset, length);
         if (strict || (firstSelectedIndex > -1)) {
             combo.setSelectedIndex(firstSelectedIndex);

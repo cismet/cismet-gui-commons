@@ -1,17 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.imagetooltip;
 
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
-
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
@@ -76,7 +75,7 @@ public class ImageToolTip extends JToolTip {
             // g.fillRect(0, 0, size.width, size.height);
             g.setColor(c.getForeground());
 
-            g.drawString(((JToolTip)c).getTipText(), 3, 15);
+            g.drawString(((JToolTip) c).getTipText(), 3, 15);
 
             g.drawImage(m_image, 3, metrics.getHeight() + 3, c);
         }
@@ -92,7 +91,7 @@ public class ImageToolTip extends JToolTip {
         @Override
         public Dimension getPreferredSize(final JComponent c) {
             final FontMetrics metrics = c.getFontMetrics(c.getFont());
-            String tipText = ((JToolTip)c).getTipText();
+            String tipText = ((JToolTip) c).getTipText();
             if (tipText == null) {
                 tipText = "";
             }

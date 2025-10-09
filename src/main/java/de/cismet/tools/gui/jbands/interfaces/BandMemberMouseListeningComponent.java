@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands.interfaces;
 
 import java.awt.event.MouseListener;
@@ -16,5 +16,4 @@ import java.awt.event.MouseMotionListener;
  * @author   thorsten
  * @version  $Revision$, $Date$
  */
-public interface BandMemberMouseListeningComponent extends MouseListener, MouseMotionListener {
-}
+public interface BandMemberMouseListeningComponent extends MouseListener, MouseMotionListener {}

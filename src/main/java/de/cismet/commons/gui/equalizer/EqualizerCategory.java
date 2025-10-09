@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.equalizer;
 
 /**
@@ -109,7 +109,7 @@ public final class EqualizerCategory implements Cloneable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final EqualizerCategory other = (EqualizerCategory)obj;
+        final EqualizerCategory other = (EqualizerCategory) obj;
         if ((this.name == null) ? (other.name != null) : (!this.name.equals(other.name))) {
             return false;
         }

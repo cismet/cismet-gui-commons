@@ -1,16 +1,11 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands;
-
-import org.apache.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import de.cismet.tools.gui.StaticSwingTools;
 import de.cismet.tools.gui.WaitingDialogThread;
@@ -18,6 +13,9 @@ import de.cismet.tools.gui.jbands.interfaces.BandListener;
 import de.cismet.tools.gui.jbands.interfaces.BandMember;
 import de.cismet.tools.gui.jbands.interfaces.BandMemberListener;
 import de.cismet.tools.gui.jbands.interfaces.BandModificationProvider;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * DOCUMENT ME!
@@ -80,29 +78,31 @@ public class SimpleModifiableBand extends DefaultBand implements BandModificatio
     }
 
     @Override
-    public void addMember(final Double startStation,
-            final Double endStation,
-            final Double minStart,
-            final Double maxEnd,
-            final List<BandMember> memberList) {
-        final WaitingDialogThread<Void> wdt = new WaitingDialogThread<Void>(StaticSwingTools.getParentFrame(
-                    getPrefixComponent()),
-                true,
-                "Erstelle Abschnitt",
-                null,
-                100) {
-
-                @Override
-                protected Void doInBackground() throws Exception {
-                    if (endStation == null) {
-                        addUnspecifiedMember(startStation, minStart, maxEnd, memberList);
-                    } else {
-                        addSpecifiedMember(startStation, endStation);
-                    }
-
-                    return null;
+    public void addMember(
+        final Double startStation,
+        final Double endStation,
+        final Double minStart,
+        final Double maxEnd,
+        final List<BandMember> memberList
+    ) {
+        final WaitingDialogThread<Void> wdt = new WaitingDialogThread<Void>(
+            StaticSwingTools.getParentFrame(getPrefixComponent()),
+            true,
+            "Erstelle Abschnitt",
+            null,
+            100
+        ) {
+            @Override
+            protected Void doInBackground() throws Exception {
+                if (endStation == null) {
+                    addUnspecifiedMember(startStation, minStart, maxEnd, memberList);
+                } else {
+                    addSpecifiedMember(startStation, endStation);
                 }
-            };
+
+                return null;
+            }
+        };
         wdt.start();
     }
 
@@ -110,7 +110,7 @@ public class SimpleModifiableBand extends DefaultBand implements BandModificatio
     public void addMember(final BandMember m) {
         super.addMember(m);
         if (m instanceof SimpleModifiableBandMember) {
-            ((SimpleModifiableBandMember)m).addBandMemberListener(this);
+            ((SimpleModifiableBandMember) m).addBandMemberListener(this);
         }
     }
 
@@ -122,10 +122,12 @@ public class SimpleModifiableBand extends DefaultBand implements BandModificatio
      * @param  maxEnd        DOCUMENT ME!
      * @param  memberList    DOCUMENT ME!
      */
-    private void addUnspecifiedMember(final Double startStation,
-            final Double minStart,
-            final Double maxEnd,
-            final List<BandMember> memberList) {
+    private void addUnspecifiedMember(
+        final Double startStation,
+        final Double minStart,
+        final Double maxEnd,
+        final List<BandMember> memberList
+    ) {
         double distanceBefore = Double.MAX_VALUE;
         double distanceBehind = Double.MAX_VALUE;
         double newTo = maxEnd;
@@ -134,8 +136,8 @@ public class SimpleModifiableBand extends DefaultBand implements BandModificatio
         if (memberList != null) {
             // member list will be considered.
             for (final BandMember tmp : memberList) {
-                final Double from = (Double)tmp.getMin();
-                final Double till = (Double)tmp.getMax();
+                final Double from = (Double) tmp.getMin();
+                final Double till = (Double) tmp.getMax();
 
                 if ((from != null) && (till != null)) {
                     double distance = startStation - till;
@@ -159,14 +161,14 @@ public class SimpleModifiableBand extends DefaultBand implements BandModificatio
             }
         }
     }
+
     /**
      * DOCUMENT ME!
      *
      * @param  startStation  DOCUMENT ME!
      * @param  endStation    minStart DOCUMENT ME!
      */
-    private void addSpecifiedMember(final Double startStation,
-            final Double endStation) {
+    private void addSpecifiedMember(final Double startStation, final Double endStation) {
         try {
             addNewMember(startStation, endStation);
         } catch (Exception e) {

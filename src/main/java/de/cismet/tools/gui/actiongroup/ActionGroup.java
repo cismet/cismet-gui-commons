@@ -1,18 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.actiongroup;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.Action;
 
 /**
@@ -60,6 +58,7 @@ public class ActionGroup {
         actions.remove(action);
         action.removePropertyChangeListener(selectedListener);
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -94,7 +93,7 @@ public class ActionGroup {
                 try {
                     notifyLock = true;
                     for (int i = 0; i < actions.size(); i++) {
-                        final Action action = (Action)actions.get(i);
+                        final Action action = (Action) actions.get(i);
                         if (!action.equals(evt.getSource())) {
                             action.putValue(ActionConstants.SELECTED_KEY, Boolean.FALSE);
                         }

@@ -1,21 +1,19 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.historybutton;
+
+import de.cismet.tools.gui.JPopupMenuButton;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.Vector;
-
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-
-import de.cismet.tools.gui.JPopupMenuButton;
 
 /**
  * The implementation of the JHistoryButton. See a short <a href="http://flexo.cismet.de/gadgets/JHistory/">description
@@ -83,48 +81,60 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
      *
      * @return  DOCUMENT ME!
      */
-    public static JHistoryButton getDefaultJHistoryButton(final int direction,
-            final int iconSize,
-            final HistoryModel model) {
+    public static JHistoryButton getDefaultJHistoryButton(
+        final int direction,
+        final int iconSize,
+        final HistoryModel model
+    ) {
         final JHistoryButton ret = new JHistoryButton();
         ret.setDirection(direction);
         ret.setHistoryModel(model);
-        final String ressourcePath = "/de/cismet/tools/gui/historybutton/res/";                // NOI18N
-        final String forward = "forward";                                                      // NOI18N
-        final String back = "back";                                                            // NOI18N
+        final String ressourcePath = "/de/cismet/tools/gui/historybutton/res/"; // NOI18N
+        final String forward = "forward"; // NOI18N
+        final String back = "back"; // NOI18N
         String name;
-        final String filetype = ".png";                                                        // NOI18N
+        final String filetype = ".png"; // NOI18N
         if (direction == DIRECTION_FORWARD) {
             name = forward;
         } else {
             name = back;
         }
         switch (iconSize) {
-            case ICON_SIZE_16: {
-                ret.setIcon(new javax.swing.ImageIcon(
-                        ret.getClass().getResource(ressourcePath + name + "16" + filetype)));  // NOI18N
-                break;
-            }
-            case ICON_SIZE_22: {
-                ret.setIcon(new javax.swing.ImageIcon(
-                        ret.getClass().getResource(ressourcePath + name + "22" + filetype)));  // NOI18N
-                break;
-            }
-            case ICON_SIZE_32: {
-                ret.setIcon(new javax.swing.ImageIcon(
-                        ret.getClass().getResource(ressourcePath + name + "32" + filetype)));  // NOI18N
-                break;
-            }
-            case ICON_SIZE_64: {
-                ret.setIcon(new javax.swing.ImageIcon(
-                        ret.getClass().getResource(ressourcePath + name + "64" + filetype)));  // NOI18N
-                break;
-            }
-            case ICON_SIZE_128: {
-                ret.setIcon(new javax.swing.ImageIcon(
-                        ret.getClass().getResource(ressourcePath + name + "128" + filetype))); // NOI18N
-                break;
-            }
+            case ICON_SIZE_16:
+                {
+                    ret.setIcon(
+                        new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath + name + "16" + filetype))
+                    ); // NOI18N
+                    break;
+                }
+            case ICON_SIZE_22:
+                {
+                    ret.setIcon(
+                        new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath + name + "22" + filetype))
+                    ); // NOI18N
+                    break;
+                }
+            case ICON_SIZE_32:
+                {
+                    ret.setIcon(
+                        new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath + name + "32" + filetype))
+                    ); // NOI18N
+                    break;
+                }
+            case ICON_SIZE_64:
+                {
+                    ret.setIcon(
+                        new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath + name + "64" + filetype))
+                    ); // NOI18N
+                    break;
+                }
+            case ICON_SIZE_128:
+                {
+                    ret.setIcon(
+                        new javax.swing.ImageIcon(ret.getClass().getResource(ressourcePath + name + "128" + filetype))
+                    ); // NOI18N
+                    break;
+                }
         }
         return ret;
     }
@@ -155,8 +165,7 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
     }
 
     @Override
-    public void historyChanged() {
-    }
+    public void historyChanged() {}
 
     @Override
     public void forwardStatusChanged() {
@@ -228,7 +237,7 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
     @Override
     public void actionPerformed(final java.awt.event.ActionEvent e) {
         if ((e != null) && (e.getSource() instanceof JHistoryMenuItem)) {
-            final JHistoryMenuItem source = (JHistoryMenuItem)e.getSource();
+            final JHistoryMenuItem source = (JHistoryMenuItem) e.getSource();
             for (int i = 0; i < (source.getPosition() - 1); ++i) {
                 if (direction == DIRECTION_BACKWARD) {
                     getHistoryModel().back(false);
@@ -237,7 +246,7 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
                 }
             }
             fireActionPerformed(new ActionEvent(this, 0, "JHistoryButtonMenuActionPerformed")); // NOI18N
-        } else if ((e != null) && (e.getSource() instanceof JHistoryButton)) {                  // &&e.getActionCommand()!="JHistoryButtonMenuActionPerformed"
+        } else if ((e != null) && (e.getSource() instanceof JHistoryButton)) { // &&e.getActionCommand()!="JHistoryButtonMenuActionPerformed"
             Object o = null;
             if (direction == DIRECTION_BACKWARD) {
                 o = getHistoryModel().back(true);
@@ -283,8 +292,7 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
     }
 
     @Override
-    public void historyActionPerformed() {
-    }
+    public void historyActionPerformed() {}
 
     //~ Inner Classes ----------------------------------------------------------
 
@@ -317,12 +325,10 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
         }
 
         @Override
-        public void forwardStatusChanged() {
-        }
+        public void forwardStatusChanged() {}
 
         @Override
-        public void backStatusChanged() {
-        }
+        public void backStatusChanged() {}
 
         @Override
         public String getText() {
@@ -335,7 +341,6 @@ public class JHistoryButton extends JPopupMenuButton implements ActionListener, 
         }
 
         @Override
-        public void historyActionPerformed() {
-        }
+        public void historyActionPerformed() {}
     }
 }

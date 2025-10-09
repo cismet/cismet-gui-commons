@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  *  Copyright (C) 2011 jweintraut
  *
@@ -23,27 +23,21 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import org.apache.log4j.Logger;
-
-import org.openide.util.NbBundle;
-
+import de.cismet.commons.concurrency.CismetConcurrency.CismetThreadFactory;
+import de.cismet.commons.concurrency.CismetExecutors;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.text.MessageFormat;
-
 import java.util.Observable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
-
 import javax.swing.JPanel;
-
-import de.cismet.commons.concurrency.CismetConcurrency.CismetThreadFactory;
-import de.cismet.commons.concurrency.CismetExecutors;
+import org.apache.log4j.Logger;
+import org.openide.util.NbBundle;
 
 /**
  * The objects of this class represent downloads. This class encompasses several default methods which should be the
@@ -62,12 +56,11 @@ public abstract class AbstractDownload extends Observable implements Download, R
         final SecurityManager s = System.getSecurityManager();
         final ThreadGroup parent = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
         final int initialParallelDownloads = (DownloadManager.instance().getParallelDownloads() == 0)
-            ? 10 : DownloadManager.instance().getParallelDownloads();
+            ? 10
+            : DownloadManager.instance().getParallelDownloads();
         final ThreadGroup threadGroup = new ThreadGroup(parent, "DownloadThreadPool");
-        downloadThreadPool = CismetExecutors.newCachedThreadPool(new CismetThreadFactory(
-                    threadGroup,
-                    "DownloadThreadPool",
-                    null));
+        downloadThreadPool =
+            CismetExecutors.newCachedThreadPool(new CismetThreadFactory(threadGroup, "DownloadThreadPool", null));
     }
 
     protected static final Logger log = Logger.getLogger(AbstractDownload.class);
@@ -197,8 +190,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
      * @param  filename   The file name for this download.
      * @param  extension  The extension for the downloaded file.
      */
-    protected void determineDestinationFile(final String filename,
-            final String extension) {
+    protected void determineDestinationFile(final String filename, final String extension) {
         final File directoryToSaveTo;
 
         if (isAbsolute(directory)) {
@@ -217,23 +209,30 @@ public abstract class AbstractDownload extends Observable implements Download, R
 
         if (!directoryToSaveTo.exists()) {
             if (!directoryToSaveTo.mkdirs()) {
-                log.error("Couldn't create destination directory '"
-                            + directoryToSaveTo.getAbsolutePath()
-                            + "'. Cancelling download.");
-                error(new Exception(
-                        "Couldn't create destination directory '"
-                                + directoryToSaveTo.getAbsolutePath()
-                                + "'. Cancelling download."));
+                log.error(
+                    "Couldn't create destination directory '" +
+                    directoryToSaveTo.getAbsolutePath() +
+                    "'. Cancelling download."
+                );
+                error(
+                    new Exception(
+                        "Couldn't create destination directory '" +
+                        directoryToSaveTo.getAbsolutePath() +
+                        "'. Cancelling download."
+                    )
+                );
                 return;
             }
         }
 
         if (!directoryToSaveTo.canWrite()) {
-            log.error("Can not write to " + directoryToSaveTo.getAbsolutePath()
-                        + ". Probably write permissions are missing.");
+            log.error(
+                "Can not write to " + directoryToSaveTo.getAbsolutePath() + ". Probably write permissions are missing."
+            );
             final String errorMessage = NbBundle.getMessage(
-                    AbstractDownload.class,
-                    "AbstractDownload.determineDestinationFile().canNotWriteToDirectory");
+                AbstractDownload.class,
+                "AbstractDownload.determineDestinationFile().canNotWriteToDirectory"
+            );
             final Exception ex = new Exception();
             ex.getLocalizedMessage();
             error(new Exception(MessageFormat.format(errorMessage, directoryToSaveTo.getAbsolutePath())));
@@ -260,32 +259,38 @@ public abstract class AbstractDownload extends Observable implements Download, R
                     fileFound = true;
                 }
             } catch (IOException ex) {
-                log.warn("IOEXception while trying to create destination file '" + fileToSaveTo.getAbsolutePath()
-                            + "'.",
-                    ex);
+                log.warn(
+                    "IOEXception while trying to create destination file '" + fileToSaveTo.getAbsolutePath() + "'.",
+                    ex
+                );
                 fileToSaveTo.deleteOnExit();
             }
 
             if ((counter >= 1000) && !fileFound) {
-                log.error("Could not create a file for the download. The tested path is '"
-                            + directoryToSaveTo.getAbsolutePath()
-                            + File.separatorChar
-                            + filename
-                            + "<1.."
-                            + 999
-                            + ">."
-                            + extension
-                            + ".");
-                error(new FileNotFoundException(
-                        "Could not create a file for the download. The tested path is '"
-                                + directoryToSaveTo.getAbsolutePath()
-                                + File.separatorChar
-                                + filename
-                                + "<1.."
-                                + 999
-                                + ">."
-                                + extension
-                                + "."));
+                log.error(
+                    "Could not create a file for the download. The tested path is '" +
+                    directoryToSaveTo.getAbsolutePath() +
+                    File.separatorChar +
+                    filename +
+                    "<1.." +
+                    999 +
+                    ">." +
+                    extension +
+                    "."
+                );
+                error(
+                    new FileNotFoundException(
+                        "Could not create a file for the download. The tested path is '" +
+                        directoryToSaveTo.getAbsolutePath() +
+                        File.separatorChar +
+                        filename +
+                        "<1.." +
+                        999 +
+                        ">." +
+                        extension +
+                        "."
+                    )
+                );
                 return;
             }
         }
@@ -307,16 +312,16 @@ public abstract class AbstractDownload extends Observable implements Download, R
         return false;
     }
 
-//    @Override
-//    public boolean cancel() {
-//        final boolean flag = f.cancel(true);
-//        if (!flag) {
-//            log.fatal("could not cancel download thread");
-//        }
-//        this.status = State.ABORTED;
-//        stateChanged();
-//        return f.isCancelled();
-//    }
+    //    @Override
+    //    public boolean cancel() {
+    //        final boolean flag = f.cancel(true);
+    //        if (!flag) {
+    //            log.fatal("could not cancel download thread");
+    //        }
+    //        this.status = State.ABORTED;
+    //        stateChanged();
+    //        return f.isCancelled();
+    //    }
     /**
      * Marks this observable as changed and notifies observers.
      */
@@ -357,7 +362,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
             return 1;
         }
 
-        final AbstractDownload other = (AbstractDownload)o;
+        final AbstractDownload other = (AbstractDownload) o;
         return this.title.compareTo(other.title);
     }
 
@@ -371,7 +376,7 @@ public abstract class AbstractDownload extends Observable implements Download, R
             log.error("Thread pool for downloads is null. Currently it is not possible to start downloads");
         }
         if (downloadThreadPool instanceof ThreadPoolExecutor) {
-            ((ThreadPoolExecutor)downloadThreadPool).setMaximumPoolSize(parallelDownloads);
+            ((ThreadPoolExecutor) downloadThreadPool).setMaximumPoolSize(parallelDownloads);
         }
     }
 
@@ -390,9 +395,12 @@ public abstract class AbstractDownload extends Observable implements Download, R
         public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
             log.error("Execution of Downlaod Thread was rejected.");
             if (r instanceof AbstractDownload) {
-                final AbstractDownload download = (AbstractDownload)r;
-                download.error(new RejectedExecutionException(
-                        " Downlaod konnte nicht gestartet werden. Es stehen nicht genügend DownlaodThreads bereit."));
+                final AbstractDownload download = (AbstractDownload) r;
+                download.error(
+                    new RejectedExecutionException(
+                        " Downlaod konnte nicht gestartet werden. Es stehen nicht genügend DownlaodThreads bereit."
+                    )
+                );
             }
         }
     }

@@ -1,16 +1,15 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
+import de.cismet.commons.security.WebDavClient;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-
-import de.cismet.commons.security.WebDavClient;
 
 /**
  * DOCUMENT ME!
@@ -45,12 +44,14 @@ public class WebDavDownload extends AbstractCancellableDownload {
      * @param  filename   DOCUMENT ME!
      * @param  extension  DOCUMENT ME!
      */
-    public WebDavDownload(final WebDavClient client,
-            final String path,
-            final String directory,
-            final String title,
-            final String filename,
-            final String extension) {
+    public WebDavDownload(
+        final WebDavClient client,
+        final String path,
+        final String directory,
+        final String title,
+        final String filename,
+        final String extension
+    ) {
         this.client = client;
         this.path = path;
         this.directory = directory;
@@ -138,7 +139,7 @@ public class WebDavDownload extends AbstractCancellableDownload {
             return false;
         }
 
-        final WebDavDownload other = (WebDavDownload)obj;
+        final WebDavDownload other = (WebDavDownload) obj;
 
         boolean result = true;
 
@@ -146,8 +147,9 @@ public class WebDavDownload extends AbstractCancellableDownload {
             result &= false;
         }
 
-        if ((this.fileToSaveTo == null) ? (other.fileToSaveTo != null)
-                                        : (!this.fileToSaveTo.equals(other.fileToSaveTo))) {
+        if (
+            (this.fileToSaveTo == null) ? (other.fileToSaveTo != null) : (!this.fileToSaveTo.equals(other.fileToSaveTo))
+        ) {
             result &= false;
         }
 

@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * RoundedPanel.java
  *
@@ -38,10 +38,16 @@ public class SemiRoundedPanel extends javax.swing.JPanel {
      * @version  1.0
      */
     public enum Orientation {
-
         //~ Enum constants -----------------------------------------------------
 
-        NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
+        NORTH,
+        NORTHEAST,
+        EAST,
+        SOUTHEAST,
+        SOUTH,
+        SOUTHWEST,
+        WEST,
+        NORTHWEST,
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -60,6 +66,7 @@ public class SemiRoundedPanel extends javax.swing.JPanel {
     public SemiRoundedPanel() {
         this(Color.BLACK);
     }
+
     /**
      * Creates a new SemiRoundedPanel using the given <code>Color</code> and the {@link BorderLayout} as <code>
      * LayoutManager</code>. See {@link #SemiRoundedPanel(java.awt.LayoutManager, java.awt.Color)}.
@@ -109,7 +116,7 @@ public class SemiRoundedPanel extends javax.swing.JPanel {
     @Override
     public void paintComponent(final Graphics g) {
         super.paintComponent(g);
-        final Graphics2D g2d = (Graphics2D)g;
+        final Graphics2D g2d = (Graphics2D) g;
         final Color old = g2d.getColor();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setColor(getBackground());
@@ -118,45 +125,54 @@ public class SemiRoundedPanel extends javax.swing.JPanel {
         final Composite save = g2d.getComposite();
         g2d.setComposite(AlphaComposite.Src);
         switch (orientation) {
-            case NORTH: {
-                g2d.fillRect(0, curveRadius, getWidth(), getHeight() - curveRadius);
-                break;
-            }
-            case NORTHEAST: {
-                g2d.fillRect(0, curveRadius, getWidth(), getHeight() - curveRadius);
-                g2d.fillRect(0, 0, getWidth() - curveRadius, getHeight());
-                break;
-            }
-            case EAST: {
-                g2d.fillRect(0, 0, getWidth() - curveRadius, getHeight());
-                break;
-            }
-            case SOUTHEAST: {
-                g2d.fillRect(0, 0, getWidth(), getHeight() - curveRadius);
-                g2d.fillRect(0, 0, getWidth() - curveRadius, getHeight());
-                break;
-            }
-            case SOUTH: {
-                g2d.fillRect(0, 0, getWidth(), getHeight() - curveRadius);
-                break;
-            }
-            case SOUTHWEST: {
-                g2d.fillRect(0, 0, getWidth(), getHeight() - curveRadius);
-                g2d.fillRect(curveRadius, 0, getWidth() - curveRadius, getHeight());
-                break;
-            }
-            case WEST: {
-                g2d.fillRect(curveRadius, 0, getWidth() - curveRadius, getHeight());
-                break;
-            }
-            case NORTHWEST: {
-                g2d.fillRect(0, curveRadius, getWidth(), getHeight() - curveRadius);
-                g2d.fillRect(curveRadius, 0, getWidth() - curveRadius, getHeight());
-                break;
-            }
-            default: {
-                // all four corners stay rounded
-            }
+            case NORTH:
+                {
+                    g2d.fillRect(0, curveRadius, getWidth(), getHeight() - curveRadius);
+                    break;
+                }
+            case NORTHEAST:
+                {
+                    g2d.fillRect(0, curveRadius, getWidth(), getHeight() - curveRadius);
+                    g2d.fillRect(0, 0, getWidth() - curveRadius, getHeight());
+                    break;
+                }
+            case EAST:
+                {
+                    g2d.fillRect(0, 0, getWidth() - curveRadius, getHeight());
+                    break;
+                }
+            case SOUTHEAST:
+                {
+                    g2d.fillRect(0, 0, getWidth(), getHeight() - curveRadius);
+                    g2d.fillRect(0, 0, getWidth() - curveRadius, getHeight());
+                    break;
+                }
+            case SOUTH:
+                {
+                    g2d.fillRect(0, 0, getWidth(), getHeight() - curveRadius);
+                    break;
+                }
+            case SOUTHWEST:
+                {
+                    g2d.fillRect(0, 0, getWidth(), getHeight() - curveRadius);
+                    g2d.fillRect(curveRadius, 0, getWidth() - curveRadius, getHeight());
+                    break;
+                }
+            case WEST:
+                {
+                    g2d.fillRect(curveRadius, 0, getWidth() - curveRadius, getHeight());
+                    break;
+                }
+            case NORTHWEST:
+                {
+                    g2d.fillRect(0, curveRadius, getWidth(), getHeight() - curveRadius);
+                    g2d.fillRect(curveRadius, 0, getWidth() - curveRadius, getHeight());
+                    break;
+                }
+            default:
+                {
+                    // all four corners stay rounded
+                }
         }
         g2d.setComposite(save);
         g2d.setColor(old);
@@ -217,11 +233,9 @@ public class SemiRoundedPanel extends javax.swing.JPanel {
      */
     public final void setAlpha(final int alpha) {
         this.alpha = alpha;
-        setBackground(new Color(
-                getBackground().getRed(),
-                getBackground().getGreen(),
-                getBackground().getBlue(),
-                alpha));
+        setBackground(
+            new Color(getBackground().getRed(), getBackground().getGreen(), getBackground().getBlue(), alpha)
+        );
     }
 
     /**

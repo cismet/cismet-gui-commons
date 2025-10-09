@@ -1,14 +1,13 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import java.awt.Color;
-
 import javax.swing.JCheckBoxMenuItem;
 
 /**
@@ -38,9 +37,7 @@ public class HighlightingCheckBoxMenuItem extends JCheckBoxMenuItem {
      * @param  selectedBackgroundColor  DOCUMENT ME!
      * @param  selectedForegroundColor  DOCUMENT ME!
      */
-    public HighlightingCheckBoxMenuItem(
-            final Color selectedBackgroundColor,
-            final Color selectedForegroundColor) {
+    public HighlightingCheckBoxMenuItem(final Color selectedBackgroundColor, final Color selectedForegroundColor) {
         this.selectedBackgroundColor = selectedBackgroundColor;
         this.selectedForegroundColor = selectedForegroundColor;
         normalBackgroundColor = bsp.getBackground();

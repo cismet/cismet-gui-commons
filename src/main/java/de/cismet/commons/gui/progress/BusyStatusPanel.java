@@ -1,14 +1,13 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.progress;
 
 import java.awt.EventQueue;
-
 import javax.swing.JPanel;
 
 /**
@@ -24,6 +23,7 @@ public class BusyStatusPanel extends JPanel {
     private final transient javax.swing.JPanel jPanel1 = new javax.swing.JPanel();
     private final transient org.jdesktop.swingx.JXBusyLabel lblProgress = new org.jdesktop.swingx.JXBusyLabel();
     private final transient javax.swing.JLabel lblStatusMsg = new javax.swing.JLabel();
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -66,13 +66,14 @@ public class BusyStatusPanel extends JPanel {
         if (EventQueue.isDispatchThread()) {
             this.lblStatusMsg.setText(statusMsg);
         } else {
-            EventQueue.invokeLater(new Runnable() {
-
+            EventQueue.invokeLater(
+                new Runnable() {
                     @Override
                     public void run() {
                         BusyStatusPanel.this.lblStatusMsg.setText(statusMsg);
                     }
-                });
+                }
+            );
         }
     }
 
@@ -95,14 +96,15 @@ public class BusyStatusPanel extends JPanel {
             this.lblProgress.setBusy(isBusy);
             this.lblProgress.setVisible(isBusy);
         } else {
-            EventQueue.invokeLater(new Runnable() {
-
+            EventQueue.invokeLater(
+                new Runnable() {
                     @Override
                     public void run() {
                         BusyStatusPanel.this.lblProgress.setBusy(isBusy);
                         BusyStatusPanel.this.lblProgress.setVisible(isBusy);
                     }
-                });
+                }
+            );
         }
     }
 
@@ -121,15 +123,15 @@ public class BusyStatusPanel extends JPanel {
         jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        lblProgress.setText(org.openide.util.NbBundle.getMessage(
-                BusyStatusPanel.class,
-                "BusyStatusPanel.lblProgress.text")); // NOI18N
+        lblProgress.setText(
+            org.openide.util.NbBundle.getMessage(BusyStatusPanel.class, "BusyStatusPanel.lblProgress.text")
+        ); // NOI18N
         jPanel1.add(lblProgress, new java.awt.GridBagConstraints());
 
         lblStatusMsg.setFont(new java.awt.Font("DejaVu Sans", 1, 13)); // NOI18N
-        lblStatusMsg.setText(org.openide.util.NbBundle.getMessage(
-                BusyStatusPanel.class,
-                "BusyStatusPanel.lblStatusMsg.text"));                 // NOI18N
+        lblStatusMsg.setText(
+            org.openide.util.NbBundle.getMessage(BusyStatusPanel.class, "BusyStatusPanel.lblStatusMsg.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 8);
         jPanel1.add(lblStatusMsg, gridBagConstraints);

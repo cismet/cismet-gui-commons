@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.equalizer;
 
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class DefaultEqualizerModel extends AbstractEqualizerModel {
             throw new IllegalArgumentException("equalizerCategories must not be null or empty"); // NOI18N
         }
         if (range == null) {
-            throw new IllegalArgumentException("range must not be null");                        // NOI18N
+            throw new IllegalArgumentException("range must not be null"); // NOI18N
         }
 
         checkDuplicateCategoryNames(equalizerCategories);
@@ -128,7 +128,7 @@ public class DefaultEqualizerModel extends AbstractEqualizerModel {
         final ArrayList<EqualizerCategory> clone = new ArrayList<EqualizerCategory>(categories.size());
         final Iterator<EqualizerCategory> it = categories.iterator();
         while (it.hasNext()) {
-            clone.add((EqualizerCategory)it.next().clone());
+            clone.add((EqualizerCategory) it.next().clone());
         }
 
         return clone;

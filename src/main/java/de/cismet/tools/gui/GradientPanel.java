@@ -1,18 +1,20 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * GradientPanel.java
  *
  * Created on 16. Dezember 2004, 13:31
  */
 package de.cismet.tools.gui;
+
 import java.awt.*;
 import java.awt.Color;
+
 /**
  * JPanel mit einem Farbverlauf als Hintergrund.
  *
@@ -53,7 +55,7 @@ public class GradientPanel extends javax.swing.JPanel {
     protected void paintComponent(final java.awt.Graphics g) {
         final int w = getWidth();
         final int h = getHeight();
-        final Graphics2D g2d = (Graphics2D)g;
+        final Graphics2D g2d = (Graphics2D) g;
         g2d.setPaint(new GradientPaint(0, 0, getLeftColor(), w, 0, getRightColor()));
         g2d.fillRect(0, 0, w, h);
     }

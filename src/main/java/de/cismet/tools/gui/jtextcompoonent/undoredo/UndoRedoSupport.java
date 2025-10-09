@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -14,7 +14,6 @@ package de.cismet.tools.gui.jtextcompoonent.undoredo;
 import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.InputMap;
@@ -39,8 +38,7 @@ public class UndoRedoSupport {
     /**
      * Creates a new UndoRedoSupport object.
      */
-    private UndoRedoSupport() {
-    }
+    private UndoRedoSupport() {}
 
     //~ Methods ----------------------------------------------------------------
 
@@ -85,11 +83,11 @@ public class UndoRedoSupport {
         final InputMap im = c.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         final UndoAction ua = new UndoAction(undo);
         final KeyStroke controlZ = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK);
-        im.put(controlZ, "control z");         // NOI18N
+        im.put(controlZ, "control z"); // NOI18N
         c.getActionMap().put("control z", ua); // NOI18N
         final RedoAction ra = new RedoAction(undo);
         final KeyStroke controlY = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK);
-        im.put(controlY, "control y");         // NOI18N
+        im.put(controlY, "control y"); // NOI18N
         c.getActionMap().put("control y", ra); // NOI18N
     }
 
@@ -101,11 +99,11 @@ public class UndoRedoSupport {
     public static final void discardAllEdits(final JTextComponent c) {
         Action aa = c.getActionMap().get("control z"); // NOI18N
         if ((aa != null) && (aa instanceof ManagerAction)) {
-            ((ManagerAction)aa).discardAllEdits();
+            ((ManagerAction) aa).discardAllEdits();
         }
-        aa = c.getActionMap().get("control y");        // NOI18N
+        aa = c.getActionMap().get("control y"); // NOI18N
         if ((aa != null) && (aa instanceof ManagerAction)) {
-            ((ManagerAction)aa).discardAllEdits();
+            ((ManagerAction) aa).discardAllEdits();
         }
     }
 

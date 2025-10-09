@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,11 +12,11 @@
  */
 package de.cismet.commons.gui.protocol;
 
+import static javax.swing.Action.SMALL_ICON;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
-
-import static javax.swing.Action.SMALL_ICON;
 
 /**
  * DOCUMENT ME!
@@ -66,10 +66,12 @@ public abstract class AbstractProtocolStepToolbarItemAction extends AbstractActi
      * @param  command  DOCUMENT ME!
      * @param  icon     DOCUMENT ME!
      */
-    public AbstractProtocolStepToolbarItemAction(final String name,
-            final String tooltip,
-            final String command,
-            final ImageIcon icon) {
+    public AbstractProtocolStepToolbarItemAction(
+        final String name,
+        final String tooltip,
+        final String command,
+        final ImageIcon icon
+    ) {
         if (name != null) {
             putValue(Action.NAME, name);
         }

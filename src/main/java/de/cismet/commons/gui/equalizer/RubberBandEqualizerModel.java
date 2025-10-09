@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.equalizer;
 
 import java.util.ArrayList;
@@ -54,7 +54,6 @@ public final class RubberBandEqualizerModel extends DefaultEqualizerModel {
      */
     public RubberBandEqualizerModel(final Collection<EqualizerCategory> equalizerCategories) {
         super(equalizerCategories, new Range(0, 100));
-
         int sum = 0;
         for (final EqualizerCategory cat : this.equalizerCategories) {
             sum += cat.getValue();

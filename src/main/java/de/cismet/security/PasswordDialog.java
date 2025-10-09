@@ -1,35 +1,29 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.security;
 
+import de.cismet.tools.gui.DialogOpenedEvent;
+import de.cismet.tools.gui.DialogSupport;
+import de.cismet.tools.gui.StaticSwingTools;
+import java.awt.Component;
+import java.net.URL;
+import java.util.prefs.Preferences;
+import javax.swing.JFrame;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.CredentialsNotAvailableException;
-
 import org.jdesktop.swingx.JXLoginPane;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.auth.DefaultUserNameStore;
 import org.jdesktop.swingx.auth.LoginService;
-
-import java.awt.Component;
-
-import java.net.URL;
-
-import java.util.prefs.Preferences;
-
-import javax.swing.JFrame;
-
-import de.cismet.tools.gui.DialogOpenedEvent;
-import de.cismet.tools.gui.DialogSupport;
-import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -118,7 +112,7 @@ public abstract class PasswordDialog extends LoginService {
      */
     public UsernamePasswordCredentials getCredentials() throws CredentialsNotAvailableException {
         if (log.isDebugEnabled()) {
-            log.debug("Credentials requested for :" + url.toString() + " alias: " + title);                    // NOI18N
+            log.debug("Credentials requested for :" + url.toString() + " alias: " + title); // NOI18N
         }
         usernames = new DefaultUserNameStore();
         appPrefs = Preferences.userNodeForPackage(this.getClass());
@@ -159,32 +153,33 @@ public abstract class PasswordDialog extends LoginService {
         title = WebAccessManager.getInstance().getServerAliasProperty(url.toString());
         if (title != null) {
             final String msg = org.openide.util.NbBundle.getMessage(
-                    PasswordDialog.class,
-                    "PasswordDialog.requestUsernamePassword().login.message");
-            login.setMessage(msg + " \"" + title + "\" ");              // NOI18N
+                PasswordDialog.class,
+                "PasswordDialog.requestUsernamePassword().login.message"
+            );
+            login.setMessage(msg + " \"" + title + "\" "); // NOI18N
         } else {
             title = url.toString();
             if (title.startsWith("http://") && (title.length() > 21)) { // NOI18N
-                title = title.substring(7, 21) + "...";                 // NOI18N
+                title = title.substring(7, 21) + "..."; // NOI18N
             } else if (title.length() > 14) {
-                title = title.substring(0, 14) + "...";                 // NOI18N
+                title = title.substring(0, 14) + "..."; // NOI18N
             }
 
             final String msg = org.openide.util.NbBundle.getMessage(
-                    PasswordDialog.class,
-                    "PasswordDialog.requestUsernamePassword().login.message");
+                PasswordDialog.class,
+                "PasswordDialog.requestUsernamePassword().login.message"
+            );
             login.setMessage(msg + "\n" + " \"" + title + "\" "); // NOI18N
         }
 
         if (log.isDebugEnabled()) {
             log.debug("parentFrame in GUICredentialprovider:" + parent); // NOI18N
         }
-        final JXLoginPane.JXLoginDialog dialog = new JXLoginPane.JXLoginDialog((JFrame)parent, login);
+        final JXLoginPane.JXLoginDialog dialog = new JXLoginPane.JXLoginDialog((JFrame) parent, login);
 
         try {
-            ((JXPanel)((JXPanel)login.getComponent(1)).getComponent(1)).getComponent(3).requestFocus();
-        } catch (Exception skip) {
-        }
+            ((JXPanel) ((JXPanel) login.getComponent(1)).getComponent(1)).getComponent(3).requestFocus();
+        } catch (Exception skip) {}
         login.setVisible(true);
         dialog.setAlwaysOnTop(true);
         dialog.toFront();

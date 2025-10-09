@@ -1,24 +1,19 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.lookupoptions.options;
-
-import org.apache.log4j.Logger;
-
-import org.jdom.Element;
-
-import org.openide.util.lookup.ServiceProvider;
 
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
-
 import de.cismet.security.PrivacyClientHandler;
-
 import de.cismet.tools.configuration.NoWriteError;
+import org.apache.log4j.Logger;
+import org.jdom.Element;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * DOCUMENT ME!
@@ -33,8 +28,9 @@ public class PrivacyOptionsPanel extends AbstractOptionsPanel implements Options
     private static final transient Logger LOG = Logger.getLogger(PrivacyOptionsPanel.class);
 
     private static final String OPTION_NAME = org.openide.util.NbBundle.getMessage(
-            PrivacyOptionsPanel.class,
-            "PrivacyOptionsPanel.OptionController.name"); // NOI18N
+        PrivacyOptionsPanel.class,
+        "PrivacyOptionsPanel.OptionController.name"
+    ); // NOI18N
     private static final String XML_CONF_ROOT = "privacy";
     private static final String XML_CONF_SEND_UNCAUGHT_EXCEPTIONS = "sendUncaughtExceptions";
 
@@ -46,6 +42,7 @@ public class PrivacyOptionsPanel extends AbstractOptionsPanel implements Options
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JPanel jPanel3;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -85,8 +82,9 @@ public class PrivacyOptionsPanel extends AbstractOptionsPanel implements Options
      */
     @Override
     public boolean isChanged() {
-        return PrivacyClientHandler.getInstance().isSendUncaughtExceptions()
-                    != cbSendUncaughtClientExceptions.isSelected();
+        return (
+            PrivacyClientHandler.getInstance().isSendUncaughtExceptions() != cbSendUncaughtClientExceptions.isSelected()
+        );
     }
 
     /**
@@ -156,20 +154,29 @@ public class PrivacyOptionsPanel extends AbstractOptionsPanel implements Options
 
         jPanel3 = new javax.swing.JPanel();
         cbSendUncaughtClientExceptions = new javax.swing.JCheckBox();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        filler1 =
+            new javax.swing.Box.Filler(
                 new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+                new java.awt.Dimension(0, 32767)
+            );
+        filler2 =
+            new javax.swing.Box.Filler(
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767)
+            );
 
         setLayout(new java.awt.GridBagLayout());
 
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        cbSendUncaughtClientExceptions.setText(org.openide.util.NbBundle.getMessage(
+        cbSendUncaughtClientExceptions.setText(
+            org.openide.util.NbBundle.getMessage(
                 PrivacyOptionsPanel.class,
-                "PrivacyOptionsPanel.cbSendUncaughtClientExceptions.text")); // NOI18N
+                "PrivacyOptionsPanel.cbSendUncaughtClientExceptions.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 15);

@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -16,16 +16,12 @@
  */
 package de.cismet.lookupoptions.options;
 
-import org.openide.util.lookup.ServiceProvider;
-
-import javax.swing.JOptionPane;
-
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
-
 import de.cismet.security.WebAccessManager;
-
 import de.cismet.tools.gui.StaticSwingTools;
+import javax.swing.JOptionPane;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * DOCUMENT ME!
@@ -39,12 +35,14 @@ public class CredentialsOptionsPanel extends AbstractOptionsPanel implements Opt
     //~ Static fields/initializers ---------------------------------------------
 
     private static final String OPTION_NAME = org.openide.util.NbBundle.getMessage(
-            CredentialsOptionsPanel.class,
-            "CredentialsOptionsPanel.OptionController.name");
+        CredentialsOptionsPanel.class,
+        "CredentialsOptionsPanel.OptionController.name"
+    );
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReset;
     private javax.swing.JLabel jLabel1;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -69,34 +67,53 @@ public class CredentialsOptionsPanel extends AbstractOptionsPanel implements Opt
         btnReset = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
-        btnReset.setText(org.openide.util.NbBundle.getMessage(
-                CredentialsOptionsPanel.class,
-                "CredentialsOptionsPanel.btnReset.text")); // NOI18N
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-
+        btnReset.setText(
+            org.openide.util.NbBundle.getMessage(CredentialsOptionsPanel.class, "CredentialsOptionsPanel.btnReset.text")
+        ); // NOI18N
+        btnReset.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnResetActionPerformed(evt);
                 }
-            });
+            }
+        );
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(
-                CredentialsOptionsPanel.class,
-                "CredentialsOptionsPanel.jLabel1.text")); // NOI18N
+        jLabel1.setText(
+            org.openide.util.NbBundle.getMessage(CredentialsOptionsPanel.class, "CredentialsOptionsPanel.jLabel1.text")
+        ); // NOI18N
 
         final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                layout.createSequentialGroup().addContainerGap().addComponent(jLabel1).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                    221,
-                    Short.MAX_VALUE).addComponent(btnReset).addContainerGap()));
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 221, Short.MAX_VALUE)
+                        .addComponent(btnReset)
+                        .addContainerGap()
+                )
+        );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                layout.createSequentialGroup().addContainerGap().addGroup(
-                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel1)
-                                .addComponent(btnReset)).addContainerGap(259, Short.MAX_VALUE)));
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(
+                            layout
+                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1)
+                                .addComponent(btnReset)
+                        )
+                        .addContainerGap(259, Short.MAX_VALUE)
+                )
+        );
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -106,11 +123,14 @@ public class CredentialsOptionsPanel extends AbstractOptionsPanel implements Opt
      */
     private void btnResetActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnResetActionPerformed
         WebAccessManager.getInstance().resetCredentials();
-        JOptionPane.showMessageDialog(StaticSwingTools.getParentFrame(this),
+        JOptionPane.showMessageDialog(
+            StaticSwingTools.getParentFrame(this),
             org.openide.util.NbBundle.getMessage(
                 CredentialsOptionsPanel.class,
-                "CredentialsOptionsPanel.OptionController.success_message"));
-    }                                                                            //GEN-LAST:event_btnResetActionPerformed
+                "CredentialsOptionsPanel.OptionController.success_message"
+            )
+        );
+    } //GEN-LAST:event_btnResetActionPerformed
 
     @Override
     public int getOrder() {
@@ -120,7 +140,8 @@ public class CredentialsOptionsPanel extends AbstractOptionsPanel implements Opt
     @Override
     public String getTooltip() {
         return org.openide.util.NbBundle.getMessage(
-                CredentialsOptionsPanel.class,
-                "CredentialsOptionsPanel.OptionController.tooltip");
+            CredentialsOptionsPanel.class,
+            "CredentialsOptionsPanel.OptionController.tooltip"
+        );
     }
 }

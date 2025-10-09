@@ -1,37 +1,31 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.wizard.converter;
 
-import org.apache.log4j.Logger;
-
-import org.openide.util.WeakListeners;
-
+import de.cismet.commons.converter.Converter;
+import de.cismet.commons.converter.FormatHint;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-
-import de.cismet.commons.converter.Converter;
-import de.cismet.commons.converter.FormatHint;
+import org.apache.log4j.Logger;
+import org.openide.util.WeakListeners;
 
 /**
  * Basic ConverterChooser that makes use of the FormatHint interface to display appropriate information for a chosen
@@ -64,6 +58,7 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
     private final transient javax.swing.JLabel lblFormatExample = new javax.swing.JLabel();
     private final transient javax.swing.JLabel lblFormatExampleValue = new javax.swing.JLabel();
     private final transient javax.swing.JPanel pnlFormatExample = new javax.swing.JPanel();
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -120,18 +115,20 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
         this.cboConverterChooser.removeAllItems();
 
         final List<? extends Converter> converters = model.getAvailableConverters();
-        Collections.sort(converters, new Comparator<Converter>() {
-
+        Collections.sort(
+            converters,
+            new Comparator<Converter>() {
                 @Override
                 public int compare(final Converter o1, final Converter o2) {
                     if ((o1 instanceof FormatHint) && (o2 instanceof FormatHint)) {
-                        return ((FormatHint)o1).getFormatDisplayName()
-                                    .compareTo(((FormatHint)o2).getFormatDisplayName());
+                        return ((FormatHint) o1).getFormatDisplayName()
+                            .compareTo(((FormatHint) o2).getFormatDisplayName());
                     } else {
                         return o1.hashCode() - o2.hashCode();
                     }
                 }
-            });
+            }
+        );
 
         for (final Converter converter : converters) {
             this.cboConverterChooser.addItem(converter);
@@ -188,8 +185,9 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
 
         lblFormatDescriptionValue.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblFormatDescriptionValue.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblFormatDescriptionValue.setText(model.getText(
-                "DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text"));
+        lblFormatDescriptionValue.setText(
+            model.getText("DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text")
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -240,15 +238,17 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
      * keep in sync with initComponents.
      */
     private void applyL10N() {
-        this.setName(model.getText("DefaultConverterChooseVisualPanel.name"));                                        // NOI18N
-        lblFormatDescriptionValue.setText(model.getText(
-                "DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text"));                                 // NOI18N
+        this.setName(model.getText("DefaultConverterChooseVisualPanel.name")); // NOI18N
+        lblFormatDescriptionValue.setText(
+            model.getText("DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text")
+        ); // NOI18N
         lblFormatExampleValue.setText(model.getText("DefaultConverterChooseVisualPanel.lblFormatExampleValue.text")); // NOI18N
-        lblConverter.setText(model.getText("DefaultConverterChooseVisualPanel.lblConverter.text"));                   // NOI18N
-        lblFormatDescription.setText(model.getText("DefaultConverterChooseVisualPanel.lblFormatDescription.text"));   // NOI18N
-        lblFormatDescriptionValue.setText(model.getText(
-                "DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text"));                                 // NOI18N
-        lblFormatExample.setText(model.getText("DefaultConverterChooseVisualPanel.lblFormatExample.text"));           // NOI18N
+        lblConverter.setText(model.getText("DefaultConverterChooseVisualPanel.lblConverter.text")); // NOI18N
+        lblFormatDescription.setText(model.getText("DefaultConverterChooseVisualPanel.lblFormatDescription.text")); // NOI18N
+        lblFormatDescriptionValue.setText(
+            model.getText("DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text")
+        ); // NOI18N
+        lblFormatExample.setText(model.getText("DefaultConverterChooseVisualPanel.lblFormatExample.text")); // NOI18N
         lblFormatExampleValue.setText(model.getText("DefaultConverterChooseVisualPanel.lblFormatExampleValue.text")); // NOI18N
     }
 
@@ -266,7 +266,7 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
         @Override
         public void propertyChange(final PropertyChangeEvent evt) {
             final String prop = evt.getPropertyName();
-            if ("converter".equals(prop)) {             // NOI18N
+            if ("converter".equals(prop)) { // NOI18N
                 cboConverterChooser.setSelectedItem(evt.getNewValue());
             } else if ("resourceBundle".equals(prop)) { // NOI18N
                 applyL10N();
@@ -286,16 +286,18 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
         //~ Methods ------------------------------------------------------------
 
         @Override
-        public Component getListCellRendererComponent(final JList list,
-                final Object value,
-                final int index,
-                final boolean isSelected,
-                final boolean cellHasFocus) {
+        public Component getListCellRendererComponent(
+            final JList list,
+            final Object value,
+            final int index,
+            final boolean isSelected,
+            final boolean cellHasFocus
+        ) {
             final Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
             if ((c instanceof JLabel) && (value instanceof FormatHint)) {
-                final JLabel label = (JLabel)c;
-                final FormatHint formatHint = (FormatHint)value;
+                final JLabel label = (JLabel) c;
+                final FormatHint formatHint = (FormatHint) value;
 
                 label.setText(formatHint.getFormatDisplayName());
             }
@@ -322,9 +324,9 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
 
             if (ItemEvent.SELECTED == e.getStateChange()) {
                 @SuppressWarnings("unchecked")
-                final Converter converter = (Converter)e.getItem();
+                final Converter converter = (Converter) e.getItem();
                 if (converter instanceof FormatHint) {
-                    final FormatHint hint = (FormatHint)converter;
+                    final FormatHint hint = (FormatHint) converter;
 
                     if (hint.getFormatHtmlDescription() == null) {
                         lblFormatDescriptionValue.setText(hint.getFormatDescription());
@@ -334,17 +336,18 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
 
                     final Object formatExample = hint.getFormatExample();
                     if (formatExample instanceof String) {
-                        lblFormatExampleValue.setText((String)formatExample);
+                        lblFormatExampleValue.setText((String) formatExample);
                     } else if (formatExample instanceof Component) {
                         pnlFormatExample.removeAll();
-                        pnlFormatExample.add((Component)formatExample);
+                        pnlFormatExample.add((Component) formatExample);
                     } else {
                         LOG.warn("unsupported example format: " + formatExample); // NOI18N
                         resetExample();
                     }
                 } else {
-                    lblFormatDescriptionValue.setText(model.getText(
-                            "DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text")); // NOI18N
+                    lblFormatDescriptionValue.setText(
+                        model.getText("DefaultConverterChooseVisualPanel.lblFormatDescriptionValue.text")
+                    ); // NOI18N
 
                     resetExample();
                 }
@@ -357,8 +360,9 @@ public class DefaultConverterChooseVisualPanel extends JPanel {
          * DOCUMENT ME!
          */
         private void resetExample() {
-            lblFormatExampleValue.setText(model.getText(
-                    "DefaultConverterChooseVisualPanel.lblFormatExampleValue.text")); // NOI18N
+            lblFormatExampleValue.setText(
+                model.getText("DefaultConverterChooseVisualPanel.lblFormatExampleValue.text")
+            ); // NOI18N
             pnlFormatExample.removeAll();
 
             final GridBagConstraints constraints = new GridBagConstraints();

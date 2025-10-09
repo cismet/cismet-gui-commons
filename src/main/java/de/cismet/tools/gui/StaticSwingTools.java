@@ -1,18 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-
-import org.openide.util.Exceptions;
-
+import de.cismet.tools.Static2DTools;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -22,20 +18,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import java.io.File;
 import java.io.IOException;
-
 import java.lang.reflect.InvocationTargetException;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import java.text.MessageFormat;
-
 import java.util.Iterator;
 import java.util.List;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -43,8 +33,8 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
-
-import de.cismet.tools.Static2DTools;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.openide.util.Exceptions;
 
 /**
  * DOCUMENT ME!
@@ -81,7 +71,7 @@ public class StaticSwingTools {
     public static void jTreeExpandAllNodesAndScroll2Last(final JTree tree) {
         // expand to the last leaf from the root
         final DefaultMutableTreeNode root;
-        root = (DefaultMutableTreeNode)tree.getModel().getRoot();
+        root = (DefaultMutableTreeNode) tree.getModel().getRoot();
         tree.scrollPathToVisible(new TreePath(root.getLastLeaf().getPath()));
     }
 
@@ -109,18 +99,21 @@ public class StaticSwingTools {
      * @param  keyStroke  DOCUMENT ME!
      * @param  rootPane   DOCUMENT ME!
      */
-    public static void doClickButtonOnKeyStroke(final JButton button,
-            final KeyStroke keyStroke,
-            final JRootPane rootPane) {
-        rootPane.registerKeyboardAction(new ActionListener() {
-
+    public static void doClickButtonOnKeyStroke(
+        final JButton button,
+        final KeyStroke keyStroke,
+        final JRootPane rootPane
+    ) {
+        rootPane.registerKeyboardAction(
+            new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     button.doClick();
                 }
             },
             keyStroke,
-            JComponent.WHEN_IN_FOCUSED_WINDOW);
+            JComponent.WHEN_IN_FOCUSED_WINDOW
+        );
     }
 
     /**
@@ -134,12 +127,13 @@ public class StaticSwingTools {
      */
     @SuppressWarnings("unchecked")
     public static <T extends Component> T findSpecificParentComponent(Container c, final Class<T> clazz) {
-//        while (c != null && !(c.getClass().equals(clazz))) {
+        //        while (c != null && !(c.getClass().equals(clazz))) {
         while ((c != null) && !(clazz.isAssignableFrom(c.getClass()))) {
             c = c.getParent();
         }
-        return (T)c;
+        return (T) c;
     }
+
     /**
      * From The Java Developers Almanac.
      *
@@ -151,7 +145,7 @@ public class StaticSwingTools {
         if (!(table.getParent() instanceof JViewport)) {
             return;
         }
-        final JViewport viewport = (JViewport)table.getParent();
+        final JViewport viewport = (JViewport) table.getParent();
 
         // This rectangle is relative to the table where the
         // northwest corner of cell (0,0) is always (0,0).
@@ -186,10 +180,10 @@ public class StaticSwingTools {
             try {
                 if (flavor.equals(DataFlavor.javaFileListFlavor)) {
                     // System.out.println("importData: FileListFlavor");
-                    final List l = (List)t.getTransferData(DataFlavor.javaFileListFlavor);
+                    final List l = (List) t.getTransferData(DataFlavor.javaFileListFlavor);
                     final Iterator iter = l.iterator();
                     while (iter.hasNext()) {
-                        final File file = (File)iter.next();
+                        final File file = (File) iter.next();
                         System.out.println(file);
                         try {
                             final String can = file.getCanonicalPath();
@@ -199,9 +193,9 @@ public class StaticSwingTools {
                         }
                     }
                 } else if (flavor.equals(DataFlavor.stringFlavor)) {
-                    final String fileOrURL = (String)t.getTransferData(flavor);
+                    final String fileOrURL = (String) t.getTransferData(flavor);
                     if (log.isDebugEnabled()) {
-                        log.debug("GOT STRING: " + fileOrURL);                  // NOI18N
+                        log.debug("GOT STRING: " + fileOrURL); // NOI18N
                     }
 
                     try {
@@ -231,9 +225,11 @@ public class StaticSwingTools {
      * @param  text     DOCUMENT ME!
      * @param  comp     DOCUMENT ME!
      */
-    public static void jTabbedPaneWithVerticalTextAddTab(final JTabbedPane tabPane,
-            final String text,
-            final JComponent comp) {
+    public static void jTabbedPaneWithVerticalTextAddTab(
+        final JTabbedPane tabPane,
+        final String text,
+        final JComponent comp
+    ) {
         jTabbedPaneWithVerticalTextAddTab(tabPane, text, null, comp);
     }
 
@@ -245,50 +241,54 @@ public class StaticSwingTools {
      * @param  icon     DOCUMENT ME!
      * @param  comp     DOCUMENT ME!
      */
-    public static void jTabbedPaneWithVerticalTextAddTab(final JTabbedPane tabPane,
-            final String text,
-            final Icon icon,
-            final JComponent comp) {
+    public static void jTabbedPaneWithVerticalTextAddTab(
+        final JTabbedPane tabPane,
+        final String text,
+        final Icon icon,
+        final JComponent comp
+    ) {
         final int tabPlacement = tabPane.getTabPlacement();
-        final Object textIconGap = UIManager.get("TabbedPane.textIconGap");   // NOI18N
+        final Object textIconGap = UIManager.get("TabbedPane.textIconGap"); // NOI18N
         final Insets tabInsets = UIManager.getInsets("TabbedPane.tabInsets"); // NOI18N
         tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
-        UIManager.put("TabbedPane.textIconGap", new Integer(1));              // NOI18N
+        UIManager.put("TabbedPane.textIconGap", new Integer(1)); // NOI18N
         // UIManager.put("TabbedPane.tabInsets", new Insets(tabInsets.left, tabInsets.top, tabInsets.right,
         // tabInsets.bottom));
-        UIManager.put("TabbedPane.tabInsets", tabInsets);                     // NOI18N
+        UIManager.put("TabbedPane.tabInsets", tabInsets); // NOI18N
         SwingUtilities.updateComponentTreeUI(tabPane);
         switch (tabPlacement) {
             case JTabbedPane.LEFT:
-            case JTabbedPane.RIGHT: {
-                if (icon == null) {
-                    tabPane.addTab(null, new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT), comp);
-                } else {
-                    Icon newIcon;
-                    if (tabPlacement == JTabbedPane.RIGHT) {
-                        final Icon[] icons = new Icon[2];
-                        icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT);
-                        icons[1] = icon;
-                        newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
+            case JTabbedPane.RIGHT:
+                {
+                    if (icon == null) {
+                        tabPane.addTab(null, new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT), comp);
                     } else {
-                        final Icon[] icons = new Icon[2];
-                        icons[1] = icon;
-                        icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT);
-                        newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
+                        Icon newIcon;
+                        if (tabPlacement == JTabbedPane.RIGHT) {
+                            final Icon[] icons = new Icon[2];
+                            icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT);
+                            icons[1] = icon;
+                            newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
+                        } else {
+                            final Icon[] icons = new Icon[2];
+                            icons[1] = icon;
+                            icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT);
+                            newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
+                        }
+                        if (log.isDebugEnabled()) {
+                            log.debug("newIconHeight" + newIcon.getIconHeight()); // NOI18N
+                        }
+                        tabPane.addTab(null, newIcon, comp);
                     }
-                    if (log.isDebugEnabled()) {
-                        log.debug("newIconHeight" + newIcon.getIconHeight()); // NOI18N
-                    }
-                    tabPane.addTab(null, newIcon, comp);
+                    break;
                 }
-                break;
-            }
-            default: {
-                tabPane.addTab(text, null, comp);
-            }
+            default:
+                {
+                    tabPane.addTab(text, null, comp);
+                }
         }
         tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
-        UIManager.put("TabbedPane.tabInsets", tabInsets);                     // NOI18N
+        UIManager.put("TabbedPane.tabInsets", tabInsets); // NOI18N
     }
 
     /**
@@ -298,9 +298,11 @@ public class StaticSwingTools {
      * @param  text     DOCUMENT ME!
      * @param  comp     DOCUMENT ME!
      */
-    public static void jTabbedPaneWithVerticalTextSetNewText(final JTabbedPane tabPane,
-            final String text,
-            final JComponent comp) {
+    public static void jTabbedPaneWithVerticalTextSetNewText(
+        final JTabbedPane tabPane,
+        final String text,
+        final JComponent comp
+    ) {
         jTabbedPaneWithVerticalTextSetNewText(tabPane, text, null, comp);
     }
 
@@ -312,10 +314,12 @@ public class StaticSwingTools {
      * @param  icon     DOCUMENT ME!
      * @param  comp     DOCUMENT ME!
      */
-    public static void jTabbedPaneWithVerticalTextSetNewText(final JTabbedPane tabPane,
-            final String text,
-            final Icon icon,
-            final JComponent comp) {
+    public static void jTabbedPaneWithVerticalTextSetNewText(
+        final JTabbedPane tabPane,
+        final String text,
+        final Icon icon,
+        final JComponent comp
+    ) {
         jTabbedPaneWithVerticalTextSetNewText(tabPane, text, icon, Color.black, comp);
     }
 
@@ -328,41 +332,47 @@ public class StaticSwingTools {
      * @param  textColor  DOCUMENT ME!
      * @param  comp       DOCUMENT ME!
      */
-    public static void jTabbedPaneWithVerticalTextSetNewText(final JTabbedPane tabPane,
-            final String text,
-            final Icon icon,
-            final Color textColor,
-            final JComponent comp) {
+    public static void jTabbedPaneWithVerticalTextSetNewText(
+        final JTabbedPane tabPane,
+        final String text,
+        final Icon icon,
+        final Color textColor,
+        final JComponent comp
+    ) {
         final int tabPlacement = tabPane.getTabPlacement();
         switch (tabPlacement) {
             case JTabbedPane.LEFT:
-            case JTabbedPane.RIGHT: {
-                if (icon == null) {
-                    tabPane.setIconAt(tabPane.indexOfComponent(comp),
-                        new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT, textColor));
-                } else {
-                    Icon newIcon;
-                    if (tabPlacement == JTabbedPane.RIGHT) {
-                        final Icon[] icons = new Icon[2];
-                        icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT, textColor);
-                        icons[1] = icon;
-                        newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
+            case JTabbedPane.RIGHT:
+                {
+                    if (icon == null) {
+                        tabPane.setIconAt(
+                            tabPane.indexOfComponent(comp),
+                            new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT, textColor)
+                        );
                     } else {
-                        final Icon[] icons = new Icon[2];
-                        icons[1] = icon;
-                        icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT, textColor);
-                        newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
+                        Icon newIcon;
+                        if (tabPlacement == JTabbedPane.RIGHT) {
+                            final Icon[] icons = new Icon[2];
+                            icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT, textColor);
+                            icons[1] = icon;
+                            newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
+                        } else {
+                            final Icon[] icons = new Icon[2];
+                            icons[1] = icon;
+                            icons[0] = new VerticalTextIcon(text, tabPlacement == JTabbedPane.RIGHT, textColor);
+                            newIcon = Static2DTools.joinIcons(icons, 6, Static2DTools.VERTICAL, Static2DTools.CENTER);
+                        }
+                        if (log.isDebugEnabled()) {
+                            log.debug("newIconHeight" + newIcon.getIconHeight()); // NOI18N
+                        }
+                        tabPane.setIconAt(tabPane.indexOfComponent(comp), newIcon);
                     }
-                    if (log.isDebugEnabled()) {
-                        log.debug("newIconHeight" + newIcon.getIconHeight()); // NOI18N
-                    }
-                    tabPane.setIconAt(tabPane.indexOfComponent(comp), newIcon);
+                    return;
                 }
-                return;
-            }
-            default: {
-                tabPane.setTitleAt(tabPane.indexOfComponent(comp), text);
-            }
+            default:
+                {
+                    tabPane.setTitleAt(tabPane.indexOfComponent(comp), text);
+                }
         }
     }
 
@@ -380,31 +390,33 @@ public class StaticSwingTools {
             final Object value = UIManager.get(key);
             if (key.toString().indexOf("abbed") != -1) { // NOI18N
                 if (log.isDebugEnabled()) {
-                    log.debug(key + "," + value);        // NOI18N
+                    log.debug(key + "," + value); // NOI18N
                 }
             }
         }
         switch (tabPlacement) {
             case JTabbedPane.LEFT:
-            case JTabbedPane.RIGHT: {
-//                Object textIconGap = UIManager.get("TabbedPane.textIconGap");
-//                Insets tabInsets = UIManager.getInsets("TabbedPane.tabInsets");
-//                tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
-//                UIManager.put("TabbedPane.textIconGap", new Integer(1));
-//                // UIManager.put("TabbedPane.tabInsets", new Insets(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom));
-//                UIManager.put("TabbedPane.tabInsets", tabInsets);
-                final JTabbedPane tabPane = new JTabbedPane(tabPlacement);
-//
-//                UIManager.put("TabbedPane.textIconGap", textIconGap);
-//                UIManager.put("TabbedPane.tabInsets", tabInsets);
-//                //SwingUtilities.updateComponentTreeUI(tabPane);
-                // tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
-                // UIManager.put("TabbedPane.tabInsets", tabInsets);
-                return tabPane;
-            }
-            default: {
-                return new JTabbedPane(tabPlacement);
-            }
+            case JTabbedPane.RIGHT:
+                {
+                    //                Object textIconGap = UIManager.get("TabbedPane.textIconGap");
+                    //                Insets tabInsets = UIManager.getInsets("TabbedPane.tabInsets");
+                    //                tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
+                    //                UIManager.put("TabbedPane.textIconGap", new Integer(1));
+                    //                // UIManager.put("TabbedPane.tabInsets", new Insets(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom));
+                    //                UIManager.put("TabbedPane.tabInsets", tabInsets);
+                    final JTabbedPane tabPane = new JTabbedPane(tabPlacement);
+                    //
+                    //                UIManager.put("TabbedPane.textIconGap", textIconGap);
+                    //                UIManager.put("TabbedPane.tabInsets", tabInsets);
+                    //                //SwingUtilities.updateComponentTreeUI(tabPane);
+                    // tabInsets.set(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom);
+                    // UIManager.put("TabbedPane.tabInsets", tabInsets);
+                    return tabPane;
+                }
+            default:
+                {
+                    return new JTabbedPane(tabPlacement);
+                }
         }
     }
 
@@ -478,15 +490,15 @@ public class StaticSwingTools {
         try {
             Object o = c;
             do {
-                o = ((Component)o).getParent();
+                o = ((Component) o).getParent();
                 if (log.isDebugEnabled()) {
-                    log.debug("getParent:" + o);          // NOI18N
+                    log.debug("getParent:" + o); // NOI18N
                 }
-            } while (!(((o instanceof Frame) && (((Component)o).getParent() == null)) || first));
+            } while (!(((o instanceof Frame) && (((Component) o).getParent() == null)) || first));
             if (log.isDebugEnabled()) {
                 log.debug("getParentFrame returns " + o); // NOI18N
             }
-            return (Frame)o;
+            return (Frame) o;
         } catch (Exception e) {
             if (log.isDebugEnabled()) {
                 log.warn("getParentFrame returns null", e); // NOI18N
@@ -555,9 +567,7 @@ public class StaticSwingTools {
      * @param  isRelativeToParentFrame  true if the dialog shall be centered relative to the parent frame (determined by
      *                                  the given parent), false otherwise
      */
-    public static void showDialog(final Component parent,
-            final JDialog dialog,
-            final boolean isRelativeToParentFrame) {
+    public static void showDialog(final Component parent, final JDialog dialog, final boolean isRelativeToParentFrame) {
         if (dialog.isVisible()) {
             dialog.toFront();
         } else {
@@ -611,15 +621,16 @@ public class StaticSwingTools {
 
         if (!EventQueue.isDispatchThread()) {
             try {
-                EventQueue.invokeAndWait(new Thread("centerWindowOnScreen") {
-
+                EventQueue.invokeAndWait(
+                    new Thread("centerWindowOnScreen") {
                         @Override
                         public void run() {
                             // show window
                             w.setLocation(x, y);
                             w.setVisible(true);
                         }
-                    });
+                    }
+                );
             } catch (InterruptedException | InvocationTargetException ex) {
                 log.error("Error while center window on screen", ex);
                 // nothing to do
@@ -694,7 +705,7 @@ public class StaticSwingTools {
         }
 
         if (parent instanceof JDialog) {
-            ((JDialog)parent).pack();
+            ((JDialog) parent).pack();
         }
     }
 
@@ -707,11 +718,9 @@ public class StaticSwingTools {
      * @param  factor  A factor for the value. E. g. if the slider allows sliding between 0 and 1000 but we want to show
      *                 the percentage, we have to multiply the value by 0.1D. Set to Double.NaN if it shouldn't be used.
      */
-    public static void enableSliderToolTips(final JSlider slider,
-            final MessageFormat format,
-            final double factor) {
-        slider.addChangeListener(new ChangeListener() {
-
+    public static void enableSliderToolTips(final JSlider slider, final MessageFormat format, final double factor) {
+        slider.addChangeListener(
+            new ChangeListener() {
                 private boolean adjusting = false;
                 private String oldTooltip;
 
@@ -725,7 +734,8 @@ public class StaticSwingTools {
 
                         final double value = slider.getValue() * (Double.isNaN(factor) ? 1D : factor);
                         slider.setToolTipText(
-                            (format != null) ? format.format(new Object[] { value }) : Double.toString(value));
+                            (format != null) ? format.format(new Object[] { value }) : Double.toString(value)
+                        );
 
                         hideToolTip(slider); // to avoid flickering
                         postToolTip(slider);
@@ -736,7 +746,8 @@ public class StaticSwingTools {
                         oldTooltip = null;
                     }
                 }
-            });
+            }
+        );
     }
 
     /**
@@ -752,11 +763,12 @@ public class StaticSwingTools {
         }
 
         final ActionEvent actionEvent = new ActionEvent(
-                comp,
-                ActionEvent.ACTION_PERFORMED,
-                "postTip",
-                EventQueue.getMostRecentEventTime(),
-                0);
+            comp,
+            ActionEvent.ACTION_PERFORMED,
+            "postTip",
+            EventQueue.getMostRecentEventTime(),
+            0
+        );
         action.actionPerformed(actionEvent);
     }
 
@@ -773,11 +785,12 @@ public class StaticSwingTools {
         }
 
         final ActionEvent actionEvent = new ActionEvent(
-                comp,
-                ActionEvent.ACTION_PERFORMED,
-                "hideTip",
-                EventQueue.getMostRecentEventTime(),
-                0);
+            comp,
+            ActionEvent.ACTION_PERFORMED,
+            "hideTip",
+            EventQueue.getMostRecentEventTime(),
+            0
+        );
         action.actionPerformed(actionEvent);
     }
 
@@ -788,11 +801,11 @@ public class StaticSwingTools {
      */
     public static void decorateWithFixedAutoCompleteDecorator(final JComboBox cbo) {
         AutoCompleteDecorator.decorate(cbo);
-        final JList pop = ((ComboPopup)cbo.getUI().getAccessibleChild(cbo, 0)).getList();
-        final JTextField txt = (JTextField)cbo.getEditor().getEditorComponent();
+        final JList pop = ((ComboPopup) cbo.getUI().getAccessibleChild(cbo, 0)).getList();
+        final JTextField txt = (JTextField) cbo.getEditor().getEditorComponent();
 
-        txt.addKeyListener(new KeyAdapter() {
-
+        txt.addKeyListener(
+            new KeyAdapter() {
                 @Override
                 public void keyReleased(final KeyEvent event) {
                     if ((event.getKeyCode() == KeyEvent.VK_DOWN) || (event.getKeyCode() == KeyEvent.VK_UP)) {
@@ -803,7 +816,8 @@ public class StaticSwingTools {
                         txt.selectAll();
                     }
                 }
-            });
+            }
+        );
     }
 
     /**
@@ -817,9 +831,10 @@ public class StaticSwingTools {
     public static void tweakUI() {
         final ObjectMapper mapper = new ObjectMapper();
         try {
-            final UITweaks config = mapper.readValue(UITweaks.class.getResourceAsStream(
-                        "/de/cismet/tools/gui/uitweaks.json"),
-                    UITweaks.class);
+            final UITweaks config = mapper.readValue(
+                UITweaks.class.getResourceAsStream("/de/cismet/tools/gui/uitweaks.json"),
+                UITweaks.class
+            );
             config.apply();
         } catch (Exception e) {
             log.warn("Problem during TweakingUI", e);
@@ -838,11 +853,13 @@ public class StaticSwingTools {
      *
      * @return  DOCUMENT ME!
      */
-    public static File chooseFile(final String currentDirectoryPath,
-            final boolean isSaveDialog,
-            final String[] allowedFileExtension,
-            final String fileExtensionDescription,
-            final Component parent) {
+    public static File chooseFile(
+        final String currentDirectoryPath,
+        final boolean isSaveDialog,
+        final String[] allowedFileExtension,
+        final String fileExtensionDescription,
+        final Component parent
+    ) {
         JFileChooser fc;
 
         try {
@@ -855,15 +872,15 @@ public class StaticSwingTools {
         FileFilter fileFilter;
 
         if ((allowedFileExtension != null) && (allowedFileExtension.length == 1)) {
-            fileFilter = new ExtensionAwareFileFilter() {
-
+            fileFilter =
+                new ExtensionAwareFileFilter() {
                     @Override
                     public boolean accept(final File f) {
                         boolean fileAllowed = f.isDirectory();
 
                         if (!fileAllowed) {
-                            final String extension = (f.getName().contains(".")
-                                    ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
+                            final String extension =
+                                (f.getName().contains(".") ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
 
                             if (extension.equals(allowedFileExtension[0])) {
                                 fileAllowed = true;
@@ -890,8 +907,8 @@ public class StaticSwingTools {
                     }
                 };
         } else {
-            fileFilter = new FileFilter() {
-
+            fileFilter =
+                new FileFilter() {
                     @Override
                     public boolean accept(final File f) {
                         boolean fileAllowed = f.isDirectory();
@@ -899,8 +916,8 @@ public class StaticSwingTools {
                         if (allowedFileExtension == null) {
                             fileAllowed = true;
                         } else if (!fileAllowed) {
-                            final String extension = (f.getName().contains(".")
-                                    ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
+                            final String extension =
+                                (f.getName().contains(".") ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
 
                             for (final String allowedExt : allowedFileExtension) {
                                 if (extension.equals(allowedExt)) {
@@ -950,17 +967,20 @@ public class StaticSwingTools {
 
                 if (file.exists() && ((allowedFileExtension == null) || (allowedFileExtension.length != 1))) {
                     final String message = org.openide.util.NbBundle.getMessage(
-                            ConfirmationJFileChooser.class,
-                            "ConfirmationJFileChooser.approveSelection.message");
+                        ConfirmationJFileChooser.class,
+                        "ConfirmationJFileChooser.approveSelection.message"
+                    );
                     final String title = org.openide.util.NbBundle.getMessage(
-                            ConfirmationJFileChooser.class,
-                            "ConfirmationJFileChooser.approveSelection.title");
+                        ConfirmationJFileChooser.class,
+                        "ConfirmationJFileChooser.approveSelection.title"
+                    );
 
                     final int result = JOptionPane.showConfirmDialog(
-                            parent,
-                            message,
-                            title,
-                            JOptionPane.YES_NO_CANCEL_OPTION);
+                        parent,
+                        message,
+                        title,
+                        JOptionPane.YES_NO_CANCEL_OPTION
+                    );
 
                     if (result == JOptionPane.YES_OPTION) {
                         return file;
@@ -988,11 +1008,13 @@ public class StaticSwingTools {
      *
      * @return  DOCUMENT ME!
      */
-    public static File chooseFileWithMultipleFilters(final String currentDirectoryPath,
-            final boolean isSaveDialog,
-            final String[] allowedFileExtension,
-            final String[] fileExtensionDescription,
-            final Component parent) {
+    public static File chooseFileWithMultipleFilters(
+        final String currentDirectoryPath,
+        final boolean isSaveDialog,
+        final String[] allowedFileExtension,
+        final String[] fileExtensionDescription,
+        final Component parent
+    ) {
         JFileChooser fc;
 
         try {
@@ -1013,26 +1035,25 @@ public class StaticSwingTools {
             }
 
             final FileFilter fileFilter = new ExtensionAwareFileFilter() {
+                @Override
+                public boolean accept(final File f) {
+                    final boolean fileAllowed = f.isDirectory();
+                    final String extension =
+                        (f.getName().contains(".") ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
 
-                    @Override
-                    public boolean accept(final File f) {
-                        final boolean fileAllowed = f.isDirectory();
-                        final String extension = (f.getName().contains(".")
-                                ? f.getName().substring(f.getName().indexOf(".") + 1) : "");
+                    return fileAllowed || extension.equals(ext);
+                }
 
-                        return fileAllowed || extension.equals(ext);
-                    }
+                @Override
+                public String getDescription() {
+                    return description;
+                }
 
-                    @Override
-                    public String getDescription() {
-                        return description;
-                    }
-
-                    @Override
-                    public String getExtension() {
-                        return ext;
-                    }
-                };
+                @Override
+                public String getExtension() {
+                    return ext;
+                }
+            };
 
             fc.addChoosableFileFilter(fileFilter);
 
@@ -1052,7 +1073,7 @@ public class StaticSwingTools {
             File file = fc.getSelectedFile();
 
             if (!fc.accept(file)) {
-                final ExtensionAwareFileFilter ff = (ExtensionAwareFileFilter)fc.getFileFilter();
+                final ExtensionAwareFileFilter ff = (ExtensionAwareFileFilter) fc.getFileFilter();
                 file = new File(file.getAbsolutePath() + "." + ff.getExtension());
             }
 

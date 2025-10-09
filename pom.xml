@@ -18,7 +18,6 @@
     
     <properties>
         <names.cismet-gui-commons>cismet GUI Commons</names.cismet-gui-commons>
-        <prettier.skip>true</prettier.skip>
     </properties>
     
     <name>${names.cismet-gui-commons} [${project.version}]</name>

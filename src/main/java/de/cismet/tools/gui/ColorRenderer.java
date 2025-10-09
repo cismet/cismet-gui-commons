@@ -1,15 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import java.awt.Color;
 import java.awt.Component;
-
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -47,13 +46,15 @@ public class ColorRenderer extends JLabel implements TableCellRenderer {
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public Component getTableCellRendererComponent(final JTable table,
-            final Object color,
-            final boolean isSelected,
-            final boolean hasFocus,
-            final int row,
-            final int column) {
-        final Color newColor = (Color)color;
+    public Component getTableCellRendererComponent(
+        final JTable table,
+        final Object color,
+        final boolean isSelected,
+        final boolean hasFocus,
+        final int row,
+        final int column
+    ) {
+        final Color newColor = (Color) color;
         setBackground(newColor);
 
         if (isBordered) {

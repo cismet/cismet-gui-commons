@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -28,6 +28,7 @@ public class HelpDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnClose;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextPane txtContent;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -70,40 +71,49 @@ public class HelpDialog extends javax.swing.JDialog {
         setTitle(org.openide.util.NbBundle.getMessage(HelpDialog.class, "HelpDialog.title")); // NOI18N
 
         btnClose.setText(org.openide.util.NbBundle.getMessage(HelpDialog.class, "HelpDialog.btnClose.text")); // NOI18N
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-
+        btnClose.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnCloseActionPerformed(evt);
                 }
-            });
+            }
+        );
 
         txtContent.setBackground(new java.awt.Color(255, 255, 255));
-        txtContent.setContentType(org.openide.util.NbBundle.getMessage(
-                HelpDialog.class,
-                "HelpDialog.txtContent.contentType")); // NOI18N
+        txtContent.setContentType(
+            org.openide.util.NbBundle.getMessage(HelpDialog.class, "HelpDialog.txtContent.contentType")
+        ); // NOI18N
         jScrollPane1.setViewportView(txtContent);
 
         final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                javax.swing.GroupLayout.Alignment.TRAILING,
-                layout.createSequentialGroup().addContainerGap(591, Short.MAX_VALUE).addComponent(btnClose)
-                            .addContainerGap()).addComponent(
-                jScrollPane1,
-                javax.swing.GroupLayout.DEFAULT_SIZE,
-                650,
-                Short.MAX_VALUE));
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    javax.swing.GroupLayout.Alignment.TRAILING,
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap(591, Short.MAX_VALUE)
+                        .addComponent(btnClose)
+                        .addContainerGap()
+                )
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
+        );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                javax.swing.GroupLayout.Alignment.TRAILING,
-                layout.createSequentialGroup().addComponent(
-                    jScrollPane1,
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    453,
-                    Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                    btnClose).addContainerGap()));
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    javax.swing.GroupLayout.Alignment.TRAILING,
+                    layout
+                        .createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnClose)
+                        .addContainerGap()
+                )
+        );
 
         pack();
     } // </editor-fold>//GEN-END:initComponents
@@ -115,7 +125,7 @@ public class HelpDialog extends javax.swing.JDialog {
      */
     private void btnCloseActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCloseActionPerformed
         dispose();
-    }                                                                            //GEN-LAST:event_btnCloseActionPerformed
+    } //GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -123,20 +133,22 @@ public class HelpDialog extends javax.swing.JDialog {
      * @param  args  the command line arguments
      */
     public static void main(final String[] args) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
+        java.awt.EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     final HelpDialog dialog = new HelpDialog(new javax.swing.JFrame(), true);
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
+                    dialog.addWindowListener(
+                        new java.awt.event.WindowAdapter() {
                             @Override
                             public void windowClosing(final java.awt.event.WindowEvent e) {
                                 System.exit(0);
                             }
-                        });
+                        }
+                    );
                     dialog.setVisible(true);
                 }
-            });
+            }
+        );
     }
 }

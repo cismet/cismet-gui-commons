@@ -1,23 +1,20 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.protocol.test;
-
-import org.apache.log4j.Logger;
-
-import java.util.List;
 
 import de.cismet.commons.gui.protocol.AbstractProtocolStep;
 import de.cismet.commons.gui.protocol.ProtocolHandler;
 import de.cismet.commons.gui.protocol.ProtocolStep;
 import de.cismet.commons.gui.protocol.impl.CommentProtocolStep;
 import de.cismet.commons.gui.protocol.impl.CommentProtocolStepImpl;
-
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * DOCUMENT ME!
@@ -36,8 +33,7 @@ public class ProtocolTester {
     /**
      * Creates a new ProtocolTester object.
      */
-    private ProtocolTester() {
-    }
+    private ProtocolTester() {}
 
     //~ Methods ----------------------------------------------------------------
 
@@ -77,9 +73,10 @@ public class ProtocolTester {
         log("json:" + jsonString);
 
         log("restoring protocol from json...");
-        final CommentProtocolStep newProto = (CommentProtocolStep)AbstractProtocolStep.fromJsonString(
-                jsonString,
-                CommentProtocolStepImpl.class);
+        final CommentProtocolStep newProto = (CommentProtocolStep) AbstractProtocolStep.fromJsonString(
+            jsonString,
+            CommentProtocolStepImpl.class
+        );
         log("protocol: " + newProto);
         log("* date: " + newProto.getDate());
         log("* message: " + newProto.getMessage());
@@ -110,7 +107,7 @@ public class ProtocolTester {
         for (final ProtocolStep newProtoFromList : newList) {
             log("protocol: " + newProtoFromList.getClass().getCanonicalName());
 
-            final CommentProtocolStep newProtoFromListCasted = (CommentProtocolStep)newProtoFromList;
+            final CommentProtocolStep newProtoFromListCasted = (CommentProtocolStep) newProtoFromList;
             log("* date: " + newProtoFromListCasted.getDate());
             log("* message: " + newProtoFromListCasted.getMessage());
             log(" ----- ");

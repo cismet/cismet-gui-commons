@@ -1,11 +1,12 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.treetable;
+
 /*
  * TreeTableModel.java
  *
@@ -39,7 +40,6 @@ import javax.swing.tree.TreeModel;
  * @version  $Revision$, $Date$
  */
 public interface TreeTableModel extends TreeModel {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

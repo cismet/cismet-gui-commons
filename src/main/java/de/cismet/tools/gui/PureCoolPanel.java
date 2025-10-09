@@ -1,16 +1,11 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
-
-import org.jdesktop.fuse.InjectedResource;
-import org.jdesktop.fuse.ResourceInjector;
-import org.jdesktop.swingx.graphics.GraphicsUtilities;
-import org.jdesktop.swingx.graphics.ShadowRenderer;
 
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
@@ -23,10 +18,13 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.image.BufferedImage;
-
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import org.jdesktop.fuse.InjectedResource;
+import org.jdesktop.fuse.ResourceInjector;
+import org.jdesktop.swingx.graphics.GraphicsUtilities;
+import org.jdesktop.swingx.graphics.ShadowRenderer;
 
 /**
  * Panel zur "ultracoolen" Darstellung von Klassinformationen in Renderern. Das Panel zeichnet ein abgerundetes Viereck
@@ -50,37 +48,91 @@ public class PureCoolPanel extends PainterCoolPanel {
 
     //~ Instance fields --------------------------------------------------------
 
-    @InjectedResource public int offset;
-    @InjectedResource public int offsetRight;
-    @InjectedResource public int offsetTop;
-    @InjectedResource public int offsetBetween;
-    @InjectedResource public int arcSize;
-    @InjectedResource public int shadowLength;
-    @InjectedResource public int blurFactor;
-    @InjectedResource public float borderWidth;
-    @InjectedResource public float shadowIntensity;
-    @InjectedResource public float titlePanelOpacity;
-    @InjectedResource public float titleLinesOpacity;
-    @InjectedResource public float interPanelOpacity;
-    @InjectedResource public float interLinesOpacity;
-    @InjectedResource public float blurredMapOpacity;
-    @InjectedResource public float cutOutMapOpacity;
-    @InjectedResource public float glossyOpacity;
-    @InjectedResource public Color shadowColor;
-    @InjectedResource public Color colorBorder;
-    @InjectedResource public Color colorMapBorder;
-    @InjectedResource public Color colorTitle;
-    @InjectedResource public Color colorInter;
-    @InjectedResource public Color colorDarkLine;
-    @InjectedResource public Color colorBrightLine;
-    @InjectedResource public Color colorGlossy;
-    @InjectedResource public Color gradientColorTop;
-    @InjectedResource public Color gradientColorBottom;
-    @InjectedResource public boolean usePainterCoolPanel;
+    @InjectedResource
+    public int offset;
+
+    @InjectedResource
+    public int offsetRight;
+
+    @InjectedResource
+    public int offsetTop;
+
+    @InjectedResource
+    public int offsetBetween;
+
+    @InjectedResource
+    public int arcSize;
+
+    @InjectedResource
+    public int shadowLength;
+
+    @InjectedResource
+    public int blurFactor;
+
+    @InjectedResource
+    public float borderWidth;
+
+    @InjectedResource
+    public float shadowIntensity;
+
+    @InjectedResource
+    public float titlePanelOpacity;
+
+    @InjectedResource
+    public float titleLinesOpacity;
+
+    @InjectedResource
+    public float interPanelOpacity;
+
+    @InjectedResource
+    public float interLinesOpacity;
+
+    @InjectedResource
+    public float blurredMapOpacity;
+
+    @InjectedResource
+    public float cutOutMapOpacity;
+
+    @InjectedResource
+    public float glossyOpacity;
+
+    @InjectedResource
+    public Color shadowColor;
+
+    @InjectedResource
+    public Color colorBorder;
+
+    @InjectedResource
+    public Color colorMapBorder;
+
+    @InjectedResource
+    public Color colorTitle;
+
+    @InjectedResource
+    public Color colorInter;
+
+    @InjectedResource
+    public Color colorDarkLine;
+
+    @InjectedResource
+    public Color colorBrightLine;
+
+    @InjectedResource
+    public Color colorGlossy;
+
+    @InjectedResource
+    public Color gradientColorTop;
+
+    @InjectedResource
+    public Color gradientColorBottom;
+
+    @InjectedResource
+    public boolean usePainterCoolPanel;
+
     private JPanel spinner;
     private JComponent panMap;
     private JComponent panContent;
-//    private boolean usePainterCoolPanel = false;
+    //    private boolean usePainterCoolPanel = false;
     private ImageIcon icons;
     private BufferedImage cacheImage;
     private BufferedImage gradientImage;
@@ -102,8 +154,8 @@ public class PureCoolPanel extends PainterCoolPanel {
         // Ressourcen hierarchisch rekursiv nach oben einfuegen
         ResourceInjector.get("purecoolpanel.style").inject(true, new Object[] { this }); // NOI18N
 
-//
-        gradientColorTop = javax.swing.UIManager.getDefaults().getColor("Button.shadow");        // NOI18N
+        //
+        gradientColorTop = javax.swing.UIManager.getDefaults().getColor("Button.shadow"); // NOI18N
         gradientColorBottom = javax.swing.UIManager.getDefaults().getColor("Button.background"); // NOI18N
         composite = AlphaComposite.SrcAtop.derive(titleLinesOpacity);
         shadowRenderer = new ShadowRenderer(shadowLength, shadowIntensity, shadowColor);
@@ -120,7 +172,7 @@ public class PureCoolPanel extends PainterCoolPanel {
             super.paintComponent(g);
         } else {
             // alter PureCoolPanel paint code....
-            final Graphics2D g2d = (Graphics2D)g;
+            final Graphics2D g2d = (Graphics2D) g;
             if ((cacheImage == null) || !getSize().equals(lastPaintSize)) {
                 lastPaintSize = getSize();
                 // Image zum Zeichnen erstellen von dem wird spaeter der Schlagschatten erstellt wird
@@ -135,13 +187,9 @@ public class PureCoolPanel extends PainterCoolPanel {
                 if ((gradientImage == null) || (gradientImage.getHeight() != box.getHeight())) {
                     gradientImage = GraphicsUtilities.createCompatibleImage(1, box.getHeight());
                     final Graphics2D gradientGraphics2d = gradientImage.createGraphics();
-                    gradientGraphics2d.setPaint(new GradientPaint(
-                            0,
-                            0,
-                            gradientColorTop,
-                            0,
-                            box.getHeight(),
-                            gradientColorBottom));
+                    gradientGraphics2d.setPaint(
+                        new GradientPaint(0, 0, gradientColorTop, 0, box.getHeight(), gradientColorBottom)
+                    );
                     gradientGraphics2d.fillRect(0, 0, 1, box.getHeight());
                 }
 
@@ -170,14 +218,16 @@ public class PureCoolPanel extends PainterCoolPanel {
                 if (getPanInter() != null) {
                     final Rectangle bounds = getPanInter().getBounds();
                     boxGraphics.setComposite(AlphaComposite.SrcAtop.derive(interPanelOpacity));
-                    boxGraphics.setPaint(new GradientPaint(
+                    boxGraphics.setPaint(
+                        new GradientPaint(
                             0,
                             bounds.y,
                             new Color(0, 0, 0, 160),
                             0,
-                            bounds.y
-                                    + bounds.height,
-                            Color.BLACK));
+                            bounds.y + bounds.height,
+                            Color.BLACK
+                        )
+                    );
                     boxGraphics.fillRect(0, bounds.y, bounds.width + offset, bounds.height);
                     boxGraphics.setComposite(AlphaComposite.SrcAtop.derive(interLinesOpacity));
                     boxGraphics.setColor(colorDarkLine);
@@ -192,50 +242,44 @@ public class PureCoolPanel extends PainterCoolPanel {
                 boxGraphics.drawRoundRect(
                     offset,
                     0,
-                    box.getWidth()
-                            - (offset + 1),
-                    box.getHeight()
-                            - 1,
+                    box.getWidth() - (offset + 1),
+                    box.getHeight() - 1,
                     arcSize,
-                    arcSize);
+                    arcSize
+                );
 
                 // Weissen oberen Rand zeichnen
                 final BufferedImage glossy = new BufferedImage(box.getWidth(), box.getHeight(), IMAGE_TYPE);
                 final Graphics2D glossyGraphics2D = glossy.createGraphics();
-//            glossyGraphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                //            glossyGraphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 glossyGraphics2D.setStroke(STROKE);
 
                 // Glossy-Effekt oben
                 glossyGraphics2D.setColor(colorGlossy);
-//            if (noTitlePanel) {
-                glossyGraphics2D.drawRoundRect(offset + 1,
+                //            if (noTitlePanel) {
+                glossyGraphics2D.drawRoundRect(
+                    offset + 1,
                     1,
-                    box.getWidth()
-                            - (offset + 3),
-                    2
-                            * arcSize,
+                    box.getWidth() - (offset + 3),
+                    2 * arcSize,
                     arcSize,
-                    arcSize);
+                    arcSize
+                );
                 glossyGraphics2D.setComposite(AlphaComposite.DstIn);
-                glossyGraphics2D.setPaint(new GradientPaint(
-                        0,
-                        0,
-                        new Color(255, 255, 255, 255),
-                        0,
-                        arcSize
-                                / 2,
-                        new Color(255, 255, 255, 0)));
+                glossyGraphics2D.setPaint(
+                    new GradientPaint(0, 0, new Color(255, 255, 255, 255), 0, arcSize / 2, new Color(255, 255, 255, 0))
+                );
                 glossyGraphics2D.fillRect(0, 0, box.getWidth(), arcSize);
                 glossyGraphics2D.setPaint(new Color(255, 255, 255, 0));
                 glossyGraphics2D.fillRect(0, arcSize / 2, box.getWidth(), 2 * arcSize);
-//            } else {
-//                gg.fillRoundRect(offset+2,2, box.getWidth()-(offset+4), getPanTitle().getHeight(),arcSize-2,arcSize-2);
-//                gg.setComposite(AlphaComposite.DstIn);
-//                gg.setPaint(new GradientPaint(0,0,new Color(255,255,255,255), 0, getPanTitle().getHeight()/2, new Color(255,255,255,0)));
-//                gg.fillRect(0,0,box.getWidth(), getPanTitle().getHeight());
-//                gg.setPaint(new Color(255,255,255,0));
-//                gg.fillRect(0,getPanTitle().getHeight()/2,box.getWidth(), getPanTitle().getHeight());
-//            }
+                //            } else {
+                //                gg.fillRoundRect(offset+2,2, box.getWidth()-(offset+4), getPanTitle().getHeight(),arcSize-2,arcSize-2);
+                //                gg.setComposite(AlphaComposite.DstIn);
+                //                gg.setPaint(new GradientPaint(0,0,new Color(255,255,255,255), 0, getPanTitle().getHeight()/2, new Color(255,255,255,0)));
+                //                gg.fillRect(0,0,box.getWidth(), getPanTitle().getHeight());
+                //                gg.setPaint(new Color(255,255,255,0));
+                //                gg.fillRect(0,getPanTitle().getHeight()/2,box.getWidth(), getPanTitle().getHeight());
+                //            }
 
                 // Drop Shadow rendern
                 final BufferedImage shadow = shadowRenderer.createShadow(box);
@@ -249,15 +293,13 @@ public class PureCoolPanel extends PainterCoolPanel {
                 resultGraphics2D.drawImage(glossy, 0, 0, null);
                 resultGraphics2D.setComposite(originalComposite);
                 if (this.icons != null) {
-//                resultGraphics2D.drawImage(this.icons.getImage(), box.getWidth() - this.icons.getIconWidth() - offsetRight, offsetTop, null);
-                    resultGraphics2D.drawImage(this.icons.getImage(),
-                        box.getWidth()
-                                - this.icons.getIconWidth()
-                                - offsetRight,
-                        (panTitle.getHeight() / 2)
-                                + 3
-                                - (this.icons.getIconHeight() / 2),
-                        null);
+                    //                resultGraphics2D.drawImage(this.icons.getImage(), box.getWidth() - this.icons.getIconWidth() - offsetRight, offsetTop, null);
+                    resultGraphics2D.drawImage(
+                        this.icons.getImage(),
+                        box.getWidth() - this.icons.getIconWidth() - offsetRight,
+                        (panTitle.getHeight() / 2) + 3 - (this.icons.getIconHeight() / 2),
+                        null
+                    );
                 }
                 boxGraphics.dispose();
                 glossyGraphics2D.dispose();
@@ -337,9 +379,11 @@ public class PureCoolPanel extends PainterCoolPanel {
         final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 400, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 400, Short.MAX_VALUE)
+        );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 300, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 300, Short.MAX_VALUE)
+        );
     } // </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

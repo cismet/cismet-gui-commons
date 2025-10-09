@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * SimpleSectionPanel.java
  *
@@ -14,7 +14,6 @@ package de.cismet.tools.gui.jbands;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,10 +28,12 @@ public class SimpleSpotPanel extends JPanel {
 
     //~ Instance fields --------------------------------------------------------
 
-    private ImageIcon up = new javax.swing.ImageIcon(getClass().getResource(
-                "/de/cismet/tools/gui/jbands/spotMarkUp.png"));
-    private ImageIcon down = new javax.swing.ImageIcon(getClass().getResource(
-                "/de/cismet/tools/gui/jbands/spotMarkDown.png"));
+    private ImageIcon up = new javax.swing.ImageIcon(
+        getClass().getResource("/de/cismet/tools/gui/jbands/spotMarkUp.png")
+    );
+    private ImageIcon down = new javax.swing.ImageIcon(
+        getClass().getResource("/de/cismet/tools/gui/jbands/spotMarkDown.png")
+    );
 
     //~ Constructors -----------------------------------------------------------
 
@@ -60,9 +61,11 @@ public class SimpleSpotPanel extends JPanel {
         final org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(0, 213, Short.MAX_VALUE));
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(0, 213, Short.MAX_VALUE)
+        );
         layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(0, 160, Short.MAX_VALUE));
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(0, 160, Short.MAX_VALUE)
+        );
     } // </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

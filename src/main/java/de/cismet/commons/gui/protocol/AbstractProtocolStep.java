@@ -1,29 +1,25 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.protocol;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-
+import de.cismet.commons.gui.protocol.listener.ProtocolStepListener;
+import de.cismet.commons.gui.protocol.listener.ProtocolStepListenerEvent;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-
-import de.cismet.commons.gui.protocol.listener.ProtocolStepListener;
-import de.cismet.commons.gui.protocol.listener.ProtocolStepListenerEvent;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * DOCUMENT ME!
@@ -38,13 +34,15 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            AbstractProtocolStep.class);
+        AbstractProtocolStep.class
+    );
     protected static final transient ObjectMapper MAPPER = new ObjectMapper();
 
     //~ Instance fields --------------------------------------------------------
 
     @Setter(AccessLevel.PACKAGE)
-    @JsonIgnore private transient boolean isInited;
+    @JsonIgnore
+    private transient boolean isInited;
 
     @JsonProperty(required = true)
     private ProtocolStepMetaInfo metaInfo;
@@ -80,8 +78,7 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
      * Is called before visualize() is called. E.g constructut and set serializable object properties (those annotated
      * with @JsonProperty)
      */
-    public void initParameters() {
-    }
+    public void initParameters() {}
 
     /**
      * DOCUMENT ME!
@@ -107,10 +104,12 @@ public abstract class AbstractProtocolStep implements ProtocolStep {
      *
      * @throws  IOException  DOCUMENT ME!
      */
-    public static ProtocolStep fromJsonString(final String jsonString,
-            final Class<? extends AbstractProtocolStep> protocolStep) throws IOException {
+    public static ProtocolStep fromJsonString(
+        final String jsonString,
+        final Class<? extends AbstractProtocolStep> protocolStep
+    ) throws IOException {
         synchronized (MAPPER) {
-            return (AbstractProtocolStep)MAPPER.readValue(jsonString, protocolStep);
+            return (AbstractProtocolStep) MAPPER.readValue(jsonString, protocolStep);
         }
     }
 

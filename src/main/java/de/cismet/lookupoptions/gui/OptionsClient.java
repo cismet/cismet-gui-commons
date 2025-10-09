@@ -1,29 +1,24 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.lookupoptions.gui;
 
-import org.jdom.Element;
-
-import org.openide.util.Lookup;
-
+import de.cismet.connectioncontext.ConnectionContextStore;
+import de.cismet.connectioncontext.OptionsConnectionContext;
+import de.cismet.lookupoptions.OptionsCategory;
+import de.cismet.lookupoptions.OptionsPanelController;
+import de.cismet.tools.configuration.Configurable;
+import de.cismet.tools.configuration.NoWriteError;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
-
-import de.cismet.connectioncontext.ConnectionContextStore;
-import de.cismet.connectioncontext.OptionsConnectionContext;
-
-import de.cismet.lookupoptions.OptionsCategory;
-import de.cismet.lookupoptions.OptionsPanelController;
-
-import de.cismet.tools.configuration.Configurable;
-import de.cismet.tools.configuration.NoWriteError;
+import org.jdom.Element;
+import org.openide.util.Lookup;
 
 /**
  * This class provides some methods for interaction between the options dialog and the OptionsCategory- and
@@ -59,8 +54,9 @@ public class OptionsClient implements Configurable {
 
         for (final OptionsPanelController controller : Lookup.getDefault().lookupAll(OptionsPanelController.class)) {
             if (controller instanceof ConnectionContextStore) {
-                ((ConnectionContextStore)controller).initWithConnectionContext(new OptionsConnectionContext(
-                        controller.getClass().getSimpleName()));
+                ((ConnectionContextStore) controller).initWithConnectionContext(
+                        new OptionsConnectionContext(controller.getClass().getSimpleName())
+                    );
             }
             if (controller.isEnabled()) {
                 controllerList.add(controller);
@@ -219,7 +215,7 @@ public class OptionsClient implements Configurable {
 
         for (final Configurable configurable : controllerList) {
             if (log.isDebugEnabled()) {
-                log.debug(" - OptionsClient.getConfiguration");                      // NOI18N
+                log.debug(" - OptionsClient.getConfiguration"); // NOI18N
             }
             try {
                 final Element element = configurable.getConfiguration();

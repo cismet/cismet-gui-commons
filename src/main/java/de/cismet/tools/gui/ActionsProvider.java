@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  *  Copyright (C) 2011 thorsten
  *
@@ -24,7 +24,6 @@
 package de.cismet.tools.gui;
 
 import java.util.Collection;
-
 import javax.swing.Action;
 
 /**
@@ -34,7 +33,6 @@ import javax.swing.Action;
  * @version  $Revision$, $Date$
  */
 public interface ActionsProvider {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

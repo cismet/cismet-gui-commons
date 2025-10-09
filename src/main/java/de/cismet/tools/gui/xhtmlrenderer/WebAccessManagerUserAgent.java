@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  *  Copyright (C) 2010 jweintraut
  *
@@ -23,29 +23,24 @@
  */
 package de.cismet.tools.gui.xhtmlrenderer;
 
-import org.xhtmlrenderer.resource.XMLResource;
-import org.xhtmlrenderer.swing.NaiveUserAgent;
-
+import de.cismet.security.WebAccessManager;
+import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
+import de.cismet.security.exceptions.MissingArgumentException;
+import de.cismet.security.exceptions.NoHandlerForURLException;
+import de.cismet.security.exceptions.RequestFailedException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import de.cismet.security.WebAccessManager;
-
-import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
-import de.cismet.security.exceptions.MissingArgumentException;
-import de.cismet.security.exceptions.NoHandlerForURLException;
-import de.cismet.security.exceptions.RequestFailedException;
+import org.xhtmlrenderer.resource.XMLResource;
+import org.xhtmlrenderer.swing.NaiveUserAgent;
 
 /**
  * A subclass of Flying Saucer's NaiveUserAgent. It's intended to fetch all requested resources via WebAccessManager.
@@ -57,7 +52,8 @@ public class WebAccessManagerUserAgent extends NaiveUserAgent {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            WebAccessManagerUserAgent.class);
+        WebAccessManagerUserAgent.class
+    );
 
     //~ Instance fields --------------------------------------------------------
 
@@ -77,21 +73,21 @@ public class WebAccessManagerUserAgent extends NaiveUserAgent {
                 } catch (MalformedURLException ex) {
                     LOG.error("Can't load from URI '" + uri + "' since the resulting URL is malformed.", ex); // NOI18N
                 } catch (IOException ex) {
-                    LOG.error("Can't load from URI '" + uri + "'.", ex);                                      // NOI18N
+                    LOG.error("Can't load from URI '" + uri + "'.", ex); // NOI18N
                 }
             } else {
                 try {
                     result = WebAccessManager.getInstance().doRequest(new URL(uri));
                 } catch (URISyntaxException ex) {
-                    LOG.error("Can't load from URI '" + uri + "' since its syntax is broken.", ex);           // NOI18N
+                    LOG.error("Can't load from URI '" + uri + "' since its syntax is broken.", ex); // NOI18N
                 } catch (MissingArgumentException ex) {
                     LOG.error("Can't load from URI '" + uri + "' since it couldn't be converted to a URL.", ex); // NOI18N
                 } catch (AccessMethodIsNotSupportedException ex) {
                     LOG.error("Can't load from URI '" + uri + "' since the access method isn't supported.", ex); // NOI18N
                 } catch (RequestFailedException ex) {
-                    LOG.error("The request to load URI '" + uri + "' failed.", ex);                           // NOI18N
+                    LOG.error("The request to load URI '" + uri + "' failed.", ex); // NOI18N
                 } catch (NoHandlerForURLException ex) {
-                    LOG.error("Can't load from URI '" + uri + "' since there is no matching handler.", ex);   // NOI18N
+                    LOG.error("Can't load from URI '" + uri + "' since there is no matching handler.", ex); // NOI18N
                 } catch (Exception ex) {
                     LOG.error("Can't load from URI '" + uri + "' since an unexcpected exception occurred.", ex); // NOI18N
                 }

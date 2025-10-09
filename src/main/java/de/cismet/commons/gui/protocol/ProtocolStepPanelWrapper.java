@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,16 +12,13 @@
  */
 package de.cismet.commons.gui.protocol;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-
-import java.awt.BorderLayout;
-import java.awt.Component;
-
-import javax.swing.SwingUtilities;
-
 import de.cismet.commons.gui.protocol.listener.ProtocolStepListener;
 import de.cismet.commons.gui.protocol.listener.ProtocolStepListenerEvent;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import javax.swing.SwingUtilities;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 /**
  * DOCUMENT ME!
@@ -34,7 +31,8 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            ProtocolStepPanelWrapper.class);
+        ProtocolStepPanelWrapper.class
+    );
 
     //~ Instance fields --------------------------------------------------------
 
@@ -55,6 +53,7 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
     private javax.swing.JPanel panRemove;
     private javax.swing.JPanel panTitle;
     private javax.swing.JSeparator sepHeaderMain;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -86,8 +85,8 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("protocolStep not yet initialized => registering listener");
             }
-            protocolStepListener = new ProtocolStepListener() {
-
+            protocolStepListener =
+                new ProtocolStepListener() {
                     @Override
                     public void parametersChanged(final ProtocolStepListenerEvent event) {
                         final ProtocolStep step = event.getProtocolStep();
@@ -95,13 +94,14 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
                             if (LOG.isDebugEnabled()) {
                                 LOG.debug("protocolStep initialized => show step");
                             }
-                            SwingUtilities.invokeLater(new Runnable() {
-
+                            SwingUtilities.invokeLater(
+                                new Runnable() {
                                     @Override
                                     public void run() {
                                         showStep();
                                     }
-                                });
+                                }
+                            );
                         }
                     }
                 };
@@ -173,26 +173,33 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
 
         panRemove.setLayout(new java.awt.GridBagLayout());
 
-        btnRemove.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/commons/gui/protocol/remove_step.png"))); // NOI18N
+        btnRemove.setIcon(
+            new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/remove_step.png"))
+        ); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             btnRemove,
             org.openide.util.NbBundle.getMessage(
                 ProtocolStepPanelWrapper.class,
-                "ProtocolStepPanelWrapper.btnRemove.text"));                                 // NOI18N
-        btnRemove.setToolTipText(org.openide.util.NbBundle.getMessage(
+                "ProtocolStepPanelWrapper.btnRemove.text"
+            )
+        ); // NOI18N
+        btnRemove.setToolTipText(
+            org.openide.util.NbBundle.getMessage(
                 ProtocolStepPanelWrapper.class,
-                "ProtocolStepPanelWrapper.btnRemove.toolTipText"));                          // NOI18N
+                "ProtocolStepPanelWrapper.btnRemove.toolTipText"
+            )
+        ); // NOI18N
         btnRemove.setBorderPainted(false);
         btnRemove.setContentAreaFilled(false);
         btnRemove.setFocusPainted(false);
-        btnRemove.addActionListener(new java.awt.event.ActionListener() {
-
+        btnRemove.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnRemoveActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -231,7 +238,9 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
             lblIcon,
             org.openide.util.NbBundle.getMessage(
                 ProtocolStepPanelWrapper.class,
-                "ProtocolStepPanelWrapper.lblIcon.text")); // NOI18N
+                "ProtocolStepPanelWrapper.lblIcon.text"
+            )
+        ); // NOI18N
         panIcon.add(lblIcon, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -254,7 +263,9 @@ public class ProtocolStepPanelWrapper extends javax.swing.JPanel {
             lblMain,
             org.openide.util.NbBundle.getMessage(
                 ProtocolStepPanelWrapper.class,
-                "ProtocolStepPanelWrapper.lblMain.text")); // NOI18N
+                "ProtocolStepPanelWrapper.lblMain.text"
+            )
+        ); // NOI18N
         panMain.add(lblMain, java.awt.BorderLayout.CENTER);
 
         gridBagConstraints = new java.awt.GridBagConstraints();

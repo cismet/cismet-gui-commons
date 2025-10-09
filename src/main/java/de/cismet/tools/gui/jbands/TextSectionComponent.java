@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * TextSectionComponent.java
  *
@@ -28,6 +28,7 @@ public class TextSectionComponent extends JPanel {
     private javax.swing.JLabel lblTitle;
     private javax.swing.JSeparator sepLeft;
     private javax.swing.JSeparator sepRight;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -91,9 +92,9 @@ public class TextSectionComponent extends JPanel {
         setOpaque(false);
         setLayout(new java.awt.GridBagLayout());
 
-        lblLeft.setText(org.openide.util.NbBundle.getMessage(
-                TextSectionComponent.class,
-                "TextSectionComponent.lblLeft.text")); // NOI18N
+        lblLeft.setText(
+            org.openide.util.NbBundle.getMessage(TextSectionComponent.class, "TextSectionComponent.lblLeft.text")
+        ); // NOI18N
         add(lblLeft, new java.awt.GridBagConstraints());
 
         sepLeft.setForeground(new java.awt.Color(0, 0, 0));
@@ -103,9 +104,9 @@ public class TextSectionComponent extends JPanel {
         gridBagConstraints.weighty = 1.0;
         add(sepLeft, gridBagConstraints);
 
-        lblTitle.setText(org.openide.util.NbBundle.getMessage(
-                TextSectionComponent.class,
-                "TextSectionComponent.lblTitle.text")); // NOI18N
+        lblTitle.setText(
+            org.openide.util.NbBundle.getMessage(TextSectionComponent.class, "TextSectionComponent.lblTitle.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 9);
         add(lblTitle, gridBagConstraints);
@@ -117,9 +118,9 @@ public class TextSectionComponent extends JPanel {
         gridBagConstraints.weighty = 1.0;
         add(sepRight, gridBagConstraints);
 
-        lblRight.setText(org.openide.util.NbBundle.getMessage(
-                TextSectionComponent.class,
-                "TextSectionComponent.lblRight.text")); // NOI18N
+        lblRight.setText(
+            org.openide.util.NbBundle.getMessage(TextSectionComponent.class, "TextSectionComponent.lblRight.text")
+        ); // NOI18N
         add(lblRight, new java.awt.GridBagConstraints());
-    }                                                   // </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 }

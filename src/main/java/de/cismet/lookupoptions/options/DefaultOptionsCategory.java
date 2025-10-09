@@ -1,21 +1,18 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.lookupoptions.options;
 
-import org.openide.util.ImageUtilities;
-import org.openide.util.lookup.ServiceProvider;
-
+import de.cismet.lookupoptions.*;
 import java.awt.Image;
-
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-
-import de.cismet.lookupoptions.*;
+import org.openide.util.ImageUtilities;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Represents the default category which is used in Options Dialog when no category is assigned to an option panel.

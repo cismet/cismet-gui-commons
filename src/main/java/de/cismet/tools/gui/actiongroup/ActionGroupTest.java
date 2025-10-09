@@ -1,14 +1,13 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.actiongroup;
 
 import java.awt.event.ActionEvent;
-
 import javax.swing.*;
 
 /**
@@ -117,6 +116,7 @@ public class ActionGroupTest {
             System.out.println("Test Action B was just turned on."); // NOI18N
         }
     }
+
     /**
      * DOCUMENT ME!
      *

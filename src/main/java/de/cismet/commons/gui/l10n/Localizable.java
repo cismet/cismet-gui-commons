@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.l10n;
 
 import java.util.ResourceBundle;
@@ -17,7 +17,6 @@ import java.util.ResourceBundle;
  * @version  1.0
  */
 public interface Localizable {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

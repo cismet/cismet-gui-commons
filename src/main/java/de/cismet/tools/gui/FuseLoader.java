@@ -1,15 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
-import org.jdesktop.fuse.ResourceInjector;
-
 import java.util.Properties;
+import org.jdesktop.fuse.ResourceInjector;
 
 /**
  * DOCUMENT ME!
@@ -34,20 +33,21 @@ public final class FuseLoader {
      */
     private FuseLoader() {
         instance = this;
-        ResourceInjector.addModule("org.jdesktop.fuse.swing.SwingModule");                                     // NOI18N
+        ResourceInjector.addModule("org.jdesktop.fuse.swing.SwingModule"); // NOI18N
         try {
-            ResourceInjector.get("coolpanel.style")
-                    .load(getClass().getResource("/coolobjectrenderer/style.properties"));                     // NOI18N
-        } catch (Exception e) {
-        }
+            ResourceInjector
+                .get("coolpanel.style")
+                .load(getClass().getResource("/coolobjectrenderer/style.properties")); // NOI18N
+        } catch (Exception e) {}
         try {
-            ResourceInjector.get("purecoolpanel.style")
-                    .load(getClass().getResource("/de/cismet/tools/gui/purecoolpanelstyle.properties"));       // NOI18N
-        } catch (Exception e) {
-        }
+            ResourceInjector
+                .get("purecoolpanel.style")
+                .load(getClass().getResource("/de/cismet/tools/gui/purecoolpanelstyle.properties")); // NOI18N
+        } catch (Exception e) {}
         try {
-            ResourceInjector.get("blurredmapobjectrenderer.style")
-                    .load(getClass().getResource("/de/cismet/tools/gui/blurredmapobjectrenderer.properties")); // NOI18N
+            ResourceInjector
+                .get("blurredmapobjectrenderer.style")
+                .load(getClass().getResource("/de/cismet/tools/gui/blurredmapobjectrenderer.properties")); // NOI18N
         } catch (Exception e) {
             System.out.println("");
         }

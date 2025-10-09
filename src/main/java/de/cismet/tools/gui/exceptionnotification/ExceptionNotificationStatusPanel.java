@@ -1,30 +1,25 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.exceptionnotification;
 
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
-
-import org.openide.util.NbBundle;
-
+import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
-
 import java.util.Properties;
 import java.util.logging.Level;
-
 import javax.swing.JFrame;
 import javax.swing.Timer;
-
-import de.cismet.tools.gui.StaticSwingTools;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
+import org.openide.util.NbBundle;
 
 /**
  * A small panel shown in the status bar, with a click on a icon a error dialog is shown.At the start of the Navigator
@@ -45,7 +40,8 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            ExceptionNotificationStatusPanel.class);
+        ExceptionNotificationStatusPanel.class
+    );
     private static int FLASH_TIME;
     private static int FLASH_PAUSE;
     private static int STEADY_TIME;
@@ -53,8 +49,11 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
     static {
         final Properties prop = new Properties();
         try {
-            prop.load(ExceptionNotificationStatusPanel.class.getResourceAsStream(
-                    "exceptionNotificationStatusPanel.properties"));
+            prop.load(
+                ExceptionNotificationStatusPanel.class.getResourceAsStream(
+                        "exceptionNotificationStatusPanel.properties"
+                    )
+            );
             FLASH_TIME = Math.abs(Integer.parseInt(prop.getProperty("flashTime")));
             FLASH_PAUSE = Math.abs(Integer.parseInt(prop.getProperty("flashPause")));
             STEADY_TIME = Math.abs(Integer.parseInt(prop.getProperty("steadyTime")));
@@ -76,6 +75,7 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
     private org.jdesktop.swingx.JXHyperlink hlErrorIcon;
     private javax.swing.JPanel pnlDisabled;
     private javax.swing.JPanel pnlIcon;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -87,7 +87,7 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
         initComponents();
         this.setVisible(false);
 
-        final int repetitions = (int)Math.floor(FLASH_TIME * 1000d / FLASH_PAUSE);
+        final int repetitions = (int) Math.floor(FLASH_TIME * 1000d / FLASH_PAUSE);
         flashTimer = new Timer(FLASH_PAUSE, new FlashHandler(repetitions));
         flashTimer.setRepeats(true);
         flashTimer.setInitialDelay(0);
@@ -118,36 +118,41 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
         pnlIcon.setMaximumSize(new java.awt.Dimension(17, 16));
         pnlIcon.setMinimumSize(new java.awt.Dimension(17, 16));
         pnlIcon.setPreferredSize(new java.awt.Dimension(17, 16));
-        pnlIcon.addMouseListener(new java.awt.event.MouseAdapter() {
-
+        pnlIcon.addMouseListener(
+            new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(final java.awt.event.MouseEvent evt) {
                     pnlIconMouseClicked(evt);
                 }
-            });
+            }
+        );
         pnlIcon.setLayout(new java.awt.GridLayout(1, 0));
 
-        hlErrorIcon.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/exceptionnotification/exclamation.png"))); // NOI18N
+        hlErrorIcon.setIcon(
+            new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/tools/gui/exceptionnotification/exclamation.png")
+            )
+        ); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             hlErrorIcon,
             org.openide.util.NbBundle.getMessage(
                 ExceptionNotificationStatusPanel.class,
-                "ExceptionNotificationStatusPanel.hlErrorIcon.text"));                                  // NOI18N
-        hlErrorIcon.addActionListener(new java.awt.event.ActionListener() {
-
+                "ExceptionNotificationStatusPanel.hlErrorIcon.text"
+            )
+        ); // NOI18N
+        hlErrorIcon.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     hlErrorIconActionPerformed(evt);
                 }
-            });
+            }
+        );
         pnlIcon.add(hlErrorIcon);
 
         add(pnlIcon, "ICON");
-        pnlIcon.addMouseListener(new MouseAdapter() {
-            });
-        pnlIcon.addMouseMotionListener(new MouseMotionAdapter() {
-            });
+        pnlIcon.addMouseListener(new MouseAdapter() {});
+        pnlIcon.addMouseMotionListener(new MouseMotionAdapter() {});
     } // </editor-fold>//GEN-END:initComponents
 
     /**
@@ -157,7 +162,7 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
      */
     private void hlErrorIconActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_hlErrorIconActionPerformed
         showErrorPanel();
-    }                                                                               //GEN-LAST:event_hlErrorIconActionPerformed
+    } //GEN-LAST:event_hlErrorIconActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -166,7 +171,7 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
      */
     private void pnlIconMouseClicked(final java.awt.event.MouseEvent evt) { //GEN-FIRST:event_pnlIconMouseClicked
         showErrorPanel();
-    }                                                                       //GEN-LAST:event_pnlIconMouseClicked
+    } //GEN-LAST:event_pnlIconMouseClicked
 
     /**
      * Shows the error panel, if another exception occurs while the panel is shown, then the icon is not hidden
@@ -175,18 +180,21 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
     private void showErrorPanel() {
         final Throwable shownException = uncaughtException;
         final String basicMessage = NbBundle.getMessage(
-                ExceptionNotificationStatusPanel.class,
-                "ExceptionNotificationStatusPanel.hlErrorIconActionPerformed().error.basicMessage");
+            ExceptionNotificationStatusPanel.class,
+            "ExceptionNotificationStatusPanel.hlErrorIconActionPerformed().error.basicMessage"
+        );
         final ErrorInfo ei = new ErrorInfo(
-                NbBundle.getMessage(
-                    ExceptionNotificationStatusPanel.class,
-                    "ExceptionNotificationStatusPanel.hlErrorIconActionPerformed().error.title"),
-                basicMessage,
-                null,
-                null,
-                uncaughtException,
-                Level.SEVERE,
-                null);
+            NbBundle.getMessage(
+                ExceptionNotificationStatusPanel.class,
+                "ExceptionNotificationStatusPanel.hlErrorIconActionPerformed().error.title"
+            ),
+            basicMessage,
+            null,
+            null,
+            uncaughtException,
+            Level.SEVERE,
+            null
+        );
         JXErrorPane.showDialog(StaticSwingTools.getParentFrameIfNotNull(this), ei);
         if (shownException == uncaughtException) {
             // hide the icon
@@ -222,7 +230,7 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
             cardStr = "ICON";
             hlErrorIcon.setVisible(card);
         }
-        ((CardLayout)this.getLayout()).show(this, cardStr);
+        ((CardLayout) this.getLayout()).show(this, cardStr);
     }
 
     @Override
@@ -281,7 +289,7 @@ public class ExceptionNotificationStatusPanel extends javax.swing.JPanel impleme
                 if (counter >= repetitions) {
                     counter = 0;
                     letIconFlashOrShowAnEmptyPanel(true);
-                    ((Timer)ae.getSource()).stop();
+                    ((Timer) ae.getSource()).stop();
                     steadyTimer.restart();
                 }
             }

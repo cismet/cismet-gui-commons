@@ -1,24 +1,11 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
-
-import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.graphics.ShadowRenderer;
-import org.jdesktop.swingx.painter.AbstractAreaPainter.Style;
-import org.jdesktop.swingx.painter.AbstractLayoutPainter.HorizontalAlignment;
-import org.jdesktop.swingx.painter.AbstractLayoutPainter.VerticalAlignment;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.ImagePainter;
-import org.jdesktop.swingx.painter.RectanglePainter;
-import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
-import org.jdesktop.swingx.painter.effects.ShadowPathEffect;
-
-import org.openide.util.Exceptions;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -33,7 +20,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -41,6 +27,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.graphics.ShadowRenderer;
+import org.jdesktop.swingx.painter.AbstractAreaPainter.Style;
+import org.jdesktop.swingx.painter.AbstractLayoutPainter.HorizontalAlignment;
+import org.jdesktop.swingx.painter.AbstractLayoutPainter.VerticalAlignment;
+import org.jdesktop.swingx.painter.CompoundPainter;
+import org.jdesktop.swingx.painter.ImagePainter;
+import org.jdesktop.swingx.painter.RectanglePainter;
+import org.jdesktop.swingx.painter.effects.InnerGlowPathEffect;
+import org.jdesktop.swingx.painter.effects.ShadowPathEffect;
+import org.openide.util.Exceptions;
 
 /**
  * DOCUMENT ME!
@@ -86,13 +83,14 @@ public class PainterCoolPanel extends JXPanel {
         final int changeFactor = Math.abs(oldHeight - getHeight());
         if (oldHeight <= 0) {
             oldHeight = getHeight();
-//            return;
+            //            return;
         }
         final int percent = changeFactor * 100 / oldHeight;
 
         if ((panInter != null) && (panTitle != null)) {
-            if ((oldPanInterHeight != panInter.getBounds().height)
-                        || (oldPanTitleHeight != panTitle.getBounds().height)) {
+            if (
+                (oldPanInterHeight != panInter.getBounds().height) || (oldPanTitleHeight != panTitle.getBounds().height)
+            ) {
                 oldPanInterHeight = panInter.getBounds().height;
                 oldPanTitleHeight = panTitle.getBounds().height;
                 changeFlag = true;
@@ -155,28 +153,28 @@ public class PainterCoolPanel extends JXPanel {
     public void setImageRechtsOben(final ImageIcon icon) {
         if (icon != null) {
             try {
-//            ReflectionRenderer renderer2 = new ReflectionRenderer(0.5f,0.4f,true);
+                //            ReflectionRenderer renderer2 = new ReflectionRenderer(0.5f,0.4f,true);
                 final ShadowRenderer renderer = new ShadowRenderer(3, 0.5f, Color.BLACK);
 
-                final BufferedImage temp = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
-                        IMAGE_TYPE);
+                final BufferedImage temp = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), IMAGE_TYPE);
                 final Graphics tg = temp.createGraphics();
                 tg.drawImage(icon.getImage(), 0, 0, null);
                 tg.dispose();
 
                 final BufferedImage shadow = renderer.createShadow(temp);
 
-                final BufferedImage result = new BufferedImage(icon.getIconWidth() + (2 * 3),
-                        icon.getIconHeight()
-                                + (2 * 3),
-                        IMAGE_TYPE);
+                final BufferedImage result = new BufferedImage(
+                    icon.getIconWidth() + (2 * 3),
+                    icon.getIconHeight() + (2 * 3),
+                    IMAGE_TYPE
+                );
                 final Graphics rg = result.createGraphics();
                 rg.drawImage(shadow, 0, 0, null);
                 rg.drawImage(temp, 0, 0, null);
                 rg.dispose();
                 shadow.flush();
 
-//            BufferedImage ref = renderer.appendReflection(tmp);
+                //            BufferedImage ref = renderer.appendReflection(tmp);
                 final ImageIcon newIcon = new ImageIcon(result);
                 this.icons = newIcon;
             } catch (Exception e) {
@@ -193,25 +191,23 @@ public class PainterCoolPanel extends JXPanel {
             return;
         }
 
-        final float centerGradientOffset = (this.getHeight() - offset - (panInter.getBounds().height * 0.8f))
-                    / (this.getHeight() - offset);
+        final float centerGradientOffset =
+            (this.getHeight() - offset - (panInter.getBounds().height * 0.8f)) / (this.getHeight() - offset);
 
         final float[] dist = { 0.0f, centerGradientOffset, 1.0f };
         final Color[] colors = { new Color(66, 66, 66), new Color(102, 102, 102), new Color(66, 66, 66) };
-        final LinearGradientPaint titleAndInterGradient = new LinearGradientPaint(new Point2D.Double(0, 0),
-                new Point2D.Double(0, getHeight() - offset),
-                dist,
-                colors,
-                CycleMethod.NO_CYCLE);
+        final LinearGradientPaint titleAndInterGradient = new LinearGradientPaint(
+            new Point2D.Double(0, 0),
+            new Point2D.Double(0, getHeight() - offset),
+            dist,
+            colors,
+            CycleMethod.NO_CYCLE
+        );
 
         /*
          * Outer round Rect
          */
-        final RectanglePainter interAndTitle = new RectanglePainter(
-                titleAndInterGradient,
-                colorDarkLine,
-                1,
-                null);
+        final RectanglePainter interAndTitle = new RectanglePainter(titleAndInterGradient, colorDarkLine, 1, null);
         interAndTitle.setPaintStretched(true);
         interAndTitle.setRoundHeight(30);
         interAndTitle.setRoundWidth(30);
@@ -223,9 +219,9 @@ public class PainterCoolPanel extends JXPanel {
 
         final ImagePainter ip = new ImagePainter();
         if (icons != null) {
-            final BufferedImage img = (BufferedImage)icons.getImage();
+            final BufferedImage img = (BufferedImage) icons.getImage();
             ip.setImage(img);
-//            ip.setInsets(new Insets(offset, getWidth() - img.getWidth() - offset, 0, offset));
+            //            ip.setInsets(new Insets(offset, getWidth() - img.getWidth() - offset, 0, offset));
             ip.setInsets(new Insets(((panTitle.getBounds().height - img.getHeight()) / 2) + 3, 0, 0, 2 * offset));
             ip.setHorizontalAlignment(HorizontalAlignment.RIGHT);
             ip.setVerticalAlignment(VerticalAlignment.TOP);
@@ -258,10 +254,12 @@ public class PainterCoolPanel extends JXPanel {
          */
         final int upperInset = panTitle.getBounds().height;
         final int lowerInset = panInter.getBounds().height;
-        final RectanglePainter center = new RectanglePainter(new Color(226, 226, 226),
-                new Color(226, 226, 226),
-                1,
-                Style.BOTH);
+        final RectanglePainter center = new RectanglePainter(
+            new Color(226, 226, 226),
+            new Color(226, 226, 226),
+            1,
+            Style.BOTH
+        );
         center.setInsets(new Insets(upperInset, offset + 1, lowerInset, offset + 1));
 
         /*
@@ -269,21 +267,21 @@ public class PainterCoolPanel extends JXPanel {
          */
 
         final RectanglePainter upperWhiteLine = new RectanglePainter(
-                new Color(220, 220, 220),
-                new Color(46, 46, 46),
-                1,
-                Style.OUTLINE);
+            new Color(220, 220, 220),
+            new Color(46, 46, 46),
+            1,
+            Style.OUTLINE
+        );
         upperWhiteLine.setInsets(new Insets(upperInset, offset, lowerInset + 1, offset));
 
         final GradientPaint centerGradientPaint = new GradientPaint(
-                0,
-                upperInset
-                        + 2,
-                new Color(150, 150, 150),
-                0,
-                getHeight()
-                        - lowerInset,
-                new Color(231, 231, 231));
+            0,
+            upperInset + 2,
+            new Color(150, 150, 150),
+            0,
+            getHeight() - lowerInset,
+            new Color(231, 231, 231)
+        );
         final RectanglePainter centerGradient = new RectanglePainter(centerGradientPaint, null, 0, Style.FILLED);
         centerGradient.setPaintStretched(true);
         centerGradient.setInsets(new Insets(upperInset + 2, offset + 1, lowerInset + 2, offset + 1));

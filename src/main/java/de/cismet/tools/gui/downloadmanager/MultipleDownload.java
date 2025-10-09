@@ -1,22 +1,19 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
-import org.apache.log4j.Logger;
-
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.JPanel;
+import org.apache.log4j.Logger;
 
 /**
  * A multiple download comprises of several SingleDownloads.
@@ -145,7 +142,7 @@ public class MultipleDownload extends Observable implements Download, Observer {
             return;
         }
 
-        final AbstractDownload download = (AbstractDownload)o;
+        final AbstractDownload download = (AbstractDownload) o;
 
         synchronized (this) {
             if ((download.getStatus() == State.RUNNING) && (status == State.WAITING)) {
@@ -182,7 +179,7 @@ public class MultipleDownload extends Observable implements Download, Observer {
             return false;
         }
 
-        final MultipleDownload other = (MultipleDownload)obj;
+        final MultipleDownload other = (MultipleDownload) obj;
 
         if ((this.downloads == null) ? (other.downloads != null) : (!this.downloads.containsAll(other.downloads))) {
             return false;

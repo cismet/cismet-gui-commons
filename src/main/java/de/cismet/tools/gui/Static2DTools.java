@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 /**
@@ -13,5 +13,4 @@ package de.cismet.tools.gui;
  * @version  $Revision$, $Date$
  */
 @Deprecated
-public class Static2DTools extends de.cismet.tools.Static2DTools {
-}
+public class Static2DTools extends de.cismet.tools.Static2DTools {}

@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
 import java.io.FileOutputStream;
@@ -34,11 +34,13 @@ public class ByteArrayDownload extends AbstractDownload {
      * @param  filename   The name of the file to be created.
      * @param  extension  The extension of the file to be created.
      */
-    public ByteArrayDownload(final byte[] content,
-            final String title,
-            final String directory,
-            final String filename,
-            final String extension) {
+    public ByteArrayDownload(
+        final byte[] content,
+        final String title,
+        final String directory,
+        final String filename,
+        final String extension
+    ) {
         this.content = content;
         this.title = title;
         this.directory = directory;
@@ -82,8 +84,7 @@ public class ByteArrayDownload extends AbstractDownload {
             if (out != null) {
                 try {
                     out.close();
-                } catch (Exception e) {
-                }
+                } catch (Exception e) {}
             }
         }
 

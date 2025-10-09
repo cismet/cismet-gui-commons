@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,9 +12,8 @@
  */
 package de.cismet.commons.gui.protocol.listener;
 
-import java.util.EventObject;
-
 import de.cismet.commons.gui.protocol.ProtocolHandler;
+import java.util.EventObject;
 
 /**
  * DOCUMENT ME!
@@ -115,7 +114,7 @@ public class ProtocolHandlerListenerEvent extends EventObject {
      * @return  DOCUMENT ME!
      */
     public ProtocolHandler getSourceProtocolHander() {
-        return (ProtocolHandler)getSource();
+        return (ProtocolHandler) getSource();
     }
 
     /**

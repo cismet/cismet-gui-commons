@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -28,10 +28,10 @@ public class ContinueOrExitDialogActionEvent {
      * @version  $Revision$, $Date$
      */
     public enum Action {
-
         //~ Enum constants -----------------------------------------------------
 
-        EXIT_ACTION, CONTINUE_ACTION
+        EXIT_ACTION,
+        CONTINUE_ACTION,
     }
 
     //~ Instance fields --------------------------------------------------------

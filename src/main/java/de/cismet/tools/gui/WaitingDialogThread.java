@@ -1,25 +1,21 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.tools.gui;
 
-import org.apache.log4j.Logger;
-
-import org.openide.util.Cancellable;
-
 import java.awt.EventQueue;
-
 import java.util.concurrent.locks.ReentrantLock;
-
 import javax.swing.Icon;
+import org.apache.log4j.Logger;
+import org.openide.util.Cancellable;
 
 /**
  * Executes a task in the background and shows a WaitingDialog until the end of the task.
@@ -61,11 +57,13 @@ public abstract class WaitingDialogThread<T> implements Runnable, Cancellable {
      * @param  icon    the icon of the dialog
      * @param  delay   after this delay, the dialog should be shown
      */
-    public WaitingDialogThread(final java.awt.Frame parent,
-            final boolean modal,
-            final String text,
-            final Icon icon,
-            final int delay) {
+    public WaitingDialogThread(
+        final java.awt.Frame parent,
+        final boolean modal,
+        final String text,
+        final Icon icon,
+        final int delay
+    ) {
         this(parent, modal, text, icon, delay, false);
     }
 
@@ -80,12 +78,14 @@ public abstract class WaitingDialogThread<T> implements Runnable, Cancellable {
      * @param  cancellable  true, if a cancel button should be shown and the {@link #doInBackground()} method should
      *                      handle the interrupt signal, if this is true
      */
-    public WaitingDialogThread(final java.awt.Frame parent,
-            final boolean modal,
-            final String text,
-            final Icon icon,
-            final int delay,
-            final boolean cancellable) {
+    public WaitingDialogThread(
+        final java.awt.Frame parent,
+        final boolean modal,
+        final String text,
+        final Icon icon,
+        final int delay,
+        final boolean cancellable
+    ) {
         this.parent = parent;
         this.modal = modal;
         this.text = text;
@@ -117,8 +117,7 @@ public abstract class WaitingDialogThread<T> implements Runnable, Cancellable {
     /**
      * This method is executed in the edt after the backgrund task.
      */
-    protected void done() {
-    }
+    protected void done() {}
 
     /**
      * provides the result of the background task.
@@ -166,41 +165,42 @@ public abstract class WaitingDialogThread<T> implements Runnable, Cancellable {
             wd = new WaitDialog(parent, modal, text, icon);
         }
 
-        final Thread t = new Thread(new Runnable() {
+        final Thread t = new Thread(
+            new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        worker = new Thread(WaitingDialogThread.this);
+                        worker.start();
 
-                    @Override
-                    public void run() {
                         try {
-                            worker = new Thread(WaitingDialogThread.this);
-                            worker.start();
-
+                            worker.join();
+                        } catch (InterruptedException e) {
+                            // nothing to do
+                        }
+                    } finally {
+                        if (shouldBeSetVisible) {
                             try {
-                                worker.join();
-                            } catch (InterruptedException e) {
-                                // nothing to do
-                            }
-                        } finally {
-                            if (shouldBeSetVisible) {
-                                try {
-                                    lock.lock();
-                                    isAlive = false;
-                                    while (!wd.isVisible()) {
-                                        try {
-                                            Thread.sleep(20);
-                                        } catch (InterruptedException e) {
-                                            // nothing to do
-                                        }
+                                lock.lock();
+                                isAlive = false;
+                                while (!wd.isVisible()) {
+                                    try {
+                                        Thread.sleep(20);
+                                    } catch (InterruptedException e) {
+                                        // nothing to do
                                     }
-
-                                    wd.setVisible(false);
-                                    wd.dispose();
-                                } finally {
-                                    lock.unlock();
                                 }
+
+                                wd.setVisible(false);
+                                wd.dispose();
+                            } finally {
+                                lock.unlock();
                             }
                         }
                     }
-                });
+                }
+            }
+        );
 
         t.start();
 

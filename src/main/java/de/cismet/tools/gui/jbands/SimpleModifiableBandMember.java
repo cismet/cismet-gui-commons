@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * LineBandMember.java
  *
@@ -12,33 +12,28 @@
  */
 package de.cismet.tools.gui.jbands;
 
-import org.apache.log4j.Logger;
-
-import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.painter.*;
-import org.jdesktop.swingx.painter.Painter;
-
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JComponent;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
 import de.cismet.tools.gui.jbands.interfaces.BandMember;
 import de.cismet.tools.gui.jbands.interfaces.BandMemberListener;
 import de.cismet.tools.gui.jbands.interfaces.BandMemberSelectable;
 import de.cismet.tools.gui.jbands.interfaces.ModifiableBandMember;
 import de.cismet.tools.gui.jbands.interfaces.Section;
 import de.cismet.tools.gui.jbands.interfaces.StationaryBandMemberMouseListeningComponent;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import org.apache.log4j.Logger;
+import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.painter.*;
+import org.jdesktop.swingx.painter.Painter;
 
 /**
  * DOCUMENT ME!
@@ -46,12 +41,15 @@ import de.cismet.tools.gui.jbands.interfaces.StationaryBandMemberMouseListeningC
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public class SimpleModifiableBandMember extends JXPanel implements ModifiableBandMember,
-    Section,
-    StationaryBandMemberMouseListeningComponent,
-    BandMemberSelectable,
-    ActionListener,
-    PopupMenuListener {
+public class SimpleModifiableBandMember
+    extends JXPanel
+    implements
+        ModifiableBandMember,
+        Section,
+        StationaryBandMemberMouseListeningComponent,
+        BandMemberSelectable,
+        ActionListener,
+        PopupMenuListener {
 
     //~ Static fields/initializers ---------------------------------------------
 
@@ -78,6 +76,7 @@ public class SimpleModifiableBandMember extends JXPanel implements ModifiableBan
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel labText;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -99,10 +98,12 @@ public class SimpleModifiableBandMember extends JXPanel implements ModifiableBan
      * @param  from      DOCUMENT ME!
      * @param  to        DOCUMENT ME!
      */
-    public SimpleModifiableBandMember(final SimpleModifiableBand parent,
-            final boolean readOnly,
-            final double from,
-            final double to) {
+    public SimpleModifiableBandMember(
+        final SimpleModifiableBand parent,
+        final boolean readOnly,
+        final double from,
+        final double to
+    ) {
         this.readOnly = readOnly;
         initComponents();
         setAlpha(0.8f);
@@ -180,7 +181,8 @@ public class SimpleModifiableBandMember extends JXPanel implements ModifiableBan
      */
     protected void setDefaultBackground() {
         unselectedBackgroundPainter = new MattePainter(new Color(229, 0, 0));
-        selectedBackgroundPainter = new CompoundPainter(
+        selectedBackgroundPainter =
+            new CompoundPainter(
                 unselectedBackgroundPainter,
                 new RectanglePainter(
                     3,
@@ -192,7 +194,9 @@ public class SimpleModifiableBandMember extends JXPanel implements ModifiableBan
                     true,
                     new Color(100, 100, 100, 100),
                     2f,
-                    new Color(50, 50, 50, 100)));
+                    new Color(50, 50, 50, 100)
+                )
+            );
         if (isSelected) {
             setBackgroundPainter(selectedBackgroundPainter);
         } else {
@@ -240,8 +244,7 @@ public class SimpleModifiableBandMember extends JXPanel implements ModifiableBan
     } // </editor-fold>//GEN-END:initComponents
 
     @Override
-    public void mouseClicked(final MouseEvent e) {
-    }
+    public void mouseClicked(final MouseEvent e) {}
 
     @Override
     public void mouseEntered(final MouseEvent e) {
@@ -288,15 +291,17 @@ public class SimpleModifiableBandMember extends JXPanel implements ModifiableBan
         }
 
         if (!dragStart) {
-            if (JBandCursorManager.getInstance().getCursor().equals(
-                            Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR))) {
+            if (
+                JBandCursorManager.getInstance().getCursor().equals(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR))
+            ) {
                 dragSide = 1;
                 dragStart = true;
                 JBandCursorManager.getInstance().setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
                 JBandCursorManager.getInstance().setLocked(true);
                 JBandCursorManager.getInstance().setCursor(this);
-            } else if (JBandCursorManager.getInstance().getCursor().equals(
-                            Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR))) {
+            } else if (
+                JBandCursorManager.getInstance().getCursor().equals(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR))
+            ) {
                 dragSide = 2;
                 dragStart = true;
                 JBandCursorManager.getInstance().setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
@@ -376,16 +381,13 @@ public class SimpleModifiableBandMember extends JXPanel implements ModifiableBan
     }
 
     @Override
-    public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
-    }
+    public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {}
 
     @Override
-    public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
-    }
+    public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {}
 
     @Override
-    public void popupMenuCanceled(final PopupMenuEvent e) {
-    }
+    public void popupMenuCanceled(final PopupMenuEvent e) {}
 
     @Override
     public void addBandMemberListener(final BandMemberListener listener) {

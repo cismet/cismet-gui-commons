@@ -1,16 +1,17 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.tools.gui.downloadmanager;
 
+import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -20,14 +21,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
 import javax.swing.Timer;
-
-import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -67,30 +65,32 @@ public class DownloadDesktopNotification extends JWindow implements ActionListen
         final JWindow tmp = new JWindow(f);
         tmp.getContentPane().add(new DownloadDesktopNotificationPanel(downlaodName, isErroneous));
         tmp.pack();
-        this.setContentPane(new JPanel() {
-
-                @Override
-                protected void paintComponent(final Graphics g) {
-                    final Graphics2D g2d = (Graphics2D)g;
-                    super.paintComponent(g2d);
-                    g2d.setPaint(bgColor);
-                    g2d.fillRect(0, 0, this.getWidth(), currY);
+        this.setContentPane(
+                new JPanel() {
+                    @Override
+                    protected void paintComponent(final Graphics g) {
+                        final Graphics2D g2d = (Graphics2D) g;
+                        super.paintComponent(g2d);
+                        g2d.setPaint(bgColor);
+                        g2d.fillRect(0, 0, this.getWidth(), currY);
+                    }
                 }
-            });
+            );
         this.setBackground(bgColor);
         this.getContentPane().add(new DownloadDesktopNotificationPanel(downlaodName, isErroneous));
         this.setSize(tmp.getSize());
         finalHeight = tmp.getHeight();
-        this.addMouseListener(new MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final MouseEvent me) {
-                    if (me.getClickCount() == 2) {
-                        final JDialog downloadManager = DownloadManagerDialog.getInstance();
-                        StaticSwingTools.showDialog(downloadManager);
+        this.addMouseListener(
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(final MouseEvent me) {
+                        if (me.getClickCount() == 2) {
+                            final JDialog downloadManager = DownloadManagerDialog.getInstance();
+                            StaticSwingTools.showDialog(downloadManager);
+                        }
                     }
                 }
-            });
+            );
     }
 
     //~ Methods ----------------------------------------------------------------

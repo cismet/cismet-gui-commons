@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.protocol;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -12,10 +12,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
-
-import java.util.Date;
-
 import de.cismet.commons.gui.protocol.listener.ProtocolStepListener;
+import java.util.Date;
 
 /**
  * DOCUMENT ME!
@@ -33,14 +31,9 @@ import de.cismet.commons.gui.protocol.listener.ProtocolStepListener;
 // FIXME: implement customized type handler to avoid the need for java class named in JSON
 // see https://www.thomaskeller.biz/blog/2013/09/10/custom-polymorphic-type-handling-with-jackson/
 // and http://stackoverflow.com/questions/31665620/is-jacksons-jsonsubtypes-still-necessary-for-polymorphic-deserialization
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.CLASS,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "@javatype"
-)
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@javatype")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public interface ProtocolStep {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.equalizer;
 
 /**
@@ -14,7 +14,6 @@ package de.cismet.commons.gui.equalizer;
  * @version  1.0
  */
 public interface EqualizerModel {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

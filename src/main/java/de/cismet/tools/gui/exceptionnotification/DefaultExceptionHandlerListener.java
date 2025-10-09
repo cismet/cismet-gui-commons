@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.exceptionnotification;
 
 /**
@@ -14,7 +14,6 @@ package de.cismet.tools.gui.exceptionnotification;
  * @version  $Revision$, $Date$
  */
 public interface DefaultExceptionHandlerListener {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

@@ -1,11 +1,12 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.treetable;
+
 /*
  * TreeTableExample2.java
  *
@@ -28,9 +29,7 @@ package de.cismet.tools.gui.treetable;
 
 import java.awt.*;
 import java.awt.event.*;
-
 import java.text.NumberFormat;
-
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -100,13 +99,14 @@ public class TreeTableExample2 {
         frame.setJMenuBar(mb);
         frame.pack();
         frame.show();
-        SwingUtilities.invokeLater(new Runnable() {
-
+        SwingUtilities.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     reload(model.getRoot());
                 }
-            });
+            }
+        );
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -160,19 +160,23 @@ public class TreeTableExample2 {
      * @return  DOCUMENT ME!
      */
     protected JFrame createFrame() {
-        final JFrame retFrame = new JFrame(org.openide.util.NbBundle.getMessage(
-                    TreeTableExample2.class,
-                    "TreeTableExample2.createFrame().retFrame.title")); // NOI18N
+        final JFrame retFrame = new JFrame(
+            org.openide.util.NbBundle.getMessage(
+                TreeTableExample2.class,
+                "TreeTableExample2.createFrame().retFrame.title"
+            )
+        ); // NOI18N
 
-        retFrame.addWindowListener(new WindowAdapter() {
-
+        retFrame.addWindowListener(
+            new WindowAdapter() {
                 @Override
                 public void windowClosing(final WindowEvent we) {
                     if (--ttCount == 0) {
                         System.exit(0);
                     }
                 }
-            });
+            }
+        );
         return retFrame;
     }
 
@@ -182,16 +186,23 @@ public class TreeTableExample2 {
      * @return  DOCUMENT ME!
      */
     protected JMenuBar createMenuBar() {
-        final JMenu fileMenu = new JMenu(org.openide.util.NbBundle.getMessage(
-                    TreeTableExample2.class,
-                    "TreeTableExample2.createMenuBar().fileMenu.title")); // NOI18N
+        final JMenu fileMenu = new JMenu(
+            org.openide.util.NbBundle.getMessage(
+                TreeTableExample2.class,
+                "TreeTableExample2.createMenuBar().fileMenu.title"
+            )
+        ); // NOI18N
         JMenuItem menuItem;
 
-        menuItem = new JMenuItem(org.openide.util.NbBundle.getMessage(
+        menuItem =
+            new JMenuItem(
+                org.openide.util.NbBundle.getMessage(
                     TreeTableExample2.class,
-                    "TreeTableExample2.createMenuBar().menuItem.text.open")); // NOI18N
-        menuItem.addActionListener(new ActionListener() {
-
+                    "TreeTableExample2.createMenuBar().menuItem.text.open"
+                )
+            ); // NOI18N
+        menuItem.addActionListener(
+            new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent ae) {
                     final JFileChooser fc = new JFileChooser(path);
@@ -206,15 +217,20 @@ public class TreeTableExample2 {
                         new TreeTableExample2(newPath);
                     }
                 }
-            });
+            }
+        );
         fileMenu.add(menuItem);
         fileMenu.addSeparator();
 
-        menuItem = new JMenuItem(org.openide.util.NbBundle.getMessage(
+        menuItem =
+            new JMenuItem(
+                org.openide.util.NbBundle.getMessage(
                     TreeTableExample2.class,
-                    "TreeTableExample2.createMenuBar().menuItem.text.reload")); // NOI18N
-        menuItem.addActionListener(new ActionListener() {
-
+                    "TreeTableExample2.createMenuBar().menuItem.text.reload"
+                )
+            ); // NOI18N
+        menuItem.addActionListener(
+            new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent ae) {
                     final TreePath path = treeTable.getTree().getSelectionPath();
@@ -224,33 +240,44 @@ public class TreeTableExample2 {
                         reload(path.getLastPathComponent());
                     }
                 }
-            });
+            }
+        );
         fileMenu.add(menuItem);
 
-        menuItem = new JMenuItem(org.openide.util.NbBundle.getMessage(
+        menuItem =
+            new JMenuItem(
+                org.openide.util.NbBundle.getMessage(
                     TreeTableExample2.class,
-                    "TreeTableExample2.createMenuBar().menuItem.text.stop")); // NOI18N
-        menuItem.addActionListener(new ActionListener() {
-
+                    "TreeTableExample2.createMenuBar().menuItem.text.stop"
+                )
+            ); // NOI18N
+        menuItem.addActionListener(
+            new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent ae) {
                     model.stopLoading();
                 }
-            });
+            }
+        );
         fileMenu.add(menuItem);
 
         fileMenu.addSeparator();
 
-        menuItem = new JMenuItem(org.openide.util.NbBundle.getMessage(
+        menuItem =
+            new JMenuItem(
+                org.openide.util.NbBundle.getMessage(
                     TreeTableExample2.class,
-                    "TreeTableExample2.createMenuBar().menuItem.text.exit")); // NOI18N
-        menuItem.addActionListener(new ActionListener() {
-
+                    "TreeTableExample2.createMenuBar().menuItem.text.exit"
+                )
+            ); // NOI18N
+        menuItem.addActionListener(
+            new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent ae) {
                     System.exit(0);
                 }
-            });
+            }
+        );
         fileMenu.add(menuItem);
 
         // Create a menu bar
@@ -262,9 +289,12 @@ public class TreeTableExample2 {
         final UIManager.LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
         final ButtonGroup lafGroup = new ButtonGroup();
 
-        final JMenu optionsMenu = new JMenu(org.openide.util.NbBundle.getMessage(
-                    TreeTableExample2.class,
-                    "TreeTableExample2.createMenuBar().optionsMenu.title")); // NOI18N
+        final JMenu optionsMenu = new JMenu(
+            org.openide.util.NbBundle.getMessage(
+                TreeTableExample2.class,
+                "TreeTableExample2.createMenuBar().optionsMenu.title"
+            )
+        ); // NOI18N
 
         menuBar.add(optionsMenu);
 
@@ -273,24 +303,28 @@ public class TreeTableExample2 {
             optionsMenu.add(rb);
             rb.setSelected(UIManager.getLookAndFeel().getName().equals(lafs[i].getName()));
             rb.putClientProperty("UIKey", lafs[i]); // NOI18N
-            rb.addItemListener(new ItemListener() {
-
+            rb.addItemListener(
+                new ItemListener() {
                     @Override
                     public void itemStateChanged(final ItemEvent ae) {
-                        final JRadioButtonMenuItem rb2 = (JRadioButtonMenuItem)ae.getSource();
+                        final JRadioButtonMenuItem rb2 = (JRadioButtonMenuItem) ae.getSource();
                         if (rb2.isSelected()) {
-                            final UIManager.LookAndFeelInfo info = (UIManager.LookAndFeelInfo)rb2.getClientProperty(
-                                    "UIKey");                          // NOI18N
+                            final UIManager.LookAndFeelInfo info = (UIManager.LookAndFeelInfo) rb2.getClientProperty(
+                                "UIKey"
+                            ); // NOI18N
                             try {
                                 UIManager.setLookAndFeel(info.getClassName());
                                 SwingUtilities.updateComponentTreeUI(frame);
                             } catch (Exception e) {
-                                System.err.println("unable to set UI " // NOI18N
-                                            + e.getMessage());
+                                System.err.println(
+                                    "unable to set UI " + // NOI18N
+                                    e.getMessage()
+                                );
                             }
                         }
                     }
-                });
+                }
+            );
             lafGroup.add(rb);
         }
         return menuBar;
@@ -313,20 +347,26 @@ public class TreeTableExample2 {
      */
     protected void updateStatusLabel() {
         if (reloadPath != null) {
-            statusLabel.setText(org.openide.util.NbBundle.getMessage(
+            statusLabel.setText(
+                org.openide.util.NbBundle.getMessage(
                     TreeTableExample2.class,
                     "TreeTableExample2.statusLabel.text.reload",
-                    model.getPath(reloadPath.getLastPathComponent())));
+                    model.getPath(reloadPath.getLastPathComponent())
+                )
+            );
             if ((reloadCounter % 4) < 2) {
                 statusLabel.setForeground(Color.red);
             } else {
                 statusLabel.setForeground(Color.blue);
             }
         } else if (!model.isReloading()) {
-            statusLabel.setText(org.openide.util.NbBundle.getMessage(
+            statusLabel.setText(
+                org.openide.util.NbBundle.getMessage(
                     TreeTableExample2.class,
                     "TreeTableExample2.statusLabel.text.default",
-                    NumberFormat.getInstance().format(model.getTotalSize(model.getRoot()))));
+                    NumberFormat.getInstance().format(model.getTotalSize(model.getRoot()))
+                )
+            );
             statusLabel.setForeground(Color.black);
         }
     }
@@ -345,7 +385,7 @@ public class TreeTableExample2 {
             String path;
 
             try {
-                path = System.getProperty("user.home");                   // NOI18N
+                path = System.getProperty("user.home"); // NOI18N
                 if (path != null) {
                     new TreeTableExample2(path);
                 }
@@ -430,7 +470,7 @@ public class TreeTableExample2 {
          */
         protected void generateChangeEvent(final int row) {
             if (row != -1) {
-                final AbstractTableModel tModel = (AbstractTableModel)treeTable.getModel();
+                final AbstractTableModel tModel = (AbstractTableModel) treeTable.getModel();
 
                 tModel.fireTableChanged(new TableModelEvent(tModel, row, row, 1));
             }
@@ -521,14 +561,15 @@ public class TreeTableExample2 {
          * @return  DOCUMENT ME!
          */
         @Override
-        public Component getTableCellRendererComponent(final JTable table,
-                final Object value,
-                final boolean isSelected,
-                final boolean hasFocus,
-                final int row,
-                final int column) {
-            super.getTableCellRendererComponent(table, value, isSelected,
-                hasFocus, row, column);
+        public Component getTableCellRendererComponent(
+            final JTable table,
+            final Object value,
+            final boolean isSelected,
+            final boolean hasFocus,
+            final int row,
+            final int column
+        ) {
+            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             lastRow = row;
             return this;
         }
@@ -551,22 +592,23 @@ public class TreeTableExample2 {
                 final int diameter = Math.min(width, height);
 
                 if (reloadCounter < 5) {
-                    g.fillArc((width - diameter) / 2,
-                        (height - diameter)
-                                / 2,
+                    g.fillArc(
+                        (width - diameter) / 2,
+                        (height - diameter) / 2,
                         diameter,
                         diameter,
                         90,
-                        -(reloadCounter * 90));
+                        -(reloadCounter * 90)
+                    );
                 } else {
-                    g.fillArc((width - diameter) / 2,
-                        (height - diameter)
-                                / 2,
+                    g.fillArc(
+                        (width - diameter) / 2,
+                        (height - diameter) / 2,
                         diameter,
                         diameter,
                         90,
-                        (4 - (reloadCounter % 4))
-                                * 90);
+                        (4 - (reloadCounter % 4)) * 90
+                    );
                 }
             } else {
                 super.paint(g);

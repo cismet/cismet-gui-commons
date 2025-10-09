@@ -1,21 +1,18 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.wizard;
 
+import java.awt.Component;
+import java.util.concurrent.locks.ReentrantLock;
+import javax.swing.event.ChangeListener;
 import org.openide.WizardDescriptor;
 import org.openide.util.ChangeSupport;
 import org.openide.util.HelpCtx;
-
-import java.awt.Component;
-
-import java.util.concurrent.locks.ReentrantLock;
-
-import javax.swing.event.ChangeListener;
 
 /**
  * Basic wizard panel implementation to eliminate the tedious task of creating Panel implementations.
@@ -74,13 +71,13 @@ public abstract class AbstractWizardPanel implements WizardDescriptor.Panel {
 
     @Override
     public void readSettings(final Object settings) {
-        this.wizard = (WizardDescriptor)settings;
+        this.wizard = (WizardDescriptor) settings;
         this.read(wizard);
     }
 
     @Override
     public void storeSettings(final Object settings) {
-        this.wizard = (WizardDescriptor)settings;
+        this.wizard = (WizardDescriptor) settings;
         this.store(wizard);
     }
 

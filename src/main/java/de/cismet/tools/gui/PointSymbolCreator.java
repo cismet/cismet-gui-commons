@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -39,17 +39,20 @@ public class PointSymbolCreator {
      *
      * @return  DOCUMENT ME!
      */
-    public static BufferedImage createPointSymbol(final boolean drawLine,
-            final boolean drawFill,
-            final int symbolSize,
-            final int lineWidth,
-            final Color fillColor,
-            final Color lineColor) {
-        final BufferedImage symbol = new BufferedImage((2 * lineWidth) + symbolSize,
-                (2 * lineWidth)
-                        + symbolSize,
-                BufferedImage.TYPE_INT_ARGB);
-        final Graphics2D g = (Graphics2D)symbol.getGraphics();
+    public static BufferedImage createPointSymbol(
+        final boolean drawLine,
+        final boolean drawFill,
+        final int symbolSize,
+        final int lineWidth,
+        final Color fillColor,
+        final Color lineColor
+    ) {
+        final BufferedImage symbol = new BufferedImage(
+            (2 * lineWidth) + symbolSize,
+            (2 * lineWidth) + symbolSize,
+            BufferedImage.TYPE_INT_ARGB
+        );
+        final Graphics2D g = (Graphics2D) symbol.getGraphics();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         final int x = (symbol.getWidth() / 2) - (symbolSize / 2);

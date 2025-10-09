@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.historybutton;
 
 /**
@@ -19,7 +19,6 @@ package de.cismet.tools.gui.historybutton;
  * @version  $Revision$, $Date$
  */
 public interface HistoryModelListener {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

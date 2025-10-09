@@ -1,29 +1,24 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
-import org.apache.log4j.Logger;
-
-import org.jdom.Element;
-
+import de.cismet.tools.configuration.Configurable;
+import de.cismet.tools.configuration.NoWriteError;
 import java.io.File;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.event.EventListenerList;
-
-import de.cismet.tools.configuration.Configurable;
-import de.cismet.tools.configuration.NoWriteError;
+import org.apache.log4j.Logger;
+import org.jdom.Element;
 
 /**
  * The download manager manages all current downloads. New downloads are added to a collection, completed downloads are
@@ -51,8 +46,9 @@ public class DownloadManager implements Observer, Configurable {
 
     //~ Instance fields --------------------------------------------------------
 
-    private File destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
-                    + "cidsDownload");
+    private File destinationDirectory = new File(
+        System.getProperty("user.home") + System.getProperty("file.separator") + "cidsDownload"
+    );
     private int parallelDownloads = 2;
     private int notificationDisplayTime = 3;
     private LinkedList<Download> downloads = new LinkedList<Download>();
@@ -69,8 +65,7 @@ public class DownloadManager implements Observer, Configurable {
     /**
      * Creates a new DownloadManager object.
      */
-    private DownloadManager() {
-    }
+    private DownloadManager() {}
 
     //~ Methods ----------------------------------------------------------------
 
@@ -102,7 +97,7 @@ public class DownloadManager implements Observer, Configurable {
         download.addObserver(this);
 
         if (download instanceof MultipleDownload) {
-            final MultipleDownload multipleDownload = (MultipleDownload)download;
+            final MultipleDownload multipleDownload = (MultipleDownload) download;
             downloadsToStart.add(multipleDownload);
 
             for (final Download singleDownload : multipleDownload.getDownloads()) {
@@ -115,14 +110,10 @@ public class DownloadManager implements Observer, Configurable {
             downloadsToStart.add(download);
         }
 
-        notifyDownloadListChanged(new DownloadListChangedEvent(
-                this,
-                download,
-                DownloadListChangedEvent.Action.ADDED));
-        notifyDownloadListChanged(new DownloadListChangedEvent(
-                this,
-                download,
-                DownloadListChangedEvent.Action.CHANGED_COUNTERS));
+        notifyDownloadListChanged(new DownloadListChangedEvent(this, download, DownloadListChangedEvent.Action.ADDED));
+        notifyDownloadListChanged(
+            new DownloadListChangedEvent(this, download, DownloadListChangedEvent.Action.CHANGED_COUNTERS)
+        );
 
         startDownloads();
     }
@@ -134,7 +125,8 @@ public class DownloadManager implements Observer, Configurable {
      * @param  backgroundTaskMultipleDownload  DOCUMENT ME!
      */
     public synchronized void addDownloadsSubsequently(
-            final BackgroundTaskMultipleDownload backgroundTaskMultipleDownload) {
+        final BackgroundTaskMultipleDownload backgroundTaskMultipleDownload
+    ) {
         if ((backgroundTaskMultipleDownload == null) || !downloads.contains(backgroundTaskMultipleDownload)) {
             return;
         }
@@ -151,14 +143,20 @@ public class DownloadManager implements Observer, Configurable {
         }
 
         if (downloadsWereAdded) {
-            notifyDownloadListChanged(new DownloadListChangedEvent(
+            notifyDownloadListChanged(
+                new DownloadListChangedEvent(
                     this,
                     backgroundTaskMultipleDownload,
-                    DownloadListChangedEvent.Action.ADDED_DOWNLOADS_SUBSEQUENTLY));
-            notifyDownloadListChanged(new DownloadListChangedEvent(
+                    DownloadListChangedEvent.Action.ADDED_DOWNLOADS_SUBSEQUENTLY
+                )
+            );
+            notifyDownloadListChanged(
+                new DownloadListChangedEvent(
                     this,
                     backgroundTaskMultipleDownload,
-                    DownloadListChangedEvent.Action.CHANGED_COUNTERS));
+                    DownloadListChangedEvent.Action.CHANGED_COUNTERS
+                )
+            );
 
             startDownloads();
         }
@@ -171,9 +169,11 @@ public class DownloadManager implements Observer, Configurable {
         final Collection<Download> downloadsRemoved = new LinkedList<Download>();
 
         for (final Download download : downloads) {
-            if ((download.getStatus() == Download.State.COMPLETED)
-                        || (download.getStatus() == Download.State.COMPLETED_WITH_ERROR)
-                        || (download.getStatus() == Download.State.ABORTED)) {
+            if (
+                (download.getStatus() == Download.State.COMPLETED) ||
+                (download.getStatus() == Download.State.COMPLETED_WITH_ERROR) ||
+                (download.getStatus() == Download.State.ABORTED)
+            ) {
                 downloadsRemoved.add(download);
             }
         }
@@ -187,23 +187,26 @@ public class DownloadManager implements Observer, Configurable {
             countDownloadsTotal--;
 
             switch (download.getStatus()) {
-                case COMPLETED_WITH_ERROR: {
-                    countDownloadsErroneous--;
-                    break;
-                }
-                case COMPLETED: {
-                    countDownloadsCompleted--;
-                    break;
-                }
-                case ABORTED: {
-                    countDownloadsCancelled--;
-                    break;
-                }
+                case COMPLETED_WITH_ERROR:
+                    {
+                        countDownloadsErroneous--;
+                        break;
+                    }
+                case COMPLETED:
+                    {
+                        countDownloadsCompleted--;
+                        break;
+                    }
+                case ABORTED:
+                    {
+                        countDownloadsCancelled--;
+                        break;
+                    }
             }
 
             download.deleteObserver(this);
             if (download instanceof MultipleDownload) {
-                final MultipleDownload multipleDownload = (MultipleDownload)download;
+                final MultipleDownload multipleDownload = (MultipleDownload) download;
 
                 for (final Download singleDownload : multipleDownload.getDownloads()) {
                     singleDownload.deleteObserver(this);
@@ -212,14 +215,12 @@ public class DownloadManager implements Observer, Configurable {
             }
         }
 
-        notifyDownloadListChanged(new DownloadListChangedEvent(
-                this,
-                downloadsRemoved,
-                DownloadListChangedEvent.Action.REMOVED));
-        notifyDownloadListChanged(new DownloadListChangedEvent(
-                this,
-                downloadsRemoved,
-                DownloadListChangedEvent.Action.CHANGED_COUNTERS));
+        notifyDownloadListChanged(
+            new DownloadListChangedEvent(this, downloadsRemoved, DownloadListChangedEvent.Action.REMOVED)
+        );
+        notifyDownloadListChanged(
+            new DownloadListChangedEvent(this, downloadsRemoved, DownloadListChangedEvent.Action.CHANGED_COUNTERS)
+        );
     }
 
     /**
@@ -232,7 +233,7 @@ public class DownloadManager implements Observer, Configurable {
         download.deleteObserver(this);
 
         if (download instanceof MultipleDownload) {
-            final MultipleDownload multipleDownload = (MultipleDownload)download;
+            final MultipleDownload multipleDownload = (MultipleDownload) download;
 
             for (final Download singleDownload : multipleDownload.getDownloads()) {
                 singleDownload.deleteObserver(this);
@@ -245,28 +246,29 @@ public class DownloadManager implements Observer, Configurable {
 
         countDownloadsTotal--;
         switch (download.getStatus()) {
-            case COMPLETED_WITH_ERROR: {
-                countDownloadsErroneous--;
-                break;
-            }
-            case COMPLETED: {
-                countDownloadsCompleted--;
-                break;
-            }
-            case ABORTED: {
-                countDownloadsCancelled--;
-                break;
-            }
+            case COMPLETED_WITH_ERROR:
+                {
+                    countDownloadsErroneous--;
+                    break;
+                }
+            case COMPLETED:
+                {
+                    countDownloadsCompleted--;
+                    break;
+                }
+            case ABORTED:
+                {
+                    countDownloadsCancelled--;
+                    break;
+                }
         }
 
-        notifyDownloadListChanged(new DownloadListChangedEvent(
-                this,
-                download,
-                DownloadListChangedEvent.Action.REMOVED));
-        notifyDownloadListChanged(new DownloadListChangedEvent(
-                this,
-                download,
-                DownloadListChangedEvent.Action.CHANGED_COUNTERS));
+        notifyDownloadListChanged(
+            new DownloadListChangedEvent(this, download, DownloadListChangedEvent.Action.REMOVED)
+        );
+        notifyDownloadListChanged(
+            new DownloadListChangedEvent(this, download, DownloadListChangedEvent.Action.CHANGED_COUNTERS)
+        );
     }
 
     /**
@@ -424,62 +426,65 @@ public class DownloadManager implements Observer, Configurable {
             return;
         }
 
-        final Download download = (Download)o;
+        final Download download = (Download) o;
 
         switch (download.getStatus()) {
-            case COMPLETED: {
-                if (!(download instanceof MultipleDownload)) {
-                    countDownloadsRunning--;
+            case COMPLETED:
+                {
+                    if (!(download instanceof MultipleDownload)) {
+                        countDownloadsRunning--;
+                    }
+
+                    if (downloads.contains(download)) {
+                        countDownloadsCompleted++;
+                    }
+
+                    startDownloads();
+
+                    break;
                 }
+            case COMPLETED_WITH_ERROR:
+                {
+                    if (!(download instanceof MultipleDownload)) {
+                        countDownloadsRunning--;
+                    }
 
-                if (downloads.contains(download)) {
-                    countDownloadsCompleted++;
+                    if (downloads.contains(download)) {
+                        countDownloadsErroneous++;
+                    }
+
+                    startDownloads();
+
+                    break;
                 }
+            case RUNNING:
+                {
+                    if (!(download instanceof MultipleDownload)) {
+                        countDownloadsRunning++;
+                    }
 
-                startDownloads();
-
-                break;
-            }
-            case COMPLETED_WITH_ERROR: {
-                if (!(download instanceof MultipleDownload)) {
-                    countDownloadsRunning--;
+                    break;
                 }
+            case ABORTED:
+                {
+                    if (!(download instanceof MultipleDownload)) {
+                        countDownloadsRunning--;
+                    }
 
-                if (downloads.contains(download)) {
-                    countDownloadsErroneous++;
+                    if (downloads.contains(download)) {
+                        //                    countDownloadsCompleted++;
+                        countDownloadsCancelled++;
+                    }
+
+                    startDownloads();
+
+                    break;
                 }
-
-                startDownloads();
-
-                break;
-            }
-            case RUNNING: {
-                if (!(download instanceof MultipleDownload)) {
-                    countDownloadsRunning++;
-                }
-
-                break;
-            }
-            case ABORTED: {
-                if (!(download instanceof MultipleDownload)) {
-                    countDownloadsRunning--;
-                }
-
-                if (downloads.contains(download)) {
-//                    countDownloadsCompleted++;
-                    countDownloadsCancelled++;
-                }
-
-                startDownloads();
-
-                break;
-            }
         }
 
-        notifyDownloadListChanged(new DownloadListChangedEvent(
-                this,
-                download,
-                DownloadListChangedEvent.Action.CHANGED_COUNTERS));
+        notifyDownloadListChanged(
+            new DownloadListChangedEvent(this, download, DownloadListChangedEvent.Action.CHANGED_COUNTERS)
+        );
     }
 
     /**
@@ -517,8 +522,8 @@ public class DownloadManager implements Observer, Configurable {
         DownloadManagerDialog.getInstance().setJobName("");
         DownloadManagerDialog.getInstance().setOpenAutomaticallyEnabled(true);
 
-        destinationDirectory = new File(System.getProperty("user.home") + System.getProperty("file.separator")
-                        + "cidsDownload");
+        destinationDirectory =
+            new File(System.getProperty("user.home") + System.getProperty("file.separator") + "cidsDownload");
 
         Element downloads = null;
         if (parent == null) {
@@ -531,8 +536,9 @@ public class DownloadManager implements Observer, Configurable {
             LOG.warn("The download manager isn't configured. Using default values.");
 
             if (!destinationDirectory.isDirectory() || !destinationDirectory.canWrite()) {
-                LOG.error("The download manager can't use the directory '" + destinationDirectory.getAbsolutePath()
-                            + "'.");
+                LOG.error(
+                    "The download manager can't use the directory '" + destinationDirectory.getAbsolutePath() + "'."
+                );
             }
 
             return;
@@ -540,8 +546,12 @@ public class DownloadManager implements Observer, Configurable {
 
         final Element directory = downloads.getChild(XML_CONF_DIRECTORY);
         if ((directory == null) || (directory.getTextTrim() == null)) {
-            LOG.warn("There is no destination directory configured for downloads. Using default destination directory '"
-                        + System.getProperty("user.home") + System.getProperty("file.separator") + "cidsDownload'.");
+            LOG.warn(
+                "There is no destination directory configured for downloads. Using default destination directory '" +
+                System.getProperty("user.home") +
+                System.getProperty("file.separator") +
+                "cidsDownload'."
+            );
         } else {
             destinationDirectory = new File(directory.getTextTrim());
         }
@@ -570,7 +580,8 @@ public class DownloadManager implements Observer, Configurable {
             } catch (NumberFormatException e) {
                 LOG.warn(
                     "Configuration for display time of download notification is invalid. Using default value of '3' sec",
-                    e);
+                    e
+                );
                 this.notificationDisplayTime = 3;
             }
         }
@@ -584,31 +595,37 @@ public class DownloadManager implements Observer, Configurable {
         final Element askForTitle = dialog.getChild(XML_CONF_DIALOG_AKSFORTITLE);
         if ((askForTitle == null) || (askForTitle.getTextTrim() == null)) {
             LOG.warn(
-                "There is no configuration whether to ask for download titles or not. Using default value 'true'.");
+                "There is no configuration whether to ask for download titles or not. Using default value 'true'."
+            );
         } else {
             final String value = askForTitle.getTextTrim();
-            DownloadManagerDialog.getInstance()
-                    .setAskForJobNameEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
+            DownloadManagerDialog
+                .getInstance()
+                .setAskForJobNameEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
         final Element openAutomatically = dialog.getChild(XML_CONF_DIALOG_OPENAUTOMATICALLY);
         if ((openAutomatically == null) || (openAutomatically.getTextTrim() == null)) {
             LOG.warn(
-                "There is no configuration whether to open downloads automatically or not. Using default value 'true'.");
+                "There is no configuration whether to open downloads automatically or not. Using default value 'true'."
+            );
         } else {
             final String value = openAutomatically.getTextTrim();
-            DownloadManagerDialog.getInstance()
-                    .setOpenAutomaticallyEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
+            DownloadManagerDialog
+                .getInstance()
+                .setOpenAutomaticallyEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
         final Element closeAutomatically = dialog.getChild(XML_CONF_DIALOG_CLOSEAUTOMATICALLY);
         if ((closeAutomatically == null) || (closeAutomatically.getTextTrim() == null)) {
             LOG.warn(
-                "There is no configuration whether to close the download manager dialog automatically or not. Using default value 'true'.");
+                "There is no configuration whether to close the download manager dialog automatically or not. Using default value 'true'."
+            );
         } else {
             final String value = closeAutomatically.getTextTrim();
-            DownloadManagerDialog.getInstance()
-                    .setCloseAutomaticallyEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
+            DownloadManagerDialog
+                .getInstance()
+                .setCloseAutomaticallyEnabled("1".equals(value) || "true".equalsIgnoreCase(value));
         }
 
         final Element userTitle = dialog.getChild(XML_CONF_DIALOG_USERTITLE);
@@ -643,12 +660,14 @@ public class DownloadManager implements Observer, Configurable {
         askForTitle.addContent(DownloadManagerDialog.getInstance().isAskForJobNameEnabled() ? "true" : "false");
 
         final Element openAutomatically = new Element(XML_CONF_DIALOG_OPENAUTOMATICALLY);
-        openAutomatically.addContent(DownloadManagerDialog.getInstance().isOpenAutomaticallyEnabled() ? "true"
-                                                                                                      : "false");
+        openAutomatically.addContent(
+            DownloadManagerDialog.getInstance().isOpenAutomaticallyEnabled() ? "true" : "false"
+        );
 
         final Element closeAutomatically = new Element(XML_CONF_DIALOG_CLOSEAUTOMATICALLY);
-        closeAutomatically.addContent(DownloadManagerDialog.getInstance().isCloseAutomaticallyEnabled() ? "true"
-                                                                                                        : "false");
+        closeAutomatically.addContent(
+            DownloadManagerDialog.getInstance().isCloseAutomaticallyEnabled() ? "true" : "false"
+        );
 
         final Element userTitle = new Element(XML_CONF_DIALOG_USERTITLE);
         userTitle.addContent(DownloadManagerDialog.getInstance().getJobName());

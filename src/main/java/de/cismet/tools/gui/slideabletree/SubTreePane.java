@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  *  Copyright (C) 2011 dmeiers
  *
@@ -23,12 +23,10 @@
  */
 package de.cismet.tools.gui.slideabletree;
 
-import org.jdesktop.swingx.JXTaskPane;
-
 import java.awt.Color;
 import java.awt.Graphics;
-
 import javax.swing.Icon;
+import org.jdesktop.swingx.JXTaskPane;
 
 /**
  * This class represents a TreeNode with an JXTaskPane. It paints the title in another Color if it is selected.
@@ -51,7 +49,7 @@ public class SubTreePane extends JXTaskPane {
     public SubTreePane() {
         this.setUI(new SpecialTaskPanebackgroundUI());
         this.setForeground(defaultTitleColor);
-//        this.setAnimated(false);
+        //        this.setAnimated(false);
     }
 
     //~ Methods ----------------------------------------------------------------

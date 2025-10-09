@@ -1,24 +1,23 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.actiongroup;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButton;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToggleButton;
+
 /**
  * DOCUMENT ME!
  *
@@ -31,8 +30,7 @@ public final class ComponentFactory {
     /**
      * Creates a new ComponentFactory object.
      */
-    private ComponentFactory() {
-    }
+    private ComponentFactory() {}
 
     //~ Methods ----------------------------------------------------------------
 
@@ -123,6 +121,7 @@ public final class ComponentFactory {
             action.addPropertyChangeListener(this);
             button.addItemListener(this);
         }
+
         @Override
         public void itemStateChanged(final ItemEvent e) {
             final boolean value = e.getStateChange() == ItemEvent.SELECTED;
@@ -133,7 +132,7 @@ public final class ComponentFactory {
         @Override
         public void propertyChange(final PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(ActionConstants.SELECTED_KEY)) {
-                final Boolean newSelectedState = (Boolean)evt.getNewValue();
+                final Boolean newSelectedState = (Boolean) evt.getNewValue();
                 button.setSelected(newSelectedState.booleanValue());
             }
         }

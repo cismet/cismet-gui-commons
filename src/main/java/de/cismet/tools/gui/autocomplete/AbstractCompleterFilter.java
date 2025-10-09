@@ -1,15 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.autocomplete;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.text.AttributeSet;
@@ -63,11 +62,13 @@ public abstract class AbstractCompleterFilter extends DocumentFilter {
     public abstract JTextField getTextField();
 
     @Override
-    public void replace(final FilterBypass filterBypass,
-            final int offset,
-            final int length,
-            final String string,
-            final AttributeSet attributeSet) throws BadLocationException {
+    public void replace(
+        final FilterBypass filterBypass,
+        final int offset,
+        final int length,
+        final String string,
+        final AttributeSet attributeSet
+    ) throws BadLocationException {
         boolean found = false;
         try {
             super.replace(filterBypass, offset, length, string, attributeSet);
@@ -96,8 +97,11 @@ public abstract class AbstractCompleterFilter extends DocumentFilter {
 
             final String objStringStart = objString.substring(0, this.preText.length());
 
-            if ((this.caseSensitive) ? objStringStart.equals(this.preText)
-                                     : objStringStart.equalsIgnoreCase(this.preText)) {
+            if (
+                (this.caseSensitive)
+                    ? objStringStart.equals(this.preText)
+                    : objStringStart.equalsIgnoreCase(this.preText)
+            ) {
                 final String objStringEnd = objString.substring(this.preText.length());
                 if (this.corrective) {
                     filterBypass.replace(0, this.preText.length(), objString, attributeSet);
@@ -122,7 +126,7 @@ public abstract class AbstractCompleterFilter extends DocumentFilter {
                         final JTextField tf = getTextField();
                         tf.setText(objStr);
                         final int end = tf.getText().length();
-//                        replace(filterBypass, 0, Math.min(preText.length() + 1, obj.length()), obj, attributeSet);
+                        //                        replace(filterBypass, 0, Math.min(preText.length() + 1, obj.length()), obj, attributeSet);
                         tf.setCaretPosition(end);
                         tf.moveCaretPosition(Math.min(end, 1));
                     }
@@ -137,18 +141,20 @@ public abstract class AbstractCompleterFilter extends DocumentFilter {
     }
 
     @Override
-    public void insertString(final FilterBypass filterBypass,
-            final int offset,
-            final String string,
-            final AttributeSet attributeSet) throws BadLocationException {
+    public void insertString(
+        final FilterBypass filterBypass,
+        final int offset,
+        final String string,
+        final AttributeSet attributeSet
+    ) throws BadLocationException {
         if (!strict) {
             super.insertString(filterBypass, offset, string, attributeSet);
         }
-//        else {
-//            final JTextField tf = getTextField();
-//            final String tfTxt = tf.getText();
-//            replace(filterBypass, offset, tfTxt.length() + string.length(), string, attributeSet);
-//        }
+        //        else {
+        //            final JTextField tf = getTextField();
+        //            final String tfTxt = tf.getText();
+        //            replace(filterBypass, offset, tfTxt.length() + string.length(), string, attributeSet);
+        //        }
     }
 
     /**
@@ -164,7 +170,7 @@ public abstract class AbstractCompleterFilter extends DocumentFilter {
 
     @Override
     public void remove(final FilterBypass filterBypass, final int offset, final int length)
-            throws BadLocationException {
+        throws BadLocationException {
         if (!strict) {
             super.remove(filterBypass, offset, length);
             final String comp = getTextField().getText();

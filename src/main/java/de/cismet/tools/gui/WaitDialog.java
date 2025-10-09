@@ -1,15 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
-import org.openide.util.Cancellable;
-
 import javax.swing.Icon;
+import org.openide.util.Cancellable;
 
 /**
  * DOCUMENT ME!
@@ -28,6 +27,7 @@ public class WaitDialog extends javax.swing.JDialog {
     private javax.swing.JProgressBar jProgressBar2;
     private javax.swing.JLabel labIcon;
     private javax.swing.JLabel labText;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -53,11 +53,13 @@ public class WaitDialog extends javax.swing.JDialog {
      * @param  icon         DOCUMENT ME!
      * @param  cancellable  A cancel button will be shown, if this parameter is not null
      */
-    public WaitDialog(final java.awt.Frame parent,
-            final boolean modal,
-            final String text,
-            final Icon icon,
-            final Cancellable cancellable) {
+    public WaitDialog(
+        final java.awt.Frame parent,
+        final boolean modal,
+        final String text,
+        final Icon icon,
+        final Cancellable cancellable
+    ) {
         super(parent, modal);
         initComponents();
         if (cancellable == null) {
@@ -172,17 +174,17 @@ public class WaitDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jProgressBar2, gridBagConstraints);
 
-        btnCancel.setText(org.openide.util.NbBundle.getMessage(
-                WaitDialog.class,
-                "WaitDialog.btnCancel.text",
-                new Object[] {})); // NOI18N
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-
+        btnCancel.setText(
+            org.openide.util.NbBundle.getMessage(WaitDialog.class, "WaitDialog.btnCancel.text", new Object[] {})
+        ); // NOI18N
+        btnCancel.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnCancelActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -207,7 +209,7 @@ public class WaitDialog extends javax.swing.JDialog {
                 setVisible(false);
             }
         }
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    } //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -215,12 +217,13 @@ public class WaitDialog extends javax.swing.JDialog {
      * @param  args  the command line arguments
      */
     public static void main(final String[] args) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
+        java.awt.EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     new WaitDialog(new javax.swing.JFrame(), true, "Change CRS", null).setVisible(true);
                 }
-            });
+            }
+        );
     }
 }

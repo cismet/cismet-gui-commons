@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.menu;
 
 import javax.swing.Action;
@@ -22,7 +22,6 @@ import javax.swing.Action;
  * @version  $Revision$, $Date$
  */
 public interface CidsUiAction extends Action {
-
     //~ Instance fields --------------------------------------------------------
 
     String CIDS_ACTION_KEY = "CidsActionKey";

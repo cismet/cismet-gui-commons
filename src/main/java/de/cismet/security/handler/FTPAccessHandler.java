@@ -1,35 +1,30 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.security.handler;
 
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPClientConfig;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
-
-import java.net.Authenticator;
-import java.net.InetSocketAddress;
-import java.net.PasswordAuthentication;
-import java.net.URL;
-
-import java.util.HashMap;
+import static org.apache.commons.net.ftp.FTP.BINARY_FILE_TYPE;
 
 import de.cismet.commons.security.AccessHandler.ACCESS_HANDLER_TYPES;
 import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
 import de.cismet.commons.security.Tunnel;
 import de.cismet.commons.security.handler.AbstractAccessHandler;
-
 import de.cismet.netutil.Proxy;
-
-import static org.apache.commons.net.ftp.FTP.BINARY_FILE_TYPE;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.net.Authenticator;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.URL;
+import java.util.HashMap;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPClientConfig;
 
 /**
  * DOCUMENT ME!
@@ -44,7 +39,7 @@ public class FTPAccessHandler extends AbstractAccessHandler {
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(FTPAccessHandler.class);
 
     public static final ACCESS_HANDLER_TYPES ACCESS_HANDLER_TYPE = ACCESS_HANDLER_TYPES.FTP;
-    public static ACCESS_METHODS[] SUPPORTED_ACCESS_METHODS = new ACCESS_METHODS[] { ACCESS_METHODS.GET_REQUEST, };
+    public static ACCESS_METHODS[] SUPPORTED_ACCESS_METHODS = new ACCESS_METHODS[] { ACCESS_METHODS.GET_REQUEST };
 
     //~ Instance fields --------------------------------------------------------
 
@@ -80,10 +75,12 @@ public class FTPAccessHandler extends AbstractAccessHandler {
     }
 
     @Override
-    public InputStream doRequest(final URL url,
-            final Reader requestParameter,
-            final ACCESS_METHODS method,
-            final HashMap<String, String> options) throws Exception {
+    public InputStream doRequest(
+        final URL url,
+        final Reader requestParameter,
+        final ACCESS_METHODS method,
+        final HashMap<String, String> options
+    ) throws Exception {
         final FTPClient ftpClient = getConfiguredFTPClient();
         final StringBuilder parameter = new StringBuilder();
         final BufferedReader reader = new BufferedReader(requestParameter);
@@ -93,10 +90,15 @@ public class FTPAccessHandler extends AbstractAccessHandler {
             parameter.append(currentLine);
         }
 
-        if ((tunnel != null)
-                    && ((method == ACCESS_METHODS.GET_REQUEST) || (method == ACCESS_METHODS.POST_REQUEST)
-                        || (method == ACCESS_METHODS.HEAD_REQUEST))
-                    && tunnel.isResponsible(method, url.toString())) {
+        if (
+            (tunnel != null) &&
+            (
+                (method == ACCESS_METHODS.GET_REQUEST) ||
+                (method == ACCESS_METHODS.POST_REQUEST) ||
+                (method == ACCESS_METHODS.HEAD_REQUEST)
+            ) &&
+            tunnel.isResponsible(method, url.toString())
+        ) {
             return tunnel.doRequest(url, new StringReader(parameter.toString()), method, options);
         }
 
@@ -121,9 +123,11 @@ public class FTPAccessHandler extends AbstractAccessHandler {
     }
 
     @Override
-    public InputStream doRequest(final URL url,
-            final InputStream requestParameter,
-            final HashMap<String, String> options) throws Exception {
+    public InputStream doRequest(
+        final URL url,
+        final InputStream requestParameter,
+        final HashMap<String, String> options
+    ) throws Exception {
         LOG.fatal("FTPAccessHandler.doRequest: Not supported yet.", new Exception()); // NOI18N
         return null;
     }
@@ -143,21 +147,24 @@ public class FTPAccessHandler extends AbstractAccessHandler {
         if (proxy != null) {
             // proxy needs authentication
             if ((proxy.getUsername() != null) && (proxy.getPassword() != null)) {
-                Authenticator.setDefault(new Authenticator() {
-
+                Authenticator.setDefault(
+                    new Authenticator() {
                         @Override
                         protected PasswordAuthentication getPasswordAuthentication() {
                             final PasswordAuthentication p = new PasswordAuthentication(
-                                    proxy.getUsername(),
-                                    proxy.getPassword().toCharArray());
+                                proxy.getUsername(),
+                                proxy.getPassword().toCharArray()
+                            );
                             return p;
                         }
-                    });
+                    }
+                );
             }
 
             final java.net.Proxy proxyfo = new java.net.Proxy(
-                    java.net.Proxy.Type.HTTP,
-                    new InetSocketAddress(this.proxy.getHost(), this.proxy.getPort()));
+                java.net.Proxy.Type.HTTP,
+                new InetSocketAddress(this.proxy.getHost(), this.proxy.getPort())
+            );
             client.setProxy(proxyfo);
         }
         client.configure(config);

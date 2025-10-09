@@ -1,23 +1,21 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.tools.gui;
 
-import org.jdesktop.swingx.JXTable;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import org.jdesktop.swingx.JXTable;
 
 /**
  * A JXTable that can use different TableCellRenderer/TableCellEditor for one column.<br />
@@ -238,7 +236,7 @@ public class CellSpecificRenderedTable extends JXTable {
         @Override
         public boolean equals(final Object obj) {
             if (obj instanceof TablePosition) {
-                final TablePosition other = (TablePosition)obj;
+                final TablePosition other = (TablePosition) obj;
 
                 return (this.row == other.row) && (this.column == other.column);
             }

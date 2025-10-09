@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -34,8 +34,7 @@ public class PrivacyClientHandler {
     /**
      * Creates a new PrivacyClientHandler object.
      */
-    private PrivacyClientHandler() {
-    }
+    private PrivacyClientHandler() {}
 
     //~ Methods ----------------------------------------------------------------
 
@@ -66,7 +65,6 @@ public class PrivacyClientHandler {
         /**
          * Creates a new LazyInitialiser object.
          */
-        private LazyInitialiser() {
-        }
+        private LazyInitialiser() {}
     }
 }

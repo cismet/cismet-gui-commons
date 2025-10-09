@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands;
 
 import de.cismet.tools.gui.jbands.interfaces.BandAbsoluteHeightProvider;
@@ -47,6 +47,7 @@ public class MinimumHeightBand extends SimpleBand implements BandAbsoluteHeightP
         }
 
         return (maxHeight > getPrefixComponent().getPreferredSize().height)
-            ? maxHeight : getPrefixComponent().getPreferredSize().height;
+            ? maxHeight
+            : getPrefixComponent().getPreferredSize().height;
     }
 }

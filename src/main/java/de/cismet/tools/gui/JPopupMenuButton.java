@@ -1,16 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-
 import javax.swing.*;
 
 /**
@@ -44,7 +44,7 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
     protected JPopupMenu popupMenu = null;
 
     protected boolean mouseInPopupArea = false;
-    protected Icon downArrow = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down.png"));   // NOI18N
+    protected Icon downArrow = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down.png")); // NOI18N
     protected Icon downArrow2 = new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/down2.png")); // NOI18N
     protected Icon userDefinedIcon = null;
     protected Icon userDefinedSelectedIcon = null;
@@ -89,8 +89,9 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
      * @return  DOCUMENT ME!
      */
     private boolean isOverMenuPopupArea(final int x, final int y) {
-        return (x >= (getWidth() - getIcon().getIconWidth() + arrowXOffset - getInsets().right))
-                    && (x <= (getWidth() - 1));
+        return (
+            (x >= (getWidth() - getIcon().getIconWidth() + arrowXOffset - getInsets().right)) && (x <= (getWidth() - 1))
+        );
     }
 
     /**
@@ -101,7 +102,7 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
     @Override
     public void mouseMoved(final java.awt.event.MouseEvent e) {
         final boolean oldValue = mouseInPopupArea;
-        mouseInPopupArea = isOverMenuPopupArea((int)e.getPoint().getX(), (int)e.getPoint().getY());
+        mouseInPopupArea = isOverMenuPopupArea((int) e.getPoint().getX(), (int) e.getPoint().getY());
         if (oldValue != mouseInPopupArea) {
             evaluateIcon(isSelected());
         }
@@ -118,8 +119,7 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
      * @param  e  DOCUMENT ME!
      */
     @Override
-    public void mouseDragged(final java.awt.event.MouseEvent e) {
-    }
+    public void mouseDragged(final java.awt.event.MouseEvent e) {}
 
     /**
      * Invoked when a mouse button has been released on a component.
@@ -127,8 +127,7 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
      * @param  e  DOCUMENT ME!
      */
     @Override
-    public void mouseReleased(final java.awt.event.MouseEvent e) {
-    }
+    public void mouseReleased(final java.awt.event.MouseEvent e) {}
 
     /**
      * Invoked when a mouse button has been pressed on a component.
@@ -136,8 +135,7 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
      * @param  e  DOCUMENT ME!
      */
     @Override
-    public void mousePressed(final java.awt.event.MouseEvent e) {
-    }
+    public void mousePressed(final java.awt.event.MouseEvent e) {}
 
     /**
      * Invoked when the mouse exits a component.
@@ -156,8 +154,7 @@ public class JPopupMenuButton extends JButton implements MouseListener, MouseMot
      * @param  e  DOCUMENT ME!
      */
     @Override
-    public void mouseEntered(final java.awt.event.MouseEvent e) {
-    }
+    public void mouseEntered(final java.awt.event.MouseEvent e) {}
 
     /**
      * DOCUMENT ME!

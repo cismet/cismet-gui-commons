@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -17,7 +17,6 @@
 package de.cismet.tools.gui;
 
 import java.awt.BorderLayout;
-
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -44,6 +43,7 @@ public class CoolEditor extends JPanel implements WrappedComponent {
     private javax.swing.JPanel panFooter;
     private javax.swing.JPanel panTitleAndIcon;
     private de.cismet.tools.gui.PureCoolPanel pcpMain;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------

@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  *  Copyright (C) 2011 dmeiers
  *
@@ -23,16 +23,14 @@
  */
 package de.cismet.tools.gui.slideabletree;
 
-import org.jdesktop.swingx.JXTaskPane;
-import org.jdesktop.swingx.plaf.basic.BasicTaskPaneUI;
-
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.RenderingHints;
-
 import javax.swing.border.Border;
+import org.jdesktop.swingx.JXTaskPane;
+import org.jdesktop.swingx.plaf.basic.BasicTaskPaneUI;
 
 /**
  * Paints a specialized Border which goes well with the Navigator GUI.
@@ -65,75 +63,51 @@ public class SpecialTaskPanebackgroundUI extends BasicTaskPaneUI {
             if (group.isSpecial()) {
                 g.setColor(specialTitleBackground);
 
-                g.fillRoundRect(
-                    0,
-                    0,
-                    group.getWidth(),
-                    getRoundHeight()
-                            * 2,
-                    getRoundHeight(),
-                    getRoundHeight());
+                g.fillRoundRect(0, 0, group.getWidth(), getRoundHeight() * 2, getRoundHeight(), getRoundHeight());
 
-                g.fillRect(
-                    0,
-                    getRoundHeight(),
-                    group.getWidth(),
-                    getTitleHeight(group)
-                            - getRoundHeight());
+                g.fillRect(0, getRoundHeight(), group.getWidth(), getTitleHeight(group) - getRoundHeight());
             } else {
-                final Paint oldPaint = ((Graphics2D)g).getPaint();
+                final Paint oldPaint = ((Graphics2D) g).getPaint();
 
-                final GradientPaint gradientRect = new GradientPaint((group.getWidth() / 4),
-                        0f,
-                        titleBackgroundGradientStart,
-                        (group.getWidth() / 4)
-                                + 1,
-                        getTitleHeight(group)
-                                - (getTitleHeight(group) / 4),
-                        titleBackgroundGradientEnd);
+                final GradientPaint gradientRect = new GradientPaint(
+                    (group.getWidth() / 4),
+                    0f,
+                    titleBackgroundGradientStart,
+                    (group.getWidth() / 4) + 1,
+                    getTitleHeight(group) - (getTitleHeight(group) / 4),
+                    titleBackgroundGradientEnd
+                );
 
-                ((Graphics2D)g).setRenderingHint(
-                    RenderingHints.KEY_COLOR_RENDERING,
-                    RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+                ((Graphics2D) g).setRenderingHint(
+                        RenderingHints.KEY_COLOR_RENDERING,
+                        RenderingHints.VALUE_COLOR_RENDER_QUALITY
+                    );
 
-                ((Graphics2D)g).setRenderingHint(
-                    RenderingHints.KEY_INTERPOLATION,
-                    RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                ((Graphics2D) g).setRenderingHint(
+                        RenderingHints.KEY_INTERPOLATION,
+                        RenderingHints.VALUE_INTERPOLATION_BILINEAR
+                    );
 
-                ((Graphics2D)g).setRenderingHint(
-                    RenderingHints.KEY_RENDERING,
-                    RenderingHints.VALUE_RENDER_QUALITY);
-                ((Graphics2D)g).setPaint(gradientRect);
+                ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                ((Graphics2D) g).setPaint(gradientRect);
 
-                g.fillRoundRect(
-                    0,
-                    0,
-                    group.getWidth(),
-                    getRoundHeight()
-                            * 2,
-                    getRoundHeight(),
-                    getRoundHeight());
+                g.fillRoundRect(0, 0, group.getWidth(), getRoundHeight() * 2, getRoundHeight(), getRoundHeight());
 
-                g.fillRect(
-                    0,
-                    getRoundHeight(),
-                    group.getWidth(),
-                    getTitleHeight(group)
-                            - getRoundHeight());
-                ((Graphics2D)g).setPaint(oldPaint);
+                g.fillRect(0, getRoundHeight(), group.getWidth(), getTitleHeight(group) - getRoundHeight());
+                ((Graphics2D) g).setPaint(oldPaint);
             }
         }
 
         @Override
-        protected void paintExpandedControls(final JXTaskPane group,
-                final Graphics g,
-                final int x,
-                final int y,
-                final int width,
-                final int height) {
-            ((Graphics2D)g).setRenderingHint(
-                RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+        protected void paintExpandedControls(
+            final JXTaskPane group,
+            final Graphics g,
+            final int x,
+            final int y,
+            final int width,
+            final int height
+        ) {
+            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
             paintOvalAroundControls(group, g, x, y, width, height);
 
@@ -141,9 +115,7 @@ public class SpecialTaskPanebackgroundUI extends BasicTaskPaneUI {
 
             paintChevronControls(group, g, x, y, width, height);
 
-            ((Graphics2D)g).setRenderingHint(
-                RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_OFF);
+            ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         }
 
         @Override

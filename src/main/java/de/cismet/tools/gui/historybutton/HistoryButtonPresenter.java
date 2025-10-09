@@ -1,16 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.historybutton;
 
 import java.io.IOException;
-
 import java.net.URL;
-
 import javax.swing.UIManager;
 
 /**
@@ -32,6 +30,7 @@ public class HistoryButtonPresenter extends javax.swing.JApplet {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JTextField txtUrl;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Methods ----------------------------------------------------------------
@@ -42,48 +41,50 @@ public class HistoryButtonPresenter extends javax.swing.JApplet {
     @Override
     public void init() {
         try {
-            java.awt.EventQueue.invokeAndWait(new Runnable() {
-
+            java.awt.EventQueue.invokeAndWait(
+                new Runnable() {
                     @Override
                     public void run() {
                         try {
                             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                        } catch (Exception e) {
-                        }
+                        } catch (Exception e) {}
                         initComponents();
 
-                        hbBack = JHistoryButton.getDefaultJHistoryButton(
+                        hbBack =
+                            JHistoryButton.getDefaultJHistoryButton(
                                 JHistoryButton.DIRECTION_BACKWARD,
                                 JHistoryButton.ICON_SIZE_16,
-                                hm);
-                        hbForward = JHistoryButton.getDefaultJHistoryButton(
+                                hm
+                            );
+                        hbForward =
+                            JHistoryButton.getDefaultJHistoryButton(
                                 JHistoryButton.DIRECTION_FORWARD,
                                 JHistoryButton.ICON_SIZE_16,
-                                hm);
+                                hm
+                            );
                         toolBar.add(hbBack, 0);
                         toolBar.add(hbForward, 1);
-                        hm.addHistoryModelListener(new HistoryModelListener() {
-
+                        hm.addHistoryModelListener(
+                            new HistoryModelListener() {
                                 @Override
                                 public void historyChanged() {
                                     txtUrl.setText(hm.getCurrentElement().toString());
                                 }
 
                                 @Override
-                                public void forwardStatusChanged() {
-                                }
+                                public void forwardStatusChanged() {}
 
                                 @Override
-                                public void backStatusChanged() {
-                                }
+                                public void backStatusChanged() {}
 
                                 @Override
-                                public void historyActionPerformed() {
-                                }
-                            });
+                                public void historyActionPerformed() {}
+                            }
+                        );
                         hm.addToHistory("http://www.google.de/"); // NOI18N
                     }
-                });
+                }
+            );
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -102,29 +103,30 @@ public class HistoryButtonPresenter extends javax.swing.JApplet {
 
         setBackground(javax.swing.UIManager.getDefaults().getColor("Button.background"));
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(
-                HistoryButtonPresenter.class,
-                "HistoryButtonPresenter.jLabel1.text")); // NOI18N
+        jLabel1.setText(
+            org.openide.util.NbBundle.getMessage(HistoryButtonPresenter.class, "HistoryButtonPresenter.jLabel1.text")
+        ); // NOI18N
         toolBar.add(jLabel1);
 
-        txtUrl.addActionListener(new java.awt.event.ActionListener() {
-
+        txtUrl.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     txtUrlActionPerformed(evt);
                 }
-            });
+            }
+        );
         toolBar.add(txtUrl);
 
         getContentPane().add(toolBar, java.awt.BorderLayout.NORTH);
 
         jLabel2.setBackground(javax.swing.UIManager.getDefaults().getColor("ComboBox.selectionBackground"));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(
-                HistoryButtonPresenter.class,
-                "HistoryButtonPresenter.jLabel2.text")); // NOI18N
+        jLabel2.setText(
+            org.openide.util.NbBundle.getMessage(HistoryButtonPresenter.class, "HistoryButtonPresenter.jLabel2.text")
+        ); // NOI18N
         getContentPane().add(jLabel2, java.awt.BorderLayout.CENTER);
-    }                                                    // </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
@@ -133,5 +135,5 @@ public class HistoryButtonPresenter extends javax.swing.JApplet {
      */
     private void txtUrlActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtUrlActionPerformed
         hm.addToHistory(txtUrl.getText());
-    }                                                                          //GEN-LAST:event_txtUrlActionPerformed
+    } //GEN-LAST:event_txtUrlActionPerformed
 }

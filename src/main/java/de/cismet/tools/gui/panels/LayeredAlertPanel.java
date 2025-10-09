@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,7 +18,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -41,6 +40,7 @@ public class LayeredAlertPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane layeredPane;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -100,6 +100,7 @@ public class LayeredAlertPanel extends javax.swing.JPanel {
     public void setTopOffset(final int topOffset) {
         this.topOffset = topOffset;
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -117,10 +118,12 @@ public class LayeredAlertPanel extends javax.swing.JPanel {
         contentPanel.add(new JLabel("Content panel"), BorderLayout.CENTER);
 
         final AlertPanel alert = new AlertPanel(
-                AlertPanel.TYPE.DANGER,
-                new JLabel(
-                    "Warnung! Es wurde kein Dokument gefunden. Klicken Sie auf diese Meldung um eine Weiterleitung einzurichten."),
-                true);
+            AlertPanel.TYPE.DANGER,
+            new JLabel(
+                "Warnung! Es wurde kein Dokument gefunden. Klicken Sie auf diese Meldung um eine Weiterleitung einzurichten."
+            ),
+            true
+        );
         alert.setPreferredSize(new Dimension(100, 50));
         alert.setMinimumSize(new Dimension(100, 50));
         alert.setMaximumSize(new Dimension(100, 50));
@@ -143,15 +146,15 @@ public class LayeredAlertPanel extends javax.swing.JPanel {
         final javax.swing.GroupLayout layeredPaneLayout = new javax.swing.GroupLayout(layeredPane);
         layeredPane.setLayout(layeredPaneLayout);
         layeredPaneLayout.setHorizontalGroup(
-            layeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                400,
-                Short.MAX_VALUE));
+            layeredPaneLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 400, Short.MAX_VALUE)
+        );
         layeredPaneLayout.setVerticalGroup(
-            layeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                300,
-                Short.MAX_VALUE));
+            layeredPaneLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         add(layeredPane, java.awt.BorderLayout.CENTER);
     } // </editor-fold>//GEN-END:initComponents
@@ -168,12 +171,10 @@ public class LayeredAlertPanel extends javax.swing.JPanel {
         //~ Methods ------------------------------------------------------------
 
         @Override
-        public void addLayoutComponent(final String name, final Component comp) {
-        }
+        public void addLayoutComponent(final String name, final Component comp) {}
 
         @Override
-        public void removeLayoutComponent(final Component comp) {
-        }
+        public void removeLayoutComponent(final Component comp) {}
 
         @Override
         public Dimension preferredLayoutSize(final Container parent) {
@@ -189,7 +190,7 @@ public class LayeredAlertPanel extends javax.swing.JPanel {
         public void layoutContainer(final Container parent) {
             contentPanel.setBounds(0, 0, parent.getWidth(), parent.getHeight());
             alert.setBounds(2, 0, parent.getWidth() - 4, alert.getPreferredSize().height);
-//            alert.setBounds(offset, topOffset, parent.getWidth() - (2 * offset), alert.getPreferredSize().height);
+            //            alert.setBounds(offset, topOffset, parent.getWidth() - (2 * offset), alert.getPreferredSize().height);
         }
     }
 }

@@ -1,16 +1,36 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.security.handler;
 
+import de.cismet.commons.security.AccessHandler.ACCESS_HANDLER_TYPES;
+import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
+import de.cismet.commons.security.Tunnel;
+import de.cismet.commons.security.TunnelStore;
+import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
+import de.cismet.commons.security.exceptions.CannotReadFromURLException;
+import de.cismet.netutil.Proxy;
+import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.Reader;
+import java.net.BindException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
@@ -23,32 +43,6 @@ import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 
-import java.io.*;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.Reader;
-
-import java.net.BindException;
-import java.net.URL;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map.Entry;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-
-import de.cismet.commons.security.AccessHandler.ACCESS_HANDLER_TYPES;
-import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
-import de.cismet.commons.security.Tunnel;
-import de.cismet.commons.security.TunnelStore;
-import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
-import de.cismet.commons.security.exceptions.CannotReadFromURLException;
-
-import de.cismet.netutil.Proxy;
-
 /**
  * DOCUMENT ME!
  *
@@ -60,9 +54,9 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
     //~ Static fields/initializers ---------------------------------------------
 
     public static ACCESS_METHODS[] SUPPORTED_ACCESS_METHODS = new ACCESS_METHODS[] {
-            ACCESS_METHODS.GET_REQUEST,
-            ACCESS_METHODS.POST_REQUEST
-        };
+        ACCESS_METHODS.GET_REQUEST,
+        ACCESS_METHODS.POST_REQUEST,
+    };
     public static final ACCESS_HANDLER_TYPES ACCESS_HANDLER_TYPE = ACCESS_HANDLER_TYPES.HTTP;
     private static final String USER_AGENT_HEADER_KEY = "User-Agent";
 
@@ -80,17 +74,18 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
      */
     public DefaultHTTPAccessHandler(final Proxy proxy) {
         super(proxy);
-
         AuthPolicy.registerAuthScheme(AuthPolicy.NTLM, JcifsNtlmScheme.class);
     }
 
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public InputStream doRequest(final URL url,
-            final Reader requestParameter,
-            final ACCESS_METHODS method,
-            final HashMap<String, String> options) throws Exception {
+    public InputStream doRequest(
+        final URL url,
+        final Reader requestParameter,
+        final ACCESS_METHODS method,
+        final HashMap<String, String> options
+    ) throws Exception {
         final HttpClient client = getSecurityEnabledHttpClient(url);
         final StringBuilder parameter = new StringBuilder();
         final BufferedReader reader = new BufferedReader(requestParameter);
@@ -106,76 +101,95 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
             log.debug("Access method: '" + method + "'."); // NOI18N
         }
 
-        if ((tunnel != null)
-                    && ((method == ACCESS_METHODS.GET_REQUEST) || (method == ACCESS_METHODS.POST_REQUEST)
-                        || (method == ACCESS_METHODS.HEAD_REQUEST))
-                    && tunnel.isResponsible(method, url.toString())) {
+        if (
+            (tunnel != null) &&
+            (
+                (method == ACCESS_METHODS.GET_REQUEST) ||
+                (method == ACCESS_METHODS.POST_REQUEST) ||
+                (method == ACCESS_METHODS.HEAD_REQUEST)
+            ) &&
+            tunnel.isResponsible(method, url.toString())
+        ) {
             return tunnel.doRequest(url, new StringReader(parameter.toString()), method, options);
         } else {
             switch (method) {
                 case POST_REQUEST_NO_TUNNEL:
-                case POST_REQUEST: {
-                    httpMethod = new PostMethod(url.toString());
-                    ((PostMethod)httpMethod).setRequestEntity(new StringRequestEntity(
-                            parameter.toString(),
-                            "text/xml",
-                            "UTF-8"));                                                          // NOI18N
-                    break;
-                }
+                case POST_REQUEST:
+                    {
+                        httpMethod = new PostMethod(url.toString());
+                        ((PostMethod) httpMethod).setRequestEntity(
+                                new StringRequestEntity(parameter.toString(), "text/xml", "UTF-8")
+                            ); // NOI18N
+                        break;
+                    }
                 case GET_REQUEST_NO_TUNNEL:
-                case GET_REQUEST: {
-                    if (parameter.length() > 0) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("HTTP GET: '" + url.toString() + "?" + parameter + "'."); // NOI18N
-                        }
+                case GET_REQUEST:
+                    {
+                        if (parameter.length() > 0) {
+                            if (log.isDebugEnabled()) {
+                                log.debug("HTTP GET: '" + url.toString() + "?" + parameter + "'."); // NOI18N
+                            }
 
-                        httpMethod = new GetMethod(url.toString() + "?" + parameter);                  // NOI18N
-                    } else {
-                        if (log.isDebugEnabled()) {
-                            log.debug("No parameters specified. HTTP GET: '" + url.toString() + "'."); // NOI18N
-                        }
+                            httpMethod = new GetMethod(url.toString() + "?" + parameter); // NOI18N
+                        } else {
+                            if (log.isDebugEnabled()) {
+                                log.debug("No parameters specified. HTTP GET: '" + url.toString() + "'."); // NOI18N
+                            }
 
-                        httpMethod = new GetMethod(url.toString());
+                            httpMethod = new GetMethod(url.toString());
+                        }
+                        break;
                     }
-                    break;
-                }
                 case HEAD_REQUEST_NO_TUNNEL:
-                case HEAD_REQUEST: {
-                    if (parameter.length() > 0) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("HTTP HEAD: '" + url.toString() + "?" + parameter + "'."); // NOI18N
-                        }
+                case HEAD_REQUEST:
+                    {
+                        if (parameter.length() > 0) {
+                            if (log.isDebugEnabled()) {
+                                log.debug("HTTP HEAD: '" + url.toString() + "?" + parameter + "'."); // NOI18N
+                            }
 
-                        httpMethod = new HeadMethod(url.toString() + "?" + parameter);                  // NOI18N
-                    } else {
-                        if (log.isDebugEnabled()) {
-                            log.debug("No parameters specified. HTTP HEAD: '" + url.toString() + "'."); // NOI18N
-                        }
+                            httpMethod = new HeadMethod(url.toString() + "?" + parameter); // NOI18N
+                        } else {
+                            if (log.isDebugEnabled()) {
+                                log.debug("No parameters specified. HTTP HEAD: '" + url.toString() + "'."); // NOI18N
+                            }
 
-                        httpMethod = new HeadMethod(url.toString());
+                            httpMethod = new HeadMethod(url.toString());
+                        }
+                        break;
                     }
-                    break;
-                }
-                default: {
-                    if (parameter.length() > 0) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("No method specified, switching to '" + ACCESS_METHODS.GET_REQUEST
-                                        + "'. URI used: '"
-                                        + url.toString() + "?" + parameter + "'."); // NOI18N
-                        }
+                default:
+                    {
+                        if (parameter.length() > 0) {
+                            if (log.isDebugEnabled()) {
+                                log.debug(
+                                    "No method specified, switching to '" +
+                                    ACCESS_METHODS.GET_REQUEST +
+                                    "'. URI used: '" +
+                                    url.toString() +
+                                    "?" +
+                                    parameter +
+                                    "'."
+                                ); // NOI18N
+                            }
 
-                        // httpMethod = new PostMethod(url.toString()); ((PostMethod) httpMethod).setRequestEntity(new
-                        // StringRequestEntity(parameter.toString(), "text/xml", "UTF-8"));
-                        httpMethod = new GetMethod(url.toString() + "?" + parameter);                         // NOI18N
-                    } else {
-                        if (log.isDebugEnabled()) {
-                            log.debug("No method specified, switching to '" + ACCESS_METHODS.GET_REQUEST
-                                        + "'. No parameters specified. URI used: '" + url.toString() + "'."); // NOI18N
-                        }
+                            // httpMethod = new PostMethod(url.toString()); ((PostMethod) httpMethod).setRequestEntity(new
+                            // StringRequestEntity(parameter.toString(), "text/xml", "UTF-8"));
+                            httpMethod = new GetMethod(url.toString() + "?" + parameter); // NOI18N
+                        } else {
+                            if (log.isDebugEnabled()) {
+                                log.debug(
+                                    "No method specified, switching to '" +
+                                    ACCESS_METHODS.GET_REQUEST +
+                                    "'. No parameters specified. URI used: '" +
+                                    url.toString() +
+                                    "'."
+                                ); // NOI18N
+                            }
 
-                        httpMethod = new GetMethod(url.toString());
+                            httpMethod = new GetMethod(url.toString());
+                        }
                     }
-                }
             }
 
             if ((options != null) && !options.isEmpty()) {
@@ -193,8 +207,7 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
                     if ((statuscode == HttpStatus.SC_MOVED_PERMANENTLY) || (statuscode == 308)) {
                         final Header location = httpMethod.getResponseHeader("location");
 
-                        if ((location != null) && (location.getValue() != null)
-                                    && (!location.getValue().equals(""))) {
+                        if ((location != null) && (location.getValue() != null) && (!location.getValue().equals(""))) {
                             final String newLocation = location.getValue();
 
                             httpMethod.setURI(new URI(newLocation, false));
@@ -203,50 +216,64 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
                     }
 
                     switch (statuscode) {
-                        case (HttpStatus.SC_UNAUTHORIZED): {
-                            if (log.isInfoEnabled()) {
-                                log.info("HTTP status code from server: SC_UNAUTHORIZED (" + HttpStatus.SC_UNAUTHORIZED
-                                            + ")."); // NOI18N
+                        case (HttpStatus.SC_UNAUTHORIZED):
+                            {
+                                if (log.isInfoEnabled()) {
+                                    log.info(
+                                        "HTTP status code from server: SC_UNAUTHORIZED (" +
+                                        HttpStatus.SC_UNAUTHORIZED +
+                                        ")."
+                                    ); // NOI18N
+                                }
+
+                                throw new CannotReadFromURLException("You are not authorized to access this URL."); // NOI18N
                             }
+                        case (HttpStatus.SC_OK):
+                            {
+                                if (log.isDebugEnabled()) {
+                                    log.debug("HTTP status code from server: OK."); // NOI18N
+                                }
+                                if (
+                                    (method == ACCESS_METHODS.HEAD_REQUEST) ||
+                                    (method == ACCESS_METHODS.HEAD_REQUEST_NO_TUNNEL)
+                                ) {
+                                    // returning the HTTP Header as InputStream, because some valid InputStream has to be
+                                    // returned. The HTTP body can not be returned because it does not exist for HEAD
+                                    // requests.
+                                    final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                    final ObjectOutputStream oos = new ObjectOutputStream(baos);
 
-                            throw new CannotReadFromURLException("You are not authorized to access this URL."); // NOI18N
-                        }
-                        case (HttpStatus.SC_OK): {
-                            if (log.isDebugEnabled()) {
-                                log.debug("HTTP status code from server: OK.");                                 // NOI18N
+                                    oos.writeObject(httpMethod.getResponseHeaders());
+
+                                    oos.flush();
+                                    oos.close();
+
+                                    final InputStream is = new ByteArrayInputStream(baos.toByteArray());
+                                    baos.close();
+                                    return is;
+                                } else {
+                                    return new BufferedInputStream(httpMethod.getResponseBodyAsStream());
+                                }
                             }
-                            if ((method == ACCESS_METHODS.HEAD_REQUEST)
-                                        || (method == ACCESS_METHODS.HEAD_REQUEST_NO_TUNNEL)) {
-                                // returning the HTTP Header as InputStream, because some valid InputStream has to be
-                                // returned. The HTTP body can not be returned because it does not exist for HEAD
-                                // requests.
-                                final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                final ObjectOutputStream oos = new ObjectOutputStream(baos);
+                        default:
+                            {
+                                if (log.isDebugEnabled()) {
+                                    log.debug(
+                                        "Unhandled HTTP status code: " +
+                                        statuscode +
+                                        " (" +
+                                        HttpStatus.getStatusText(statuscode) +
+                                        ")"
+                                    ); // NOI18N
+                                }
 
-                                oos.writeObject(httpMethod.getResponseHeaders());
-
-                                oos.flush();
-                                oos.close();
-
-                                final InputStream is = new ByteArrayInputStream(baos.toByteArray());
-                                baos.close();
-                                return is;
-                            } else {
-                                return new BufferedInputStream(httpMethod.getResponseBodyAsStream());
+                                throw new BadHttpStatusCodeException(
+                                    httpMethod.getURI().toString(),
+                                    statuscode,
+                                    HttpStatus.getStatusText(statuscode),
+                                    httpMethod.getResponseBodyAsString()
+                                ); // NOI18N
                             }
-                        }
-                        default: {
-                            if (log.isDebugEnabled()) {
-                                log.debug("Unhandled HTTP status code: " + statuscode + " ("
-                                            + HttpStatus.getStatusText(statuscode)
-                                            + ")"); // NOI18N
-                            }
-
-                            throw new BadHttpStatusCodeException(httpMethod.getURI().toString(),
-                                statuscode,
-                                HttpStatus.getStatusText(statuscode),
-                                httpMethod.getResponseBodyAsString()); // NOI18N
-                        }
                     }
                 } catch (BindException e) {
                     if (log.isDebugEnabled()) {
@@ -256,13 +283,15 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
                 }
             }
         }
-//        throw new RuntimeException("Should never happen");
+        //        throw new RuntimeException("Should never happen");
     }
 
     @Override
-    public InputStream doRequest(final URL url,
-            final InputStream requestParameter,
-            final HashMap<String, String> options) throws Exception {
+    public InputStream doRequest(
+        final URL url,
+        final InputStream requestParameter,
+        final HashMap<String, String> options
+    ) throws Exception {
         final HttpClient client = getSecurityEnabledHttpClient(url);
         final PostMethod postMethod = new PostMethod(url.toString());
         boolean hasUserAgent = false;
@@ -289,33 +318,45 @@ public class DefaultHTTPAccessHandler extends HTTPBasedAccessHandler implements 
                 final int statuscode = client.executeMethod(postMethod);
                 hasBound = true;
                 switch (statuscode) {
-                    case (HttpStatus.SC_UNAUTHORIZED): {
-                        if (log.isInfoEnabled()) {
-                            log.info("HTTP status code from server: SC_UNAUTHORIZED (" + HttpStatus.SC_UNAUTHORIZED
-                                        + ")."); // NOI18N
-                        }
+                    case (HttpStatus.SC_UNAUTHORIZED):
+                        {
+                            if (log.isInfoEnabled()) {
+                                log.info(
+                                    "HTTP status code from server: SC_UNAUTHORIZED (" +
+                                    HttpStatus.SC_UNAUTHORIZED +
+                                    ")."
+                                ); // NOI18N
+                            }
 
-                        throw new CannotReadFromURLException("You are not authorized to access this URL."); // NOI18N
-                    }
-                    case (HttpStatus.SC_OK): {
-                        if (log.isDebugEnabled()) {
-                            log.debug("HTTP status code from server: OK.");                                 // NOI18N
+                            throw new CannotReadFromURLException("You are not authorized to access this URL."); // NOI18N
                         }
+                    case (HttpStatus.SC_OK):
+                        {
+                            if (log.isDebugEnabled()) {
+                                log.debug("HTTP status code from server: OK."); // NOI18N
+                            }
 
-                        return new BufferedInputStream(postMethod.getResponseBodyAsStream());
-                    }
-                    default: {
-                        if (log.isDebugEnabled()) {
-                            log.debug("Unhandled HTTP status code: " + statuscode + " ("
-                                        + HttpStatus.getStatusText(statuscode)
-                                        + ")."); // NOI18N
+                            return new BufferedInputStream(postMethod.getResponseBodyAsStream());
                         }
+                    default:
+                        {
+                            if (log.isDebugEnabled()) {
+                                log.debug(
+                                    "Unhandled HTTP status code: " +
+                                    statuscode +
+                                    " (" +
+                                    HttpStatus.getStatusText(statuscode) +
+                                    ")."
+                                ); // NOI18N
+                            }
 
-                        throw new BadHttpStatusCodeException(postMethod.getURI().toString(),
-                            statuscode,
-                            HttpStatus.getStatusText(statuscode),
-                            postMethod.getResponseBodyAsString()); // NOI18N
-                    }
+                            throw new BadHttpStatusCodeException(
+                                postMethod.getURI().toString(),
+                                statuscode,
+                                HttpStatus.getStatusText(statuscode),
+                                postMethod.getResponseBodyAsString()
+                            ); // NOI18N
+                        }
                 }
             } catch (BindException e) {
                 if (log.isDebugEnabled()) {

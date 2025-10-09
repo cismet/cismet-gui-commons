@@ -1,27 +1,25 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.protocol;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
-import org.jdom.Element;
-
-import org.openide.util.Lookup;
-
+import de.cismet.commons.gui.protocol.listener.ProtocolHandlerListener;
+import de.cismet.commons.gui.protocol.listener.ProtocolHandlerListenerEvent;
+import de.cismet.tools.configuration.Configurable;
+import de.cismet.tools.configuration.NoWriteError;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,12 +28,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import de.cismet.commons.gui.protocol.listener.ProtocolHandlerListener;
-import de.cismet.commons.gui.protocol.listener.ProtocolHandlerListenerEvent;
-
-import de.cismet.tools.configuration.Configurable;
-import de.cismet.tools.configuration.NoWriteError;
+import org.jdom.Element;
+import org.openide.util.Lookup;
 
 /**
  * DOCUMENT ME!
@@ -48,7 +42,8 @@ public class ProtocolHandler implements Configurable {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(
-            ProtocolHandler.class);
+        ProtocolHandler.class
+    );
 
     private static ProtocolHandler INSTANCE;
 
@@ -71,8 +66,9 @@ public class ProtocolHandler implements Configurable {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         // objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        final Collection<? extends ProtocolStepConfiguration> configs = Lookup.getDefault()
-                    .lookupAll(ProtocolStepConfiguration.class);
+        final Collection<? extends ProtocolStepConfiguration> configs = Lookup
+            .getDefault()
+            .lookupAll(ProtocolStepConfiguration.class);
         for (final ProtocolStepConfiguration config : configs) {
             final String configKey = config.getProtocolStepKey();
             if (configKey != null) {
@@ -80,20 +76,23 @@ public class ProtocolHandler implements Configurable {
             }
         }
 
-        final Collection<? extends ProtocolStepToolbarItem> toolbarItems = Lookup.getDefault()
-                    .lookupAll(ProtocolStepToolbarItem.class);
+        final Collection<? extends ProtocolStepToolbarItem> toolbarItems = Lookup
+            .getDefault()
+            .lookupAll(ProtocolStepToolbarItem.class);
         for (final ProtocolStepToolbarItem toolbarItem : toolbarItems) {
             if (toolbarItem.isVisible()) {
                 this.toolbarItems.add(toolbarItem);
             }
         }
-        Collections.sort(this.toolbarItems, new Comparator<ProtocolStepToolbarItem>() {
-
+        Collections.sort(
+            this.toolbarItems,
+            new Comparator<ProtocolStepToolbarItem>() {
                 @Override
                 public int compare(final ProtocolStepToolbarItem o1, final ProtocolStepToolbarItem o2) {
                     return o1.getSorterString().compareTo(o2.getSorterString());
                 }
-            });
+            }
+        );
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -151,9 +150,9 @@ public class ProtocolHandler implements Configurable {
     public void setRecordEnabled(final boolean recordEnabled) {
         LOG.info("protocol globally enabled: " + recordEnabled);
         this.recordEnabled = recordEnabled;
-        fireRecordStateChanged(new ProtocolHandlerListenerEvent(
-                this,
-                ProtocolHandlerListenerEvent.PROTOCOL_RECORD_STATE));
+        fireRecordStateChanged(
+            new ProtocolHandlerListenerEvent(this, ProtocolHandlerListenerEvent.PROTOCOL_RECORD_STATE)
+        );
     }
 
     /**
@@ -172,10 +171,9 @@ public class ProtocolHandler implements Configurable {
      */
     public void removeStep(final ProtocolStep protocolStep) {
         storage.remove(protocolStep);
-        fireStepRemoved(new ProtocolHandlerListenerEvent(
-                this,
-                protocolStep,
-                ProtocolHandlerListenerEvent.PROTOCOL_STEP_REMOVED));
+        fireStepRemoved(
+            new ProtocolHandlerListenerEvent(this, protocolStep, ProtocolHandlerListenerEvent.PROTOCOL_STEP_REMOVED)
+        );
     }
 
     /**
@@ -202,25 +200,26 @@ public class ProtocolHandler implements Configurable {
             synchronized (storage) {
                 storage.add(protocolStep);
             }
-            fireStepAdded(new ProtocolHandlerListenerEvent(
-                    this,
-                    protocolStep,
-                    ProtocolHandlerListenerEvent.PROTOCOL_STEP_ADDED));
-            new Thread(new Runnable() {
-
+            fireStepAdded(
+                new ProtocolHandlerListenerEvent(this, protocolStep, ProtocolHandlerListenerEvent.PROTOCOL_STEP_ADDED)
+            );
+            new Thread(
+                new Runnable() {
                     @Override
                     public void run() {
                         protocolStep.init();
                     }
-                }).start();
+                }
+            )
+                .start();
             if (LOG.isDebugEnabled()) {
-                LOG.debug("protocol step '" + protocolStep.getMetaInfo().getKey()
-                            + "' added.");
+                LOG.debug("protocol step '" + protocolStep.getMetaInfo().getKey() + "' added.");
             }
             return true;
         } else {
-            LOG.warn("protocol step '" + protocolStep.getMetaInfo().getKey()
-                        + "' not added: protocol globally  disabled!");
+            LOG.warn(
+                "protocol step '" + protocolStep.getMetaInfo().getKey() + "' not added: protocol globally  disabled!"
+            );
             return false;
         }
     }
@@ -277,8 +276,9 @@ public class ProtocolHandler implements Configurable {
             LOG.debug("saving " + storage.size() + " protocol objects to JSON");
         }
 
-        return objectMapper.writerWithType(new TypeReference<Collection<ProtocolStep>>() {
-                }).writeValueAsString(storage);
+        return objectMapper
+            .writerWithType(new TypeReference<Collection<ProtocolStep>>() {})
+            .writeValueAsString(storage);
     }
 
     /**
@@ -291,9 +291,9 @@ public class ProtocolHandler implements Configurable {
      */
     public void fromJsonString(final String jsonString) throws IOException, ClassNotFoundException {
         final Collection<ProtocolStep> loadedStorage = objectMapper.readValue(
-                jsonString,
-                new TypeReference<Collection<ProtocolStep>>() {
-                });
+            jsonString,
+            new TypeReference<Collection<ProtocolStep>>() {}
+        );
         if (LOG.isDebugEnabled()) {
             LOG.debug(loadedStorage.size() + " protocol objects restored from JSON");
         }

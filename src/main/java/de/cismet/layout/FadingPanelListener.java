@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.layout;
 
 import java.util.EventListener;
@@ -16,7 +16,6 @@ import java.util.EventListener;
  * @version  $Revision$, $Date$
  */
 public interface FadingPanelListener extends EventListener {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

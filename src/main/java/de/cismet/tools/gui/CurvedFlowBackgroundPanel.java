@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import java.awt.*;
@@ -15,7 +15,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
-
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -51,8 +50,8 @@ public class CurvedFlowBackgroundPanel extends JPanel {
     public CurvedFlowBackgroundPanel() {
         super();
         setOpaque(false);
-        addMouseListener(new MouseAdapter() {
-
+        addMouseListener(
+            new MouseAdapter() {
                 @Override
                 public void mouseClicked(final MouseEvent e) {
                     super.mouseClicked(e);
@@ -67,29 +66,32 @@ public class CurvedFlowBackgroundPanel extends JPanel {
                         final JLabel lblInfo = new JLabel();
                         final JButton cmdRefresh = new JButton("refresh");
                         final JCheckBox chkRelative = new JCheckBox("relativeHeight", isRelativeHeights());
-                        chkRelative.addActionListener(new ActionListener() {
-
+                        chkRelative.addActionListener(
+                            new ActionListener() {
                                 @Override
                                 public void actionPerformed(final ActionEvent e) {
                                     setRelativeHeights(chkRelative.isSelected());
                                 }
-                            });
-                        sliOben.addChangeListener(new ChangeListener() {
-
+                            }
+                        );
+                        sliOben.addChangeListener(
+                            new ChangeListener() {
                                 @Override
                                 public void stateChanged(final ChangeEvent e) {
-                                    setOben((double)(sliOben.getValue() / 100.0));
+                                    setOben((double) (sliOben.getValue() / 100.0));
                                     lblInfo.setText(getInfoString());
                                 }
-                            });
-                        sliUnten.addChangeListener(new ChangeListener() {
-
+                            }
+                        );
+                        sliUnten.addChangeListener(
+                            new ChangeListener() {
                                 @Override
                                 public void stateChanged(final ChangeEvent e) {
-                                    setUnten((double)(sliUnten.getValue() / 100.0));
+                                    setUnten((double) (sliUnten.getValue() / 100.0));
                                     lblInfo.setText(getInfoString());
                                 }
-                            });
+                            }
+                        );
 
                         jd.getContentPane().add(lblInfo, BorderLayout.CENTER);
                         jd.getContentPane().add(sliOben, BorderLayout.NORTH);
@@ -98,36 +100,39 @@ public class CurvedFlowBackgroundPanel extends JPanel {
                         jd.getContentPane().add(chkRelative, BorderLayout.WEST);
 
                         lblInfo.setText(getInfoString());
-                        cmdRefresh.addActionListener(new ActionListener() {
-
+                        cmdRefresh.addActionListener(
+                            new ActionListener() {
                                 @Override
                                 public void actionPerformed(final ActionEvent e) {
                                     lblInfo.setText(getInfoString());
                                 }
-                            });
-                        sliOben.setValue((int)((double)getOben() / (double)getHeight() * 100));
-                        sliUnten.setValue((int)((double)getUnten() / (double)getHeight() * 100));
+                            }
+                        );
+                        sliOben.setValue((int) ((double) getOben() / (double) getHeight() * 100));
+                        sliUnten.setValue((int) ((double) getUnten() / (double) getHeight() * 100));
 
                         jd.pack();
                         StaticSwingTools.showDialog(jd);
                     }
                 }
-            });
-        addComponentListener(new ComponentAdapter() {
-
+            }
+        );
+        addComponentListener(
+            new ComponentAdapter() {
                 @Override
                 public void componentResized(final ComponentEvent e) {
                     super.componentResized(e);
                     if ((untenFraction < 0) || (obenFraction < 0)) {
-                        untenFraction = (double)getUnten() / (double)getHeight();
-                        obenFraction = (double)getOben() / (double)getHeight();
+                        untenFraction = (double) getUnten() / (double) getHeight();
+                        obenFraction = (double) getOben() / (double) getHeight();
                     }
                     if (relativeHeights) {
                         setOben(obenFraction);
                         setUnten(untenFraction);
                     }
                 }
-            });
+            }
+        );
     }
 
     /**
@@ -150,9 +155,20 @@ public class CurvedFlowBackgroundPanel extends JPanel {
      * @return  DOCUMENT ME!
      */
     private String getInfoString() {
-        return "Info: Size=" + getWidth() + "," + getHeight() + " Oben(abs,rel)=" + getOben() + ","
-                    + ((double)getOben() / (double)getHeight()) + " Unten(abs,rel)=" + getUnten() + ","
-                    + ((double)getUnten() / (double)getHeight());
+        return (
+            "Info: Size=" +
+            getWidth() +
+            "," +
+            getHeight() +
+            " Oben(abs,rel)=" +
+            getOben() +
+            "," +
+            ((double) getOben() / (double) getHeight()) +
+            " Unten(abs,rel)=" +
+            getUnten() +
+            "," +
+            ((double) getUnten() / (double) getHeight())
+        );
     }
 
     /**
@@ -185,27 +201,32 @@ public class CurvedFlowBackgroundPanel extends JPanel {
         if ((WIDTH <= 0) || (HEIGHT <= 0)) {
             return null;
         }
-        final java.awt.GraphicsConfiguration GFX_CONF = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment()
-                    .getDefaultScreenDevice()
-                    .getDefaultConfiguration();
+        final java.awt.GraphicsConfiguration GFX_CONF = java.awt.GraphicsEnvironment
+            .getLocalGraphicsEnvironment()
+            .getDefaultScreenDevice()
+            .getDefaultConfiguration();
         final java.awt.image.BufferedImage IMAGE = GFX_CONF.createCompatibleImage(
-                WIDTH,
-                HEIGHT,
-                java.awt.Transparency.TRANSLUCENT);
+            WIDTH,
+            HEIGHT,
+            java.awt.Transparency.TRANSLUCENT
+        );
         final java.awt.Graphics2D G2 = IMAGE.createGraphics();
         G2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
         G2.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
         G2.setRenderingHint(java.awt.RenderingHints.KEY_DITHERING, java.awt.RenderingHints.VALUE_DITHER_ENABLE);
         G2.setRenderingHint(
             java.awt.RenderingHints.KEY_ALPHA_INTERPOLATION,
-            java.awt.RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+            java.awt.RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY
+        );
         G2.setRenderingHint(
             java.awt.RenderingHints.KEY_COLOR_RENDERING,
-            java.awt.RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+            java.awt.RenderingHints.VALUE_COLOR_RENDER_QUALITY
+        );
         G2.setRenderingHint(java.awt.RenderingHints.KEY_STROKE_CONTROL, java.awt.RenderingHints.VALUE_STROKE_PURE);
         G2.setRenderingHint(
             java.awt.RenderingHints.KEY_TEXT_ANTIALIASING,
-            java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON
+        );
         final java.awt.font.FontRenderContext RENDER_CONTEXT = new java.awt.font.FontRenderContext(null, true, true);
         final int IMAGE_WIDTH = IMAGE.getWidth();
         final int IMAGE_HEIGHT = IMAGE.getHeight();
@@ -214,44 +235,35 @@ public class CurvedFlowBackgroundPanel extends JPanel {
         OBEN1_1.moveTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
         OBEN1_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 0.0);
         OBEN1_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
-        OBEN1_1.curveTo(IMAGE_WIDTH * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.078125,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.078125);
-        OBEN1_1.curveTo(IMAGE_WIDTH * 0.337890625,
-            IMAGE_HEIGHT
-                    * 0.181640625,
-            IMAGE_WIDTH
-                    * 0.4921875,
-            IMAGE_HEIGHT
-                    * 0.96484375,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0);
-        OBEN1_1.curveTo(IMAGE_WIDTH * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0);
+        OBEN1_1.curveTo(
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.078125,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.078125
+        );
+        OBEN1_1.curveTo(
+            IMAGE_WIDTH * 0.337890625,
+            IMAGE_HEIGHT * 0.181640625,
+            IMAGE_WIDTH * 0.4921875,
+            IMAGE_HEIGHT * 0.96484375,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0
+        );
+        OBEN1_1.curveTo(
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0
+        );
         OBEN1_1.closePath();
         OBEN1_1.moveTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
         OBEN1_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
         OBEN1_1.closePath();
-//        final java.awt.Color FILL_COLOR_PATH1_1 = new java.awt.Color(13421772);
+        //        final java.awt.Color FILL_COLOR_PATH1_1 = new java.awt.Color(13421772);
         final java.awt.Color FILL_COLOR_PATH1_1 = new java.awt.Color(0, 0, 0, 0);
         G2.setColor(FILL_COLOR_PATH1_1);
         G2.fill(OBEN1_1);
@@ -260,39 +272,30 @@ public class CurvedFlowBackgroundPanel extends JPanel {
         OBEN2_1.moveTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
         OBEN2_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 0.0);
         OBEN2_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
-        OBEN2_1.curveTo(IMAGE_WIDTH * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.078125,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.078125);
-        OBEN2_1.curveTo(IMAGE_WIDTH * 0.337890625,
-            IMAGE_HEIGHT
-                    * 0.181640625,
-            IMAGE_WIDTH
-                    * 0.4921875,
-            IMAGE_HEIGHT
-                    * 0.96484375,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0);
-        OBEN2_1.curveTo(IMAGE_WIDTH * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0);
+        OBEN2_1.curveTo(
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.078125,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.078125
+        );
+        OBEN2_1.curveTo(
+            IMAGE_WIDTH * 0.337890625,
+            IMAGE_HEIGHT * 0.181640625,
+            IMAGE_WIDTH * 0.4921875,
+            IMAGE_HEIGHT * 0.96484375,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0
+        );
+        OBEN2_1.curveTo(
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0
+        );
         OBEN2_1.closePath();
         OBEN2_1.moveTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
         OBEN2_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
@@ -303,6 +306,7 @@ public class CurvedFlowBackgroundPanel extends JPanel {
         G2.dispose();
         return IMAGE;
     }
+
     /**
      * G2.drawImage(createUnten_EBENE_1_0_Image(100, 100), 0, 0, null);
      *
@@ -315,27 +319,32 @@ public class CurvedFlowBackgroundPanel extends JPanel {
         if ((WIDTH <= 0) || (HEIGHT <= 0)) {
             return null;
         }
-        final java.awt.GraphicsConfiguration GFX_CONF = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment()
-                    .getDefaultScreenDevice()
-                    .getDefaultConfiguration();
+        final java.awt.GraphicsConfiguration GFX_CONF = java.awt.GraphicsEnvironment
+            .getLocalGraphicsEnvironment()
+            .getDefaultScreenDevice()
+            .getDefaultConfiguration();
         final java.awt.image.BufferedImage IMAGE = GFX_CONF.createCompatibleImage(
-                WIDTH,
-                HEIGHT,
-                java.awt.Transparency.TRANSLUCENT);
+            WIDTH,
+            HEIGHT,
+            java.awt.Transparency.TRANSLUCENT
+        );
         final java.awt.Graphics2D G2 = IMAGE.createGraphics();
         G2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
         G2.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
         G2.setRenderingHint(java.awt.RenderingHints.KEY_DITHERING, java.awt.RenderingHints.VALUE_DITHER_ENABLE);
         G2.setRenderingHint(
             java.awt.RenderingHints.KEY_ALPHA_INTERPOLATION,
-            java.awt.RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+            java.awt.RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY
+        );
         G2.setRenderingHint(
             java.awt.RenderingHints.KEY_COLOR_RENDERING,
-            java.awt.RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+            java.awt.RenderingHints.VALUE_COLOR_RENDER_QUALITY
+        );
         G2.setRenderingHint(java.awt.RenderingHints.KEY_STROKE_CONTROL, java.awt.RenderingHints.VALUE_STROKE_PURE);
         G2.setRenderingHint(
             java.awt.RenderingHints.KEY_TEXT_ANTIALIASING,
-            java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON
+        );
         final java.awt.font.FontRenderContext RENDER_CONTEXT = new java.awt.font.FontRenderContext(null, true, true);
         final int IMAGE_WIDTH = IMAGE.getWidth();
         final int IMAGE_HEIGHT = IMAGE.getHeight();
@@ -344,39 +353,30 @@ public class CurvedFlowBackgroundPanel extends JPanel {
         UNTEN1_1.moveTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
         UNTEN1_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 1.0);
         UNTEN1_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
-        UNTEN1_1.curveTo(IMAGE_WIDTH * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 0.921875,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 0.921875);
-        UNTEN1_1.curveTo(IMAGE_WIDTH * 0.662109375,
-            IMAGE_HEIGHT
-                    * 0.818359375,
-            IMAGE_WIDTH
-                    * 0.5078125,
-            IMAGE_HEIGHT
-                    * 0.03515625,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0);
-        UNTEN1_1.curveTo(IMAGE_WIDTH * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0);
+        UNTEN1_1.curveTo(
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 0.921875,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 0.921875
+        );
+        UNTEN1_1.curveTo(
+            IMAGE_WIDTH * 0.662109375,
+            IMAGE_HEIGHT * 0.818359375,
+            IMAGE_WIDTH * 0.5078125,
+            IMAGE_HEIGHT * 0.03515625,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0
+        );
+        UNTEN1_1.curveTo(
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0
+        );
         UNTEN1_1.closePath();
         UNTEN1_1.moveTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
         UNTEN1_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
@@ -389,39 +389,30 @@ public class CurvedFlowBackgroundPanel extends JPanel {
         UNTEN2_1.moveTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
         UNTEN2_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 1.0);
         UNTEN2_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
-        UNTEN2_1.curveTo(IMAGE_WIDTH * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 0.921875,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 0.921875);
-        UNTEN2_1.curveTo(IMAGE_WIDTH * 0.662109375,
-            IMAGE_HEIGHT
-                    * 0.818359375,
-            IMAGE_WIDTH
-                    * 0.5078125,
-            IMAGE_HEIGHT
-                    * 0.03515625,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0);
-        UNTEN2_1.curveTo(IMAGE_WIDTH * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0);
+        UNTEN2_1.curveTo(
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 0.921875,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 0.921875
+        );
+        UNTEN2_1.curveTo(
+            IMAGE_WIDTH * 0.662109375,
+            IMAGE_HEIGHT * 0.818359375,
+            IMAGE_WIDTH * 0.5078125,
+            IMAGE_HEIGHT * 0.03515625,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0
+        );
+        UNTEN2_1.curveTo(
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0
+        );
         UNTEN2_1.closePath();
         UNTEN2_1.moveTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
         UNTEN2_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
@@ -443,34 +434,41 @@ public class CurvedFlowBackgroundPanel extends JPanel {
      *
      * @return  DOCUMENT ME!
      */
-    private java.awt.image.BufferedImage createFlow(final int WIDTH,
-            final int HEIGHT,
-            final int HEIGHT_OBEN,
-            final int HEIGHT_UNTEN) {
+    private java.awt.image.BufferedImage createFlow(
+        final int WIDTH,
+        final int HEIGHT,
+        final int HEIGHT_OBEN,
+        final int HEIGHT_UNTEN
+    ) {
         if ((WIDTH <= 0) || (HEIGHT <= 0)) {
             return null;
         }
-        final java.awt.GraphicsConfiguration GFX_CONF = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment()
-                    .getDefaultScreenDevice()
-                    .getDefaultConfiguration();
+        final java.awt.GraphicsConfiguration GFX_CONF = java.awt.GraphicsEnvironment
+            .getLocalGraphicsEnvironment()
+            .getDefaultScreenDevice()
+            .getDefaultConfiguration();
         final java.awt.image.BufferedImage IMAGE = GFX_CONF.createCompatibleImage(
-                WIDTH,
-                HEIGHT,
-                java.awt.Transparency.TRANSLUCENT);
+            WIDTH,
+            HEIGHT,
+            java.awt.Transparency.TRANSLUCENT
+        );
         final java.awt.Graphics2D G2 = IMAGE.createGraphics();
         G2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
         G2.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
         G2.setRenderingHint(java.awt.RenderingHints.KEY_DITHERING, java.awt.RenderingHints.VALUE_DITHER_ENABLE);
         G2.setRenderingHint(
             java.awt.RenderingHints.KEY_ALPHA_INTERPOLATION,
-            java.awt.RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+            java.awt.RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY
+        );
         G2.setRenderingHint(
             java.awt.RenderingHints.KEY_COLOR_RENDERING,
-            java.awt.RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+            java.awt.RenderingHints.VALUE_COLOR_RENDER_QUALITY
+        );
         G2.setRenderingHint(java.awt.RenderingHints.KEY_STROKE_CONTROL, java.awt.RenderingHints.VALUE_STROKE_PURE);
         G2.setRenderingHint(
             java.awt.RenderingHints.KEY_TEXT_ANTIALIASING,
-            java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON
+        );
         final java.awt.font.FontRenderContext RENDER_CONTEXT = new java.awt.font.FontRenderContext(null, true, true);
         final int IMAGE_WIDTH = IMAGE.getWidth();
         int IMAGE_HEIGHT = HEIGHT_OBEN;
@@ -485,91 +483,73 @@ public class CurvedFlowBackgroundPanel extends JPanel {
         OBEN1_1.moveTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
         OBEN1_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 0.0);
         OBEN1_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
-        OBEN1_1.curveTo(IMAGE_WIDTH * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.078125,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.078125);
-        OBEN1_1.curveTo(IMAGE_WIDTH * 0.337890625,
-            IMAGE_HEIGHT
-                    * 0.181640625,
-            IMAGE_WIDTH
-                    * 0.4921875,
-            IMAGE_HEIGHT
-                    * 0.96484375,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0);
-        OBEN1_1.curveTo(IMAGE_WIDTH * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0);
+        OBEN1_1.curveTo(
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.078125,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.078125
+        );
+        OBEN1_1.curveTo(
+            IMAGE_WIDTH * 0.337890625,
+            IMAGE_HEIGHT * 0.181640625,
+            IMAGE_WIDTH * 0.4921875,
+            IMAGE_HEIGHT * 0.96484375,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0
+        );
+        OBEN1_1.curveTo(
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0
+        );
         OBEN1_1.closePath();
         OBEN1_1.moveTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
         OBEN1_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
         OBEN1_1.closePath();
-//        final java.awt.Color FILL_COLOR_PATH1_1 = new java.awt.Color(13421772);
-//        final java.awt.Color FILL_COLOR_PATH1_1 = new java.awt.Color(0,0,0,0);
-//        G2.setColor(FILL_COLOR_PATH1_1);
+        //        final java.awt.Color FILL_COLOR_PATH1_1 = new java.awt.Color(13421772);
+        //        final java.awt.Color FILL_COLOR_PATH1_1 = new java.awt.Color(0,0,0,0);
+        //        G2.setColor(FILL_COLOR_PATH1_1);
         G2.fill(OBEN1_1);
         final java.awt.geom.GeneralPath OBEN2_1 = new java.awt.geom.GeneralPath();
         OBEN2_1.setWindingRule(java.awt.geom.GeneralPath.WIND_EVEN_ODD);
         OBEN2_1.moveTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
         OBEN2_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 0.0);
         OBEN2_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
-        OBEN2_1.curveTo(IMAGE_WIDTH * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.078125,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.078125);
-        OBEN2_1.curveTo(IMAGE_WIDTH * 0.337890625,
-            IMAGE_HEIGHT
-                    * 0.181640625,
-            IMAGE_WIDTH
-                    * 0.4921875,
-            IMAGE_HEIGHT
-                    * 0.96484375,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0);
-        OBEN2_1.curveTo(IMAGE_WIDTH * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0);
+        OBEN2_1.curveTo(
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.078125,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.078125
+        );
+        OBEN2_1.curveTo(
+            IMAGE_WIDTH * 0.337890625,
+            IMAGE_HEIGHT * 0.181640625,
+            IMAGE_WIDTH * 0.4921875,
+            IMAGE_HEIGHT * 0.96484375,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0
+        );
+        OBEN2_1.curveTo(
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0
+        );
         OBEN2_1.closePath();
         OBEN2_1.moveTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
         OBEN2_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
         OBEN2_1.closePath();
-//        final java.awt.Color FILL_COLOR_PATH2_1 = new java.awt.Color(13421772);
-//        G2.setColor(FILL_COLOR_PATH2_1);
+        //        final java.awt.Color FILL_COLOR_PATH2_1 = new java.awt.Color(13421772);
+        //        G2.setColor(FILL_COLOR_PATH2_1);
         G2.fill(OBEN2_1);
 
         G2.translate(0, HEIGHT - HEIGHT_UNTEN);
@@ -581,39 +561,30 @@ public class CurvedFlowBackgroundPanel extends JPanel {
         UNTEN1_1.moveTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
         UNTEN1_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 1.0);
         UNTEN1_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
-        UNTEN1_1.curveTo(IMAGE_WIDTH * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 0.921875,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 0.921875);
-        UNTEN1_1.curveTo(IMAGE_WIDTH * 0.662109375,
-            IMAGE_HEIGHT
-                    * 0.818359375,
-            IMAGE_WIDTH
-                    * 0.5078125,
-            IMAGE_HEIGHT
-                    * 0.03515625,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0);
-        UNTEN1_1.curveTo(IMAGE_WIDTH * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0);
+        UNTEN1_1.curveTo(
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 0.921875,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 0.921875
+        );
+        UNTEN1_1.curveTo(
+            IMAGE_WIDTH * 0.662109375,
+            IMAGE_HEIGHT * 0.818359375,
+            IMAGE_WIDTH * 0.5078125,
+            IMAGE_HEIGHT * 0.03515625,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0
+        );
+        UNTEN1_1.curveTo(
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0
+        );
         UNTEN1_1.closePath();
         UNTEN1_1.moveTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
         UNTEN1_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
@@ -626,39 +597,30 @@ public class CurvedFlowBackgroundPanel extends JPanel {
         UNTEN2_1.moveTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
         UNTEN2_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 1.0);
         UNTEN2_1.lineTo(IMAGE_WIDTH * 0.0, IMAGE_HEIGHT * 1.0);
-        UNTEN2_1.curveTo(IMAGE_WIDTH * 0.0,
-            IMAGE_HEIGHT
-                    * 1.0,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 0.921875,
-            IMAGE_WIDTH
-                    * 0.0,
-            IMAGE_HEIGHT
-                    * 0.921875);
-        UNTEN2_1.curveTo(IMAGE_WIDTH * 0.662109375,
-            IMAGE_HEIGHT
-                    * 0.818359375,
-            IMAGE_WIDTH
-                    * 0.5078125,
-            IMAGE_HEIGHT
-                    * 0.03515625,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0);
-        UNTEN2_1.curveTo(IMAGE_WIDTH * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0,
-            IMAGE_WIDTH
-                    * 1.0,
-            IMAGE_HEIGHT
-                    * 0.0);
+        UNTEN2_1.curveTo(
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 1.0,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 0.921875,
+            IMAGE_WIDTH * 0.0,
+            IMAGE_HEIGHT * 0.921875
+        );
+        UNTEN2_1.curveTo(
+            IMAGE_WIDTH * 0.662109375,
+            IMAGE_HEIGHT * 0.818359375,
+            IMAGE_WIDTH * 0.5078125,
+            IMAGE_HEIGHT * 0.03515625,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0
+        );
+        UNTEN2_1.curveTo(
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0,
+            IMAGE_WIDTH * 1.0,
+            IMAGE_HEIGHT * 0.0
+        );
         UNTEN2_1.closePath();
         UNTEN2_1.moveTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
         UNTEN2_1.lineTo(IMAGE_WIDTH * 1.0, IMAGE_HEIGHT * 0.0);
@@ -673,7 +635,7 @@ public class CurvedFlowBackgroundPanel extends JPanel {
     @Override
     public void paint(final Graphics g) {
         super.paint(g);
-        ((Graphics2D)g).drawImage(createFlow(getWidth(), getHeight(), oben, unten), 0, 0, null);
+        ((Graphics2D) g).drawImage(createFlow(getWidth(), getHeight(), oben, unten), 0, 0, null);
     }
 
     /**
@@ -693,7 +655,7 @@ public class CurvedFlowBackgroundPanel extends JPanel {
     public void setOben(final int oben) {
         this.oben = oben;
         if (!relativeHeights) {
-            obenFraction = (double)getOben() / (double)getHeight();
+            obenFraction = (double) getOben() / (double) getHeight();
         }
         repaint();
     }
@@ -705,7 +667,7 @@ public class CurvedFlowBackgroundPanel extends JPanel {
      */
     public void setOben(final double fractionOben) {
         obenFraction = fractionOben;
-        final int o = (int)(((double)getHeight()) * fractionOben);
+        final int o = (int) (((double) getHeight()) * fractionOben);
         setOben(o);
     }
 
@@ -716,7 +678,7 @@ public class CurvedFlowBackgroundPanel extends JPanel {
      */
     public void setUnten(final double fractionUnten) {
         untenFraction = fractionUnten;
-        final int u = (int)(((double)getHeight()) * fractionUnten);
+        final int u = (int) (((double) getHeight()) * fractionUnten);
         setUnten(u);
     }
 
@@ -737,7 +699,7 @@ public class CurvedFlowBackgroundPanel extends JPanel {
     public void setUnten(final int unten) {
         this.unten = unten;
         if (!relativeHeights) {
-            untenFraction = (double)getUnten() / (double)getHeight();
+            untenFraction = (double) getUnten() / (double) getHeight();
         }
         repaint();
     }

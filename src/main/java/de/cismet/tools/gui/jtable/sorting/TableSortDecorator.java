@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -13,7 +13,6 @@ package de.cismet.tools.gui.jtable.sorting;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -34,8 +33,7 @@ public final class TableSortDecorator {
     /**
      * Creates a new TableSortDecorator object.
      */
-    private TableSortDecorator() {
-    }
+    private TableSortDecorator() {}
 
     //~ Methods ----------------------------------------------------------------
 

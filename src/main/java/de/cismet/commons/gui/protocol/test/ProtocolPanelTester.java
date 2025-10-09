@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,12 +12,10 @@
  */
 package de.cismet.commons.gui.protocol.test;
 
-import javax.swing.UIManager;
-
 import de.cismet.commons.gui.protocol.ProtocolHandler;
 import de.cismet.commons.gui.protocol.impl.CommentProtocolStepImpl;
-
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import javax.swing.UIManager;
 
 /**
  * DOCUMENT ME!
@@ -34,6 +32,7 @@ public class ProtocolPanelTester extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSplitPane jSplitPane1;
     private de.cismet.commons.gui.protocol.ProtocolPanel protocolPanel1;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -65,7 +64,8 @@ public class ProtocolPanelTester extends javax.swing.JFrame {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton2,
-            org.openide.util.NbBundle.getMessage(ProtocolPanelTester.class, "ProtocolPanelTester.jButton2.text")); // NOI18N
+            org.openide.util.NbBundle.getMessage(ProtocolPanelTester.class, "ProtocolPanelTester.jButton2.text")
+        ); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(ProtocolPanelTester.class, "ProtocolPanelTester.title")); // NOI18N
@@ -74,14 +74,16 @@ public class ProtocolPanelTester extends javax.swing.JFrame {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton4,
-            org.openide.util.NbBundle.getMessage(ProtocolPanelTester.class, "ProtocolPanelTester.jButton4.text")); // NOI18N
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-
+            org.openide.util.NbBundle.getMessage(ProtocolPanelTester.class, "ProtocolPanelTester.jButton4.text")
+        ); // NOI18N
+        jButton4.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     jButton4ActionPerformed(evt);
                 }
-            });
+            }
+        );
         jPanel2.add(jButton4);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.NORTH);
@@ -95,12 +97,11 @@ public class ProtocolPanelTester extends javax.swing.JFrame {
         final javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE));
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 0, Short.MAX_VALUE)
+        );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(
-                0,
-                475,
-                Short.MAX_VALUE));
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 475, Short.MAX_VALUE)
+        );
 
         jSplitPane1.setLeftComponent(jPanel1);
 
@@ -115,25 +116,33 @@ public class ProtocolPanelTester extends javax.swing.JFrame {
      * @param  evt  DOCUMENT ME!
      */
     private void jButton4ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton4ActionPerformed
-        ProtocolHandler.getInstance()
-                .recordStep(new CommentProtocolStepImpl(
-                        "    // Variables declaration - do not modify                     \n"
-                        + "    private javax.swing.JButton jButton1;\n"
-                        + "    private javax.swing.JPanel jPanel1;\n"
-                        + "    private javax.swing.JPanel jPanel2;\n"
-                        + "    private javax.swing.JPanel jPanel3;\n"
-                        + "    private javax.swing.JScrollPane jScrollPane1;\n"
-                        + "    private javax.swing.JTextField jTextField1;\n"
-                        + "    private javax.swing.JPanel panSteps;\n"
-                        + "    // End of variables declaration              "));
-        ProtocolHandler.getInstance()
-                .recordStep(new CommentProtocolStepImpl(
-                        "        final JFrame frame = new JFrame(\"test\");\n"
-                        + "        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\n"
-                        + "        frame.setContentPane(new ProtocolPanel());\n"
-                        + "        frame.setExtendedState( frame.getExtendedState()|JFrame.MAXIMIZED_BOTH );\n"
-                        + "        frame.setVisible(true);"));
-    }                                                                            //GEN-LAST:event_jButton4ActionPerformed
+        ProtocolHandler
+            .getInstance()
+            .recordStep(
+                new CommentProtocolStepImpl(
+                    "    // Variables declaration - do not modify                     \n" +
+                    "    private javax.swing.JButton jButton1;\n" +
+                    "    private javax.swing.JPanel jPanel1;\n" +
+                    "    private javax.swing.JPanel jPanel2;\n" +
+                    "    private javax.swing.JPanel jPanel3;\n" +
+                    "    private javax.swing.JScrollPane jScrollPane1;\n" +
+                    "    private javax.swing.JTextField jTextField1;\n" +
+                    "    private javax.swing.JPanel panSteps;\n" +
+                    "    // End of variables declaration              "
+                )
+            );
+        ProtocolHandler
+            .getInstance()
+            .recordStep(
+                new CommentProtocolStepImpl(
+                    "        final JFrame frame = new JFrame(\"test\");\n" +
+                    "        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\n" +
+                    "        frame.setContentPane(new ProtocolPanel());\n" +
+                    "        frame.setExtendedState( frame.getExtendedState()|JFrame.MAXIMIZED_BOTH );\n" +
+                    "        frame.setVisible(true);"
+                )
+            );
+    } //GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -154,33 +163,37 @@ public class ProtocolPanelTester extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ProtocolPanelTester.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(ProtocolPanelTester.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ProtocolPanelTester.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(ProtocolPanelTester.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ProtocolPanelTester.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(ProtocolPanelTester.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProtocolPanelTester.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(ProtocolPanelTester.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         }
         try {
             //</editor-fold>
             //</editor-fold>
             UIManager.setLookAndFeel("com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
-        } catch (final Exception ex) {
-        }
+        } catch (final Exception ex) {}
 
         Log4JQuickConfig.configure4LumbermillOnLocalhost();
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
+        java.awt.EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     new ProtocolPanelTester().setVisible(true);
                 }
-            });
+            }
+        );
     }
 }

@@ -1,17 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands;
 
+import de.cismet.tools.gui.jbands.interfaces.BandPrefixProvider;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-
-import de.cismet.tools.gui.jbands.interfaces.BandPrefixProvider;
 
 /**
  * DOCUMENT ME!

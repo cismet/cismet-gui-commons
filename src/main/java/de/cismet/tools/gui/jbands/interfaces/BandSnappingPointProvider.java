@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands.interfaces;
 
 /**
@@ -13,5 +13,4 @@ package de.cismet.tools.gui.jbands.interfaces;
  * @author   therter
  * @version  $Revision$, $Date$
  */
-public interface BandSnappingPointProvider {
-}
+public interface BandSnappingPointProvider {}

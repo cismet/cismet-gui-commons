@@ -1,16 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
 import java.io.File;
-
 import java.util.Observer;
-
 import javax.swing.JPanel;
 
 /**
@@ -21,7 +19,6 @@ import javax.swing.JPanel;
  * @version  $Revision$, $Date$
  */
 public interface Download {
-
     //~ Enums ------------------------------------------------------------------
 
     /**
@@ -30,10 +27,15 @@ public interface Download {
      * @version  $Revision$, $Date$
      */
     enum State {
-
         //~ Enum constants -----------------------------------------------------
 
-        WAITING, RUNNING, RUNNING_WITH_ERROR, COMPLETED, COMPLETED_WITH_ERROR, ABORTED, RUNNING_WITH_PROGRESS
+        WAITING,
+        RUNNING,
+        RUNNING_WITH_ERROR,
+        COMPLETED,
+        COMPLETED_WITH_ERROR,
+        ABORTED,
+        RUNNING_WITH_PROGRESS,
     }
 
     //~ Methods ----------------------------------------------------------------

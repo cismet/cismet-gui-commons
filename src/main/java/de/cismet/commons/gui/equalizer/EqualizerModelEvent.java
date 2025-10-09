@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.equalizer;
 
 import java.util.EventObject;
@@ -39,7 +39,6 @@ public final class EqualizerModelEvent extends EventObject {
      */
     public EqualizerModelEvent(final Object source) {
         super(source);
-
         this.index = -1;
         this.oldValue = Integer.MIN_VALUE;
         this.newValue = Integer.MIN_VALUE;
@@ -55,7 +54,6 @@ public final class EqualizerModelEvent extends EventObject {
      */
     public EqualizerModelEvent(final Object source, final int index, final int oldValue, final int newValue) {
         super(source);
-
         this.index = index;
         this.oldValue = oldValue;
         this.newValue = newValue;

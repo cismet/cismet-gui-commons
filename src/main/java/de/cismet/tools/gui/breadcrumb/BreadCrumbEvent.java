@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.breadcrumb;
 
 import java.util.EventObject;
@@ -40,7 +40,6 @@ public class BreadCrumbEvent extends EventObject {
      */
     public BreadCrumbEvent(final BreadCrumbModel source, final BreadCrumb breadCrumb) {
         super(source);
-
         this.breadCrumb = breadCrumb;
     }
 
@@ -62,6 +61,6 @@ public class BreadCrumbEvent extends EventObject {
      */
     @Override
     public BreadCrumbModel getSource() {
-        return (BreadCrumbModel)source;
+        return (BreadCrumbModel) source;
     }
 }

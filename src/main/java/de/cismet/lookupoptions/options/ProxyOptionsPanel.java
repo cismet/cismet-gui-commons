@@ -1,27 +1,22 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.lookupoptions.options;
-
-import org.apache.log4j.Logger;
-
-import org.openide.util.NbBundle;
-import org.openide.util.lookup.ServiceProvider;
-
-import java.util.Objects;
-import java.util.regex.Pattern;
-
-import javax.swing.SwingUtilities;
 
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
-
 import de.cismet.netutil.Proxy;
 import de.cismet.netutil.ProxyHandler;
+import java.util.Objects;
+import java.util.regex.Pattern;
+import javax.swing.SwingUtilities;
+import org.apache.log4j.Logger;
+import org.openide.util.NbBundle;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * OptionsPanel for the Proxy Options.
@@ -40,8 +35,9 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     private static final transient Logger LOG = Logger.getLogger(ProxyOptionsPanel.class);
 
     private static final String OPTION_NAME = org.openide.util.NbBundle.getMessage(
-            ProxyOptionsPanel.class,
-            "ProxyOptionsPanel.OptionController.name"); // NOI18N
+        ProxyOptionsPanel.class,
+        "ProxyOptionsPanel.OptionController.name"
+    ); // NOI18N
 
     //~ Instance fields --------------------------------------------------------
 
@@ -77,6 +73,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     private javax.swing.JTextArea txtExcludedHosts;
     private javax.swing.JTextField txtHost;
     private javax.swing.JTextField txtUsername;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -91,12 +88,12 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         final Proxy preconfiguredProxy = ProxyHandler.getInstance().getPreconfiguredProxy();
         jPanel2.setVisible((preconfiguredProxy != null) && preconfiguredProxy.isValid());
         update();
-        proxyListener = new ProxyHandler.Listener() {
-
+        proxyListener =
+            new ProxyHandler.Listener() {
                 @Override
                 public void proxyChanged(final ProxyHandler.Event event) {
-                    SwingUtilities.invokeLater(new Runnable() {
-
+                    SwingUtilities.invokeLater(
+                        new Runnable() {
                             @Override
                             public void run() {
                                 final ProxyHandler.Mode mode = event.getNewMode();
@@ -106,10 +103,15 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
                                     mode,
                                     ProxyHandler.Mode.MANUAL.equals(mode)
                                         ? ProxyHandler.getInstance().getManualProxy()
-                                        : (ProxyHandler.Mode.PRECONFIGURED.equals(mode)
-                                            ? ProxyHandler.getInstance().getPreconfiguredProxy() : null));
+                                        : (
+                                            ProxyHandler.Mode.PRECONFIGURED.equals(mode)
+                                                ? ProxyHandler.getInstance().getPreconfiguredProxy()
+                                                : null
+                                        )
+                                );
                             }
-                        });
+                        }
+                    );
                 }
             };
         ProxyHandler.getInstance().addListener(proxyListener);
@@ -142,14 +144,16 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         final ProxyHandler.Mode mode = ProxyHandler.getInstance().getMode();
         if (mode != null) {
             switch (mode) {
-                case MANUAL: {
-                    rdoManualProxyActionPerformed(null);
-                    break;
-                }
-                case PRECONFIGURED: {
-                    rdoPreconfiguredProxyActionPerformed(null);
-                    break;
-                }
+                case MANUAL:
+                    {
+                        rdoManualProxyActionPerformed(null);
+                        break;
+                    }
+                case PRECONFIGURED:
+                    {
+                        rdoPreconfiguredProxyActionPerformed(null);
+                        break;
+                    }
             }
         }
     }
@@ -162,17 +166,20 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         final ProxyHandler.Mode selectedMode = getSelectedMode();
         if (selectedMode != null) {
             switch (selectedMode) {
-                case MANUAL: {
-                    ProxyHandler.getInstance().useManualProxy(getProxyFromFields());
-                    break;
-                }
-                case PRECONFIGURED: {
-                    ProxyHandler.getInstance().usePreconfiguredProxy();
-                    break;
-                }
-                default: {
-                    ProxyHandler.getInstance().useNoProxy();
-                }
+                case MANUAL:
+                    {
+                        ProxyHandler.getInstance().useManualProxy(getProxyFromFields());
+                        break;
+                    }
+                case PRECONFIGURED:
+                    {
+                        ProxyHandler.getInstance().usePreconfiguredProxy();
+                        break;
+                    }
+                default:
+                    {
+                        ProxyHandler.getInstance().useNoProxy();
+                    }
             }
         } else {
             ProxyHandler.getInstance().useNoProxy();
@@ -215,12 +222,14 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
             final String domain = (proxy != null) ? proxy.getDomain() : "";
             final String excludeHosts = (proxy != null) ? proxy.getExcludedHosts() : "";
 
-            return (!txtHost.getText().equals(host)
-                            || !((int)spiPort.getValue() == port)
-                            || !txtUsername.getText().equals(username)
-                            || !String.valueOf(pwdPassword.getPassword()).equals(password)
-                            || !txtDomain.getText().equals(domain)
-                            || !txtExcludedHosts.getText().replaceAll("Pattern.quote(\n)", "|").equals(excludeHosts));
+            return (
+                !txtHost.getText().equals(host) ||
+                !((int) spiPort.getValue() == port) ||
+                !txtUsername.getText().equals(username) ||
+                !String.valueOf(pwdPassword.getPassword()).equals(password) ||
+                !txtDomain.getText().equals(domain) ||
+                !txtExcludedHosts.getText().replaceAll("Pattern.quote(\n)", "|").equals(excludeHosts)
+            );
         } else {
             return false;
         }
@@ -268,8 +277,11 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         spiPort.setValue((proxy != null) ? proxy.getPort() : 0);
         txtUsername.setText((proxy != null) ? proxy.getUsername() : null);
         pwdPassword.setText((proxy != null) ? proxy.getPassword() : null);
-        txtExcludedHosts.setText(((proxy != null) && (proxy.getExcludedHosts() != null))
-                ? proxy.getExcludedHosts().replaceAll(Pattern.quote("|"), "\n") : null);
+        txtExcludedHosts.setText(
+            ((proxy != null) && (proxy.getExcludedHosts() != null))
+                ? proxy.getExcludedHosts().replaceAll(Pattern.quote("|"), "\n")
+                : null
+        );
         txtDomain.setText((proxy != null) ? proxy.getDomain() : null);
     }
 
@@ -307,9 +319,12 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         lblExcludedHosts = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtExcludedHosts = new javax.swing.JTextArea();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        filler1 =
+            new javax.swing.Box.Filler(
                 new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767)
+            );
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -319,34 +334,40 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
         buttonGroup1.add(rdoPreconfiguredProxy);
         rdoPreconfiguredProxy.setSelected(true);
-        rdoPreconfiguredProxy.setText(org.openide.util.NbBundle.getMessage(
+        rdoPreconfiguredProxy.setText(
+            org.openide.util.NbBundle.getMessage(
                 ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.rdoPreconfiguredProxy.text")); // NOI18N
-        rdoPreconfiguredProxy.addActionListener(new java.awt.event.ActionListener() {
-
+                "ProxyOptionsPanel.rdoPreconfiguredProxy.text"
+            )
+        ); // NOI18N
+        rdoPreconfiguredProxy.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     rdoPreconfiguredProxyActionPerformed(evt);
                 }
-            });
+            }
+        );
         jPanel2.add(rdoPreconfiguredProxy);
 
         buttonGroup1.add(rdoManualProxy);
-        rdoManualProxy.setText(org.openide.util.NbBundle.getMessage(
-                ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.rdoManualProxy.text")); // NOI18N
-        rdoManualProxy.addActionListener(new java.awt.event.ActionListener() {
-
+        rdoManualProxy.setText(
+            org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.rdoManualProxy.text")
+        ); // NOI18N
+        rdoManualProxy.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     rdoManualProxyActionPerformed(evt);
                 }
-            });
+            }
+        );
         jPanel2.add(rdoManualProxy);
-        rdoManualProxy.getAccessibleContext()
-                .setAccessibleName(org.openide.util.NbBundle.getMessage(
-                        ProxyOptionsPanel.class,
-                        "ProxyOptionsPanel.rdoManualProxy.text")); // NOI18N
+        rdoManualProxy
+            .getAccessibleContext()
+            .setAccessibleName(
+                org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.rdoManualProxy.text")
+            ); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -358,24 +379,25 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        cbEnabled.setText(org.openide.util.NbBundle.getMessage(
-                ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.cbEnabled.text")); // NOI18N
-        cbEnabled.addActionListener(new java.awt.event.ActionListener() {
-
+        cbEnabled.setText(
+            org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.cbEnabled.text")
+        ); // NOI18N
+        cbEnabled.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     cbEnabledActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 15);
         jPanel5.add(cbEnabled, gridBagConstraints);
 
-        lblHost.setText(org.openide.util.NbBundle.getMessage(
-                ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.lblHost.text")); // NOI18N
+        lblHost.setText(
+            org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.lblHost.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -389,9 +411,9 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         jPanel5.add(txtHost, gridBagConstraints);
 
-        lblPort.setText(org.openide.util.NbBundle.getMessage(
-                ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.lblPort.text")); // NOI18N
+        lblPort.setText(
+            org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.lblPort.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -410,8 +432,11 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel4.add(jPanel5, gridBagConstraints);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.jPanel1.border.title"))); // NOI18N
+        jPanel1.setBorder(
+            javax.swing.BorderFactory.createTitledBorder(
+                NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.jPanel1.border.title")
+            )
+        ); // NOI18N
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jPanel6.setLayout(new java.awt.GridBagLayout());
@@ -497,20 +522,24 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         jPanel3.add(jPanel4, gridBagConstraints);
 
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                org.openide.util.NbBundle.getMessage(
-                    ProxyOptionsPanel.class,
-                    "ProxyOptionsPanel.jPanel7.border.title"))); // NOI18N
+        jPanel7.setBorder(
+            javax.swing.BorderFactory.createTitledBorder(
+                org.openide.util.NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.jPanel7.border.title")
+            )
+        ); // NOI18N
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        lblExcludedHosts.setText(NbBundle.getMessage(
+        lblExcludedHosts.setText(
+            NbBundle.getMessage(ProxyOptionsPanel.class, "ProxyOptionsPanel.lblExcludedHosts.text")
+        ); // NOI18N
+        lblExcludedHosts.setToolTipText(
+            org.openide.util.NbBundle.getMessage(
                 ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.lblExcludedHosts.text"));        // NOI18N
-        lblExcludedHosts.setToolTipText(org.openide.util.NbBundle.getMessage(
-                ProxyOptionsPanel.class,
-                "ProxyOptionsPanel.lblExcludedHosts.toolTipText")); // NOI18N
+                "ProxyOptionsPanel.lblExcludedHosts.toolTipText"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -566,14 +595,16 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
      */
     private Proxy getProxyFromFields() {
         return new Proxy(
-                cbEnabled.isSelected(),
-                txtHost.getText().trim(),
-                (int)spiPort.getValue(),
-                txtExcludedHosts.getText().replaceAll(Pattern.quote("\n"), "|"),
-                txtUsername.getText(),
-                String.valueOf(pwdPassword.getPassword()),
-                txtDomain.getText());
+            cbEnabled.isSelected(),
+            txtHost.getText().trim(),
+            (int) spiPort.getValue(),
+            txtExcludedHosts.getText().replaceAll(Pattern.quote("\n"), "|"),
+            txtUsername.getText(),
+            String.valueOf(pwdPassword.getPassword()),
+            txtDomain.getText()
+        );
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -582,7 +613,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
     private void rdoPreconfiguredProxyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_rdoPreconfiguredProxyActionPerformed
         ProxyHandler.getInstance().setManualProxy(getProxyFromFields());
         updateFields(ProxyHandler.Mode.PRECONFIGURED, ProxyHandler.getInstance().getPreconfiguredProxy());
-    }                                                                                         //GEN-LAST:event_rdoPreconfiguredProxyActionPerformed
+    } //GEN-LAST:event_rdoPreconfiguredProxyActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -591,7 +622,7 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
      */
     private void rdoManualProxyActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_rdoManualProxyActionPerformed
         updateFields(ProxyHandler.Mode.MANUAL, ProxyHandler.getInstance().getManualProxy());
-    }                                                                                  //GEN-LAST:event_rdoManualProxyActionPerformed
+    } //GEN-LAST:event_rdoManualProxyActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -602,5 +633,5 @@ public class ProxyOptionsPanel extends AbstractOptionsPanel implements OptionsPa
         final Proxy proxy = ProxyHandler.getInstance().getManualProxy();
         proxy.setEnabled(cbEnabled.isSelected());
         updateFields(getSelectedMode(), proxy);
-    }                                                                             //GEN-LAST:event_cbEnabledActionPerformed
+    } //GEN-LAST:event_cbEnabledActionPerformed
 }

@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,9 +12,8 @@
  */
 package de.cismet.tools.gui.menu.example;
 
-import java.awt.Component;
-
 import de.cismet.tools.gui.menu.CidsUiComponent;
+import java.awt.Component;
 
 /**
  * DOCUMENT ME!
@@ -28,6 +27,7 @@ public class ToolbarPanelExample extends javax.swing.JPanel implements CidsUiCom
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField jTextField1;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -56,30 +56,47 @@ public class ToolbarPanelExample extends javax.swing.JPanel implements CidsUiCom
             org.openide.util.NbBundle.getMessage(
                 ToolbarPanelExample.class,
                 "ToolbarPanelExample.jLabel1.text",
-                new Object[] {})); // NOI18N
+                new Object[] {}
+            )
+        ); // NOI18N
 
-        jTextField1.setText(org.openide.util.NbBundle.getMessage(
+        jTextField1.setText(
+            org.openide.util.NbBundle.getMessage(
                 ToolbarPanelExample.class,
                 "ToolbarPanelExample.jTextField1.text",
-                new Object[] {})); // NOI18N
+                new Object[] {}
+            )
+        ); // NOI18N
 
         final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                layout.createSequentialGroup().addComponent(jLabel1).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                    jTextField1,
-                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    javax.swing.GroupLayout.PREFERRED_SIZE)));
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jTextField1)
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    layout
+                        .createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(
-                            jLabel1,
+                            jTextField1,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
                             javax.swing.GroupLayout.DEFAULT_SIZE,
-                            javax.swing.GroupLayout.DEFAULT_SIZE,
-                            Short.MAX_VALUE));
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                )
+        );
+        layout.setVerticalGroup(
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jTextField1)
+                .addComponent(
+                    jLabel1,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE
+                )
+        );
     } // </editor-fold>//GEN-END:initComponents
 
     @Override

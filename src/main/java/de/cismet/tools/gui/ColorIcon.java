@@ -1,17 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
 import javax.swing.Icon;
 
 /**
@@ -47,7 +46,7 @@ public class ColorIcon implements Icon {
 
     @Override
     public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
-        final Graphics2D g2d = (Graphics2D)g.create();
+        final Graphics2D g2d = (Graphics2D) g.create();
 
         g2d.setColor(color);
         g2d.fillRect(x, y, width, height);

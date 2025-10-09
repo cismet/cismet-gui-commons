@@ -1,14 +1,13 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import java.awt.Color;
-
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
@@ -43,15 +42,17 @@ public class StayOpenCheckBoxMenuItem extends JCheckBoxMenuItem {
     //~ Instance initializers --------------------------------------------------
 
     {
-        getModel().addChangeListener(new ChangeListener() {
-
-                @Override
-                public void stateChanged(final ChangeEvent e) {
-                    if (getModel().isArmed() && isShowing()) {
-                        path = MenuSelectionManager.defaultManager().getSelectedPath();
+        getModel()
+            .addChangeListener(
+                new ChangeListener() {
+                    @Override
+                    public void stateChanged(final ChangeEvent e) {
+                        if (getModel().isArmed() && isShowing()) {
+                            path = MenuSelectionManager.defaultManager().getSelectedPath();
+                        }
                     }
                 }
-            });
+            );
     }
 
     //~ Constructors -----------------------------------------------------------
@@ -105,9 +106,11 @@ public class StayOpenCheckBoxMenuItem extends JCheckBoxMenuItem {
      * @param  selectedBackgroundColor  DOCUMENT ME!
      * @param  selectedForegroundColor  DOCUMENT ME!
      */
-    public StayOpenCheckBoxMenuItem(final Action action,
-            final Color selectedBackgroundColor,
-            final Color selectedForegroundColor) {
+    public StayOpenCheckBoxMenuItem(
+        final Action action,
+        final Color selectedBackgroundColor,
+        final Color selectedForegroundColor
+    ) {
         this(action);
         this.selectedBackgroundColor = selectedBackgroundColor;
         this.selectedForegroundColor = selectedForegroundColor;
@@ -134,7 +137,7 @@ public class StayOpenCheckBoxMenuItem extends JCheckBoxMenuItem {
         super.doClick(pressTime);
 
         if ((path != null) && (path.length > 1) && (path[0] instanceof JPopupMenu)) {
-            final JPopupMenu menu = (JPopupMenu)path[0];
+            final JPopupMenu menu = (JPopupMenu) path[0];
             menu.setVisible(true);
         }
 

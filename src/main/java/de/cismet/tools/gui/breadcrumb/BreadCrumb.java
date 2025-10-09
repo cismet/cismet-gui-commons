@@ -1,19 +1,17 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.breadcrumb;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 
@@ -48,7 +46,6 @@ public abstract class BreadCrumb extends AbstractAction {
      */
     public BreadCrumb(final String name, final Icon icon) {
         super(name, icon);
-
         listeners = new HashSet<ActionListener>();
     }
 
@@ -91,6 +88,7 @@ public abstract class BreadCrumb extends AbstractAction {
             listeners.add(al);
         }
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -101,6 +99,7 @@ public abstract class BreadCrumb extends AbstractAction {
             listeners.remove(al);
         }
     }
+
     /**
      * DOCUMENT ME!
      *

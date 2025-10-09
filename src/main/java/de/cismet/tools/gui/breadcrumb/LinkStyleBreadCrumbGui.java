@@ -1,18 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.breadcrumb;
 
-import org.jdesktop.swingx.JXHyperlink;
-
 import java.util.List;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import org.jdesktop.swingx.JXHyperlink;
 
 /**
  * DOCUMENT ME!
@@ -83,8 +81,8 @@ public final class LinkStyleBreadCrumbGui extends javax.swing.JPanel {
      */
     public void setBreadCrumbModel(final BreadCrumbModel breadCrumbModel) {
         this.breadCrumbModel = breadCrumbModel;
-        breadCrumbModel.addBreadCrumbModelListener(new AbstractBreadCrumbModelListener() {
-
+        breadCrumbModel.addBreadCrumbModelListener(
+            new AbstractBreadCrumbModelListener() {
                 @Override
                 public void breadCrumbModelChanged(final BreadCrumbEvent bce) {
                     LinkStyleBreadCrumbGui.this.removeAll();
@@ -101,7 +99,8 @@ public final class LinkStyleBreadCrumbGui extends javax.swing.JPanel {
                     final BreadCrumb bc = bce.getBreadCrumb();
                     addToGui(bc);
                 }
-            });
+            }
+        );
     }
 
     /**

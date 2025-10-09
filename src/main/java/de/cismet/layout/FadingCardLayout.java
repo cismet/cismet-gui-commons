@@ -1,19 +1,17 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.layout;
 
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
-
 import java.util.Enumeration;
 import java.util.Hashtable;
-
 import javax.swing.SwingUtilities;
 
 /**
@@ -51,12 +49,12 @@ public class FadingCardLayout extends CardLayout {
         // neuen fadePanel erzeugen
         fadePanel = new FadingPanel();
         // als Listener anmelden um informiert zu werden wenn das Faden beendet wurde
-        fadePanel.addFadingPanelListener(new FadingPanelListener() {
-
+        fadePanel.addFadingPanelListener(
+            new FadingPanelListener() {
                 @Override
                 public void fadeFinished() {
-                    SwingUtilities.invokeLater(new Runnable() {
-
+                    SwingUtilities.invokeLater(
+                        new Runnable() {
                             @Override
                             public void run() {
                                 final Container parent = fadePanel.getParent();
@@ -66,9 +64,11 @@ public class FadingCardLayout extends CardLayout {
                                 // fadePanel wieder aus dem Container entfernen
                                 parent.remove(fadePanel);
                             }
-                        });
+                        }
+                    );
                 }
-            });
+            }
+        );
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -111,13 +111,14 @@ public class FadingCardLayout extends CardLayout {
     public void next(final Container parent) {
         synchronized (parent.getTreeLock()) {
             // current ist die momentan angezeigte komponente, oder aber fadeto falls gerade gefadet wird
-            int currentIndex = (fadeTo != null) ? getIndexOfComponent(parent, fadeTo)
-                                                : getIndexOfCurrentComponent(parent);
+            int currentIndex = (fadeTo != null)
+                ? getIndexOfComponent(parent, fadeTo)
+                : getIndexOfCurrentComponent(parent);
             // next ist die nächste komponente
             int nextIndex = ++currentIndex % parent.getComponentCount();
             // ... beziehungsweise die übernächste falls die nächste der fadepanel ist
-            nextIndex = (parent.getComponent(nextIndex) == fadePanel) ? (++nextIndex % parent.getComponentCount())
-                                                                      : nextIndex;
+            nextIndex =
+                (parent.getComponent(nextIndex) == fadePanel) ? (++nextIndex % parent.getComponentCount()) : nextIndex;
             // faden zur nächsten komponente
             fade(parent, parent.getComponent(nextIndex));
         }
@@ -132,13 +133,16 @@ public class FadingCardLayout extends CardLayout {
     public void previous(final Container parent) {
         synchronized (parent.getTreeLock()) {
             // current ist die momentan angezeigte komponente, oder aber fadeto falls gerade gefadet wird
-            int currentIndex = (fadeTo != null) ? getIndexOfComponent(parent, fadeTo)
-                                                : getIndexOfCurrentComponent(parent);
+            int currentIndex = (fadeTo != null)
+                ? getIndexOfComponent(parent, fadeTo)
+                : getIndexOfCurrentComponent(parent);
             // previous ist die vorherige komponente
             int previousIndex = (currentIndex == 0) ? (parent.getComponentCount() - 1) : --currentIndex;
             // ... beziehungsweise die vor-vorherige falls die vorherige der fadepanel ist
-            previousIndex = (parent.getComponent(previousIndex) == fadePanel)
-                ? (--previousIndex % parent.getComponentCount()) : previousIndex;
+            previousIndex =
+                (parent.getComponent(previousIndex) == fadePanel)
+                    ? (--previousIndex % parent.getComponentCount())
+                    : previousIndex;
             // faden zur vorherigen komponente
             fade(parent, parent.getComponent(previousIndex));
         }

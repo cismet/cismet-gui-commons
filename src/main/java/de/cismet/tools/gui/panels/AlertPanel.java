@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,6 +12,7 @@
  */
 package de.cismet.tools.gui.panels;
 
+import de.cismet.tools.gui.RoundedPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -24,17 +25,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Path2D;
 import java.awt.geom.RoundRectangle2D;
-
 import java.util.ArrayList;
-
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
-
-import de.cismet.tools.gui.RoundedPanel;
 
 /**
  * DOCUMENT ME!
@@ -70,10 +67,12 @@ public class AlertPanel extends RoundedPanel {
      * @version  $Revision$, $Date$
      */
     public static enum TYPE {
-
         //~ Enum constants -----------------------------------------------------
 
-        INFO, SUCCESS, WARNING, DANGER
+        INFO,
+        SUCCESS,
+        WARNING,
+        DANGER,
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -87,6 +86,7 @@ public class AlertPanel extends RoundedPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton closeButton;
     private javax.swing.JPanel pnlContent;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -164,7 +164,7 @@ public class AlertPanel extends RoundedPanel {
         setBackground(dangerBgColor);
         border = new RoundedBorder(dangerBorderColor, curve, 1);
         if (content instanceof JLabel) {
-            ((JLabel)content).setForeground(dangerMessageColor);
+            ((JLabel) content).setForeground(dangerMessageColor);
         }
     }
 
@@ -175,7 +175,7 @@ public class AlertPanel extends RoundedPanel {
         setBackground(successBgColor);
         border = new RoundedBorder(successBorderColor, curve, 1);
         if (content instanceof JLabel) {
-            ((JLabel)content).setForeground(successMessageColor);
+            ((JLabel) content).setForeground(successMessageColor);
         }
     }
 
@@ -186,7 +186,7 @@ public class AlertPanel extends RoundedPanel {
         setBackground(warningBgColor);
         border = new RoundedBorder(warningBorderColor, curve, 1);
         if (content instanceof JLabel) {
-            ((JLabel)content).setForeground(warningMessageColor);
+            ((JLabel) content).setForeground(warningMessageColor);
         }
     }
 
@@ -197,7 +197,7 @@ public class AlertPanel extends RoundedPanel {
         setBackground(infoBgColor);
         border = new RoundedBorder(infoBorderColor, curve, 1);
         if (content instanceof JLabel) {
-            ((JLabel)content).setForeground(infoMessageColor);
+            ((JLabel) content).setForeground(infoMessageColor);
         }
     }
 
@@ -226,22 +226,26 @@ public class AlertPanel extends RoundedPanel {
      */
     private void stylePanel() {
         switch (type) {
-            case DANGER: {
-                styleDanger();
-                break;
-            }
-            case SUCCESS: {
-                styleSuccess();
-                break;
-            }
-            case WARNING: {
-                styleWarning();
-                break;
-            }
-            default: {
-                styleInfo();
-                break;
-            }
+            case DANGER:
+                {
+                    styleDanger();
+                    break;
+                }
+            case SUCCESS:
+                {
+                    styleSuccess();
+                    break;
+                }
+            case WARNING:
+                {
+                    styleWarning();
+                    break;
+                }
+            default:
+                {
+                    styleInfo();
+                    break;
+                }
         }
         this.setBorder(BorderFactory.createCompoundBorder(border, new EmptyBorder(10, 30, 10, 10)));
     }
@@ -253,21 +257,25 @@ public class AlertPanel extends RoundedPanel {
      */
     public static void main(final String[] args) {
         final AlertPanel info = new AlertPanel(
-                TYPE.INFO,
-                new JLabel("<html> <b>INFO! </b> What a cool alert message box</html>"),
-                true);
+            TYPE.INFO,
+            new JLabel("<html> <b>INFO! </b> What a cool alert message box</html>"),
+            true
+        );
         final AlertPanel success = new AlertPanel(
-                TYPE.SUCCESS,
-                new JLabel("<html> <b>SUCCESS! </b>What a cool alert message box</html>"),
-                true);
+            TYPE.SUCCESS,
+            new JLabel("<html> <b>SUCCESS! </b>What a cool alert message box</html>"),
+            true
+        );
         final AlertPanel warn = new AlertPanel(
-                TYPE.WARNING,
-                new JLabel("<html> <b>WARNING! </b>What a cool alert message box</html>"),
-                true);
+            TYPE.WARNING,
+            new JLabel("<html> <b>WARNING! </b>What a cool alert message box</html>"),
+            true
+        );
         final AlertPanel danger = new AlertPanel(
-                TYPE.DANGER,
-                new JLabel("<html> <b>DANGER! </b>What a cool alert message box</html>"),
-                true);
+            TYPE.DANGER,
+            new JLabel("<html> <b>DANGER! </b>What a cool alert message box</html>"),
+            true
+        );
 
         final JFrame f = new JFrame();
         f.setSize(500, 500);
@@ -313,23 +321,28 @@ public class AlertPanel extends RoundedPanel {
         add(pnlContent, gridBagConstraints);
 
         if (closeable) {
-            closeButton.setIcon(new javax.swing.ImageIcon(
-                    getClass().getResource("/de/cismet/tools/gui/res/glyphicons_207_remove_2.png")));   // NOI18N
+            closeButton.setIcon(
+                new javax.swing.ImageIcon(
+                    getClass().getResource("/de/cismet/tools/gui/res/glyphicons_207_remove_2.png")
+                )
+            ); // NOI18N
             org.openide.awt.Mnemonics.setLocalizedText(
                 closeButton,
-                org.openide.util.NbBundle.getMessage(AlertPanel.class, "AlertPanel.closeButton.text")); // NOI18N
+                org.openide.util.NbBundle.getMessage(AlertPanel.class, "AlertPanel.closeButton.text")
+            ); // NOI18N
             closeButton.setBorderPainted(false);
             closeButton.setContentAreaFilled(false);
             closeButton.setFocusPainted(false);
             closeButton.setPreferredSize(new java.awt.Dimension(16, 16));
         }
-        closeButton.addActionListener(new java.awt.event.ActionListener() {
-
+        closeButton.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     closeButtonActionPerformed(evt);
                 }
-            });
+            }
+        );
         if (closeable) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 1;
@@ -347,7 +360,7 @@ public class AlertPanel extends RoundedPanel {
     private void closeButtonActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_closeButtonActionPerformed
         this.setVisible(false);
         fireCloseEvent(evt);
-    }                                                                               //GEN-LAST:event_closeButtonActionPerformed
+    } //GEN-LAST:event_closeButtonActionPerformed
 
     //~ Inner Classes ----------------------------------------------------------
 
@@ -400,13 +413,15 @@ public class AlertPanel extends RoundedPanel {
         }
 
         @Override
-        public void paintBorder(final Component c,
-                final Graphics g,
-                final int x,
-                final int y,
-                final int width,
-                final int height) {
-            final Graphics2D g2 = (Graphics2D)g;
+        public void paintBorder(
+            final Component c,
+            final Graphics g,
+            final int x,
+            final int y,
+            final int width,
+            final int height
+        ) {
+            final Graphics2D g2 = (Graphics2D) g;
             g2.setColor(this.color);
             final int offs = this.thickness;
             final int size = offs + offs;

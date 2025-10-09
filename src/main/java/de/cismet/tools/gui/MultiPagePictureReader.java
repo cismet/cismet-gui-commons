@@ -1,15 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URL;
 
 /**
@@ -57,7 +56,7 @@ public class MultiPagePictureReader extends WebAccessMultiPagePictureReader {
      */
     @Deprecated
     public MultiPagePictureReader(final File imageFile, final boolean caching, final boolean checkHeapSize)
-            throws IOException {
+        throws IOException {
         super(imageFile, caching, checkHeapSize);
     }
 
@@ -72,7 +71,7 @@ public class MultiPagePictureReader extends WebAccessMultiPagePictureReader {
      */
     @Deprecated
     public MultiPagePictureReader(final URL imageURL, final boolean caching, final boolean checkHeapSize)
-            throws IOException {
+        throws IOException {
         super(imageURL, caching, checkHeapSize);
     }
 }

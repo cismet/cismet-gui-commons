@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.autocomplete;
 
 import javax.swing.JTextField;
@@ -90,7 +90,7 @@ public class CompleterTextField extends JTextField {
         super.setDocument(doc);
 
         if (doc instanceof AbstractDocument) {
-            ((AbstractDocument)doc).setDocumentFilter(filter);
+            ((AbstractDocument) doc).setDocumentFilter(filter);
         }
     }
 

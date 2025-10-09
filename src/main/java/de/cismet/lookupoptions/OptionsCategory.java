@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.lookupoptions;
 
 import javax.swing.Icon;
@@ -16,7 +16,6 @@ import javax.swing.Icon;
  * @version  $Revision$, $Date$
  */
 public interface OptionsCategory extends Comparable<OptionsCategory> {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

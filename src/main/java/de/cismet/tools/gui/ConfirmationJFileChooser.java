@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -12,7 +12,6 @@
 package de.cismet.tools.gui;
 
 import java.io.File;
-
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
@@ -31,8 +30,7 @@ public class ConfirmationJFileChooser extends JFileChooser {
     /**
      * Creates a new ConfirmationJFileChooser object.
      */
-    public ConfirmationJFileChooser() {
-    }
+    public ConfirmationJFileChooser() {}
 
     /**
      * Creates a new ConfirmationJFileChooser object.
@@ -89,37 +87,39 @@ public class ConfirmationJFileChooser extends JFileChooser {
         final FileFilter ff = getFileFilter();
 
         if (!accept(f) && (ff instanceof ExtensionAwareFileFilter)) {
-            f = new File(f.getAbsolutePath() + "." + ((ExtensionAwareFileFilter)ff).getExtension());
+            f = new File(f.getAbsolutePath() + "." + ((ExtensionAwareFileFilter) ff).getExtension());
         }
 
         if (f.exists() && (getDialogType() == SAVE_DIALOG)) {
             final String message = org.openide.util.NbBundle.getMessage(
-                    ConfirmationJFileChooser.class,
-                    "ConfirmationJFileChooser.approveSelection.message");
+                ConfirmationJFileChooser.class,
+                "ConfirmationJFileChooser.approveSelection.message"
+            );
             final String title = org.openide.util.NbBundle.getMessage(
-                    ConfirmationJFileChooser.class,
-                    "ConfirmationJFileChooser.approveSelection.title");
+                ConfirmationJFileChooser.class,
+                "ConfirmationJFileChooser.approveSelection.title"
+            );
 
-            final int result = JOptionPane.showConfirmDialog(
-                    this,
-                    message,
-                    title,
-                    JOptionPane.YES_NO_CANCEL_OPTION);
+            final int result = JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_CANCEL_OPTION);
             switch (result) {
-                case JOptionPane.YES_OPTION: {
-                    super.approveSelection();
-                    return;
-                }
-                case JOptionPane.NO_OPTION: {
-                    return;
-                }
-                case JOptionPane.CLOSED_OPTION: {
-                    return;
-                }
-                case JOptionPane.CANCEL_OPTION: {
-                    cancelSelection();
-                    return;
-                }
+                case JOptionPane.YES_OPTION:
+                    {
+                        super.approveSelection();
+                        return;
+                    }
+                case JOptionPane.NO_OPTION:
+                    {
+                        return;
+                    }
+                case JOptionPane.CLOSED_OPTION:
+                    {
+                        return;
+                    }
+                case JOptionPane.CANCEL_OPTION:
+                    {
+                        cancelSelection();
+                        return;
+                    }
             }
         } else {
             super.approveSelection();

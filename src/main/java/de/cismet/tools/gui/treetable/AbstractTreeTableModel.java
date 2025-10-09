@@ -1,11 +1,12 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.treetable;
+
 /*
  * @(#)AbstractTreeTableModel.java      1.2 98/10/27
  *
@@ -65,8 +66,7 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
     }
 
     @Override
-    public void valueForPathChanged(final TreePath path, final Object newValue) {
-    }
+    public void valueForPathChanged(final TreePath path, final Object newValue) {}
 
     // This is not called in the JTree's default mode: use a naive implementation.
     @Override
@@ -88,6 +88,7 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
     public void removeTreeModelListener(final TreeModelListener l) {
         listenerList.remove(TreeModelListener.class, l);
     }
+
     /**
      * Notify all listeners that have registered interest for notification on this event type. The event instance is
      * lazily created using the parameters passed into the fire method.
@@ -99,10 +100,12 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
      *
      * @see    EventListenerList
      */
-    protected void fireTreeNodesChanged(final Object source,
-            final Object[] path,
-            final int[] childIndices,
-            final Object[] children) {
+    protected void fireTreeNodesChanged(
+        final Object source,
+        final Object[] path,
+        final int[] childIndices,
+        final Object[] children
+    ) {
         // Guaranteed to return a non-null array
         final Object[] listeners = listenerList.getListenerList();
         TreeModelEvent e = null;
@@ -112,13 +115,13 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
             if (listeners[i] == TreeModelListener.class) {
                 // Lazily create the event:
                 if (e == null) {
-                    e = new TreeModelEvent(source, path,
-                            childIndices, children);
+                    e = new TreeModelEvent(source, path, childIndices, children);
                 }
-                ((TreeModelListener)listeners[i + 1]).treeNodesChanged(e);
+                ((TreeModelListener) listeners[i + 1]).treeNodesChanged(e);
             }
         }
     }
+
     /**
      * Notify all listeners that have registered interest for notification on this event type. The event instance is
      * lazily created using the parameters passed into the fire method.
@@ -130,10 +133,12 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
      *
      * @see    EventListenerList
      */
-    protected void fireTreeNodesInserted(final Object source,
-            final Object[] path,
-            final int[] childIndices,
-            final Object[] children) {
+    protected void fireTreeNodesInserted(
+        final Object source,
+        final Object[] path,
+        final int[] childIndices,
+        final Object[] children
+    ) {
         // Guaranteed to return a non-null array
         final Object[] listeners = listenerList.getListenerList();
         TreeModelEvent e = null;
@@ -143,13 +148,13 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
             if (listeners[i] == TreeModelListener.class) {
                 // Lazily create the event:
                 if (e == null) {
-                    e = new TreeModelEvent(source, path,
-                            childIndices, children);
+                    e = new TreeModelEvent(source, path, childIndices, children);
                 }
-                ((TreeModelListener)listeners[i + 1]).treeNodesInserted(e);
+                ((TreeModelListener) listeners[i + 1]).treeNodesInserted(e);
             }
         }
     }
+
     /**
      * Notify all listeners that have registered interest for notification on this event type. The event instance is
      * lazily created using the parameters passed into the fire method.
@@ -161,10 +166,12 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
      *
      * @see    EventListenerList
      */
-    protected void fireTreeNodesRemoved(final Object source,
-            final Object[] path,
-            final int[] childIndices,
-            final Object[] children) {
+    protected void fireTreeNodesRemoved(
+        final Object source,
+        final Object[] path,
+        final int[] childIndices,
+        final Object[] children
+    ) {
         // Guaranteed to return a non-null array
         final Object[] listeners = listenerList.getListenerList();
         TreeModelEvent e = null;
@@ -174,13 +181,13 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
             if (listeners[i] == TreeModelListener.class) {
                 // Lazily create the event:
                 if (e == null) {
-                    e = new TreeModelEvent(source, path,
-                            childIndices, children);
+                    e = new TreeModelEvent(source, path, childIndices, children);
                 }
-                ((TreeModelListener)listeners[i + 1]).treeNodesRemoved(e);
+                ((TreeModelListener) listeners[i + 1]).treeNodesRemoved(e);
             }
         }
     }
+
     /**
      * Notify all listeners that have registered interest for notification on this event type. The event instance is
      * lazily created using the parameters passed into the fire method.
@@ -192,10 +199,12 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
      *
      * @see    EventListenerList
      */
-    protected void fireTreeStructureChanged(final Object source,
-            final Object[] path,
-            final int[] childIndices,
-            final Object[] children) {
+    protected void fireTreeStructureChanged(
+        final Object source,
+        final Object[] path,
+        final int[] childIndices,
+        final Object[] children
+    ) {
         // Guaranteed to return a non-null array
         final Object[] listeners = listenerList.getListenerList();
         TreeModelEvent e = null;
@@ -205,10 +214,9 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
             if (listeners[i] == TreeModelListener.class) {
                 // Lazily create the event:
                 if (e == null) {
-                    e = new TreeModelEvent(source, path,
-                            childIndices, children);
+                    e = new TreeModelEvent(source, path, childIndices, children);
                 }
-                ((TreeModelListener)listeners[i + 1]).treeStructureChanged(e);
+                ((TreeModelListener) listeners[i + 1]).treeStructureChanged(e);
             }
         }
     }
@@ -237,9 +245,7 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
     }
 
     @Override
-    public void setValueAt(final Object aValue, final Object node, final int column) {
-    }
-
+    public void setValueAt(final Object aValue, final Object node, final int column) {}
     // Left to be implemented in the subclass:
 
     /*

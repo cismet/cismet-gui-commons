@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  *  Copyright (C) 2010 srichter
  *
@@ -23,10 +23,7 @@
  */
 package de.cismet.tools.gui;
 
-import org.apache.log4j.Logger;
-
-import org.jdesktop.swingx.graphics.ShadowRenderer;
-
+import de.cismet.tools.ExifReader;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -36,13 +33,11 @@ import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-
-import de.cismet.tools.ExifReader;
+import org.apache.log4j.Logger;
+import org.jdesktop.swingx.graphics.ShadowRenderer;
 
 /**
  * DOCUMENT ME!
@@ -68,18 +63,21 @@ public final class ImageUtil {
      *
      * @return  DOCUMENT ME!
      */
-    public static Image adjustScale(final BufferedImage bi,
-            final JComponent component,
-            final int insetX,
-            final int insetY) {
-        final double scalex = (double)component.getWidth() / bi.getWidth();
-        final double scaley = (double)component.getHeight() / bi.getHeight();
+    public static Image adjustScale(
+        final BufferedImage bi,
+        final JComponent component,
+        final int insetX,
+        final int insetY
+    ) {
+        final double scalex = (double) component.getWidth() / bi.getWidth();
+        final double scaley = (double) component.getHeight() / bi.getHeight();
         final double scale = Math.min(scalex, scaley);
         if (scale <= 1d) {
-            return bi.getScaledInstance((int)(bi.getWidth() * scale) - insetX,
-                    (int)(bi.getHeight() * scale)
-                            - insetY,
-                    Image.SCALE_SMOOTH);
+            return bi.getScaledInstance(
+                (int) (bi.getWidth() * scale) - insetX,
+                (int) (bi.getHeight() * scale) - insetY,
+                Image.SCALE_SMOOTH
+            );
         } else {
             return bi;
         }
@@ -96,19 +94,22 @@ public final class ImageUtil {
      *
      * @return  DOCUMENT ME!
      */
-    public static Image adjustScale(final BufferedImage bi,
-            final int targetW,
-            final int targetH,
-            final int insetX,
-            final int insetY) {
-        final double scalex = (double)targetW / bi.getWidth();
-        final double scaley = (double)targetH / bi.getHeight();
+    public static Image adjustScale(
+        final BufferedImage bi,
+        final int targetW,
+        final int targetH,
+        final int insetX,
+        final int insetY
+    ) {
+        final double scalex = (double) targetW / bi.getWidth();
+        final double scaley = (double) targetH / bi.getHeight();
         final double scale = Math.min(scalex, scaley);
         if (scale <= 1d) {
-            return bi.getScaledInstance((int)(bi.getWidth() * scale) - insetX,
-                    (int)(bi.getHeight() * scale)
-                            - insetY,
-                    Image.SCALE_SMOOTH);
+            return bi.getScaledInstance(
+                (int) (bi.getWidth() * scale) - insetX,
+                (int) (bi.getHeight() * scale) - insetY,
+                Image.SCALE_SMOOTH
+            );
         } else {
             return bi;
         }
@@ -126,14 +127,14 @@ public final class ImageUtil {
     public static Image resizeOnScale(final Image origImage, final int maxWidth, final int maxHeight) {
         final int origWidth = origImage.getWidth(null);
         final int origHeight = origImage.getHeight(null);
-        final double ratio = origWidth / (double)origHeight;
+        final double ratio = origWidth / (double) origHeight;
         final int resizedWidth;
         final int resizedHeight;
         if (ratio > (maxWidth / maxHeight)) {
             resizedWidth = maxWidth;
-            resizedHeight = (int)Math.round(maxWidth / ratio);
+            resizedHeight = (int) Math.round(maxWidth / ratio);
         } else {
-            resizedWidth = (int)Math.round(maxHeight * ratio);
+            resizedWidth = (int) Math.round(maxHeight * ratio);
             resizedHeight = maxHeight;
         }
         return origImage.getScaledInstance(resizedWidth, resizedHeight, Image.SCALE_SMOOTH);
@@ -153,11 +154,13 @@ public final class ImageUtil {
         }
         final BufferedImage input;
         if (in instanceof BufferedImage) {
-            input = (BufferedImage)in;
+            input = (BufferedImage) in;
         } else {
-            final BufferedImage temp = new BufferedImage(in.getWidth(null),
-                    in.getHeight(null),
-                    BufferedImage.TYPE_4BYTE_ABGR);
+            final BufferedImage temp = new BufferedImage(
+                in.getWidth(null),
+                in.getHeight(null),
+                BufferedImage.TYPE_4BYTE_ABGR
+            );
             final Graphics tg = temp.createGraphics();
             tg.drawImage(in, 0, 0, null);
             tg.dispose();
@@ -168,10 +171,11 @@ public final class ImageUtil {
         }
         final ShadowRenderer renderer = new ShadowRenderer(shadowPixel, 0.5f, Color.BLACK);
         final BufferedImage shadow = renderer.createShadow(input);
-        final BufferedImage result = new BufferedImage(input.getWidth() + (2 * shadowPixel),
-                input.getHeight()
-                        + (2 * shadowPixel),
-                BufferedImage.TYPE_4BYTE_ABGR);
+        final BufferedImage result = new BufferedImage(
+            input.getWidth() + (2 * shadowPixel),
+            input.getHeight() + (2 * shadowPixel),
+            BufferedImage.TYPE_4BYTE_ABGR
+        );
         final Graphics2D rg = result.createGraphics();
         rg.drawImage(shadow, 0, 0, null);
         rg.drawImage(input, 0, 0, null);
@@ -188,24 +192,26 @@ public final class ImageUtil {
      * @return  DOCUMENT ME!
      */
     public static BufferedImage rotateImage(final BufferedImage src, final double degrees) {
-        final float radianAngle = (float)Math.toRadians(degrees);
-        final float sin = (float)Math.abs(Math.sin(radianAngle));
-        final float cos = (float)Math.abs(Math.cos(radianAngle));
+        final float radianAngle = (float) Math.toRadians(degrees);
+        final float sin = (float) Math.abs(Math.sin(radianAngle));
+        final float cos = (float) Math.abs(Math.cos(radianAngle));
 
         final int width = src.getWidth();
         final int height = src.getHeight();
-        final int newWidth = (int)Math.round((width * cos) + (height * sin));
-        final int newHeight = (int)Math.round((height * cos) + (width * sin));
+        final int newWidth = (int) Math.round((width * cos) + (height * sin));
+        final int newHeight = (int) Math.round((height * cos) + (width * sin));
 
-        final AffineTransform transform = AffineTransform.getTranslateInstance((newWidth - width) / 2,
-                (newHeight - height)
-                        / 2);
+        final AffineTransform transform = AffineTransform.getTranslateInstance(
+            (newWidth - width) / 2,
+            (newHeight - height) / 2
+        );
         transform.rotate(radianAngle, width / 2, height / 2);
 
-        final BufferedImage result = GraphicsEnvironment.getLocalGraphicsEnvironment()
-                    .getDefaultScreenDevice()
-                    .getDefaultConfiguration()
-                    .createCompatibleImage(newWidth, newHeight, Transparency.TRANSLUCENT);
+        final BufferedImage result = GraphicsEnvironment
+            .getLocalGraphicsEnvironment()
+            .getDefaultScreenDevice()
+            .getDefaultConfiguration()
+            .createCompatibleImage(newWidth, newHeight, Transparency.TRANSLUCENT);
 
         final Graphics2D g = result.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -226,12 +232,14 @@ public final class ImageUtil {
      */
     public static BufferedImage toBufferedImage(final Image image) {
         if (image instanceof BufferedImage) {
-            return (BufferedImage)image;
+            return (BufferedImage) image;
         }
 
-        final BufferedImage bufferedImage = new BufferedImage(image.getWidth(null),
-                image.getHeight(null),
-                BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage bufferedImage = new BufferedImage(
+            image.getWidth(null),
+            image.getHeight(null),
+            BufferedImage.TYPE_INT_ARGB
+        );
 
         final Graphics2D bGr = bufferedImage.createGraphics();
         bGr.drawImage(image, 0, 0, null);
@@ -248,9 +256,11 @@ public final class ImageUtil {
      * @return  the horizontally mirrored image
      */
     public static BufferedImage toHorizontallyMirroredImage(final BufferedImage image) {
-        final BufferedImage mirroredImage = new BufferedImage(image.getWidth(),
-                image.getHeight(),
-                BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage mirroredImage = new BufferedImage(
+            image.getWidth(),
+            image.getHeight(),
+            BufferedImage.TYPE_INT_ARGB
+        );
 
         for (int x = 0; x < image.getWidth(); ++x) {
             for (int y = 0; y < image.getHeight(); ++y) {
@@ -269,9 +279,11 @@ public final class ImageUtil {
      * @return  the vertically mirrored image
      */
     public static BufferedImage toVerticallyMirroredImage(final BufferedImage image) {
-        final BufferedImage mirroredImage = new BufferedImage(image.getWidth(),
-                image.getHeight(),
-                BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage mirroredImage = new BufferedImage(
+            image.getWidth(),
+            image.getHeight(),
+            BufferedImage.TYPE_INT_ARGB
+        );
 
         for (int x = 0; x < image.getWidth(); ++x) {
             for (int y = 0; y < image.getHeight(); ++y) {

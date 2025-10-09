@@ -1,17 +1,15 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.slideabletree;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import java.util.Enumeration;
-
 import javax.swing.JTree;
 import javax.swing.plaf.TreeUI;
 import javax.swing.plaf.basic.BasicTreeUI;
@@ -124,8 +122,10 @@ public class SlideableSubTree extends JTree {
             }
 
             for (int i = 1; i < path.getPathCount(); i++) {
-                final int childIndex = model.getIndexOfChild(path.getPathComponent(i - 1),
-                        path.getPathComponent(i - 1));
+                final int childIndex = model.getIndexOfChild(
+                    path.getPathComponent(i - 1),
+                    path.getPathComponent(i - 1)
+                );
                 if (childIndex == -1) {
                     // parent oder childknoten null oder nicht vorhanden...
                     return false;
@@ -166,44 +166,42 @@ public class SlideableSubTree extends JTree {
         @Override
         protected MouseListener createMouseListener() {
             return new MouseListener() {
+                @Override
+                public void mouseClicked(final MouseEvent e) {}
 
-                    @Override
-                    public void mouseClicked(final MouseEvent e) {
-                    }
+                @Override
+                public void mousePressed(final MouseEvent e) {
+                    final int selCount = tree.getSelectionCount();
+                    final TreePath clickPath = tree.getPathForLocation(e.getX(), e.getY());
 
-                    @Override
-                    public void mousePressed(final MouseEvent e) {
-                        final int selCount = tree.getSelectionCount();
-                        final TreePath clickPath = tree.getPathForLocation(e.getX(), e.getY());
-
-                        if (selCount > 1) {
-                            if (tree.getSelectionModel().isPathSelected(clickPath)) {
-                                releasedAction = true;
-                                return;
-                            }
+                    if (selCount > 1) {
+                        if (tree.getSelectionModel().isPathSelected(clickPath)) {
+                            releasedAction = true;
+                            return;
                         }
+                    }
+                    SpecialSelectionUI.super.createMouseListener().mousePressed(e);
+                }
+
+                @Override
+                public void mouseReleased(final MouseEvent e) {
+                    final TreePath clickPath = tree.getPathForLocation(e.getX(), e.getY());
+                    if (releasedAction && tree.getSelectionModel().isPathSelected(clickPath)) {
+                        releasedAction = false;
                         SpecialSelectionUI.super.createMouseListener().mousePressed(e);
                     }
+                }
 
-                    @Override
-                    public void mouseReleased(final MouseEvent e) {
-                        final TreePath clickPath = tree.getPathForLocation(e.getX(), e.getY());
-                        if (releasedAction && tree.getSelectionModel().isPathSelected(clickPath)) {
-                            releasedAction = false;
-                            SpecialSelectionUI.super.createMouseListener().mousePressed(e);
-                        }
-                    }
+                @Override
+                public void mouseEntered(final MouseEvent e) {
+                    SpecialSelectionUI.super.createMouseListener().mouseEntered(e);
+                }
 
-                    @Override
-                    public void mouseEntered(final MouseEvent e) {
-                        SpecialSelectionUI.super.createMouseListener().mouseEntered(e);
-                    }
-
-                    @Override
-                    public void mouseExited(final MouseEvent e) {
-                        SpecialSelectionUI.super.createMouseListener().mouseExited(e);
-                    }
-                };
+                @Override
+                public void mouseExited(final MouseEvent e) {
+                    SpecialSelectionUI.super.createMouseListener().mouseExited(e);
+                }
+            };
         }
     }
 }

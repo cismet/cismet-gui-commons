@@ -1,15 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands;
 
-import javax.swing.JComponent;
-
 import de.cismet.tools.gui.jbands.interfaces.Section;
+import javax.swing.JComponent;
 
 /**
  * DOCUMENT ME!

@@ -1,15 +1,15 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.equalizer;
 
-import org.testng.annotations.Test;
-
 import static org.testng.Assert.*;
+
+import org.testng.annotations.Test;
 
 /**
  * DOCUMENT ME!
@@ -51,7 +51,7 @@ public class EqualizerCategoryNGTest {
     @Test
     public void testClone() {
         final EqualizerCategory ec1 = new EqualizerCategory("test", 4);
-        final EqualizerCategory clone = (EqualizerCategory)ec1.clone();
+        final EqualizerCategory clone = (EqualizerCategory) ec1.clone();
         assertEquals(clone, ec1);
     }
 }

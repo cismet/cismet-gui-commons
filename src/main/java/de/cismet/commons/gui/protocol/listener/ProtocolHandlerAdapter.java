@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -23,22 +23,17 @@ public class ProtocolHandlerAdapter implements ProtocolHandlerListener {
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void recordStateChanged(final ProtocolHandlerListenerEvent event) {
-    }
+    public void recordStateChanged(final ProtocolHandlerListenerEvent event) {}
 
     @Override
-    public void stepAdded(final ProtocolHandlerListenerEvent event) {
-    }
+    public void stepAdded(final ProtocolHandlerListenerEvent event) {}
 
     @Override
-    public void stepRemoved(final ProtocolHandlerListenerEvent event) {
-    }
+    public void stepRemoved(final ProtocolHandlerListenerEvent event) {}
 
     @Override
-    public void stepsCleared(final ProtocolHandlerListenerEvent event) {
-    }
+    public void stepsCleared(final ProtocolHandlerListenerEvent event) {}
 
     @Override
-    public void stepsRestored(final ProtocolHandlerListenerEvent event) {
-    }
+    public void stepsRestored(final ProtocolHandlerListenerEvent event) {}
 }

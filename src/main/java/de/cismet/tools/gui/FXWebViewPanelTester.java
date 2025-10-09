@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,14 +12,11 @@
  */
 package de.cismet.tools.gui;
 
+import java.awt.BorderLayout;
 import javafx.application.Platform;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-
 import javafx.concurrent.Worker;
-
-import java.awt.BorderLayout;
 
 /**
  * DOCUMENT ME!
@@ -42,6 +39,7 @@ public class FXWebViewPanelTester extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel panEditor;
     private javax.swing.JPanel panJFX;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -55,27 +53,34 @@ public class FXWebViewPanelTester extends javax.swing.JFrame {
         initComponents();
         jTextField1.setText(url);
         panJFX.add(fxWV, BorderLayout.CENTER);
-        Platform.runLater(new Runnable() {
-
+        Platform.runLater(
+            new Runnable() {
                 @Override
                 public void run() {
-                    fxWV.webEng.getLoadWorker().stateProperty().addListener(
-                        new ChangeListener<Worker.State>() {
-
-                            @Override
-                            public void changed(final ObservableValue ov,
+                    fxWV.webEng
+                        .getLoadWorker()
+                        .stateProperty()
+                        .addListener(
+                            new ChangeListener<Worker.State>() {
+                                @Override
+                                public void changed(
+                                    final ObservableValue ov,
                                     final Worker.State oldState,
-                                    final Worker.State newState) {
-                                if (newState == Worker.State.SUCCEEDED) {
-                                    System.out.println("Ready");
-                                    final String html = (String)fxWV.webEng.executeScript(
-                                            "document.documentElement.outerHTML");
-                                    jEditorPane1.setText(html);
+                                    final Worker.State newState
+                                ) {
+                                    if (newState == Worker.State.SUCCEEDED) {
+                                        System.out.println("Ready");
+                                        final String html = (String) fxWV.webEng.executeScript(
+                                            "document.documentElement.outerHTML"
+                                        );
+                                        jEditorPane1.setText(html);
+                                    }
                                 }
                             }
-                        });
+                        );
                 }
-            });
+            }
+        );
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -103,10 +108,13 @@ public class FXWebViewPanelTester extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         panJFX.setLayout(new java.awt.BorderLayout());
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(
+        jTabbedPane1.addTab(
+            org.openide.util.NbBundle.getMessage(
                 FXWebViewPanelTester.class,
-                "FXWebViewPanelTester.panJFX.TabConstraints.tabTitle"),
-            panJFX); // NOI18N
+                "FXWebViewPanelTester.panJFX.TabConstraints.tabTitle"
+            ),
+            panJFX
+        ); // NOI18N
 
         panEditor.setLayout(new java.awt.BorderLayout());
 
@@ -116,20 +124,25 @@ public class FXWebViewPanelTester extends javax.swing.JFrame {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton2,
-            org.openide.util.NbBundle.getMessage(FXWebViewPanelTester.class, "FXWebViewPanelTester.jButton2.text")); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-
+            org.openide.util.NbBundle.getMessage(FXWebViewPanelTester.class, "FXWebViewPanelTester.jButton2.text")
+        ); // NOI18N
+        jButton2.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     jButton2ActionPerformed(evt);
                 }
-            });
+            }
+        );
         panEditor.add(jButton2, java.awt.BorderLayout.PAGE_START);
 
-        jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(
+        jTabbedPane1.addTab(
+            org.openide.util.NbBundle.getMessage(
                 FXWebViewPanelTester.class,
-                "FXWebViewPanelTester.panEditor.TabConstraints.tabTitle"),
-            panEditor); // NOI18N
+                "FXWebViewPanelTester.panEditor.TabConstraints.tabTitle"
+            ),
+            panEditor
+        ); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -140,16 +153,17 @@ public class FXWebViewPanelTester extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         getContentPane().add(jTabbedPane1, gridBagConstraints);
 
-        jTextField1.setText(org.openide.util.NbBundle.getMessage(
-                FXWebViewPanelTester.class,
-                "FXWebViewPanelTester.jTextField1.text")); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-
+        jTextField1.setText(
+            org.openide.util.NbBundle.getMessage(FXWebViewPanelTester.class, "FXWebViewPanelTester.jTextField1.text")
+        ); // NOI18N
+        jTextField1.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     jTextField1ActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -159,14 +173,16 @@ public class FXWebViewPanelTester extends javax.swing.JFrame {
 
         org.openide.awt.Mnemonics.setLocalizedText(
             jButton1,
-            org.openide.util.NbBundle.getMessage(FXWebViewPanelTester.class, "FXWebViewPanelTester.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-
+            org.openide.util.NbBundle.getMessage(FXWebViewPanelTester.class, "FXWebViewPanelTester.jButton1.text")
+        ); // NOI18N
+        jButton1.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     jButton1ActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -191,7 +207,7 @@ public class FXWebViewPanelTester extends javax.swing.JFrame {
      */
     private void jButton1ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton1ActionPerformed
         fxWV.loadUrl(jTextField1.getText());
-    }                                                                            //GEN-LAST:event_jButton1ActionPerformed
+    } //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -200,7 +216,7 @@ public class FXWebViewPanelTester extends javax.swing.JFrame {
      */
     private void jButton2ActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jButton2ActionPerformed
         fxWV.loadContent(jEditorPane1.getText());
-    }                                                                            //GEN-LAST:event_jButton2ActionPerformed
+    } //GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -221,17 +237,21 @@ public class FXWebViewPanelTester extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FXWebViewPanelTester.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(FXWebViewPanelTester.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FXWebViewPanelTester.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(FXWebViewPanelTester.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FXWebViewPanelTester.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(FXWebViewPanelTester.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FXWebViewPanelTester.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(FXWebViewPanelTester.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         String url = null;
@@ -243,12 +263,13 @@ public class FXWebViewPanelTester extends javax.swing.JFrame {
         }
         final String myUrl = url;
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
+        java.awt.EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     new FXWebViewPanelTester(myUrl).setVisible(true);
                 }
-            });
+            }
+        );
     }
 }

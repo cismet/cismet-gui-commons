@@ -1,14 +1,13 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
 import java.util.Collection;
-
 import javax.swing.SwingWorker;
 
 /**
@@ -39,9 +38,11 @@ public class BackgroundTaskMultipleDownload extends MultipleDownload {
      * @param  title               DOCUMENT ME!
      * @param  fetchDownloadsTask  DOCUMENT ME!
      */
-    public BackgroundTaskMultipleDownload(final Collection<? extends Download> downloads,
-            final String title,
-            final FetchDownloadsTask fetchDownloadsTask) {
+    public BackgroundTaskMultipleDownload(
+        final Collection<? extends Download> downloads,
+        final String title,
+        final FetchDownloadsTask fetchDownloadsTask
+    ) {
         super(downloads, title);
         this.fetchDownloadTask = fetchDownloadsTask;
     }
@@ -50,8 +51,8 @@ public class BackgroundTaskMultipleDownload extends MultipleDownload {
 
     @Override
     public void startDownload() {
-        worker = new SwingWorker<Collection<? extends Download>, Void>() {
-
+        worker =
+            new SwingWorker<Collection<? extends Download>, Void>() {
                 @Override
                 protected Collection<? extends Download> doInBackground() throws Exception {
                     return fetchDownloadTask.fetchDownloads();
@@ -84,7 +85,7 @@ public class BackgroundTaskMultipleDownload extends MultipleDownload {
      * @param  newDownloads  DOCUMENT ME!
      */
     private <D extends Download> void addDownloadsSubsequently(final Collection<D> newDownloads) {
-        final Collection<D> existentDownloads = (Collection<D>)getDownloads();
+        final Collection<D> existentDownloads = (Collection<D>) getDownloads();
         for (final D download : newDownloads) {
             existentDownloads.add(download);
         }
@@ -106,9 +107,11 @@ public class BackgroundTaskMultipleDownload extends MultipleDownload {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final BackgroundTaskMultipleDownload other = (BackgroundTaskMultipleDownload)obj;
-        if ((this.fetchDownloadTask != other.fetchDownloadTask)
-                    && ((this.fetchDownloadTask == null) || !this.fetchDownloadTask.equals(other.fetchDownloadTask))) {
+        final BackgroundTaskMultipleDownload other = (BackgroundTaskMultipleDownload) obj;
+        if (
+            (this.fetchDownloadTask != other.fetchDownloadTask) &&
+            ((this.fetchDownloadTask == null) || !this.fetchDownloadTask.equals(other.fetchDownloadTask))
+        ) {
             return false;
         }
         return true;
@@ -122,7 +125,6 @@ public class BackgroundTaskMultipleDownload extends MultipleDownload {
      * @version  $Revision$, $Date$
      */
     public interface FetchDownloadsTask {
-
         //~ Methods ------------------------------------------------------------
 
         /**

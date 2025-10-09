@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import javax.swing.JSlider;
@@ -100,8 +100,7 @@ public class RangeSlider extends JSlider {
         final int newExtent = oldExtent + oldValue - newValue;
 
         // Set new value and extent, and fire a single change event.
-        getModel().setRangeProperties(newValue, newExtent, getMinimum(),
-            getMaximum(), getValueIsAdjusting());
+        getModel().setRangeProperties(newValue, newExtent, getMinimum(), getMaximum(), getValueIsAdjusting());
     }
 
     /**

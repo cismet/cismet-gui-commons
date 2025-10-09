@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,16 +12,12 @@
  */
 package de.cismet.commons.gui.protocol.impl;
 
-import org.openide.util.lookup.ServiceProvider;
-
-import java.awt.event.ActionEvent;
-
-import javax.swing.ImageIcon;
-
 import de.cismet.commons.gui.protocol.AbstractProtocolStepToolbarItemAction;
 import de.cismet.commons.gui.protocol.ProtocolStepToolbarItem;
-
 import de.cismet.tools.gui.StaticSwingTools;
+import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * DOCUMENT ME!
@@ -36,10 +32,12 @@ public class CommentProtocolStepToolbarItem extends AbstractProtocolStepToolbarI
 
     private static final String NAME = "";
     private static final String TOOLTIP = org.openide.util.NbBundle.getMessage(
-            CommentProtocolStepToolbarItem.class,
-            "CommentProtocolStepToolbarItem.tooltip");
-    private static final ImageIcon ICON = new ImageIcon(CommentProtocolStepToolbarItem.class.getResource(
-                "/de/cismet/commons/gui/protocol/impl/comment_add.png"));
+        CommentProtocolStepToolbarItem.class,
+        "CommentProtocolStepToolbarItem.tooltip"
+    );
+    private static final ImageIcon ICON = new ImageIcon(
+        CommentProtocolStepToolbarItem.class.getResource("/de/cismet/commons/gui/protocol/impl/comment_add.png")
+    );
 
     //~ Constructors -----------------------------------------------------------
 

@@ -1,30 +1,25 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.startup;
 
-import org.jdesktop.swingx.JXBusyLabel;
-
+import de.cismet.tools.Static2DTools;
+import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-
-import de.cismet.tools.Static2DTools;
-
-import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
+import org.jdesktop.swingx.JXBusyLabel;
 
 /**
  * DOCUMENT ME!
@@ -56,25 +51,26 @@ public class GhostFrame extends javax.swing.JFrame {
         final String height = reader.readLine();
         reader.close();
         rectangle = new Rectangle();
-        rectangle.setBounds(Integer.parseInt(x),
+        rectangle.setBounds(
+            Integer.parseInt(x),
             Integer.parseInt(y),
             Integer.parseInt(width),
-            Integer.parseInt(height));
+            Integer.parseInt(height)
+        );
         final ImageIcon ii = new ImageIcon(file + ".png");
         final ImageIcon iii = new ImageIcon(Static2DTools.removeUnusedBorder(ii.getImage(), 0, 1));
         final JPanel p = new JPanel(new BorderLayout()) {
+            @Override
+            public void paint(final Graphics g) {
+                super.paint(g);
+            }
 
-                @Override
-                public void paint(final Graphics g) {
-                    super.paint(g);
-                }
-
-                @Override
-                protected void paintChildren(final Graphics g) {
-                    g.drawImage(iii.getImage(), 0, 0, null);
-                    super.paintChildren(g);
-                }
-            };
+            @Override
+            protected void paintChildren(final Graphics g) {
+                g.drawImage(iii.getImage(), 0, 0, null);
+                super.paintChildren(g);
+            }
+        };
 
         getContentPane().add(p, BorderLayout.CENTER);
         if (rectangle != null) {

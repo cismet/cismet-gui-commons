@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * DownloadManagerOptionsPanel.java
  *
@@ -12,24 +12,17 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import org.apache.log4j.Logger;
-
-import org.jdom.Element;
-
-import org.openide.util.NbBundle;
-import org.openide.util.lookup.ServiceProvider;
-
-import java.io.File;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
-
 import de.cismet.tools.BrowserLauncher;
-
 import de.cismet.tools.configuration.NoWriteError;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import org.apache.log4j.Logger;
+import org.jdom.Element;
+import org.openide.util.NbBundle;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * DOCUMENT ME!
@@ -45,8 +38,9 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
     private static final Logger LOG = Logger.getLogger(DownloadManagerOptionsPanel.class);
 
     private static final String OPTION_NAME = NbBundle.getMessage(
-            DownloadManagerOptionsPanel.class,
-            "DownloadManagerOptionsPanel.OPTION_NAME");
+        DownloadManagerOptionsPanel.class,
+        "DownloadManagerOptionsPanel.OPTION_NAME"
+    );
 
     //~ Instance fields --------------------------------------------------------
 
@@ -82,6 +76,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
     private javax.swing.ButtonGroup rgrOpenAutomatically;
     private javax.swing.JSpinner spnNotificationDisplayTime;
     private javax.swing.JSpinner spnParallelDownloads;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -91,7 +86,6 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
      */
     public DownloadManagerOptionsPanel() {
         super(OPTION_NAME, DownloadManagerOptionsCategory.class);
-
         initComponents();
     }
 
@@ -115,12 +109,18 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         lblJobname = new javax.swing.JLabel();
         chkAskForJobname = new javax.swing.JCheckBox();
         lblOpenAutomatically = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        filler1 =
+            new javax.swing.Box.Filler(
                 new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 32767));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
                 new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(32767, 32767));
+                new java.awt.Dimension(32767, 32767)
+            );
+        filler2 =
+            new javax.swing.Box.Filler(
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(32767, 32767)
+            );
         pnlOpenAutomatically = new javax.swing.JPanel();
         rdoDontOpenAutomatically = new javax.swing.JRadioButton();
         rdoOpenAutomatically = new javax.swing.JRadioButton();
@@ -133,16 +133,22 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         spnNotificationDisplayTime = new javax.swing.JSpinner();
         lblNotificationDisplayTime = new javax.swing.JLabel();
 
-        fileChooser.setDialogTitle(org.openide.util.NbBundle.getMessage(
+        fileChooser.setDialogTitle(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.fileChooser.dialogTitle")); // NOI18N
+                "DownloadManagerOptionsPanel.fileChooser.dialogTitle"
+            )
+        ); // NOI18N
         fileChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         setLayout(new java.awt.GridBagLayout());
 
-        lblDestinationDirectory.setText(org.openide.util.NbBundle.getMessage(
+        lblDestinationDirectory.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.lblDestinationDirectory.text")); // NOI18N
+                "DownloadManagerOptionsPanel.lblDestinationDirectory.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -150,16 +156,20 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(8, 5, 3, 10);
         add(lblDestinationDirectory, gridBagConstraints);
 
-        jhlDownloadDestination.setText(org.openide.util.NbBundle.getMessage(
+        jhlDownloadDestination.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.jhlDownloadDestination.text")); // NOI18N
-        jhlDownloadDestination.addActionListener(new java.awt.event.ActionListener() {
-
+                "DownloadManagerOptionsPanel.jhlDownloadDestination.text"
+            )
+        ); // NOI18N
+        jhlDownloadDestination.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     jhlDownloadDestinationActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -168,25 +178,32 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(8, 3, 3, 5);
         add(jhlDownloadDestination, gridBagConstraints);
 
-        btnChangeDownloadDestination.setText(org.openide.util.NbBundle.getMessage(
+        btnChangeDownloadDestination.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.btnChangeDownloadDestination.text")); // NOI18N
-        btnChangeDownloadDestination.addActionListener(new java.awt.event.ActionListener() {
-
+                "DownloadManagerOptionsPanel.btnChangeDownloadDestination.text"
+            )
+        ); // NOI18N
+        btnChangeDownloadDestination.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnChangeDownloadDestinationActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(8, 0, 3, 5);
         add(btnChangeDownloadDestination, gridBagConstraints);
 
-        lblJobname.setText(org.openide.util.NbBundle.getMessage(
+        lblJobname.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.lblJobname.text")); // NOI18N
+                "DownloadManagerOptionsPanel.lblJobname.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -195,9 +212,12 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         add(lblJobname, gridBagConstraints);
 
         chkAskForJobname.setSelected(true);
-        chkAskForJobname.setText(org.openide.util.NbBundle.getMessage(
+        chkAskForJobname.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.chkAskForJobname.text")); // NOI18N
+                "DownloadManagerOptionsPanel.chkAskForJobname.text"
+            )
+        ); // NOI18N
         chkAskForJobname.setFocusPainted(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -209,9 +229,12 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(chkAskForJobname, gridBagConstraints);
 
-        lblOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(
+        lblOpenAutomatically.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.lblOpenAutomatically.text")); // NOI18N
+                "DownloadManagerOptionsPanel.lblOpenAutomatically.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -237,9 +260,12 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         pnlOpenAutomatically.setLayout(new java.awt.GridBagLayout());
 
         rgrOpenAutomatically.add(rdoDontOpenAutomatically);
-        rdoDontOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(
+        rdoDontOpenAutomatically.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.rdoDontOpenAutomatically.text")); // NOI18N
+                "DownloadManagerOptionsPanel.rdoDontOpenAutomatically.text"
+            )
+        ); // NOI18N
         rdoDontOpenAutomatically.setFocusPainted(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -252,9 +278,12 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
 
         rgrOpenAutomatically.add(rdoOpenAutomatically);
         rdoOpenAutomatically.setSelected(true);
-        rdoOpenAutomatically.setText(org.openide.util.NbBundle.getMessage(
+        rdoOpenAutomatically.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.rdoOpenAutomatically.text")); // NOI18N
+                "DownloadManagerOptionsPanel.rdoOpenAutomatically.text"
+            )
+        ); // NOI18N
         rdoOpenAutomatically.setFocusPainted(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -271,9 +300,12 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(pnlOpenAutomatically, gridBagConstraints);
 
-        lblCloseAutomatically.setText(org.openide.util.NbBundle.getMessage(
+        lblCloseAutomatically.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.lblCloseAutomatically.text")); // NOI18N
+                "DownloadManagerOptionsPanel.lblCloseAutomatically.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -281,9 +313,12 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
         add(lblCloseAutomatically, gridBagConstraints);
 
-        lblParallelDownloads.setText(org.openide.util.NbBundle.getMessage(
+        lblParallelDownloads.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.lblParallelDownloads.text")); // NOI18N
+                "DownloadManagerOptionsPanel.lblParallelDownloads.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -303,9 +338,12 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         pnlCloseAutomatically.setLayout(new java.awt.GridBagLayout());
 
         rgrCloseAutomatically.add(rdoDontCloseAutomatically);
-        rdoDontCloseAutomatically.setText(org.openide.util.NbBundle.getMessage(
+        rdoDontCloseAutomatically.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.rdoDontCloseAutomatically.text")); // NOI18N
+                "DownloadManagerOptionsPanel.rdoDontCloseAutomatically.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -317,9 +355,12 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
 
         rgrCloseAutomatically.add(rdoCloseAutomatically);
         rdoCloseAutomatically.setSelected(true);
-        rdoCloseAutomatically.setText(org.openide.util.NbBundle.getMessage(
+        rdoCloseAutomatically.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.rdoCloseAutomatically.text")); // NOI18N
+                "DownloadManagerOptionsPanel.rdoCloseAutomatically.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -345,16 +386,19 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 5);
         add(spnNotificationDisplayTime, gridBagConstraints);
 
-        lblNotificationDisplayTime.setText(org.openide.util.NbBundle.getMessage(
+        lblNotificationDisplayTime.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.lblNotificationDisplayTime.text")); // NOI18N
+                "DownloadManagerOptionsPanel.lblNotificationDisplayTime.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(3, 5, 3, 10);
         add(lblNotificationDisplayTime, gridBagConstraints);
-    }                                                                            // </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * An event handler.
@@ -368,14 +412,17 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
             final File tmp_downloadDestination = fileChooser.getSelectedFile();
             // check if the choosen download directory is valid
             if (!tmp_downloadDestination.isDirectory() || !tmp_downloadDestination.canWrite()) {
-                LOG.error("The download manager can't use the directory '" + tmp_downloadDestination.getAbsolutePath()
-                            + "'.");
+                LOG.error(
+                    "The download manager can't use the directory '" + tmp_downloadDestination.getAbsolutePath() + "'."
+                );
                 final String errorMessage = NbBundle.getMessage(
-                        DownloadManagerOptionsPanel.class,
-                        "DownloadManagerOptionsPanel.btnChangeDownloadDestinationActionPerformed().folder.dialog.message");
+                    DownloadManagerOptionsPanel.class,
+                    "DownloadManagerOptionsPanel.btnChangeDownloadDestinationActionPerformed().folder.dialog.message"
+                );
                 final String errorTitle = NbBundle.getMessage(
-                        DownloadManagerOptionsPanel.class,
-                        "DownloadManagerOptionsPanel.btnChangeDownloadDestinationActionPerformed().folder.dialog.title");
+                    DownloadManagerOptionsPanel.class,
+                    "DownloadManagerOptionsPanel.btnChangeDownloadDestinationActionPerformed().folder.dialog.title"
+                );
                 JOptionPane.showMessageDialog(this, errorMessage, errorTitle, JOptionPane.ERROR_MESSAGE);
             } else {
                 downloadDestination = tmp_downloadDestination;
@@ -433,8 +480,8 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         askForJobtitle = chkAskForJobname.isSelected();
         openAutomatically = rdoOpenAutomatically.isSelected();
         closeAutomatically = rdoCloseAutomatically.isSelected();
-        parallelDownloads = (Integer)spnParallelDownloads.getValue();
-        notificationDisplayTime = (Integer)spnNotificationDisplayTime.getValue();
+        parallelDownloads = (Integer) spnParallelDownloads.getValue();
+        notificationDisplayTime = (Integer) spnNotificationDisplayTime.getValue();
 
         if (!askForJobtitle) {
             jobname = "";
@@ -460,12 +507,13 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
         boolean result = false;
 
         if (jobname != null) {
-            result = downloadDestinationChanged
-                        || (!askForJobtitle == chkAskForJobname.isSelected())
-                        || (!openAutomatically == rdoOpenAutomatically.isSelected())
-                        || (!closeAutomatically == rdoCloseAutomatically.isSelected())
-                        || (parallelDownloads != ((Integer)spnParallelDownloads.getValue()).intValue())
-                        || (notificationDisplayTime != ((Integer)spnNotificationDisplayTime.getValue()).intValue());
+            result =
+                downloadDestinationChanged ||
+                (!askForJobtitle == chkAskForJobname.isSelected()) ||
+                (!openAutomatically == rdoOpenAutomatically.isSelected()) ||
+                (!closeAutomatically == rdoCloseAutomatically.isSelected()) ||
+                (parallelDownloads != ((Integer) spnParallelDownloads.getValue()).intValue()) ||
+                (notificationDisplayTime != ((Integer) spnNotificationDisplayTime.getValue()).intValue());
         }
 
         return result;
@@ -478,8 +526,7 @@ public class DownloadManagerOptionsPanel extends AbstractOptionsPanel implements
      */
     @Override
     public String getTooltip() {
-        return NbBundle.getMessage(DownloadManagerOptionsPanel.class,
-                "DownloadManagerOptionsPanel.tooltip");
+        return NbBundle.getMessage(DownloadManagerOptionsPanel.class, "DownloadManagerOptionsPanel.tooltip");
     }
 
     /**

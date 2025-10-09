@@ -1,19 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.lookupoptions;
 
-import org.jdom.Element;
-
-import javax.swing.JPanel;
-
 import de.cismet.lookupoptions.options.DefaultOptionsCategory;
-
 import de.cismet.tools.configuration.NoWriteError;
+import javax.swing.JPanel;
+import org.jdom.Element;
 
 /**
  * The base-class for Options Panels.
@@ -144,16 +141,13 @@ public abstract class AbstractOptionsPanel extends JPanel implements OptionsPane
     }
 
     @Override
-    public void applyChanges() {
-    }
+    public void applyChanges() {}
 
     @Override
-    public void update() {
-    }
+    public void update() {}
 
     @Override
-    public void configure(final Element parent) {
-    }
+    public void configure(final Element parent) {}
 
     @Override
     public Element getConfiguration() throws NoWriteError {
@@ -161,8 +155,7 @@ public abstract class AbstractOptionsPanel extends JPanel implements OptionsPane
     }
 
     @Override
-    public void masterConfigure(final Element parent) {
-    }
+    public void masterConfigure(final Element parent) {}
 
     @Override
     public boolean isEnabled() {

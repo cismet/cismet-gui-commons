@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.layout;
 
 import java.awt.AlphaComposite;
@@ -15,9 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
-
 import java.util.concurrent.ExecutionException;
-
 import javax.swing.SwingWorker;
 import javax.swing.event.EventListenerList;
 
@@ -83,13 +81,16 @@ public class FadingPanel extends Component {
      * @param  fadeToComponent    DOCUMENT ME!
      * @param  fadeDuration       DOCUMENT ME!
      */
-    public void startFading(final Component fadeFromComponent,
-            final Component fadeToComponent,
-            final long fadeDuration) {
+    public void startFading(
+        final Component fadeFromComponent,
+        final Component fadeToComponent,
+        final long fadeDuration
+    ) {
         startFading(
             createImageFromComponent(fadeFromComponent),
             createImageFromComponent(fadeToComponent),
-            fadeDuration);
+            fadeDuration
+        );
     }
 
     /**
@@ -100,9 +101,11 @@ public class FadingPanel extends Component {
      * @param  fadeToImage    the image to fade to
      * @param  fadeDuration   the duration in ms for the fade animation
      */
-    public void startFading(final BufferedImage fadeFromImage,
-            final BufferedImage fadeToImage,
-            final long fadeDuration) {
+    public void startFading(
+        final BufferedImage fadeFromImage,
+        final BufferedImage fadeToImage,
+        final long fadeDuration
+    ) {
         this.fadeFromImage = fadeFromImage;
         this.fadeToImage = fadeToImage;
         this.fadeDuration = fadeDuration;
@@ -114,36 +117,35 @@ public class FadingPanel extends Component {
         } else {
             // sonst einen neuen fade-thread starten
             final SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        // als erstes Zeit zurücksetzen
-                        resetStartTime();
-                        // faden bis fadeDuration erreicht wurde
-                        while (ellapsedTime() < fadeDuration) {
-                            // neu zeichnen (repaint ist thread-safe)
-                            repaint();
-                        }
-                        // Startzeit wieder auf 0 setzen
-                        // dies ist wichtig damit das Objekt weiß, dass das Faden
-                        // beendet wurde (isFading)
-                        startTime = 0;
-                        return null;
+                @Override
+                protected Void doInBackground() throws Exception {
+                    // als erstes Zeit zurücksetzen
+                    resetStartTime();
+                    // faden bis fadeDuration erreicht wurde
+                    while (ellapsedTime() < fadeDuration) {
+                        // neu zeichnen (repaint ist thread-safe)
+                        repaint();
                     }
+                    // Startzeit wieder auf 0 setzen
+                    // dies ist wichtig damit das Objekt weiß, dass das Faden
+                    // beendet wurde (isFading)
+                    startTime = 0;
+                    return null;
+                }
 
-                    @Override
-                    protected void done() {
-                        try {
-                            get();
-                        } catch (InterruptedException ex) {
-                            // Exceptions.printStackTrace(ex);
-                        } catch (ExecutionException ex) {
-                            // Exceptions.printStackTrace(ex);
-                        }
-                        // Arbeit fertig, listener informieren
-                        fireFadeFinished();
+                @Override
+                protected void done() {
+                    try {
+                        get();
+                    } catch (InterruptedException ex) {
+                        // Exceptions.printStackTrace(ex);
+                    } catch (ExecutionException ex) {
+                        // Exceptions.printStackTrace(ex);
                     }
-                };
+                    // Arbeit fertig, listener informieren
+                    fireFadeFinished();
+                }
+            };
             worker.execute();
         }
     }
@@ -178,14 +180,14 @@ public class FadingPanel extends Component {
             alpha = 1;
         } else {
             // je mehr Zeit vergeht, desto größer wird alpha
-            alpha = (float)ellapsedTime() / fadeDuration;
+            alpha = (float) ellapsedTime() / fadeDuration;
             // alpha ist minimal 0 wenn noch keine Zeit vergangen ist,
             alpha = (alpha < 0) ? 0 : alpha;
             // und maximal 1 wenn die fadeDauer erreicht wurde
             alpha = (alpha > 1) ? 1 : alpha;
         }
 
-        final Graphics2D graphics2d = (Graphics2D)graphics;
+        final Graphics2D graphics2d = (Graphics2D) graphics;
         // alte Composite sichern
         final Composite oldComposite = graphics2d.getComposite();
         // "from" immer mehr durchsichtig malen
@@ -229,9 +231,10 @@ public class FadingPanel extends Component {
         }
 
         // Standart-Grafik-Konfiguration des Bildschirms holen
-        final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment()
-                    .getDefaultScreenDevice()
-                    .getDefaultConfiguration();
+        final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment
+            .getLocalGraphicsEnvironment()
+            .getDefaultScreenDevice()
+            .getDefaultConfiguration();
 
         // Höhe und Breite der Komponente schonmal merken
         final int width = component.getSize().width;

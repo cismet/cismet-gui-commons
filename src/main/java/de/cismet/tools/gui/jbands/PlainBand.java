@@ -1,16 +1,15 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands;
-
-import java.util.ArrayList;
 
 import de.cismet.tools.gui.jbands.interfaces.Band;
 import de.cismet.tools.gui.jbands.interfaces.BandMember;
+import java.util.ArrayList;
 
 /**
  * DOCUMENT ME!
@@ -39,8 +38,7 @@ public class PlainBand implements Band {
     /**
      * Creates a new SimpleBand object.
      */
-    public PlainBand() {
-    }
+    public PlainBand() {}
 
     //~ Methods ----------------------------------------------------------------
 
@@ -103,6 +101,7 @@ public class PlainBand implements Band {
     public boolean isEnabled() {
         return enabled;
     }
+
     /**
      * DOCUMENT ME!
      *

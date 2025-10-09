@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.historybutton;
 
 import java.util.Vector;
@@ -21,7 +21,6 @@ import java.util.Vector;
  * @version  $Revision$, $Date$
  */
 public interface HistoryModel {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

@@ -1,18 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
+import de.cismet.security.WebAccessManager;
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URL;
-
-import de.cismet.security.WebAccessManager;
 
 /**
  * DOCUMENT ME!
@@ -55,7 +53,7 @@ public class WebAccessMultiPagePictureReader extends de.cismet.commons.utils.Mul
      * @throws  IOException  DOCUMENT ME!
      */
     public WebAccessMultiPagePictureReader(final File imageFile, final boolean caching, final boolean checkHeapSize)
-            throws IOException {
+        throws IOException {
         super(imageFile, caching, checkHeapSize, WebAccessManager.getInstance());
     }
 
@@ -69,7 +67,7 @@ public class WebAccessMultiPagePictureReader extends de.cismet.commons.utils.Mul
      * @throws  IOException  DOCUMENT ME!
      */
     public WebAccessMultiPagePictureReader(final URL imageURL, final boolean caching, final boolean checkHeapSize)
-            throws IOException {
+        throws IOException {
         super(imageURL, caching, checkHeapSize, WebAccessManager.getInstance());
     }
 }

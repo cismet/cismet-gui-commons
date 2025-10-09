@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jtable.sorting;
 
 /*
@@ -31,6 +31,7 @@ package de.cismet.tools.gui.jtable.sorting;
  *
  */
 import java.util.Comparator;
+
 /**
  * TODO make it generic!
  *
@@ -47,8 +48,7 @@ public final class AlphanumComparator implements Comparator<Comparable<?>> {
     /**
      * Creates a new AlphanumComparator object.
      */
-    private AlphanumComparator() {
-    }
+    private AlphanumComparator() {}
 
     //~ Methods ----------------------------------------------------------------
 
@@ -114,8 +114,8 @@ public final class AlphanumComparator implements Comparator<Comparable<?>> {
             return o1.compareTo(o2);
         }
 
-        final String s1 = (String)o1;
-        final String s2 = (String)o2;
+        final String s1 = (String) o1;
+        final String s2 = (String) o2;
 
         int thisMarker = 0;
         int thatMarker = 0;

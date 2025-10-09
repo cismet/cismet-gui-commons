@@ -1,15 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.protocol.impl;
 
-import java.awt.Component;
-
 import de.cismet.commons.gui.protocol.AbstractProtocolStepPanel;
+import java.awt.Component;
 
 /**
  * DOCUMENT ME!
@@ -24,6 +23,7 @@ public class CommentProtocolStepPanel extends AbstractProtocolStepPanel<CommentP
     private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel panMain;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -35,7 +35,6 @@ public class CommentProtocolStepPanel extends AbstractProtocolStepPanel<CommentP
      */
     public CommentProtocolStepPanel(final CommentProtocolStep commentProtocolStep) {
         super(commentProtocolStep);
-
         initComponents();
     }
 
@@ -70,16 +69,21 @@ public class CommentProtocolStepPanel extends AbstractProtocolStepPanel<CommentP
             lblTitle,
             org.openide.util.NbBundle.getMessage(
                 CommentProtocolStepPanel.class,
-                "CommentProtocolStepPanel.lblTitle.text")); // NOI18N
+                "CommentProtocolStepPanel.lblTitle.text"
+            )
+        ); // NOI18N
 
         lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblIcon.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/commons/gui/protocol/impl/comment.png"))); // NOI18N
+        lblIcon.setIcon(
+            new javax.swing.ImageIcon(getClass().getResource("/de/cismet/commons/gui/protocol/impl/comment.png"))
+        ); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(
             lblIcon,
             org.openide.util.NbBundle.getMessage(
                 CommentProtocolStepPanel.class,
-                "CommentProtocolStepPanel.lblIcon.text"));                                    // NOI18N
+                "CommentProtocolStepPanel.lblIcon.text"
+            )
+        ); // NOI18N
 
         setLayout(new java.awt.GridBagLayout());
 

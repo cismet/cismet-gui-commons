@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  *  Copyright (C) 2010 thorsten
  *
@@ -31,7 +31,6 @@ import javax.swing.JComponent;
  * @version  $Revision$, $Date$
  */
 public interface BasicGuiComponentProvider {
-
     //~ Enums ------------------------------------------------------------------
 
     /**
@@ -40,10 +39,11 @@ public interface BasicGuiComponentProvider {
      * @version  $Revision$, $Date$
      */
     public static enum GuiType {
-
         //~ Enum constants -----------------------------------------------------
 
-        TOOLBARCOMPONENT, GUICOMPONENT, DUMMY
+        TOOLBARCOMPONENT,
+        GUICOMPONENT,
+        DUMMY,
     }
 
     //~ Methods ----------------------------------------------------------------

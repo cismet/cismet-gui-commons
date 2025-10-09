@@ -1,29 +1,22 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
-
-import org.apache.log4j.Logger;
-
-import org.jdom.Element;
-
-import org.openide.util.lookup.ServiceProvider;
 
 import de.cismet.connectioncontext.ConnectionContext;
 import de.cismet.connectioncontext.ConnectionContextStore;
-
 import de.cismet.lookupoptions.AbstractOptionsPanel;
 import de.cismet.lookupoptions.OptionsPanelController;
-
 import de.cismet.lookupoptions.options.GeneralOptionsCategory;
-
 import de.cismet.tools.BrowserLauncher;
-
 import de.cismet.tools.configuration.NoWriteError;
+import org.apache.log4j.Logger;
+import org.jdom.Element;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * DOCUMENT ME!
@@ -54,6 +47,7 @@ public class BrowserLauncherOptionsPanel extends AbstractOptionsPanel implements
     private javax.swing.JLabel lblIntervall;
     private javax.swing.JLabel lblSeconds;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -62,10 +56,13 @@ public class BrowserLauncherOptionsPanel extends AbstractOptionsPanel implements
      * Creates new form PasswordOptionsDialog.
      */
     public BrowserLauncherOptionsPanel() {
-        super(org.openide.util.NbBundle.getMessage(
+        super(
+            org.openide.util.NbBundle.getMessage(
                 BrowserLauncherOptionsPanel.class,
-                "BrowserLauncherOptionsPanel.title"), // NOI18N,
-            GeneralOptionsCategory.class);
+                "BrowserLauncherOptionsPanel.title"
+            ), // NOI18N,
+            GeneralOptionsCategory.class
+        );
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -92,9 +89,12 @@ public class BrowserLauncherOptionsPanel extends AbstractOptionsPanel implements
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         lblSeconds = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        filler1 =
+            new javax.swing.Box.Filler(
                 new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767)
+            );
         lblIntervall = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jCheckBox1 = new javax.swing.JCheckBox();
@@ -105,16 +105,20 @@ public class BrowserLauncherOptionsPanel extends AbstractOptionsPanel implements
         setLayout(new java.awt.GridBagLayout());
 
         lblSeconds.setFont(new java.awt.Font("Noto Sans", 2, 12)); // NOI18N
-        lblSeconds.setText(org.openide.util.NbBundle.getMessage(
+        lblSeconds.setText(
+            org.openide.util.NbBundle.getMessage(
                 BrowserLauncherOptionsPanel.class,
-                "BrowserLauncherOptionsPanel.lblSeconds.text"));   // NOI18N
+                "BrowserLauncherOptionsPanel.lblSeconds.text"
+            )
+        ); // NOI18N
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
-                org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
-                jCheckBox1,
-                org.jdesktop.beansbinding.ELProperty.create("${selected}"),
-                lblSeconds,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+            org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
+            jCheckBox1,
+            org.jdesktop.beansbinding.ELProperty.create("${selected}"),
+            lblSeconds,
+            org.jdesktop.beansbinding.BeanProperty.create("enabled")
+        );
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -134,16 +138,21 @@ public class BrowserLauncherOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.weighty = 0.1;
         add(filler1, gridBagConstraints);
 
-        lblIntervall.setText(org.openide.util.NbBundle.getMessage(
+        lblIntervall.setText(
+            org.openide.util.NbBundle.getMessage(
                 BrowserLauncherOptionsPanel.class,
-                "BrowserLauncherOptionsPanel.lblIntervall.text")); // NOI18N
+                "BrowserLauncherOptionsPanel.lblIntervall.text"
+            )
+        ); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding =
+            org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 jCheckBox1,
                 org.jdesktop.beansbinding.ELProperty.create("${selected}"),
                 lblIntervall,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+                org.jdesktop.beansbinding.BeanProperty.create("enabled")
+            );
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -154,16 +163,21 @@ public class BrowserLauncherOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         add(lblIntervall, gridBagConstraints);
 
-        jTextField1.setText(org.openide.util.NbBundle.getMessage(
+        jTextField1.setText(
+            org.openide.util.NbBundle.getMessage(
                 BrowserLauncherOptionsPanel.class,
-                "BrowserLauncherOptionsPanel.jTextField1.text")); // NOI18N
+                "BrowserLauncherOptionsPanel.jTextField1.text"
+            )
+        ); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(
+        binding =
+            org.jdesktop.beansbinding.Bindings.createAutoBinding(
                 org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE,
                 jCheckBox1,
                 org.jdesktop.beansbinding.ELProperty.create("${selected}"),
                 jTextField1,
-                org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+                org.jdesktop.beansbinding.BeanProperty.create("enabled")
+            );
         bindingGroup.addBinding(binding);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -173,9 +187,12 @@ public class BrowserLauncherOptionsPanel extends AbstractOptionsPanel implements
         gridBagConstraints.weightx = 1.0;
         add(jTextField1, gridBagConstraints);
 
-        jCheckBox1.setText(org.openide.util.NbBundle.getMessage(
+        jCheckBox1.setText(
+            org.openide.util.NbBundle.getMessage(
                 BrowserLauncherOptionsPanel.class,
-                "BrowserLauncherOptionsPanel.jCheckBox1.text")); // NOI18N
+                "BrowserLauncherOptionsPanel.jCheckBox1.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -226,8 +243,9 @@ public class BrowserLauncherOptionsPanel extends AbstractOptionsPanel implements
     @Override
     public String getTooltip() {
         return org.openide.util.NbBundle.getMessage(
-                BrowserLauncherOptionsPanel.class,
-                "BrowserLauncherOptionsPanel.tooltip"); // NOI18N
+            BrowserLauncherOptionsPanel.class,
+            "BrowserLauncherOptionsPanel.tooltip"
+        ); // NOI18N
     }
 
     @Override

@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands.interfaces;
 
 import de.cismet.tools.gui.jbands.BandModelEvent;
@@ -16,7 +16,6 @@ import de.cismet.tools.gui.jbands.BandModelEvent;
  * @version  $Revision$, $Date$
  */
 public interface BandModelListener {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

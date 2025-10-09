@@ -1,11 +1,12 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
+
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
@@ -27,6 +28,7 @@ public class JPopupMenuButtonPresenter extends javax.swing.JApplet {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkEnabled;
     private javax.swing.JToolBar toolbar;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Methods ----------------------------------------------------------------
@@ -37,42 +39,44 @@ public class JPopupMenuButtonPresenter extends javax.swing.JApplet {
     @Override
     public void init() {
         try {
-            java.awt.EventQueue.invokeAndWait(new Runnable() {
-
+            java.awt.EventQueue.invokeAndWait(
+                new Runnable() {
                     @Override
                     public void run() {
                         try {
                             // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()) ;
-                        } catch (Exception e) {
-                        }
+                        } catch (Exception e) {}
                         initComponents();
 
                         mb = new JPopupMenuButton();
                         mb.setIcon(
-                            new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/demo.png"))); // NOI18N
+                            new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/res/demo.png"))
+                        ); // NOI18N
                         mb.setEnabled(true);
                         final JPopupMenu popupMenu = new javax.swing.JPopupMenu();
-                        popupMenu.add(new JMenuItem("Print", 'P'));                                                  // NOI18N
-                        popupMenu.add(new JMenuItem("Preview", 'v'));                                                // NOI18N
-                        popupMenu.add(new JMenuItem("Properties", 't'));                                             // NOI18N
-                        popupMenu.addPopupMenuListener(new PopupMenuListener() {
+                        popupMenu.add(new JMenuItem("Print", 'P')); // NOI18N
+                        popupMenu.add(new JMenuItem("Preview", 'v')); // NOI18N
+                        popupMenu.add(new JMenuItem("Properties", 't')); // NOI18N
+                        popupMenu.addPopupMenuListener(
+                            new PopupMenuListener() {
+                                @Override
+                                public void popupMenuCanceled(final PopupMenuEvent e) {}
 
                                 @Override
-                                public void popupMenuCanceled(final PopupMenuEvent e) {
-                                }
-                                @Override
-                                public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
-                                }
+                                public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {}
+
                                 @Override
                                 public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
                                     System.out.println("XXXXXX"); // NOI18N
                                 }
-                            });
+                            }
+                        );
                         mb.setPopupMenu(popupMenu);
                         toolbar.add(mb);
                         toolbar.add(chkEnabled);
                     }
-                });
+                }
+            );
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -88,16 +92,20 @@ public class JPopupMenuButtonPresenter extends javax.swing.JApplet {
         toolbar = new javax.swing.JToolBar();
 
         chkEnabled.setSelected(true);
-        chkEnabled.setText(org.openide.util.NbBundle.getMessage(
+        chkEnabled.setText(
+            org.openide.util.NbBundle.getMessage(
                 JPopupMenuButtonPresenter.class,
-                "JPopupMenuButtonPresenter.chkEnabled.text")); // NOI18N
-        chkEnabled.addActionListener(new java.awt.event.ActionListener() {
-
+                "JPopupMenuButtonPresenter.chkEnabled.text"
+            )
+        ); // NOI18N
+        chkEnabled.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     chkEnabledActionPerformed(evt);
                 }
-            });
+            }
+        );
 
         getContentPane().add(toolbar, java.awt.BorderLayout.NORTH);
     } // </editor-fold>//GEN-END:initComponents
@@ -109,5 +117,5 @@ public class JPopupMenuButtonPresenter extends javax.swing.JApplet {
      */
     private void chkEnabledActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkEnabledActionPerformed
         mb.setEnabled(chkEnabled.isSelected());
-    }                                                                              //GEN-LAST:event_chkEnabledActionPerformed
+    } //GEN-LAST:event_chkEnabledActionPerformed
 }

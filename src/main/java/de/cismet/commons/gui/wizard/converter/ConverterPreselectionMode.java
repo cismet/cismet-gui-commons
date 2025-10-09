@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.wizard.converter;
 
 /**
@@ -15,8 +15,12 @@ package de.cismet.commons.gui.wizard.converter;
  * @version  1.0
  */
 public enum ConverterPreselectionMode {
-
     //~ Enum constants ---------------------------------------------------------
 
-    AUTO_DETECT, CONFIGURE, CONFIGURE_AND_MEMORY, DEFAULT, PERMANENT_MEMORY, SESSION_MEMORY
+    AUTO_DETECT,
+    CONFIGURE,
+    CONFIGURE_AND_MEMORY,
+    DEFAULT,
+    PERMANENT_MEMORY,
+    SESSION_MEMORY,
 }

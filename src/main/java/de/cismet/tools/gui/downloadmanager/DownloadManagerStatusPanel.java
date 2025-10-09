@@ -1,30 +1,26 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import org.apache.log4j.Logger;
-
+import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import java.util.Collection;
-
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-
-import de.cismet.tools.gui.StaticSwingTools;
+import org.apache.log4j.Logger;
 
 /**
  * DOCUMENT ME!
@@ -49,6 +45,7 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
     private javax.swing.JLabel lblRunningCounter;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JLabel lblTotalCounter;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -59,17 +56,18 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
     public DownloadManagerStatusPanel() {
         initComponents();
         DownloadManager.instance().addDownloadListChangedListener(this);
-        this.addMouseListener(new MouseAdapter() {
-
-                @Override
-                public void mouseClicked(final MouseEvent me) {
-                    if (me.getClickCount() == 2) {
-                        final JDialog downloadManager = DownloadManagerDialog.getInstance();
-                        downloadManager.pack();
-                        StaticSwingTools.showDialog(downloadManager);
+        this.addMouseListener(
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(final MouseEvent me) {
+                        if (me.getClickCount() == 2) {
+                            final JDialog downloadManager = DownloadManagerDialog.getInstance();
+                            downloadManager.pack();
+                            StaticSwingTools.showDialog(downloadManager);
+                        }
                     }
                 }
-            });
+            );
         updateLabels();
     }
 
@@ -92,51 +90,69 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
 
         setLayout(new java.awt.GridBagLayout());
 
-        lblRunning.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/downloadmanager.png"))); // NOI18N
-        lblRunning.setText(org.openide.util.NbBundle.getMessage(
+        lblRunning.setIcon(
+            new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/downloadmanager.png")
+            )
+        ); // NOI18N
+        lblRunning.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerStatusPanel.class,
-                "DownloadManagerStatusPanel.lblRunning.text"));                                           // NOI18N
+                "DownloadManagerStatusPanel.lblRunning.text"
+            )
+        ); // NOI18N
         lblRunning.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         add(lblRunning, gridBagConstraints);
 
-        lblRunningCounter.setText(org.openide.util.NbBundle.getMessage(
+        lblRunningCounter.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerStatusPanel.class,
-                "DownloadManagerStatusPanel.lblRunningCounter.text")); // NOI18N
+                "DownloadManagerStatusPanel.lblRunningCounter.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         add(lblRunningCounter, gridBagConstraints);
 
-        lblTotal.setText(org.openide.util.NbBundle.getMessage(
+        lblTotal.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerStatusPanel.class,
-                "DownloadManagerStatusPanel.lblTotal.text")); // NOI18N
+                "DownloadManagerStatusPanel.lblTotal.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         add(lblTotal, gridBagConstraints);
 
-        lblTotalCounter.setText(org.openide.util.NbBundle.getMessage(
+        lblTotalCounter.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerStatusPanel.class,
-                "DownloadManagerStatusPanel.lblTotalCounter.text")); // NOI18N
+                "DownloadManagerStatusPanel.lblTotalCounter.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 10);
         add(lblTotalCounter, gridBagConstraints);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(
+        jLabel1.setText(
+            org.openide.util.NbBundle.getMessage(
                 DownloadManagerStatusPanel.class,
-                "DownloadManagerStatusPanel.jLabel1.text")); // NOI18N
+                "DownloadManagerStatusPanel.jLabel1.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         add(jLabel1, gridBagConstraints);
-    }                                                        // </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     @Override
     public void downloadListChanged(final DownloadListChangedEvent event) {
@@ -145,7 +161,8 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
             if (downloads.size() > 1) {
                 // this should not happen...
                 log.warn(
-                    "It should not happend that a DownlaodListChangedEvent.Changed_Counters concerns more than one Download.");
+                    "It should not happend that a DownlaodListChangedEvent.Changed_Counters concerns more than one Download."
+                );
             }
             final Download[] downloadArr = downloads.toArray(new Download[downloads.size()]);
             final int tmpComplDownloads = DownloadManager.instance().getCountDownloadsCompleted();
@@ -168,9 +185,10 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
      */
     private void updateLabels() {
         // done are all completed,cancelled and erroneus downloads
-        final int done = DownloadManager.instance().getCountDownloadsCompleted()
-                    + DownloadManager.instance().getCountDownloadsErroneous()
-                    + DownloadManager.instance().getCountDownloadsCancelled();
+        final int done =
+            DownloadManager.instance().getCountDownloadsCompleted() +
+            DownloadManager.instance().getCountDownloadsErroneous() +
+            DownloadManager.instance().getCountDownloadsCancelled();
         lblTotalCounter.setText("" + DownloadManager.instance().getCountDownloadsTotal());
         lblRunningCounter.setText("" + done);
     }
@@ -183,37 +201,41 @@ public class DownloadManagerStatusPanel extends javax.swing.JPanel implements Do
      */
     private void showNotification(final String downloadName, final boolean isErroneous) {
         if (!SwingUtilities.isEventDispatchThread()) {
-            SwingUtilities.invokeLater(new Runnable() {
-
+            SwingUtilities.invokeLater(
+                new Runnable() {
                     @Override
                     public void run() {
                         showNotification(downloadName, isErroneous);
                     }
-                });
+                }
+            );
         } else {
-            final DownloadDesktopNotification notification = new DownloadDesktopNotification(StaticSwingTools
-                            .getParentFrame(this),
-                    downloadName,
-                    isErroneous);
+            final DownloadDesktopNotification notification = new DownloadDesktopNotification(
+                StaticSwingTools.getParentFrame(this),
+                downloadName,
+                isErroneous
+            );
             notification.floatInFromLowerFrameBound();
-            final Timer t = new Timer(DownloadManager.instance().getNotificationDisplayTime() * 1000,
-                    new ActionListener() {
-
-                        @Override
-                        public void actionPerformed(final ActionEvent ae) {
-                            SwingUtilities.invokeLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            notification.dispose();
-                                        } catch (final Exception ex) {
-                                            log.warn(ex, ex);
-                                        }
+            final Timer t = new Timer(
+                DownloadManager.instance().getNotificationDisplayTime() * 1000,
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(final ActionEvent ae) {
+                        SwingUtilities.invokeLater(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        notification.dispose();
+                                    } catch (final Exception ex) {
+                                        log.warn(ex, ex);
                                     }
-                                });
-                        }
-                    });
+                                }
+                            }
+                        );
+                    }
+                }
+            );
             t.start();
         }
     }

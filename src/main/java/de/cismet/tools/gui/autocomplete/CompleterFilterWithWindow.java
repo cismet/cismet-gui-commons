@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.autocomplete;
 
 import java.awt.Window;
@@ -17,7 +17,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JList;
@@ -73,27 +72,31 @@ public class CompleterFilterWithWindow extends CompleterFilter {
     //~ Methods ----------------------------------------------------------------
 
     @Override
-    public void insertString(final FilterBypass filterBypass,
-            final int offset,
-            final String string,
-            final AttributeSet attributeSet) throws BadLocationException {
+    public void insertString(
+        final FilterBypass filterBypass,
+        final int offset,
+        final String string,
+        final AttributeSet attributeSet
+    ) throws BadLocationException {
         setFilterWindowVisible(false);
         super.insertString(filterBypass, offset, string, attributeSet);
     }
 
     @Override
     public void remove(final FilterBypass filterBypass, final int offset, final int length)
-            throws BadLocationException {
+        throws BadLocationException {
         setFilterWindowVisible(false);
         super.remove(filterBypass, offset, length);
     }
 
     @Override
-    public void replace(final FilterBypass filterBypass,
-            final int offset,
-            final int length,
-            final String string,
-            final AttributeSet attributeSet) throws BadLocationException {
+    public void replace(
+        final FilterBypass filterBypass,
+        final int offset,
+        final int length,
+        final String string,
+        final AttributeSet attributeSet
+    ) throws BadLocationException {
         if (isAdjusting) {
             filterBypass.replace(offset, length, string, attributeSet);
             return;
@@ -133,7 +136,8 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         textField.registerKeyboardAction(
             escape,
             KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-            JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+            JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT
+        );
     }
 
     /**
@@ -203,9 +207,7 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         list.addListSelectionListener(lsl);
         list.addMouseListener(lml);
 
-        sp = new JScrollPane(list,
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        sp = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setFocusable(false);
         sp.getVerticalScrollBar().setFocusable(false);
 
@@ -265,9 +267,9 @@ public class CompleterFilterWithWindow extends CompleterFilter {
      *
      * @version  $Revision$, $Date$
      */
-    private class FilterWindowListener extends MouseAdapter implements AncestorListener,
-        FocusListener,
-        WindowFocusListener {
+    private class FilterWindowListener
+        extends MouseAdapter
+        implements AncestorListener, FocusListener, WindowFocusListener {
 
         //~ Methods ------------------------------------------------------------
 
@@ -294,8 +296,7 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         }
 
         @Override
-        public void focusGained(final FocusEvent e) {
-        }
+        public void focusGained(final FocusEvent e) {}
 
         @Override
         public void windowLostFocus(final WindowEvent e) {
@@ -307,8 +308,7 @@ public class CompleterFilterWithWindow extends CompleterFilter {
         }
 
         @Override
-        public void windowGainedFocus(final WindowEvent e) {
-        }
+        public void windowGainedFocus(final WindowEvent e) {}
 
         @Override
         public void mousePressed(final MouseEvent e) {
@@ -327,11 +327,15 @@ public class CompleterFilterWithWindow extends CompleterFilter {
 
         @Override
         public void keyPressed(final KeyEvent e) {
-            if (!((e.getKeyCode() == KeyEvent.VK_DOWN)
-                            || (e.getKeyCode() == KeyEvent.VK_UP)
-                            || ((e.getKeyCode() == KeyEvent.VK_PAGE_DOWN) && (isFilterWindowVisible()))
-                            || ((e.getKeyCode() == KeyEvent.VK_PAGE_UP) && (isFilterWindowVisible()))
-                            || (e.getKeyCode() == KeyEvent.VK_ENTER))) {
+            if (
+                !(
+                    (e.getKeyCode() == KeyEvent.VK_DOWN) ||
+                    (e.getKeyCode() == KeyEvent.VK_UP) ||
+                    ((e.getKeyCode() == KeyEvent.VK_PAGE_DOWN) && (isFilterWindowVisible())) ||
+                    ((e.getKeyCode() == KeyEvent.VK_PAGE_UP) && (isFilterWindowVisible())) ||
+                    (e.getKeyCode() == KeyEvent.VK_ENTER)
+                )
+            ) {
                 return;
             }
 

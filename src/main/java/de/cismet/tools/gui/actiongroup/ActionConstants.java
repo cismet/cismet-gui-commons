@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.actiongroup;
 
 /**
@@ -24,6 +24,5 @@ public final class ActionConstants {
     /**
      * Creates a new instance of ActionConstants.
      */
-    private ActionConstants() {
-    }
+    private ActionConstants() {}
 }

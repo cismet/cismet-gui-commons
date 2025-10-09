@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  *  Copyright (C) 2011 thorsten
  *
@@ -28,16 +28,15 @@
  */
 package de.cismet.tools.gui;
 
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.MattePainter;
-import org.jdesktop.swingx.painter.RectanglePainter;
-import org.jdesktop.swingx.painter.effects.ShadowPathEffect;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.Insets;
 import java.awt.geom.Point2D;
+import org.jdesktop.swingx.painter.CompoundPainter;
+import org.jdesktop.swingx.painter.MattePainter;
+import org.jdesktop.swingx.painter.RectanglePainter;
+import org.jdesktop.swingx.painter.effects.ShadowPathEffect;
 
 /**
  * DOCUMENT ME!
@@ -50,57 +49,65 @@ public class CoolPanelTester extends javax.swing.JFrame {
     //~ Static fields/initializers ---------------------------------------------
 
     public static final GradientPaint BLUE_EXPERIENCE = new GradientPaint(
-            new Point2D.Double(0, 0),
-            new Color(168, 204, 241),
-            new Point2D.Double(0, 1),
-            new Color(44, 61, 146));
+        new Point2D.Double(0, 0),
+        new Color(168, 204, 241),
+        new Point2D.Double(0, 1),
+        new Color(44, 61, 146)
+    );
     public static final GradientPaint MAC_OSX_SELECTED = new GradientPaint(
-            new Point2D.Double(0, 0),
-            new Color(81, 141, 236),
-            new Point2D.Double(0, 1),
-            new Color(36, 96, 192));
+        new Point2D.Double(0, 0),
+        new Color(81, 141, 236),
+        new Point2D.Double(0, 1),
+        new Color(36, 96, 192)
+    );
     public static final GradientPaint MAC_OSX = new GradientPaint(
-            new Point2D.Double(0, 0),
-            new Color(167, 210, 250),
-            new Point2D.Double(0, 1),
-            new Color(99, 147, 206));
+        new Point2D.Double(0, 0),
+        new Color(167, 210, 250),
+        new Point2D.Double(0, 1),
+        new Color(99, 147, 206)
+    );
     public static final GradientPaint AERITH = new GradientPaint(
-            new Point2D.Double(0, 0),
-            Color.WHITE,
-            new Point2D.Double(
-                0,
-                1),
-            new Color(64, 110, 161));
+        new Point2D.Double(0, 0),
+        Color.WHITE,
+        new Point2D.Double(0, 1),
+        new Color(64, 110, 161)
+    );
     public static final GradientPaint GRAY = new GradientPaint(
-            new Point2D.Double(0, 0),
-            new Color(226, 226, 226),
-            new Point2D.Double(0, 1),
-            new Color(250, 248, 248));
+        new Point2D.Double(0, 0),
+        new Color(226, 226, 226),
+        new Point2D.Double(0, 1),
+        new Color(250, 248, 248)
+    );
     public static final GradientPaint RED_XP = new GradientPaint(
-            new Point2D.Double(0, 0),
-            new Color(236, 81, 81),
-            new Point2D.Double(0, 1),
-            new Color(192, 36, 36));
+        new Point2D.Double(0, 0),
+        new Color(236, 81, 81),
+        new Point2D.Double(0, 1),
+        new Color(192, 36, 36)
+    );
     public static final GradientPaint NIGHT_GRAY = new GradientPaint(
-            new Point2D.Double(0, 0),
-            new Color(102, 111, 127),
-            new Point2D.Double(0, 1),
-            new Color(38, 45, 61));
+        new Point2D.Double(0, 0),
+        new Color(102, 111, 127),
+        new Point2D.Double(0, 1),
+        new Color(38, 45, 61)
+    );
     public static final GradientPaint NIGHT_GRAY_LIGHT = new GradientPaint(
-            new Point2D.Double(0, 0),
-            new Color(129, 138, 155),
-            new Point2D.Double(0, 1),
-            new Color(58, 66, 82));
+        new Point2D.Double(0, 0),
+        new Color(129, 138, 155),
+        new Point2D.Double(0, 1),
+        new Color(58, 66, 82)
+    );
     public static final GradientPaint HELL = new GradientPaint(
-            new Point2D.Double(0, 0),
-            new Color(129, 138, 155),
-            new Point2D.Double(0, 100),
-            new Color(222, 222, 222));
+        new Point2D.Double(0, 0),
+        new Color(129, 138, 155),
+        new Point2D.Double(0, 100),
+        new Color(222, 222, 222)
+    );
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JRadioButton jRadioButton1;
     private org.jdesktop.swingx.JXPanel p;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -110,13 +117,13 @@ public class CoolPanelTester extends javax.swing.JFrame {
      */
     public CoolPanelTester() {
         initComponents();
-//        PureCoolPanel p=new PureCoolPanel();
-//        p.setPanTitle(new JPanel());
-//        p.getPanTitle().add(new JLabel("jhdskaflkasdjh"));
+        //        PureCoolPanel p=new PureCoolPanel();
+        //        p.setPanTitle(new JPanel());
+        //        p.getPanTitle().add(new JLabel("jhdskaflkasdjh"));
         // JXPanel p = new JXPanel();
         p.setPreferredSize(new Dimension(300, 400));
 
-//        RectanglePainter rp=new RectanglePainter(10,10,10,10,20,20);
+        //        RectanglePainter rp=new RectanglePainter(10,10,10,10,20,20);
         final RectanglePainter rp = new RectanglePainter(HELL, Color.BLACK, 1, null);
 
         rp.setRounded(true);
@@ -151,37 +158,58 @@ public class CoolPanelTester extends javax.swing.JFrame {
 
         jButton1.setText(org.openide.util.NbBundle.getMessage(CoolPanelTester.class, "CoolPanelTester.jButton1.text")); // NOI18N
 
-        jCheckBox1.setText(org.openide.util.NbBundle.getMessage(
-                CoolPanelTester.class,
-                "CoolPanelTester.jCheckBox1.text")); // NOI18N
+        jCheckBox1.setText(
+            org.openide.util.NbBundle.getMessage(CoolPanelTester.class, "CoolPanelTester.jCheckBox1.text")
+        ); // NOI18N
 
-        jRadioButton1.setText(org.openide.util.NbBundle.getMessage(
-                CoolPanelTester.class,
-                "CoolPanelTester.jRadioButton1.text")); // NOI18N
+        jRadioButton1.setText(
+            org.openide.util.NbBundle.getMessage(CoolPanelTester.class, "CoolPanelTester.jRadioButton1.text")
+        ); // NOI18N
 
         final org.jdesktop.layout.GroupLayout pLayout = new org.jdesktop.layout.GroupLayout(p);
         p.setLayout(pLayout);
         pLayout.setHorizontalGroup(
-            pLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-                org.jdesktop.layout.GroupLayout.TRAILING,
-                pLayout.createSequentialGroup().addContainerGap(286, Short.MAX_VALUE).add(jButton1).add(
-                    116,
-                    116,
-                    116)).add(
-                pLayout.createSequentialGroup().add(113, 113, 113).add(jCheckBox1).addContainerGap(
-                    280,
-                    Short.MAX_VALUE)).add(
-                org.jdesktop.layout.GroupLayout.TRAILING,
-                pLayout.createSequentialGroup().addContainerGap(220, Short.MAX_VALUE).add(jRadioButton1).add(
-                    159,
-                    159,
-                    159)));
+            pLayout
+                .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(
+                    org.jdesktop.layout.GroupLayout.TRAILING,
+                    pLayout
+                        .createSequentialGroup()
+                        .addContainerGap(286, Short.MAX_VALUE)
+                        .add(jButton1)
+                        .add(116, 116, 116)
+                )
+                .add(
+                    pLayout
+                        .createSequentialGroup()
+                        .add(113, 113, 113)
+                        .add(jCheckBox1)
+                        .addContainerGap(280, Short.MAX_VALUE)
+                )
+                .add(
+                    org.jdesktop.layout.GroupLayout.TRAILING,
+                    pLayout
+                        .createSequentialGroup()
+                        .addContainerGap(220, Short.MAX_VALUE)
+                        .add(jRadioButton1)
+                        .add(159, 159, 159)
+                )
+        );
         pLayout.setVerticalGroup(
-            pLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-                pLayout.createSequentialGroup().add(98, 98, 98).add(jButton1).add(44, 44, 44).add(jCheckBox1).add(
-                    46,
-                    46,
-                    46).add(jRadioButton1).addContainerGap(115, Short.MAX_VALUE)));
+            pLayout
+                .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(
+                    pLayout
+                        .createSequentialGroup()
+                        .add(98, 98, 98)
+                        .add(jButton1)
+                        .add(44, 44, 44)
+                        .add(jCheckBox1)
+                        .add(46, 46, 46)
+                        .add(jRadioButton1)
+                        .addContainerGap(115, Short.MAX_VALUE)
+                )
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -195,12 +223,13 @@ public class CoolPanelTester extends javax.swing.JFrame {
      * @param  args  the command line arguments
      */
     public static void main(final String[] args) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
+        java.awt.EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     new CoolPanelTester().setVisible(true);
                 }
-            });
+            }
+        );
     }
 }

@@ -1,34 +1,27 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
-import org.apache.log4j.Logger;
-
-import org.openide.util.NbBundle;
-
+import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
+import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-
 import java.text.MessageFormat;
-
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-
-import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
-
-import de.cismet.tools.gui.StaticSwingTools;
+import org.apache.log4j.Logger;
+import org.openide.util.NbBundle;
 
 /**
  * DOCUMENT ME!
@@ -61,6 +54,7 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane scpRequestedURI;
     private javax.swing.JToggleButton togDetails;
     protected javax.swing.JTextArea txaRequestedURI;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -80,10 +74,9 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
 
         if (this.exception != null) {
             txaRequestedURI.setText(exception.getRequestedURI());
-            lblMessage2.setText(MessageFormat.format(
-                    lblMessage2.getText(),
-                    exception.getStatuscode(),
-                    exception.getMessage()));
+            lblMessage2.setText(
+                MessageFormat.format(lblMessage2.getText(), exception.getStatuscode(), exception.getMessage())
+            );
         }
     }
 
@@ -111,23 +104,30 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
         scpRequestedURI = new javax.swing.JScrollPane();
         txaRequestedURI = new javax.swing.JTextArea();
         lblMessage2 = new javax.swing.JLabel();
-        gluMain = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0),
+        gluMain =
+            new javax.swing.Box.Filler(
                 new java.awt.Dimension(0, 0),
-                new java.awt.Dimension(0, 32767));
+                new java.awt.Dimension(0, 0),
+                new java.awt.Dimension(0, 32767)
+            );
 
         setLayout(new java.awt.GridBagLayout());
 
-        togDetails.setText(org.openide.util.NbBundle.getMessage(
+        togDetails.setText(
+            org.openide.util.NbBundle.getMessage(
                 BadHttpStatusCodeExceptionPanel.class,
-                "BadHttpStatusCodeExceptionPanel.togDetails.text")); // NOI18N
+                "BadHttpStatusCodeExceptionPanel.togDetails.text"
+            )
+        ); // NOI18N
         togDetails.setFocusPainted(false);
-        togDetails.addActionListener(new java.awt.event.ActionListener() {
-
+        togDetails.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     togDetailsActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -137,17 +137,21 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
 
         pnlServerResponse.setLayout(new java.awt.GridBagLayout());
 
-        btnSaveResponse.setText(org.openide.util.NbBundle.getMessage(
+        btnSaveResponse.setText(
+            org.openide.util.NbBundle.getMessage(
                 BadHttpStatusCodeExceptionPanel.class,
-                "BadHttpStatusCodeExceptionPanel.btnSaveResponse.text")); // NOI18N
+                "BadHttpStatusCodeExceptionPanel.btnSaveResponse.text"
+            )
+        ); // NOI18N
         btnSaveResponse.setFocusPainted(false);
-        btnSaveResponse.addActionListener(new java.awt.event.ActionListener() {
-
+        btnSaveResponse.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnSaveResponseActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -156,9 +160,12 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlServerResponse.add(btnSaveResponse, gridBagConstraints);
 
-        lblHeaderReponse.setText(org.openide.util.NbBundle.getMessage(
+        lblHeaderReponse.setText(
+            org.openide.util.NbBundle.getMessage(
                 BadHttpStatusCodeExceptionPanel.class,
-                "BadHttpStatusCodeExceptionPanel.lblHeaderReponse.text")); // NOI18N
+                "BadHttpStatusCodeExceptionPanel.lblHeaderReponse.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -180,9 +187,12 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
 
         pnlRequestedURI.setLayout(new java.awt.GridBagLayout());
 
-        lblHeaderRequestedURI.setText(org.openide.util.NbBundle.getMessage(
+        lblHeaderRequestedURI.setText(
+            org.openide.util.NbBundle.getMessage(
                 BadHttpStatusCodeExceptionPanel.class,
-                "BadHttpStatusCodeExceptionPanel.lblHeaderRequestedURI.text")); // NOI18N
+                "BadHttpStatusCodeExceptionPanel.lblHeaderRequestedURI.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -196,17 +206,21 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 0.1;
         pnlRequestedURI.add(jSeparator2, gridBagConstraints);
 
-        btnCopyRequestedURIToClipboard.setText(org.openide.util.NbBundle.getMessage(
+        btnCopyRequestedURIToClipboard.setText(
+            org.openide.util.NbBundle.getMessage(
                 BadHttpStatusCodeExceptionPanel.class,
-                "BadHttpStatusCodeExceptionPanel.btnCopyRequestedURIToClipboard.text")); // NOI18N
+                "BadHttpStatusCodeExceptionPanel.btnCopyRequestedURIToClipboard.text"
+            )
+        ); // NOI18N
         btnCopyRequestedURIToClipboard.setFocusPainted(false);
-        btnCopyRequestedURIToClipboard.addActionListener(new java.awt.event.ActionListener() {
-
+        btnCopyRequestedURIToClipboard.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnCopyRequestedURIToClipboardActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -215,9 +229,12 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         pnlRequestedURI.add(btnCopyRequestedURIToClipboard, gridBagConstraints);
 
-        lblMessage.setText(org.openide.util.NbBundle.getMessage(
+        lblMessage.setText(
+            org.openide.util.NbBundle.getMessage(
                 BadHttpStatusCodeExceptionPanel.class,
-                "BadHttpStatusCodeExceptionPanel.lblMessage.text")); // NOI18N
+                "BadHttpStatusCodeExceptionPanel.lblMessage.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -251,9 +268,12 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         add(pnlRequestedURI, gridBagConstraints);
 
-        lblMessage2.setText(org.openide.util.NbBundle.getMessage(
+        lblMessage2.setText(
+            org.openide.util.NbBundle.getMessage(
                 BadHttpStatusCodeExceptionPanel.class,
-                "BadHttpStatusCodeExceptionPanel.lblMessage2.text")); // NOI18N
+                "BadHttpStatusCodeExceptionPanel.lblMessage2.text"
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -268,7 +288,7 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 0.1;
         add(gluMain, gridBagConstraints);
-    }                                                                 // </editor-fold>//GEN-END:initComponents
+    } // </editor-fold>//GEN-END:initComponents
 
     /**
      * DOCUMENT ME!
@@ -289,27 +309,33 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
                 writer.write(exception.getResponse());
             } catch (final IOException ex) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("Couldn't save following reponse to file '"
-                                + ((file != null) ? file.getAbsolutePath() : "null") + "': '" + exception.getResponse()
-                                + "'.",
-                        ex);
+                    LOG.debug(
+                        "Couldn't save following reponse to file '" +
+                        ((file != null) ? file.getAbsolutePath() : "null") +
+                        "': '" +
+                        exception.getResponse() +
+                        "'.",
+                        ex
+                    );
                 }
                 JOptionPane.showMessageDialog(
                     StaticSwingTools.getParentFrameIfNotNull(this),
                     NbBundle.getMessage(
                         BadHttpStatusCodeExceptionPanel.class,
                         "BadHttpStatusCodeExceptionPanel.btnSaveResponseActionPerformed.JOptionPane.errorWhileSaving.message",
-                        ex.getMessage()),
+                        ex.getMessage()
+                    ),
                     NbBundle.getMessage(
                         BadHttpStatusCodeExceptionPanel.class,
-                        "BadHttpStatusCodeExceptionPanel.btnSaveResponseActionPerformed.JOptionPane.errorWhileSaving.title"),
-                    JOptionPane.ERROR_MESSAGE);
+                        "BadHttpStatusCodeExceptionPanel.btnSaveResponseActionPerformed.JOptionPane.errorWhileSaving.title"
+                    ),
+                    JOptionPane.ERROR_MESSAGE
+                );
             } finally {
                 if (writer != null) {
                     try {
                         writer.close();
-                    } catch (IOException ex) {
-                    }
+                    } catch (IOException ex) {}
                 }
             }
         }
@@ -321,12 +347,20 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
      * @param  evt  DOCUMENT ME!
      */
     private void togDetailsActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_togDetailsActionPerformed
-        pnlServerResponse.setVisible(togDetails.isSelected() && (exception != null) && (exception.getResponse() != null)
-                    && !exception.getResponse().isEmpty());
-        pnlRequestedURI.setVisible(togDetails.isSelected() && (exception != null)
-                    && (exception.getRequestedURI() != null) && !exception.getRequestedURI().isEmpty());
+        pnlServerResponse.setVisible(
+            togDetails.isSelected() &&
+            (exception != null) &&
+            (exception.getResponse() != null) &&
+            !exception.getResponse().isEmpty()
+        );
+        pnlRequestedURI.setVisible(
+            togDetails.isSelected() &&
+            (exception != null) &&
+            (exception.getRequestedURI() != null) &&
+            !exception.getRequestedURI().isEmpty()
+        );
 
-//        lblRequestedURI.setMaximumSize(new Dimension(getWidth(), Integer.MAX_VALUE));
+        //        lblRequestedURI.setMaximumSize(new Dimension(getWidth(), Integer.MAX_VALUE));
 
         StaticSwingTools.tryPackingMyParentDialog(this);
     } //GEN-LAST:event_togDetailsActionPerformed
@@ -337,10 +371,11 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
      * @param  evt  DOCUMENT ME!
      */
     private void btnCopyRequestedURIToClipboardActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCopyRequestedURIToClipboardActionPerformed
-        Toolkit.getDefaultToolkit()
-                .getSystemClipboard()
-                .setContents(new StringSelection(exception.getRequestedURI()), null);
-    }                                                                                                  //GEN-LAST:event_btnCopyRequestedURIToClipboardActionPerformed
+        Toolkit
+            .getDefaultToolkit()
+            .getSystemClipboard()
+            .setContents(new StringSelection(exception.getRequestedURI()), null);
+    } //GEN-LAST:event_btnCopyRequestedURIToClipboardActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -348,8 +383,8 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
      * @param  args  DOCUMENT ME!
      */
     public static void main(final String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-
+        EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     final JDialog dialog = new JDialog();
@@ -359,9 +394,13 @@ public class BadHttpStatusCodeExceptionPanel extends javax.swing.JPanel {
                                 "http://s102x283:8080/ASWeb/ASA_AAAWeb/ALKISBuchNachweis?nmless=5061756C612030352E31322E32303035204A75737475732032352E30372E323030382054616E6A612030362E31302E31393734&product=LB.GDBNRW.A.FNW.1&id=053001-001-00003/0002&user=3awup&password=3awup&service=Wuppertal",
                                 404,
                                 "Not Found",
-                                "")));
+                                ""
+                            )
+                        )
+                    );
                     dialog.setVisible(true);
                 }
-            });
+            }
+        );
     }
 }

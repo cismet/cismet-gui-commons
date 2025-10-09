@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.downloadmanager;
 
 import java.util.Collection;
@@ -28,10 +28,12 @@ public class DownloadListChangedEvent extends EventObject {
      * @version  $Revision$, $Date$
      */
     public enum Action {
-
         //~ Enum constants -----------------------------------------------------
 
-        ADDED, REMOVED, CHANGED_COUNTERS, ADDED_DOWNLOADS_SUBSEQUENTLY
+        ADDED,
+        REMOVED,
+        CHANGED_COUNTERS,
+        ADDED_DOWNLOADS_SUBSEQUENTLY,
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -62,9 +64,7 @@ public class DownloadListChangedEvent extends EventObject {
      * @param  downloads  The changed downloads.
      * @param  action     The change aciton.
      */
-    public DownloadListChangedEvent(final Object source,
-            final Collection<Download> downloads,
-            final Action action) {
+    public DownloadListChangedEvent(final Object source, final Collection<Download> downloads, final Action action) {
         super(source);
         this.downloads = downloads;
         this.action = action;

@@ -1,26 +1,23 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
-import org.jdesktop.swingx.JXTable;
-
 import java.awt.BorderLayout;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.JXTable;
 
 /**
  * DOCUMENT ME!
@@ -85,7 +82,7 @@ public class TheProperties {
 
         for (int i = 0; i < list.size(); i++) {
             final Object[] row = new Object[2];
-            final String unsplittedRow = (String)list.get(i);
+            final String unsplittedRow = (String) list.get(i);
             final String[] values = unsplittedRow.split(split);
             row[0] = values[0];
             row[1] = values[1];
@@ -101,16 +98,15 @@ public class TheProperties {
      */
     public static void showUIDefaultsGUI(final Object[][] modelData) {
         final Object[] colNames = new Object[2];
-        colNames[0] = "Key";   // NOI18N
+        colNames[0] = "Key"; // NOI18N
         colNames[1] = "Value"; // NOI18N
 
         final DefaultTableModel model = new DefaultTableModel(modelData, colNames) {
-
-                @Override
-                public boolean isCellEditable(final int row, final int column) {
-                    return false;
-                }
-            };
+            @Override
+            public boolean isCellEditable(final int row, final int column) {
+                return false;
+            }
+        };
 
         final JXTable table = new JXTable(model);
         // JTable table = new JTable(model);

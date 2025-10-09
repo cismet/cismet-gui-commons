@@ -1,15 +1,17 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.lookupoptions.gui;
 
 import com.l2fprod.common.swing.JButtonBar;
 import com.l2fprod.common.swing.plaf.blue.BlueishButtonBarUI;
-
+import de.cismet.lookupoptions.OptionsCategory;
+import de.cismet.lookupoptions.OptionsPanelController;
+import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -18,9 +20,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
 import java.util.Hashtable;
-
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JFrame;
@@ -32,11 +32,6 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import de.cismet.lookupoptions.OptionsCategory;
-import de.cismet.lookupoptions.OptionsPanelController;
-
-import de.cismet.tools.gui.StaticSwingTools;
 
 /*
  * OptionsDialog.java
@@ -59,8 +54,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
 
     private final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(this.getClass());
     private OptionsClient optionsClient = OptionsClient.getInstance();
-    private Hashtable<OptionsCategory, OptionsPanelController> selectedControllerPerCategory =
-        new Hashtable<OptionsCategory, OptionsPanelController>();
+    private Hashtable<OptionsCategory, OptionsPanelController> selectedControllerPerCategory = new Hashtable<OptionsCategory, OptionsPanelController>();
     private OptionsCategory selectedCategory;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
@@ -68,6 +62,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
     private javax.swing.JButton btnOk;
     private javax.swing.JPanel panCategories;
     private javax.swing.JPanel panCategory;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -90,7 +85,8 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         StaticSwingTools.doClickButtonOnKeyStroke(
             btnClose,
             KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-            getRootPane());
+            getRootPane()
+        );
         setLocationRelativeTo(parent);
         addWindowListener(this);
     }
@@ -135,18 +131,19 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
                 button.setToolTipText(categoryTooltip);
 
                 // Verhalten wenn eine Kategorie gewählt wird wird
-                button.addActionListener(new ActionListener() {
-
+                button.addActionListener(
+                    new ActionListener() {
                         @Override
                         public void actionPerformed(final ActionEvent e) {
                             // alle OptionsController der Kategorie updaten (Werte neu laden)
                             optionsClient.update(categoryClass);
                             // und dann die Card der Kategorie anzeigen
-                            ((CardLayout)panCategory.getLayout()).show(panCategory, categoryCardName);
+                            ((CardLayout) panCategory.getLayout()).show(panCategory, categoryCardName);
                             selectedCategory = category;
                             selectedPanelChanged();
                         }
-                    });
+                    }
+                );
 
                 buttonGroup.add(button);
                 buttonbar.add(button);
@@ -181,17 +178,18 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
 
                         // jeweils ein tab (mit title)
                         tbpPanels.addTab(controllerName, null, controllerPanel, controllerTooltip);
-                        tbpPanels.addChangeListener(new ChangeListener() {
-
+                        tbpPanels.addChangeListener(
+                            new ChangeListener() {
                                 @Override
                                 public void stateChanged(final ChangeEvent e) {
-                                    final JTabbedPane sourceTabbedPane = (JTabbedPane)e.getSource();
+                                    final JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
                                     if (sourceTabbedPane.getSelectedComponent() == controllerPanel) {
                                         selectedControllerPerCategory.put(category, controller);
                                         selectedPanelChanged();
                                     }
                                 }
-                            });
+                            }
+                        );
                     }
                     panCategory.add(tbpPanels, categoryCardName);
                 }
@@ -200,7 +198,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         panCategories.add(buttonbar);
 
         // ersten button ermitteln
-        final JToggleButton firstButton = (JToggleButton)buttonbar.getComponent(0);
+        final JToggleButton firstButton = (JToggleButton) buttonbar.getComponent(0);
         if (firstButton != null) {
             // und selected setzen
             buttonGroup.setSelected(firstButton.getModel(), true);
@@ -227,87 +225,113 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         panCategory.setLayout(new java.awt.CardLayout());
 
         btnClose.setText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnClose.text")); // NOI18N
-        btnClose.setToolTipText(org.openide.util.NbBundle.getMessage(
-                OptionsDialog.class,
-                "OptionsDialog.btnClose.tooltip"));                                                                 // NOI18N
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-
+        btnClose.setToolTipText(
+            org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnClose.tooltip")
+        ); // NOI18N
+        btnClose.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnCloseActionPerformed(evt);
                 }
-            });
+            }
+        );
 
         panCategories.setMaximumSize(new java.awt.Dimension(32767, 90));
         panCategories.setMinimumSize(new java.awt.Dimension(10, 90));
         panCategories.setLayout(new java.awt.BorderLayout());
 
-        btnOk.setText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnOk.text"));           // NOI18N
+        btnOk.setText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnOk.text")); // NOI18N
         btnOk.setToolTipText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnOk.tooltip")); // NOI18N
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
-
+        btnOk.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnOkActionPerformed(evt);
                 }
-            });
+            }
+        );
 
         btnHelp.setText(org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnHelp.text")); // NOI18N
-        btnHelp.setToolTipText(org.openide.util.NbBundle.getMessage(
-                OptionsDialog.class,
-                "OptionsDialog.btnHelp.tooltip"));                                                                // NOI18N
-        btnHelp.addActionListener(new java.awt.event.ActionListener() {
-
+        btnHelp.setToolTipText(
+            org.openide.util.NbBundle.getMessage(OptionsDialog.class, "OptionsDialog.btnHelp.tooltip")
+        ); // NOI18N
+        btnHelp.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnHelpActionPerformed(evt);
                 }
-            });
+            }
+        );
 
         final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                javax.swing.GroupLayout.Alignment.TRAILING,
-                layout.createSequentialGroup().addContainerGap(336, Short.MAX_VALUE).addComponent(
-                    btnOk,
-                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                    80,
-                    javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                    btnClose,
-                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                    80,
-                    javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-                    btnHelp,
-                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                    80,
-                    javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap()).addComponent(
-                panCategories,
-                javax.swing.GroupLayout.DEFAULT_SIZE,
-                600,
-                Short.MAX_VALUE).addComponent(
-                panCategory,
-                javax.swing.GroupLayout.Alignment.TRAILING,
-                javax.swing.GroupLayout.DEFAULT_SIZE,
-                600,
-                Short.MAX_VALUE));
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                javax.swing.GroupLayout.Alignment.TRAILING,
-                layout.createSequentialGroup().addComponent(
-                    panCategories,
-                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                    70,
-                    javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    javax.swing.GroupLayout.Alignment.TRAILING,
+                    layout
+                        .createSequentialGroup()
+                        .addContainerGap(336, Short.MAX_VALUE)
+                        .addComponent(
+                            btnOk,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            80,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(
+                            btnClose,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            80,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(
+                            btnHelp,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            80,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addContainerGap()
+                )
+                .addComponent(panCategories, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                .addComponent(
                     panCategory,
+                    javax.swing.GroupLayout.Alignment.TRAILING,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
-                    371,
-                    Short.MAX_VALUE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addGroup(
-                    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(btnHelp)
-                                .addComponent(btnClose).addComponent(btnOk)).addContainerGap()));
+                    600,
+                    Short.MAX_VALUE
+                )
+        );
+        layout.setVerticalGroup(
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    javax.swing.GroupLayout.Alignment.TRAILING,
+                    layout
+                        .createSequentialGroup()
+                        .addComponent(
+                            panCategories,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            70,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panCategory, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(
+                            layout
+                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnHelp)
+                                .addComponent(btnClose)
+                                .addComponent(btnOk)
+                        )
+                        .addContainerGap()
+                )
+        );
 
         pack();
     } // </editor-fold>//GEN-END:initComponents
@@ -334,12 +358,12 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
             optionsClient.cancelAll();
         } catch (Throwable t) {
             if (log.isDebugEnabled()) {
-                log.debug("btnCloseActionPerformed", t);                         // NOI18N
+                log.debug("btnCloseActionPerformed", t); // NOI18N
             }
         } finally {
             dispose();
         }
-    }                                                                            //GEN-LAST:event_btnCloseActionPerformed
+    } //GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -351,12 +375,12 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
             optionsClient.applyAll();
         } catch (Throwable t) {
             if (log.isDebugEnabled()) {
-                log.debug("btnOkActionPerformed", t);                         // NOI18N
+                log.debug("btnOkActionPerformed", t); // NOI18N
             }
         } finally {
             dispose();
         }
-    }                                                                         //GEN-LAST:event_btnOkActionPerformed
+    } //GEN-LAST:event_btnOkActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -366,10 +390,10 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
     private void btnHelpActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnHelpActionPerformed
         final OptionsPanelController controller = selectedControllerPerCategory.get(selectedCategory);
         final String help = controller.getHelp();
-        final HelpDialog dialog = new HelpDialog((JFrame)getParent(), true);
+        final HelpDialog dialog = new HelpDialog((JFrame) getParent(), true);
         dialog.setContent(help);
         StaticSwingTools.showDialog(dialog);
-    }                                                                           //GEN-LAST:event_btnHelpActionPerformed
+    } //GEN-LAST:event_btnHelpActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -382,21 +406,23 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
         // zum Testen das gewünschte LookAndFeel
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
+        java.awt.EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     final OptionsDialog dialog = new OptionsDialog(new javax.swing.JFrame(), true);
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
+                    dialog.addWindowListener(
+                        new java.awt.event.WindowAdapter() {
                             @Override
                             public void windowClosing(final java.awt.event.WindowEvent e) {
                                 System.exit(0);
                             }
-                        });
+                        }
+                    );
                     dialog.setVisible(true);
                 }
-            });
+            }
+        );
     }
 
     /**
@@ -405,8 +431,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
      * @param  e  DOCUMENT ME!
      */
     @Override
-    public void windowOpened(final WindowEvent e) {
-    }
+    public void windowOpened(final WindowEvent e) {}
 
     /**
      * DOCUMENT ME!
@@ -414,8 +439,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
      * @param  e  DOCUMENT ME!
      */
     @Override
-    public void windowClosing(final WindowEvent e) {
-    }
+    public void windowClosing(final WindowEvent e) {}
 
     /**
      * DOCUMENT ME!
@@ -433,8 +457,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
      * @param  e  DOCUMENT ME!
      */
     @Override
-    public void windowIconified(final WindowEvent e) {
-    }
+    public void windowIconified(final WindowEvent e) {}
 
     /**
      * DOCUMENT ME!
@@ -442,8 +465,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
      * @param  e  DOCUMENT ME!
      */
     @Override
-    public void windowDeiconified(final WindowEvent e) {
-    }
+    public void windowDeiconified(final WindowEvent e) {}
 
     /**
      * DOCUMENT ME!
@@ -451,8 +473,7 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
      * @param  e  DOCUMENT ME!
      */
     @Override
-    public void windowActivated(final WindowEvent e) {
-    }
+    public void windowActivated(final WindowEvent e) {}
 
     /**
      * DOCUMENT ME!
@@ -460,6 +481,5 @@ public class OptionsDialog extends javax.swing.JDialog implements WindowListener
      * @param  e  DOCUMENT ME!
      */
     @Override
-    public void windowDeactivated(final WindowEvent e) {
-    }
+    public void windowDeactivated(final WindowEvent e) {}
 }

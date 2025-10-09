@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import de.cismet.tools.gui.log4jquickconfig.Log4JQuickConfig;
@@ -28,6 +28,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton cbxFatal;
     private javax.swing.JButton cmdDebug;
     private javax.swing.JButton cmdError;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -59,58 +60,63 @@ public class NewJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         cmdDebug.setText(org.openide.util.NbBundle.getMessage(NewJFrame.class, "NewJFrame.cmdDebug.text")); // NOI18N
-        cmdDebug.addActionListener(new java.awt.event.ActionListener() {
-
+        cmdDebug.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     cmdDebugActionPerformed(evt);
                 }
-            });
+            }
+        );
         getContentPane().add(cmdDebug);
         cmdDebug.setBounds(90, 160, 80, 29);
 
         cmdError.setText(org.openide.util.NbBundle.getMessage(NewJFrame.class, "NewJFrame.cmdError.text")); // NOI18N
-        cmdError.addActionListener(new java.awt.event.ActionListener() {
-
+        cmdError.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     cmdErrorActionPerformed(evt);
                 }
-            });
+            }
+        );
         getContentPane().add(cmdError);
         cmdError.setBounds(180, 160, 80, 29);
 
         cbxDebug.setSelected(true);
         cbxDebug.setText(org.openide.util.NbBundle.getMessage(NewJFrame.class, "NewJFrame.cbxDebug.text")); // NOI18N
-        cbxDebug.addActionListener(new java.awt.event.ActionListener() {
-
+        cbxDebug.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     cbxDebugActionPerformed(evt);
                 }
-            });
+            }
+        );
         getContentPane().add(cbxDebug);
         cbxDebug.setBounds(140, 70, 180, 22);
 
         cbxError.setText(org.openide.util.NbBundle.getMessage(NewJFrame.class, "NewJFrame.cbxError.text")); // NOI18N
-        cbxError.addActionListener(new java.awt.event.ActionListener() {
-
+        cbxError.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     cbxErrorActionPerformed(evt);
                 }
-            });
+            }
+        );
         getContentPane().add(cbxError);
         cbxError.setBounds(140, 90, 160, 22);
 
         cbxFatal.setText(org.openide.util.NbBundle.getMessage(NewJFrame.class, "NewJFrame.cbxFatal.text")); // NOI18N
-        cbxFatal.addActionListener(new java.awt.event.ActionListener() {
-
+        cbxFatal.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     cbxFatalActionPerformed(evt);
                 }
-            });
+            }
+        );
         getContentPane().add(cbxFatal);
         cbxFatal.setBounds(140, 110, 140, 22);
 
@@ -124,8 +130,8 @@ public class NewJFrame extends javax.swing.JFrame {
      * @param  evt  DOCUMENT ME!
      */
     private void cmdErrorActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdErrorActionPerformed
-        log.error("Error");                                                      // NOI18N
-    }                                                                            //GEN-LAST:event_cmdErrorActionPerformed
+        log.error("Error"); // NOI18N
+    } //GEN-LAST:event_cmdErrorActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -137,7 +143,7 @@ public class NewJFrame extends javax.swing.JFrame {
         cbxError.setSelected(false);
         cbxFatal.setSelected(true);
         configLog4J();
-    }                                                                            //GEN-LAST:event_cbxFatalActionPerformed
+    } //GEN-LAST:event_cbxFatalActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -149,7 +155,7 @@ public class NewJFrame extends javax.swing.JFrame {
         cbxError.setSelected(true);
         cbxFatal.setSelected(false);
         configLog4J();
-    }                                                                            //GEN-LAST:event_cbxErrorActionPerformed
+    } //GEN-LAST:event_cbxErrorActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -161,7 +167,7 @@ public class NewJFrame extends javax.swing.JFrame {
         cbxError.setSelected(false);
         cbxFatal.setSelected(false);
         configLog4J();
-    }                                                                            //GEN-LAST:event_cbxDebugActionPerformed
+    } //GEN-LAST:event_cbxDebugActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -170,9 +176,9 @@ public class NewJFrame extends javax.swing.JFrame {
      */
     private void cmdDebugActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdDebugActionPerformed
         if (log.isDebugEnabled()) {
-            log.debug("Debug");                                                  // NOI18N
+            log.debug("Debug"); // NOI18N
         }
-    }                                                                            //GEN-LAST:event_cmdDebugActionPerformed
+    } //GEN-LAST:event_cmdDebugActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -180,13 +186,14 @@ public class NewJFrame extends javax.swing.JFrame {
      * @param  args  the command line arguments
      */
     public static void main(final String[] args) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
+        java.awt.EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     new NewJFrame().setVisible(true);
                 }
-            });
+            }
+        );
     }
 
     /**

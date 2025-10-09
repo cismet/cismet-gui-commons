@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * Copyright (c) 2001-2009 JGoodies Karsten Lentzsch. All Rights Reserved.
  *
@@ -38,10 +38,8 @@ package de.cismet.tools.gui;
 
 import com.jgoodies.looks.Options;
 import com.jgoodies.looks.plastic.PlasticComboBoxUI;
-
 import java.awt.Component;
 import java.awt.Rectangle;
-
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JScrollBar;
@@ -97,8 +95,7 @@ class ScrollableComboUI extends PlasticComboBoxUI {
     /**
      * Creates a new ScrollableComboUI object.
      */
-    private ScrollableComboUI() {
-    }
+    private ScrollableComboUI() {}
 
     //~ Methods ----------------------------------------------------------------
 
@@ -158,9 +155,10 @@ class ScrollableComboUI extends PlasticComboBoxUI {
         @Override
         protected JScrollPane createScroller() {
             final JScrollPane sp = new JScrollPane(
-                    list,
-                    ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                list,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED
+            );
             return sp;
         }
 
@@ -170,12 +168,8 @@ class ScrollableComboUI extends PlasticComboBoxUI {
         @Override
         protected void configureScroller() {
             super.configureScroller();
-            scroller.getVerticalScrollBar().putClientProperty(
-                MetalScrollBarUI.FREE_STANDING_PROP,
-                Boolean.FALSE);
-            scroller.getHorizontalScrollBar().putClientProperty(
-                MetalScrollBarUI.FREE_STANDING_PROP,
-                Boolean.FALSE);
+            scroller.getVerticalScrollBar().putClientProperty(MetalScrollBarUI.FREE_STANDING_PROP, Boolean.FALSE);
+            scroller.getHorizontalScrollBar().putClientProperty(MetalScrollBarUI.FREE_STANDING_PROP, Boolean.FALSE);
         }
 
         /**
@@ -206,18 +200,14 @@ class ScrollableComboUI extends PlasticComboBoxUI {
         protected Rectangle computePopupBounds(final int px, final int py, int pw, final int ph) {
             final Rectangle defaultBounds = super.computePopupBounds(px, py, pw, ph);
             final Object popupPrototypeDisplayValue = comboBox.getClientProperty(
-                    Options.COMBO_POPUP_PROTOTYPE_DISPLAY_VALUE_KEY);
+                Options.COMBO_POPUP_PROTOTYPE_DISPLAY_VALUE_KEY
+            );
             if (popupPrototypeDisplayValue == null) {
                 return defaultBounds;
             }
 
             final ListCellRenderer renderer = list.getCellRenderer();
-            final Component c = renderer.getListCellRendererComponent(
-                    list,
-                    popupPrototypeDisplayValue,
-                    -1,
-                    true,
-                    true);
+            final Component c = renderer.getListCellRendererComponent(list, popupPrototypeDisplayValue, -1, true, true);
             pw = c.getPreferredSize().width;
             final boolean hasVerticalScrollBar = comboBox.getItemCount() > comboBox.getMaximumRowCount();
             if (hasVerticalScrollBar) {

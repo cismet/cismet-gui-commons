@@ -1,11 +1,12 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.historybutton;
+
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.Vector;
@@ -37,8 +38,7 @@ public class DefaultHistoryModel implements HistoryModel {
     /**
      * Creates a new instance of DefaultHistoryModel.
      */
-    public DefaultHistoryModel() {
-    }
+    public DefaultHistoryModel() {}
 
     //~ Methods ----------------------------------------------------------------
 
@@ -142,7 +142,7 @@ public class DefaultHistoryModel implements HistoryModel {
         while (it.hasNext()) {
             final Object o = it.next();
             if (o instanceof HistoryModelListener) {
-                ((HistoryModelListener)o).forwardStatusChanged();
+                ((HistoryModelListener) o).forwardStatusChanged();
             }
         }
     }
@@ -155,7 +155,7 @@ public class DefaultHistoryModel implements HistoryModel {
         while (it.hasNext()) {
             final Object o = it.next();
             if (o instanceof HistoryModelListener) {
-                ((HistoryModelListener)o).backStatusChanged();
+                ((HistoryModelListener) o).backStatusChanged();
             }
         }
     }
@@ -168,7 +168,7 @@ public class DefaultHistoryModel implements HistoryModel {
         while (it.hasNext()) {
             final Object o = it.next();
             if (o instanceof HistoryModelListener) {
-                ((HistoryModelListener)o).historyChanged();
+                ((HistoryModelListener) o).historyChanged();
             }
         }
     }
@@ -176,6 +176,5 @@ public class DefaultHistoryModel implements HistoryModel {
     /**
      * DOCUMENT ME!
      */
-    private void fireHistoryActionPerformed() {
-    }
+    private void fireHistoryActionPerformed() {}
 }

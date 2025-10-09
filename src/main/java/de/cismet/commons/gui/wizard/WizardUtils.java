@@ -1,18 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.wizard;
 
+import java.lang.reflect.Field;
+import javax.swing.AbstractButton;
 import org.openide.WizardDescriptor;
 import org.openide.awt.Mnemonics;
-
-import java.lang.reflect.Field;
-
-import javax.swing.AbstractButton;
 
 /**
  * Some utilities that are helpful when working with the NetBeans Wizard API.
@@ -27,8 +25,7 @@ public final class WizardUtils {
     /**
      * Creates a new WizardUtils object.
      */
-    private WizardUtils() {
-    }
+    private WizardUtils() {}
 
     //~ Methods ----------------------------------------------------------------
 
@@ -61,33 +58,38 @@ public final class WizardUtils {
      *
      * @see     Mnemonics#setLocalizedText(javax.swing.AbstractButton, java.lang.String)
      */
-    public static void setCustomButtonText(final WizardDescriptor wizard,
-            final Object option,
-            final String text) {
+    public static void setCustomButtonText(final WizardDescriptor wizard, final Object option, final String text) {
         try {
             final Field buttonField;
             if (WizardDescriptor.FINISH_OPTION.equals(option)) {
-                buttonField = wizard.getClass().getDeclaredField("finishButton");    // NOI18N
+                buttonField = wizard.getClass().getDeclaredField("finishButton"); // NOI18N
             } else if (WizardDescriptor.CANCEL_OPTION.equals(option)) {
-                buttonField = wizard.getClass().getDeclaredField("cancelButton");    // NOI18N
+                buttonField = wizard.getClass().getDeclaredField("cancelButton"); // NOI18N
             } else if (WizardDescriptor.PREVIOUS_OPTION.equals(option)) {
-                buttonField = wizard.getClass().getDeclaredField("previousButton");  // NOI18N
+                buttonField = wizard.getClass().getDeclaredField("previousButton"); // NOI18N
             } else if (WizardDescriptor.NEXT_OPTION.equals(option)) {
-                buttonField = wizard.getClass().getDeclaredField("nextButton");      // NOI18N
+                buttonField = wizard.getClass().getDeclaredField("nextButton"); // NOI18N
             } else {
                 throw new IllegalArgumentException("unsupported option: " + option); // NOI18N
             }
 
             final boolean accessible = buttonField.isAccessible();
             buttonField.setAccessible(true);
-            final AbstractButton button = (AbstractButton)buttonField.get(wizard);
+            final AbstractButton button = (AbstractButton) buttonField.get(wizard);
             buttonField.setAccessible(accessible);
 
             Mnemonics.setLocalizedText(button, text);
         } catch (final Exception ex) {
-            throw new IllegalStateException("cannot set customized text: [wizard=" + wizard + "|optionButton=" // NOI18N
-                        + option + "|text=" + text + "]", // NOI18N
-                ex);
+            throw new IllegalStateException(
+                "cannot set customized text: [wizard=" +
+                wizard +
+                "|optionButton=" + // NOI18N
+                option +
+                "|text=" +
+                text +
+                "]", // NOI18N
+                ex
+            );
         }
     }
 }

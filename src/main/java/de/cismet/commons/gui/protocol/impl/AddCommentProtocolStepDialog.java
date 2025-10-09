@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -29,6 +29,7 @@ public class AddCommentProtocolStepDialog extends javax.swing.JDialog {
     private javax.swing.JPanel panMain;
     private javax.swing.JScrollPane scpComment;
     private javax.swing.JTextPane txpComment;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -63,9 +64,12 @@ public class AddCommentProtocolStepDialog extends javax.swing.JDialog {
         btnAdd = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(org.openide.util.NbBundle.getMessage(
+        setTitle(
+            org.openide.util.NbBundle.getMessage(
                 AddCommentProtocolStepDialog.class,
-                "AddCommentProtocolStepDialog.title")); // NOI18N
+                "AddCommentProtocolStepDialog.title"
+            )
+        ); // NOI18N
         setPreferredSize(new java.awt.Dimension(300, 200));
         setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -86,28 +90,34 @@ public class AddCommentProtocolStepDialog extends javax.swing.JDialog {
             btnCancel,
             org.openide.util.NbBundle.getMessage(
                 AddCommentProtocolStepDialog.class,
-                "AddCommentProtocolStepDialog.btnCancel.text")); // NOI18N
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-
+                "AddCommentProtocolStepDialog.btnCancel.text"
+            )
+        ); // NOI18N
+        btnCancel.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnCancelActionPerformed(evt);
                 }
-            });
+            }
+        );
         panControls.add(btnCancel);
 
         org.openide.awt.Mnemonics.setLocalizedText(
             btnAdd,
             org.openide.util.NbBundle.getMessage(
                 AddCommentProtocolStepDialog.class,
-                "AddCommentProtocolStepDialog.btnAdd.text")); // NOI18N
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
-
+                "AddCommentProtocolStepDialog.btnAdd.text"
+            )
+        ); // NOI18N
+        btnAdd.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnAddActionPerformed(evt);
                 }
-            });
+            }
+        );
         panControls.add(btnAdd);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -135,7 +145,7 @@ public class AddCommentProtocolStepDialog extends javax.swing.JDialog {
     private void btnAddActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnAddActionPerformed
         ProtocolHandler.getInstance().recordStep(new CommentProtocolStepImpl(txpComment.getText()), false);
         dispose();
-    }                                                                          //GEN-LAST:event_btnAddActionPerformed
+    } //GEN-LAST:event_btnAddActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -144,7 +154,7 @@ public class AddCommentProtocolStepDialog extends javax.swing.JDialog {
      */
     private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         dispose();
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    } //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -165,37 +175,44 @@ public class AddCommentProtocolStepDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddCommentProtocolStepDialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(AddCommentProtocolStepDialog.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddCommentProtocolStepDialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(AddCommentProtocolStepDialog.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddCommentProtocolStepDialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(AddCommentProtocolStepDialog.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddCommentProtocolStepDialog.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger
+                .getLogger(AddCommentProtocolStepDialog.class.getName())
+                .log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
+        java.awt.EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     final AddCommentProtocolStepDialog dialog = new AddCommentProtocolStepDialog(
-                            new javax.swing.JFrame(),
-                            true);
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
+                        new javax.swing.JFrame(),
+                        true
+                    );
+                    dialog.addWindowListener(
+                        new java.awt.event.WindowAdapter() {
                             @Override
                             public void windowClosing(final java.awt.event.WindowEvent e) {
                                 System.exit(0);
                             }
-                        });
+                        }
+                    );
                     dialog.setVisible(true);
                 }
-            });
+            }
+        );
     }
 }

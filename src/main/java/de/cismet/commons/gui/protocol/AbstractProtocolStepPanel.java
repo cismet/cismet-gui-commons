@@ -1,14 +1,13 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.protocol;
 
 import java.awt.Component;
-
 import javax.swing.JLabel;
 
 /**
@@ -19,8 +18,9 @@ import javax.swing.JLabel;
  * @author   jruiz
  * @version  $Revision$, $Date$
  */
-public abstract class AbstractProtocolStepPanel<S extends ProtocolStep> extends javax.swing.JPanel
-        implements ProtocolStepPanel {
+public abstract class AbstractProtocolStepPanel<S extends ProtocolStep>
+    extends javax.swing.JPanel
+    implements ProtocolStepPanel {
 
     //~ Instance fields --------------------------------------------------------
 
@@ -69,9 +69,11 @@ public abstract class AbstractProtocolStepPanel<S extends ProtocolStep> extends 
         final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 400, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 400, Short.MAX_VALUE)
+        );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 300, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 300, Short.MAX_VALUE)
+        );
     } // </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

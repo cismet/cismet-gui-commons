@@ -1,11 +1,12 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.treetable;
+
 /*
  * FileSystemModel2.java
  *
@@ -28,10 +29,8 @@ package de.cismet.tools.gui.treetable;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.util.Date;
 import java.util.Stack;
-
 import javax.swing.SwingUtilities;
 import javax.swing.tree.TreePath;
 
@@ -71,11 +70,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
     protected static String[] cNames = { "Name", "Size", "Type", "Modified" }; // NOI18N
 
     // Types of the columns.
-    protected static Class[] cTypes = {
-            TreeTableModel.class,
-            Integer.class, String.class,
-            Date.class
-        };
+    protected static Class[] cTypes = { TreeTableModel.class, Integer.class, String.class, Date.class };
 
     // The the returned file length for directories.
     public static final Integer ZERO = new Integer(0);
@@ -87,12 +82,11 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
 
     // Used to sort the file names.
     private static MergeSort fileMS = new MergeSort() {
-
-            @Override
-            public int compareElementsAt(final int beginLoc, final int endLoc) {
-                return ((String)toSort[beginLoc]).compareTo((String)toSort[endLoc]);
-            }
-        };
+        @Override
+        public int compareElementsAt(final int beginLoc, final int endLoc) {
+            return ((String) toSort[beginLoc]).compareTo((String) toSort[endLoc]);
+        }
+    };
 
     //~ Instance fields --------------------------------------------------------
 
@@ -142,7 +136,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
             if (sorters.size() == 0) {
                 return new SizeSorter();
             }
-            return (MergeSort)sorters.pop();
+            return (MergeSort) sorters.pop();
         }
     }
 
@@ -196,7 +190,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
      */
     @Override
     public boolean isLeaf(final Object node) {
-        return ((FileNode)node).isLeaf();
+        return ((FileNode) node).isLeaf();
     }
 
     //
@@ -247,28 +241,31 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
      */
     @Override
     public Object getValueAt(final Object node, final int column) {
-        final FileNode fn = (FileNode)node;
+        final FileNode fn = (FileNode) node;
 
         try {
             switch (column) {
-                case 0: {
-                    return fn.getFile().getName();
-                }
-                case 1: {
-                    if (fn.isTotalSizeValid()) {
-                        return new Integer((int)((FileNode)node).totalSize());
+                case 0:
+                    {
+                        return fn.getFile().getName();
                     }
-                    return null;
-                }
-                case 2: {
-                    return fn.isLeaf() ? "File" : "Directory"; // NOI18N
-                }
-                case 3: {
-                    return fn.lastModified();
-                }
+                case 1:
+                    {
+                        if (fn.isTotalSizeValid()) {
+                            return new Integer((int) ((FileNode) node).totalSize());
+                        }
+                        return null;
+                    }
+                case 2:
+                    {
+                        return fn.isLeaf() ? "File" : "Directory"; // NOI18N
+                    }
+                case 3:
+                    {
+                        return fn.lastModified();
+                    }
             }
-        } catch (SecurityException se) {
-        }
+        } catch (SecurityException se) {}
 
         return null;
     }
@@ -283,13 +280,13 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
      * @param  node  DOCUMENT ME!
      */
     public void reloadChildren(final Object node) {
-        final FileNode fn = (FileNode)node;
+        final FileNode fn = (FileNode) node;
 
         synchronized (this) {
             reloadCount++;
         }
         fn.resetSize();
-        new Thread(new FileNodeLoader((FileNode)node)).start();
+        new Thread(new FileNodeLoader((FileNode) node)).start();
     }
 
     /**
@@ -301,8 +298,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
             while (reloadCount > 0) {
                 try {
                     wait();
-                } catch (InterruptedException ie) {
-                }
+                } catch (InterruptedException ie) {}
             }
         }
         isValid = true;
@@ -335,7 +331,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
      * @return  DOCUMENT ME!
      */
     public String getPath(final Object node) {
-        return ((FileNode)node).getFile().getPath();
+        return ((FileNode) node).getFile().getPath();
     }
 
     /**
@@ -346,7 +342,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
      * @return  DOCUMENT ME!
      */
     public long getTotalSize(final Object node) {
-        return ((FileNode)node).totalSize();
+        return ((FileNode) node).totalSize();
     }
 
     /**
@@ -389,7 +385,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
      * @return  DOCUMENT ME!
      */
     protected File getFile(final Object node) {
-        final FileNode fileNode = ((FileNode)node);
+        final FileNode fileNode = ((FileNode) node);
         return fileNode.getFile();
     }
 
@@ -401,7 +397,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
      * @return  DOCUMENT ME!
      */
     protected Object[] getChildren(final Object node) {
-        final FileNode fileNode = ((FileNode)node);
+        final FileNode fileNode = ((FileNode) node);
         return fileNode.getChildren();
     }
 
@@ -573,8 +569,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
             children = createChildren(null);
             for (int counter = children.length - 1; counter >= 0; counter--) {
                 Thread.yield(); // Give the GUI CPU time to draw itself.
-                if (!children[counter].isLeaf()
-                            && (descendLinks || !children[counter].isLink())) {
+                if (!children[counter].isLeaf() && (descendLinks || !children[counter].isLink())) {
                     children[counter].loadChildren(sorter);
                 }
                 totalSize += children[counter].totalSize();
@@ -613,8 +608,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
                         retArray[i] = new FileNode(this, childFile);
                     }
                 }
-            } catch (SecurityException se) {
-            }
+            } catch (SecurityException se) {}
             if (retArray == null) {
                 retArray = EMPTY_CHILDREN;
             }
@@ -701,8 +695,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
             if (generateEvent) {
                 final FileNode[] path = getPath();
 
-                fireTreeStructureChanged(FileSystemModel2.this, path, null,
-                    null);
+                fireTreeStructureChanged(FileSystemModel2.this, path, null, null);
 
                 final FileNode parent = getParent();
 
@@ -786,8 +779,7 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
                 final int[] index = { getIndexOfChild(parent, this) };
                 final Object[] children = { this };
 
-                fireTreeNodesChanged(FileSystemModel2.this, path, index,
-                    children);
+                fireTreeNodesChanged(FileSystemModel2.this, path, index, children);
             }
         }
     }
@@ -843,8 +835,8 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
             }
             recycleSorter(sizeMS);
             if (isValid) {
-                SwingUtilities.invokeLater(new Runnable() {
-
+                SwingUtilities.invokeLater(
+                    new Runnable() {
                         @Override
                         public void run() {
                             final MergeSort sorter = getSizeSorter();
@@ -857,7 +849,8 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
                                 FileSystemModel2.this.notifyAll();
                             }
                         }
-                    });
+                    }
+                );
             } else {
                 synchronized (FileSystemModel2.this) {
                     reloadCount--;
@@ -891,8 +884,8 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
                     final FileNode fn = node;
 
                     // Reset the children
-                    SwingUtilities.invokeLater(new Runnable() {
-
+                    SwingUtilities.invokeLater(
+                        new Runnable() {
                             @Override
                             public void run() {
                                 final MergeSort sorter = getSizeSorter();
@@ -903,7 +896,8 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
                                 fn.setTotalSizeValid(true);
                                 fn.nodeChanged();
                             }
-                        });
+                        }
+                    );
                 }
             } else {
                 node.forceTotalSizeValid();
@@ -922,13 +916,13 @@ public class FileSystemModel2 extends AbstractTreeTableModel {
 
         @Override
         public int compareElementsAt(final int beginLoc, final int endLoc) {
-            final long firstSize = ((FileNode)toSort[beginLoc]).totalSize();
-            final long secondSize = ((FileNode)toSort[endLoc]).totalSize();
+            final long firstSize = ((FileNode) toSort[beginLoc]).totalSize();
+            final long secondSize = ((FileNode) toSort[endLoc]).totalSize();
 
             if (firstSize != secondSize) {
-                return (int)(secondSize - firstSize);
+                return (int) (secondSize - firstSize);
             }
-            return ((FileNode)toSort[beginLoc]).toString().compareTo(((FileNode)toSort[endLoc]).toString());
+            return ((FileNode) toSort[beginLoc]).toString().compareTo(((FileNode) toSort[endLoc]).toString());
         }
     }
 }

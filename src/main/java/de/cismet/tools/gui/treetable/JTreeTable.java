@@ -1,11 +1,12 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.treetable;
+
 /*
  * @(#)JTreeTable.java  1.2 98/10/27
  *
@@ -25,9 +26,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-
 import java.util.EventObject;
-
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -57,7 +56,6 @@ public class JTreeTable extends JTable {
      */
     public JTreeTable(final TreeTableModel treeTableModel) {
         super();
-
         // Create the tree. It will be used as a renderer and editor.
         tree = new TreeTableCellRenderer(treeTableModel);
 
@@ -110,8 +108,12 @@ public class JTreeTable extends JTable {
         }
         // Use the tree's default foreground and background colors in the
         // table.
-        LookAndFeel.installColorsAndFont(this, "Tree.background", // NOI18N
-            "Tree.foreground", "Tree.font"); // NOI18N
+        LookAndFeel.installColorsAndFont(
+            this,
+            "Tree.background", // NOI18N
+            "Tree.foreground",
+            "Tree.font"
+        ); // NOI18N
     }
 
     /* Workaround for BasicTableUI anomaly. Make sure the UI never tries to
@@ -195,12 +197,12 @@ public class JTreeTable extends JTable {
             // colors.
             final TreeCellRenderer tcr = getCellRenderer();
             if (tcr instanceof DefaultTreeCellRenderer) {
-                final DefaultTreeCellRenderer dtcr = ((DefaultTreeCellRenderer)tcr);
+                final DefaultTreeCellRenderer dtcr = ((DefaultTreeCellRenderer) tcr);
                 // For 1.1 uncomment this, 1.2 has a bug that will cause an
                 // exception to be thrown if the border selection color is
                 // null.
                 // dtcr.setBorderSelectionColor(null);
-                dtcr.setTextSelectionColor(UIManager.getColor("Table.selectionForeground"));       // NOI18N
+                dtcr.setTextSelectionColor(UIManager.getColor("Table.selectionForeground")); // NOI18N
                 dtcr.setBackgroundSelectionColor(UIManager.getColor("Table.selectionBackground")); // NOI18N
             }
         }
@@ -214,8 +216,7 @@ public class JTreeTable extends JTable {
         public void setRowHeight(final int rowHeight) {
             if (rowHeight > 0) {
                 super.setRowHeight(rowHeight);
-                if ((JTreeTable.this != null)
-                            && (JTreeTable.this.getRowHeight() != rowHeight)) {
+                if ((JTreeTable.this != null) && (JTreeTable.this.getRowHeight() != rowHeight)) {
                     JTreeTable.this.setRowHeight(getRowHeight());
                 }
             }
@@ -258,12 +259,14 @@ public class JTreeTable extends JTable {
          * @return  DOCUMENT ME!
          */
         @Override
-        public Component getTableCellRendererComponent(final JTable table,
-                final Object value,
-                final boolean isSelected,
-                final boolean hasFocus,
-                final int row,
-                final int column) {
+        public Component getTableCellRendererComponent(
+            final JTable table,
+            final Object value,
+            final boolean isSelected,
+            final boolean hasFocus,
+            final int row,
+            final int column
+        ) {
             if (isSelected) {
                 setBackground(table.getSelectionBackground());
             } else {
@@ -285,11 +288,13 @@ public class JTreeTable extends JTable {
         //~ Methods ------------------------------------------------------------
 
         @Override
-        public Component getTableCellEditorComponent(final JTable table,
-                final Object value,
-                final boolean isSelected,
-                final int r,
-                final int c) {
+        public Component getTableCellEditorComponent(
+            final JTable table,
+            final Object value,
+            final boolean isSelected,
+            final int r,
+            final int c
+        ) {
             return tree;
         }
 
@@ -316,17 +321,17 @@ public class JTreeTable extends JTable {
             if (e instanceof MouseEvent) {
                 for (int counter = getColumnCount() - 1; counter >= 0; counter--) {
                     if (getColumnClass(counter) == TreeTableModel.class) {
-                        final MouseEvent me = (MouseEvent)e;
+                        final MouseEvent me = (MouseEvent) e;
                         final MouseEvent newME = new MouseEvent(
-                                tree,
-                                me.getID(),
-                                me.getWhen(),
-                                me.getModifiers(),
-                                me.getX()
-                                        - getCellRect(0, counter, true).x,
-                                me.getY(),
-                                me.getClickCount(),
-                                me.isPopupTrigger());
+                            tree,
+                            me.getID(),
+                            me.getWhen(),
+                            me.getModifiers(),
+                            me.getX() - getCellRect(0, counter, true).x,
+                            me.getY(),
+                            me.getClickCount(),
+                            me.isPopupTrigger()
+                        );
                         tree.dispatchEvent(newME);
                         break;
                     }

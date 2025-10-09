@@ -1,17 +1,15 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands;
 
-import org.apache.log4j.Logger;
-
 import java.awt.Cursor;
-
 import javax.swing.JComponent;
+import org.apache.log4j.Logger;
 
 /**
  * DOCUMENT ME!
@@ -37,8 +35,7 @@ public class JBandCursorManager {
     /**
      * Creates a new JBandCursorManager object.
      */
-    private JBandCursorManager() {
-    }
+    private JBandCursorManager() {}
 
     //~ Methods ----------------------------------------------------------------
 

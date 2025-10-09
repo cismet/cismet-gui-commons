@@ -1,17 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.equalizer;
 
-import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 import java.util.Arrays;
-
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 /**
  * DOCUMENT ME!
@@ -36,24 +35,30 @@ public class RubberBandEqualizerModelNGTest {
      */
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testRubberBandEqualizerModel_sumNE100_2() {
-        new RubberBandEqualizerModel(Arrays.asList(
+        new RubberBandEqualizerModel(
+            Arrays.asList(
                 new EqualizerCategory("test1", 1),
                 new EqualizerCategory("test1", 1),
                 new EqualizerCategory("test1", 1),
                 new EqualizerCategory("test1", 1),
-                new EqualizerCategory("test1", 1)));
+                new EqualizerCategory("test1", 1)
+            )
+        );
     }
 
     /**
      * DOCUMENT ME!
      */
     public void testRubberBandEqualizerModel_equalDistribution() {
-        RubberBandEqualizerModel model = new RubberBandEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", 0),
-                    new EqualizerCategory("test1", 0),
-                    new EqualizerCategory("test1", 0),
-                    new EqualizerCategory("test1", 0),
-                    new EqualizerCategory("test1", 0)));
+        RubberBandEqualizerModel model = new RubberBandEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", 0),
+                new EqualizerCategory("test1", 0),
+                new EqualizerCategory("test1", 0),
+                new EqualizerCategory("test1", 0),
+                new EqualizerCategory("test1", 0)
+            )
+        );
 
         assertEquals(model.getValueAt(0), 20);
         assertEquals(model.getValueAt(1), 20);
@@ -61,10 +66,14 @@ public class RubberBandEqualizerModelNGTest {
         assertEquals(model.getValueAt(3), 20);
         assertEquals(model.getValueAt(4), 20);
 
-        model = new RubberBandEqualizerModel(Arrays.asList(
+        model =
+            new RubberBandEqualizerModel(
+                Arrays.asList(
                     new EqualizerCategory("test1", 0),
                     new EqualizerCategory("test1", 0),
-                    new EqualizerCategory("test1", 0)));
+                    new EqualizerCategory("test1", 0)
+                )
+            );
 
         assertEquals(model.getValueAt(0), 33);
         assertEquals(model.getValueAt(1), 33);
@@ -76,10 +85,13 @@ public class RubberBandEqualizerModelNGTest {
      */
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSetValueAt_notWithinRange() {
-        final RubberBandEqualizerModel instance = new RubberBandEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", 33),
-                    new EqualizerCategory("test2", 33),
-                    new EqualizerCategory("test3", 34)));
+        final RubberBandEqualizerModel instance = new RubberBandEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", 33),
+                new EqualizerCategory("test2", 33),
+                new EqualizerCategory("test3", 34)
+            )
+        );
         instance.setValueAt(0, 101);
     }
 
@@ -88,10 +100,13 @@ public class RubberBandEqualizerModelNGTest {
      */
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
     public void testSetValueAt_indexTooLow() {
-        final RubberBandEqualizerModel instance = new RubberBandEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", 33),
-                    new EqualizerCategory("test2", 33),
-                    new EqualizerCategory("test3", 34)));
+        final RubberBandEqualizerModel instance = new RubberBandEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", 33),
+                new EqualizerCategory("test2", 33),
+                new EqualizerCategory("test3", 34)
+            )
+        );
         instance.setValueAt(-1, 8);
     }
 
@@ -100,10 +115,13 @@ public class RubberBandEqualizerModelNGTest {
      */
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
     public void testSetValueAt_indexTooHigh() {
-        final RubberBandEqualizerModel instance = new RubberBandEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", 33),
-                    new EqualizerCategory("test2", 33),
-                    new EqualizerCategory("test3", 34)));
+        final RubberBandEqualizerModel instance = new RubberBandEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", 33),
+                new EqualizerCategory("test2", 33),
+                new EqualizerCategory("test3", 34)
+            )
+        );
         instance.setValueAt(3, 8);
     }
 
@@ -112,10 +130,13 @@ public class RubberBandEqualizerModelNGTest {
      */
     @Test
     public void testSetValueAt() {
-        RubberBandEqualizerModel instance = new RubberBandEqualizerModel(Arrays.asList(
-                    new EqualizerCategory("test1", 33),
-                    new EqualizerCategory("test2", 33),
-                    new EqualizerCategory("test3", 34)));
+        RubberBandEqualizerModel instance = new RubberBandEqualizerModel(
+            Arrays.asList(
+                new EqualizerCategory("test1", 33),
+                new EqualizerCategory("test2", 33),
+                new EqualizerCategory("test3", 34)
+            )
+        );
         instance.setValueAt(2, 50);
         assertEquals(instance.getValueAt(0), 25);
         assertEquals(instance.getValueAt(1), 25);
@@ -155,8 +176,10 @@ public class RubberBandEqualizerModelNGTest {
         assertEquals(instance.getValueAt(0), 0);
         assertEquals(instance.getValueAt(1), 0);
         assertEquals(instance.getValueAt(2), 100);
-        
-        instance = new RubberBandEqualizerModel(Arrays.asList(
+
+        instance =
+            new RubberBandEqualizerModel(
+                Arrays.asList(
                     new EqualizerCategory("test1", 10),
                     new EqualizerCategory("test2", 10),
                     new EqualizerCategory("test3", 10),
@@ -166,7 +189,9 @@ public class RubberBandEqualizerModelNGTest {
                     new EqualizerCategory("test7", 10),
                     new EqualizerCategory("test8", 10),
                     new EqualizerCategory("test9", 10),
-                    new EqualizerCategory("test10", 10)));
+                    new EqualizerCategory("test10", 10)
+                )
+            );
         instance.setValueAt(0, 50);
         assertEquals(instance.getValueAt(0), 50);
         assertEquals(instance.getValueAt(1), 5);

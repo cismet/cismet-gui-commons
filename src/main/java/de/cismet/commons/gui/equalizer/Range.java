@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.equalizer;
 
 import java.io.Serializable;
@@ -80,7 +80,7 @@ public final class Range implements Serializable {
             return false;
         }
 
-        final Range other = (Range)obj;
+        final Range other = (Range) obj;
 
         return (this.min == other.min) && (this.max == other.max);
     }

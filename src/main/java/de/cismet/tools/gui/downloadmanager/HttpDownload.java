@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  *  Copyright (C) 2011 jweintraut
  *
@@ -23,6 +23,13 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
+import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
+import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
+import de.cismet.security.WebAccessManager;
+import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
+import de.cismet.security.exceptions.MissingArgumentException;
+import de.cismet.security.exceptions.NoHandlerForURLException;
+import de.cismet.security.exceptions.RequestFailedException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,24 +39,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
-
 import java.util.HashMap;
-
 import javax.swing.JPanel;
-
-import de.cismet.commons.security.AccessHandler.ACCESS_METHODS;
-import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
-
-import de.cismet.security.WebAccessManager;
-
-import de.cismet.security.exceptions.AccessMethodIsNotSupportedException;
-import de.cismet.security.exceptions.MissingArgumentException;
-import de.cismet.security.exceptions.NoHandlerForURLException;
-import de.cismet.security.exceptions.RequestFailedException;
 
 /**
  * The objects of this class represent a HTTP download. The objects of this class are observed by the download manager.
@@ -77,8 +71,7 @@ public class HttpDownload extends AbstractCancellableDownload {
      * StandardConstructor defined for usage by subclasse like the ButlerDownload. If used it must be garuanteed that
      * the fields are set correctly before the Download starts running.
      */
-    public HttpDownload() {
-    }
+    public HttpDownload() {}
 
     /**
      * Constructor for Download.
@@ -91,12 +84,14 @@ public class HttpDownload extends AbstractCancellableDownload {
      * @param  filename   A String containing the filename.
      * @param  extension  A String containing the file extension.
      */
-    public HttpDownload(final URL url,
-            final String request,
-            final String directory,
-            final String title,
-            final String filename,
-            final String extension) {
+    public HttpDownload(
+        final URL url,
+        final String request,
+        final String directory,
+        final String title,
+        final String filename,
+        final String extension
+    ) {
         this(url, request, new HashMap<String, String>(), directory, title, filename, extension);
     }
 
@@ -112,13 +107,15 @@ public class HttpDownload extends AbstractCancellableDownload {
      * @param  filename   A String containing the filename.
      * @param  extension  A String containing the file extension.
      */
-    public HttpDownload(final URL url,
-            final String request,
-            final HashMap<String, String> headers,
-            final String directory,
-            final String title,
-            String filename,
-            final String extension) {
+    public HttpDownload(
+        final URL url,
+        final String request,
+        final HashMap<String, String> headers,
+        final String directory,
+        final String title,
+        String filename,
+        final String extension
+    ) {
         this.url = url;
         this.request = request;
         this.directory = directory;
@@ -127,12 +124,20 @@ public class HttpDownload extends AbstractCancellableDownload {
 
         status = State.WAITING;
         if (url != null) {
-            LOG.info("inited HttpDownload on: " + url.toString()
-                        + "<br>and request=" + request
-                        + "<br>and title=" + title
-                        + "<br>and filename=" + filename
-                        + "<br>and extension=" + extension
-                        + "<br>with these headers:" + headers);
+            LOG.info(
+                "inited HttpDownload on: " +
+                url.toString() +
+                "<br>and request=" +
+                request +
+                "<br>and title=" +
+                title +
+                "<br>and filename=" +
+                filename +
+                "<br>and extension=" +
+                extension +
+                "<br>with these headers:" +
+                headers
+            );
         }
 
         try {
@@ -193,12 +198,8 @@ public class HttpDownload extends AbstractCancellableDownload {
      * @throws  NoHandlerForURLException             DOCUMENT ME!
      * @throws  Exception                            DOCUMENT ME!
      */
-    protected InputStream getUrlInputStreamWithWebAcessManager(final URL url) throws URISyntaxException,
-        FileNotFoundException,
-        AccessMethodIsNotSupportedException,
-        RequestFailedException,
-        NoHandlerForURLException,
-        Exception {
+    protected InputStream getUrlInputStreamWithWebAcessManager(final URL url)
+        throws URISyntaxException, FileNotFoundException, AccessMethodIsNotSupportedException, RequestFailedException, NoHandlerForURLException, Exception {
         InputStream resp = null;
         if ("file".equals(url.getProtocol())) {
             resp = new FileInputStream(new File(url.toURI()));
@@ -209,12 +210,10 @@ public class HttpDownload extends AbstractCancellableDownload {
             if ((request == null) || (request.trim().length() <= 0)) {
                 resp = WebAccessManager.getInstance().doRequest(url);
             } else {
-                resp = WebAccessManager.getInstance()
-                            .doRequest(
-                                    url,
-                                    new StringReader(request),
-                                    ACCESS_METHODS.POST_REQUEST,
-                                    headers);
+                resp =
+                    WebAccessManager
+                        .getInstance()
+                        .doRequest(url, new StringReader(request), ACCESS_METHODS.POST_REQUEST, headers);
             }
         }
         return resp;
@@ -286,7 +285,7 @@ public class HttpDownload extends AbstractCancellableDownload {
     @Override
     public JPanel getExceptionPanel(final Exception exception) {
         if (exception instanceof BadHttpStatusCodeException) {
-            return new BadHttpStatusCodeExceptionPanel((BadHttpStatusCodeException)exception);
+            return new BadHttpStatusCodeExceptionPanel((BadHttpStatusCodeException) exception);
         }
 
         return super.getExceptionPanel(exception);
@@ -298,7 +297,7 @@ public class HttpDownload extends AbstractCancellableDownload {
             return false;
         }
 
-        final HttpDownload other = (HttpDownload)obj;
+        final HttpDownload other = (HttpDownload) obj;
 
         boolean result = true;
 
@@ -308,8 +307,9 @@ public class HttpDownload extends AbstractCancellableDownload {
         if ((this.request == null) ? (other.request != null) : (!this.request.equals(other.request))) {
             result &= false;
         }
-        if ((this.fileToSaveTo == null) ? (other.fileToSaveTo != null)
-                                        : (!this.fileToSaveTo.equals(other.fileToSaveTo))) {
+        if (
+            (this.fileToSaveTo == null) ? (other.fileToSaveTo != null) : (!this.fileToSaveTo.equals(other.fileToSaveTo))
+        ) {
             result &= false;
         }
 

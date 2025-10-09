@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,7 +24,6 @@ package de.cismet.tools.gui;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
-
 import javax.swing.*;
 
 /**
@@ -47,7 +46,8 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
-            EventDispatchThreadHangMonitor.class);
+        EventDispatchThreadHangMonitor.class
+    );
 
     private static JButton test;
 
@@ -122,10 +122,10 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
                 if (repaint && st.getClassName().startsWith("javax.swing.")) { // NOI18N
                     fromSwing = true;
                 }
-                if (repaint && "imageUpdate".equals(st.getMethodName())) {     // NOI18N
+                if (repaint && "imageUpdate".equals(st.getMethodName())) { // NOI18N
                     imageUpdate = true;
                 }
-                if ("repaint".equals(st.getMethodName())) {                    // NOI18N
+                if ("repaint".equals(st.getMethodName())) { // NOI18N
                     repaint = true;
                     fromSwing = false;
                 }
@@ -155,20 +155,19 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
      * @param  stackTrace  DOCUMENT ME!
      */
     protected void violationFound(final JComponent c, final StackTraceElement[] stackTrace) {
-//        System.out.println();
-//        System.out.println("EDT violation detected");
-//        System.out.println(c);
-//        for (StackTraceElement st : stackTrace) {
-//            System.out.println("\tat " + st);
-//        }
+        //        System.out.println();
+        //        System.out.println("EDT violation detected");
+        //        System.out.println(c);
+        //        for (StackTraceElement st : stackTrace) {
+        //            System.out.println("\tat " + st);
+        //        }
 
         final Throwable customThrowable = new Throwable() {
-
-                @Override
-                public StackTraceElement[] getStackTrace() {
-                    return stackTrace;
-                }
-            };
+            @Override
+            public StackTraceElement[] getStackTrace() {
+                return stackTrace;
+            }
+        };
 
         log.fatal("EDT violation detected for Component:" + c, customThrowable); // NOI18N
     }
@@ -184,15 +183,16 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
         // set CheckThreadViolationRepaintManager
         RepaintManager.setCurrentManager(new CheckThreadViolationRepaintManager());
         // Valid code
-        SwingUtilities.invokeAndWait(new Runnable() {
-
+        SwingUtilities.invokeAndWait(
+            new Runnable() {
                 @Override
                 public void run() {
                     test();
                 }
-            });
+            }
+        );
         if (log.isDebugEnabled()) {
-            log.debug("Valid code passed...");        // NOI18N
+            log.debug("Valid code passed..."); // NOI18N
         }
         repaintTest();
         if (log.isDebugEnabled()) {
@@ -209,11 +209,12 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
     static void test() {
         final JFrame frame = new JFrame("Am I on EDT?"); // NOI18N
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new JButton("JButton"));               // NOI18N
+        frame.add(new JButton("JButton")); // NOI18N
         frame.pack();
         frame.setVisible(true);
         frame.dispose();
     }
+
     /**
      * this test must pass.
      */
@@ -228,19 +229,21 @@ public class CheckThreadViolationRepaintManager extends RepaintManager {
         frame.setSize(300, 200);
         frame.setVisible(true);
     }
+
     /**
      * DOCUMENT ME!
      */
     static void repaintTest() {
         try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-
+            SwingUtilities.invokeAndWait(
+                new Runnable() {
                     @Override
                     public void run() {
                         test = new JButton();
                         test.setSize(100, 100);
                     }
-                });
+                }
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }

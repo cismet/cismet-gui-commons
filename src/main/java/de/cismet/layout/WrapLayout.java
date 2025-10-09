@@ -1,14 +1,13 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.layout;
 
 import java.awt.*;
-
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
@@ -173,6 +172,7 @@ public class WrapLayout extends FlowLayout {
             return dim;
         }
     }
+
     /**
      * A new row has been completed. Use the dimensions of this row to update the preferred size for the container.
      *

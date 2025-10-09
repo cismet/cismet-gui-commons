@@ -1,19 +1,17 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.treetable;
+
 import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.event.*;
-
 import java.io.Serializable;
-
 import java.util.EventObject;
-
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -34,21 +32,24 @@ public class AbstractCellEditor implements CellEditor {
     public Object getCellEditorValue() {
         return null;
     }
+
     @Override
     public boolean isCellEditable(final EventObject e) {
         return true;
     }
+
     @Override
     public boolean shouldSelectCell(final EventObject anEvent) {
         return false;
     }
+
     @Override
     public boolean stopCellEditing() {
         return true;
     }
+
     @Override
-    public void cancelCellEditing() {
-    }
+    public void cancelCellEditing() {}
 
     @Override
     public void addCellEditorListener(final CellEditorListener l) {
@@ -59,6 +60,7 @@ public class AbstractCellEditor implements CellEditor {
     public void removeCellEditorListener(final CellEditorListener l) {
         listenerList.remove(CellEditorListener.class, l);
     }
+
     /**
      * Notify all listeners that have registered interest for notification on this event type.
      *
@@ -71,10 +73,11 @@ public class AbstractCellEditor implements CellEditor {
         // those that are interested in this event
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == CellEditorListener.class) {
-                ((CellEditorListener)listeners[i + 1]).editingStopped(new ChangeEvent(this));
+                ((CellEditorListener) listeners[i + 1]).editingStopped(new ChangeEvent(this));
             }
         }
     }
+
     /**
      * Notify all listeners that have registered interest for notification on this event type.
      *
@@ -87,7 +90,7 @@ public class AbstractCellEditor implements CellEditor {
         // those that are interested in this event
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == CellEditorListener.class) {
-                ((CellEditorListener)listeners[i + 1]).editingCanceled(new ChangeEvent(this));
+                ((CellEditorListener) listeners[i + 1]).editingCanceled(new ChangeEvent(this));
             }
         }
     }

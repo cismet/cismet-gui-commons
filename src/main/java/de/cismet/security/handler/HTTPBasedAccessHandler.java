@@ -1,16 +1,24 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.security.handler;
 
+import de.cismet.commons.security.handler.AbstractAccessHandler;
+import de.cismet.commons.security.handler.ProxyCabaple;
+import de.cismet.netutil.Proxy;
+import de.cismet.security.GUICredentialsProvider;
+import de.cismet.security.WebAccessManager;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -18,19 +26,6 @@ import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.auth.CredentialsProvider;
 import org.apache.log4j.Logger;
-
-import java.net.URL;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import de.cismet.commons.security.handler.AbstractAccessHandler;
-import de.cismet.commons.security.handler.ProxyCabaple;
-
-import de.cismet.netutil.Proxy;
-
-import de.cismet.security.GUICredentialsProvider;
-import de.cismet.security.WebAccessManager;
 
 /**
  * DOCUMENT ME!
@@ -81,17 +76,26 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler imple
         }
 
         final HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
-        if (((proxy != null) && (proxy.getHost() != null) && (proxy.getPort() > 0)
-                        && proxy.isValid() && proxy.isEnabledFor((url != null) ? url.getHost() : null))) {
+        if (
+            (
+                (proxy != null) &&
+                (proxy.getHost() != null) &&
+                (proxy.getPort() > 0) &&
+                proxy.isValid() &&
+                proxy.isEnabledFor((url != null) ? url.getHost() : null)
+            )
+        ) {
             client.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
 
             // proxy needs authentication
             if ((proxy.getUsername() != null) && (proxy.getPassword() != null)) {
                 final AuthScope authscope = new AuthScope(proxy.getHost(), proxy.getPort());
-                final Credentials credentials = new NTCredentials(proxy.getUsername(),
-                        proxy.getPassword(),
-                        "", // NOI18N
-                        (proxy.getDomain() == null) ? "" : proxy.getDomain());
+                final Credentials credentials = new NTCredentials(
+                    proxy.getUsername(),
+                    proxy.getPassword(),
+                    "", // NOI18N
+                    (proxy.getDomain() == null) ? "" : proxy.getDomain()
+                );
                 client.getState().setProxyCredentials(authscope, credentials);
             }
         }
@@ -196,7 +200,7 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler imple
             httpCredentialsForURLS.put(url.toString(), cp);
         } else {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Credential Provider was already available: " + url.toString());          // NOI18N
+                LOG.debug("Credential Provider was already available: " + url.toString()); // NOI18N
             }
         }
 

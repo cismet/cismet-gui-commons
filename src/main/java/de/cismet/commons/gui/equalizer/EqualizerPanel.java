@@ -1,13 +1,11 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.equalizer;
-
-import org.openide.util.WeakListeners;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -28,13 +26,10 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D.Double;
 import java.awt.geom.Rectangle2D;
-
 import java.lang.reflect.Field;
-
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.TreeMap;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -44,6 +39,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 import javax.swing.plaf.SliderUI;
 import javax.swing.plaf.basic.BasicSliderUI;
+import org.openide.util.WeakListeners;
 
 /**
  * This component is a view to an {@link EqualizerModel}. It displays the different categories of the model using
@@ -67,10 +63,13 @@ public class EqualizerPanel extends javax.swing.JPanel {
 
     static {
         // cannot use single integer because java only supports 31-bit integers (32nd bit is for sign indication)
-        DEFAULT_PAINT = new Color(Integer.decode("0x17"), // NOI18N
+        DEFAULT_PAINT =
+            new Color(
+                Integer.decode("0x17"), // NOI18N
                 Integer.decode("0xA8"), // NOI18N
                 Integer.decode("0x14"), // NOI18N
-                Integer.decode("0xDD")); // NOI18N
+                Integer.decode("0xDD")
+            ); // NOI18N
         DEFAULT_STROKE = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10, new float[] { 7, 3 }, 0);
 
         PROP_MODEL_INDEX = "__prop_model_index__"; // NOI18N
@@ -94,6 +93,7 @@ public class EqualizerPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel pnlEqualizer;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -120,7 +120,6 @@ public class EqualizerPanel extends javax.swing.JPanel {
     public EqualizerPanel() {
         this(
             new EqualizerModel() {
-
                 private final EventListenerList list = new EventListenerList();
 
                 private final int[] value = new int[1];
@@ -153,8 +152,9 @@ public class EqualizerPanel extends javax.swing.JPanel {
                     final int oldValue = this.value[index];
                     this.value[index] = value;
                     for (final Object o : list.getListeners(EqualizerModelListener.class)) {
-                        ((EqualizerModelListener)o).equalizerChanged(
-                            new EqualizerModelEvent(this, index, oldValue, value));
+                        ((EqualizerModelListener) o).equalizerChanged(
+                                new EqualizerModelEvent(this, index, oldValue, value)
+                            );
                     }
                 }
 
@@ -174,7 +174,8 @@ public class EqualizerPanel extends javax.swing.JPanel {
             null,
             true,
             false,
-            true);
+            true
+        );
     }
 
     /**
@@ -211,14 +212,16 @@ public class EqualizerPanel extends javax.swing.JPanel {
      * @param  updateModelWhileAdjusting   if updates are sent to the model while the user is adjusting the value
      * @param  updateSplineWhileAdjusting  if the spline is updated while the user is adjusting the value
      */
-    public EqualizerPanel(final EqualizerModel model,
-            final Paint splinePaint,
-            final Stroke splineStroke,
-            final boolean splinePainted,
-            final String rangeAxisName,
-            final boolean rangeAxisPainted,
-            final boolean updateModelWhileAdjusting,
-            final boolean updateSplineWhileAdjusting) {
+    public EqualizerPanel(
+        final EqualizerModel model,
+        final Paint splinePaint,
+        final Stroke splineStroke,
+        final boolean splinePainted,
+        final String rangeAxisName,
+        final boolean rangeAxisPainted,
+        final boolean updateModelWhileAdjusting,
+        final boolean updateSplineWhileAdjusting
+    ) {
         this.equalizerModelL = new EqualizerModelL();
         this.sliderChangeL = new SliderChangeL();
         this.updateInProgress = false;
@@ -272,10 +275,9 @@ public class EqualizerPanel extends javax.swing.JPanel {
         if (this.model != model) {
             this.model = model;
 
-            this.model.addEqualizerModelListener(WeakListeners.create(
-                    EqualizerModelListener.class,
-                    equalizerModelL,
-                    this.model));
+            this.model.addEqualizerModelListener(
+                    WeakListeners.create(EqualizerModelListener.class, equalizerModelL, this.model)
+                );
 
             recreateComponents();
         }
@@ -444,13 +446,14 @@ public class EqualizerPanel extends javax.swing.JPanel {
         validate();
         // strangely the spline is not correctly painted after these steps and calling repaint directly does not help
         // only if the repaint is invoked later than the commands above it renders correctly
-        EventQueue.invokeLater(new Runnable() {
-
+        EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     repaint();
                 }
-            });
+            }
+        );
     }
 
     /**
@@ -465,29 +468,31 @@ public class EqualizerPanel extends javax.swing.JPanel {
         final JPanel rangePanel = new RangePanel();
 
         final GridBagConstraints rangeConstraints = new GridBagConstraints(
-                0,
-                0,
-                1,
-                1,
-                0,
-                1,
-                GridBagConstraints.SOUTH,
-                GridBagConstraints.VERTICAL,
-                new Insets(5, 5, 5, 5),
-                0,
-                0);
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            GridBagConstraints.SOUTH,
+            GridBagConstraints.VERTICAL,
+            new Insets(5, 5, 5, 5),
+            0,
+            0
+        );
         final GridBagConstraints labelConstraints = new GridBagConstraints(
-                0,
-                1,
-                1,
-                1,
-                0,
-                0,
-                GridBagConstraints.NORTH,
-                GridBagConstraints.HORIZONTAL,
-                new Insets(5, 5, 5, 5),
-                0,
-                0);
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            GridBagConstraints.NORTH,
+            GridBagConstraints.HORIZONTAL,
+            new Insets(5, 5, 5, 5),
+            0,
+            0
+        );
         panel.add(rangePanel, rangeConstraints);
         panel.add(lblRangeAxis, labelConstraints);
 
@@ -498,37 +503,40 @@ public class EqualizerPanel extends javax.swing.JPanel {
      * DOCUMENT ME!
      */
     private void createComponents() {
-        sliderMap = new TreeMap<Integer, JSlider>(new Comparator<Integer>() {
-
+        sliderMap =
+            new TreeMap<Integer, JSlider>(
+                new Comparator<Integer>() {
                     @Override
                     public int compare(final Integer o1, final Integer o2) {
                         return o1.compareTo(o2);
                     }
-                });
+                }
+            );
         pnlEqualizer.removeAll();
 
         final GridBagConstraints baseConstraints = new GridBagConstraints(
-                0,
-                0,
-                1,
-                1,
-                0,
-                1,
-                GridBagConstraints.SOUTH,
-                GridBagConstraints.VERTICAL,
-                new Insets(5, 5, 5, 5),
-                0,
-                0);
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            GridBagConstraints.SOUTH,
+            GridBagConstraints.VERTICAL,
+            new Insets(5, 5, 5, 5),
+            0,
+            0
+        );
 
         if (rangeAxisPainted) {
             final JPanel scaleComp = createRangeComponent();
-            final GridBagConstraints constraints = (GridBagConstraints)baseConstraints.clone();
+            final GridBagConstraints constraints = (GridBagConstraints) baseConstraints.clone();
             pnlEqualizer.add(scaleComp, constraints);
         }
 
         for (int i = 0; i < model.getEqualizerCategoryCount(); ++i) {
             final JPanel sliderComp = createSliderComponent(i);
-            final GridBagConstraints constraints = (GridBagConstraints)baseConstraints.clone();
+            final GridBagConstraints constraints = (GridBagConstraints) baseConstraints.clone();
             // we start to add it at index one in case of scale is available
             constraints.gridx = i + 1;
             pnlEqualizer.add(sliderComp, constraints);
@@ -561,29 +569,31 @@ public class EqualizerPanel extends javax.swing.JPanel {
         sliderMap.put(index, slider);
 
         final GridBagConstraints sliderConstraints = new GridBagConstraints(
-                0,
-                0,
-                1,
-                1,
-                0,
-                1,
-                GridBagConstraints.SOUTH,
-                GridBagConstraints.VERTICAL,
-                new Insets(5, 5, 5, 5),
-                0,
-                0);
+            0,
+            0,
+            1,
+            1,
+            0,
+            1,
+            GridBagConstraints.SOUTH,
+            GridBagConstraints.VERTICAL,
+            new Insets(5, 5, 5, 5),
+            0,
+            0
+        );
         final GridBagConstraints labelConstraints = new GridBagConstraints(
-                0,
-                1,
-                1,
-                1,
-                0,
-                0,
-                GridBagConstraints.NORTH,
-                GridBagConstraints.HORIZONTAL,
-                new Insets(5, 5, 5, 5),
-                0,
-                0);
+            0,
+            1,
+            1,
+            1,
+            0,
+            0,
+            GridBagConstraints.NORTH,
+            GridBagConstraints.HORIZONTAL,
+            new Insets(5, 5, 5, 5),
+            0,
+            0
+        );
         panel.add(slider, sliderConstraints);
         panel.add(label, labelConstraints);
 
@@ -666,14 +676,14 @@ public class EqualizerPanel extends javax.swing.JPanel {
                 // hack to get position of the knob
                 final SliderUI sui = s.getUI();
                 if (!useSliderKnobPositionFallback && (sui instanceof BasicSliderUI)) {
-                    final BasicSliderUI bui = (BasicSliderUI)sui;
+                    final BasicSliderUI bui = (BasicSliderUI) sui;
                     Field field = null;
                     Boolean accessible = null;
                     try {
                         field = BasicSliderUI.class.getDeclaredField("thumbRect"); // NOI18N
                         accessible = field.isAccessible();
                         field.setAccessible(true);
-                        final Rectangle r = (Rectangle)field.get(bui);
+                        final Rectangle r = (Rectangle) field.get(bui);
                         final Point loc = r.getLocation();
                         handle.x = loc.x + (r.width / 2);
                         handle.y = loc.y + (r.height / 2);
@@ -698,10 +708,10 @@ public class EqualizerPanel extends javax.swing.JPanel {
                     handle.x = sliderSize.width / 2;
 
                     // slider percentage from upper bound (reversed)
-                    final double sliderPercentage = 1 - (val / (double)(max - min));
+                    final double sliderPercentage = 1 - (val / (double) (max - min));
                     // assume offset because of shape of knob and internal insets
                     final double offset = 13 * (1 - (2 * sliderPercentage));
-                    handle.y = (int)((sliderSize.height * sliderPercentage) + offset);
+                    handle.y = (int) ((sliderSize.height * sliderPercentage) + offset);
                 }
 
                 final Point rel = SwingUtilities.convertPoint(s, handle, this);
@@ -717,7 +727,7 @@ public class EqualizerPanel extends javax.swing.JPanel {
             final Double[] p2 = new Double[p.length - 1];
             calculateControlPoints(p, p1, p2);
 
-            final Graphics2D g2 = (Graphics2D)g.create();
+            final Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
             final GeneralPath path = new GeneralPath();
@@ -751,16 +761,17 @@ public class EqualizerPanel extends javax.swing.JPanel {
             if (p == null) {
                 throw new IllegalArgumentException("points must not be null"); // NOI18N
             } else if (p1 == null) {
-                throw new IllegalArgumentException("p1 must not be null");     // NOI18N
+                throw new IllegalArgumentException("p1 must not be null"); // NOI18N
             } else if (p2 == null) {
-                throw new IllegalArgumentException("p2 must not be null");     // NOI18N
+                throw new IllegalArgumentException("p2 must not be null"); // NOI18N
             }
 
             final int n = p.length - 1;
 
             if (n == 0) {
                 throw new IllegalStateException(
-                    "at least two points must be available to calculate control points for");             // NOI18N
+                    "at least two points must be available to calculate control points for"
+                ); // NOI18N
             } else if (p1.length != n) {
                 throw new IllegalStateException("p1 must have length of " + n + ", but is " + p1.length); // NOI18N
             } else if (p2.length != n) {
@@ -870,14 +881,18 @@ public class EqualizerPanel extends javax.swing.JPanel {
             final Rectangle2D maxBounds = font.getStringBounds(String.valueOf(model.getRange().getMax()), frc);
             final Rectangle2D minBounds = font.getStringBounds(String.valueOf(model.getRange().getMin()), frc);
 
-            final int minX1 = INSETS_WIDTH + (int)maxBounds.getWidth() + TEXT_GAP_WIDTH + MAJOR_TICK_WIDTH
-                        + INSETS_WIDTH;
-            final int minX2 = INSETS_WIDTH + (int)minBounds.getWidth() + TEXT_GAP_WIDTH + MAJOR_TICK_WIDTH
-                        + INSETS_WIDTH;
+            final int minX1 =
+                INSETS_WIDTH + (int) maxBounds.getWidth() + TEXT_GAP_WIDTH + MAJOR_TICK_WIDTH + INSETS_WIDTH;
+            final int minX2 =
+                INSETS_WIDTH + (int) minBounds.getWidth() + TEXT_GAP_WIDTH + MAJOR_TICK_WIDTH + INSETS_WIDTH;
             final int minX = Math.max(minX1, minX2);
 
-            final int minY = INSETS_WIDTH + (int)maxBounds.getHeight() + TEXT_GAP_WIDTH + (int)minBounds.getHeight()
-                        + INSETS_WIDTH;
+            final int minY =
+                INSETS_WIDTH +
+                (int) maxBounds.getHeight() +
+                TEXT_GAP_WIDTH +
+                (int) minBounds.getHeight() +
+                INSETS_WIDTH;
 
             this.setMinimumSize(new Dimension(minX, minY));
             this.setPreferredSize(new Dimension(minX, minY));
@@ -896,16 +911,16 @@ public class EqualizerPanel extends javax.swing.JPanel {
             int upperY = 0;
             int lowerY = 0;
             if (!useSliderTrackRectangleFallback && (sui instanceof BasicSliderUI)) {
-                final BasicSliderUI bui = (BasicSliderUI)sui;
+                final BasicSliderUI bui = (BasicSliderUI) sui;
                 Field field = null;
                 Boolean accessible = null;
                 try {
                     field = BasicSliderUI.class.getDeclaredField("trackRect"); // NOI18N
                     accessible = field.isAccessible();
                     field.setAccessible(true);
-                    final Rectangle r = (Rectangle)field.get(bui);
+                    final Rectangle r = (Rectangle) field.get(bui);
                     upperY = r.getLocation().y;
-                    lowerY = upperY + (int)r.getHeight();
+                    lowerY = upperY + (int) r.getHeight();
                 } catch (final Exception e) {
                     useSliderTrackRectangleFallback = true;
                 } finally {
@@ -937,7 +952,7 @@ public class EqualizerPanel extends javax.swing.JPanel {
             final int rangeMid = (rangeMax + rangeMin) / 2;
 
             // TODO: nicer rendering
-            final Graphics2D g2 = (Graphics2D)g.create();
+            final Graphics2D g2 = (Graphics2D) g.create();
             g2.setStroke(new BasicStroke(STROKE_WIDTH, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -967,9 +982,9 @@ public class EqualizerPanel extends javax.swing.JPanel {
         public void stateChanged(final ChangeEvent e) {
             if (!updateInProgress) {
                 pnlEqualizer.repaint();
-                final JSlider slider = (JSlider)e.getSource();
+                final JSlider slider = (JSlider) e.getSource();
                 if (updateModelWhileAdjusting || !slider.getValueIsAdjusting()) {
-                    final int index = (Integer)slider.getClientProperty(PROP_MODEL_INDEX);
+                    final int index = (Integer) slider.getClientProperty(PROP_MODEL_INDEX);
                     model.setValueAt(index, slider.getValue());
                 }
             }

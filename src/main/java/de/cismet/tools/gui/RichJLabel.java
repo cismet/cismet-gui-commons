@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * RichJLabel.java
  *
@@ -14,9 +14,9 @@
  * and open the template in the editor.
  */
 package de.cismet.tools.gui;
+
 import java.awt.*;
 import java.awt.font.*;
-
 import javax.swing.*;
 
 /**
@@ -95,8 +95,7 @@ public class RichJLabel extends JLabel {
 
     @Override
     public void paintComponent(final Graphics g) {
-        ((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-            RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         final char[] chars = getText().toCharArray();
 

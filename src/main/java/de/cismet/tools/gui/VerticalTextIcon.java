@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import java.awt.Color;
@@ -16,7 +16,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
-
 import javax.swing.Icon;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -51,6 +50,7 @@ public class VerticalTextIcon implements Icon, SwingConstants {
     public VerticalTextIcon(final String text, final boolean clockwize) {
         this(text, clockwize, Color.black);
     }
+
     /**
      * Creates a new VerticalTextIcon object.
      *
@@ -70,12 +70,11 @@ public class VerticalTextIcon implements Icon, SwingConstants {
 
     @Override
     public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
-        final Graphics2D g2 = (Graphics2D)g;
+        final Graphics2D g2 = (Graphics2D) g;
         final Font oldFont = g.getFont();
         final Color oldColor = g.getColor();
         final AffineTransform oldTransform = g2.getTransform();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setFont(font);
         g.setColor(color);
         if (clockwize) {

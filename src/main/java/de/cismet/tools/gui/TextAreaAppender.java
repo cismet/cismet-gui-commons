@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  *  Copyright (C) 2010 thorsten
  *
@@ -23,12 +23,11 @@
  */
 package de.cismet.tools.gui;
 
-import org.apache.log4j.WriterAppender;
-import org.apache.log4j.spi.LoggingEvent;
-
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
+import org.apache.log4j.WriterAppender;
+import org.apache.log4j.spi.LoggingEvent;
 
 /**
  * DOCUMENT ME!
@@ -46,12 +45,12 @@ public class TextAreaAppender extends WriterAppender {
     //~ Instance fields --------------------------------------------------------
 
     String prefix =
-        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
-                + "<html><head><title>Log4J Log Messages</title><style type=\"text/css\">"
-                + "<!--body, table {font-family: arial,sans-serif; font-size: x-small;}th {background: #336699; color: #FFFFFF; text-align: left;}-->"
-                + "</style></head><body bgcolor=\"#FFFFFF\" topmargin=\"6\" leftmargin=\"6\"><hr size=\"1\" noshade>"
-                + "Log session <br><br><table cellspacing=\"0\" cellpadding=\"4\" border=\"0\" bordercolor=\"#224466\" width=\"100%\">"
-                + "<tr><th>Time</th><th>Thread</th><th>Level</th><th>Category</th><th>Message</th></tr>";
+        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">" +
+        "<html><head><title>Log4J Log Messages</title><style type=\"text/css\">" +
+        "<!--body, table {font-family: arial,sans-serif; font-size: x-small;}th {background: #336699; color: #FFFFFF; text-align: left;}-->" +
+        "</style></head><body bgcolor=\"#FFFFFF\" topmargin=\"6\" leftmargin=\"6\"><hr size=\"1\" noshade>" +
+        "Log session <br><br><table cellspacing=\"0\" cellpadding=\"4\" border=\"0\" bordercolor=\"#224466\" width=\"100%\">" +
+        "<tr><th>Time</th><th>Thread</th><th>Level</th><th>Category</th><th>Message</th></tr>";
 
     //~ Methods ----------------------------------------------------------------
 
@@ -76,14 +75,15 @@ public class TextAreaAppender extends WriterAppender {
         final String message = this.layout.format(loggingEvent);
 
         // Append formatted message to textarea using the Swing Thread.
-        SwingUtilities.invokeLater(new Runnable() {
-
+        SwingUtilities.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     if (message.contains(regs.getText())) {
                         jTextArea.append(message);
                     }
                 }
-            });
+            }
+        );
     }
 }

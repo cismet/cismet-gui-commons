@@ -1,20 +1,15 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.startup;
 
 import com.jhlabs.image.BoxBlurFilter;
-
-import org.jdesktop.swingx.JXBusyLabel;
-import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.GlossPainter;
-import org.jdesktop.swingx.painter.ImagePainter;
-
+import de.cismet.tools.Static2DTools;
+import de.cismet.tools.gui.StaticSwingTools;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -27,23 +22,20 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-
 import java.net.URL;
-
 import javax.imageio.ImageIO;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-
-import de.cismet.tools.Static2DTools;
-
-import de.cismet.tools.gui.StaticSwingTools;
+import org.jdesktop.swingx.JXBusyLabel;
+import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.painter.CompoundPainter;
+import org.jdesktop.swingx.painter.GlossPainter;
+import org.jdesktop.swingx.painter.ImagePainter;
 
 /**
  * DOCUMENT ME!
@@ -56,7 +48,8 @@ public class StaticStartupTools {
     //~ Static fields/initializers ---------------------------------------------
 
     private static final transient org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(
-            StaticStartupTools.class);
+        StaticStartupTools.class
+    );
 
     //~ Methods ----------------------------------------------------------------
 
@@ -73,9 +66,10 @@ public class StaticStartupTools {
             if (!EventQueue.isDispatchThread()) {
                 log.fatal("not in EDT");
             }
-            final GraphicsConfiguration configuration = GraphicsEnvironment.getLocalGraphicsEnvironment()
-                        .getDefaultScreenDevice()
-                        .getDefaultConfiguration();
+            final GraphicsConfiguration configuration = GraphicsEnvironment
+                .getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice()
+                .getDefaultConfiguration();
 
             // Create a buffered image which is the right (translucent) format for the current graphics device, this
             // should ensure the fastest possible performance. Adding on some extra height to make room for the
@@ -91,15 +85,10 @@ public class StaticStartupTools {
                 final int width = frame.getWidth() - insets.right;
                 final int h = frame.getHeight() - insets.top - insets.bottom;
 
-                final Rectangle screenRect = new Rectangle(x,
-                        y,
-                        width,
-                        h);
+                final Rectangle screenRect = new Rectangle(x, y, width, h);
                 bi = new Robot().createScreenCapture(screenRect);
             } else {
-                bi = configuration.createCompatibleImage(frame.getWidth(),
-                        frame.getHeight(),
-                        Transparency.TRANSLUCENT);
+                bi = configuration.createCompatibleImage(frame.getWidth(), frame.getHeight(), Transparency.TRANSLUCENT);
 
                 final Graphics g = bi.getGraphics();
                 // ((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .4f));
@@ -148,12 +137,14 @@ public class StaticStartupTools {
             final String height = reader.readLine();
             reader.close();
             rectangle = new Rectangle();
-            rectangle.setBounds(Integer.parseInt(x),
+            rectangle.setBounds(
+                Integer.parseInt(x),
                 Integer.parseInt(y),
                 Integer.parseInt(width),
-                Integer.parseInt(height));
+                Integer.parseInt(height)
+            );
             final ImageIcon i = new ImageIcon(file + ".png");
-            final BufferedImage bi = (BufferedImage)(Static2DTools.removeUnusedBorder(i.getImage(), 0, 1));
+            final BufferedImage bi = (BufferedImage) (Static2DTools.removeUnusedBorder(i.getImage(), 0, 1));
             final JFrame fake = new JFrame(title);
 
             if (rectangle != null) {
@@ -179,7 +170,7 @@ public class StaticStartupTools {
      */
     public static JFrame showCustomGhostFrame(final URL file, final String title) throws Exception {
         final ImageIcon i = new ImageIcon(file);
-        final BufferedImage bi = (BufferedImage)(Static2DTools.removeUnusedBorder(i.getImage(), 0, 1));
+        final BufferedImage bi = (BufferedImage) (Static2DTools.removeUnusedBorder(i.getImage(), 0, 1));
         final JFrame fake = new JFrame(title);
 
         fake.setSize(bi.getWidth(), bi.getHeight());
@@ -199,8 +190,7 @@ public class StaticStartupTools {
      */
     private static JFrame showGhostFrameInternal(final JFrame frame, final BufferedImage bufferedImage) {
         final JXBusyLabel busy = new JXBusyLabel(new Dimension(100, 100));
-        final GlossPainter gp = new GlossPainter(new Color(255, 255, 255, 25),
-                GlossPainter.GlossPosition.TOP);
+        final GlossPainter gp = new GlossPainter(new Color(255, 255, 255, 25), GlossPainter.GlossPosition.TOP);
         final ImagePainter ip = new ImagePainter(bufferedImage);
         final JXPanel p = new JXPanel();
         p.setAlpha(.5f);

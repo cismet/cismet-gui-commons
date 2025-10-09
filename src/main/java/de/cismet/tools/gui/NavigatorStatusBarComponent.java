@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
 import java.awt.Component;
@@ -16,7 +16,6 @@ import java.awt.Component;
  * @version  $Revision$, $Date$
  */
 public interface NavigatorStatusBarComponent {
-
     //~ Enums ------------------------------------------------------------------
 
     /**
@@ -25,10 +24,10 @@ public interface NavigatorStatusBarComponent {
      * @version  $Revision$, $Date$
      */
     enum Side {
-
         //~ Enum constants -----------------------------------------------------
 
-        LEFT, RIGHT
+        LEFT,
+        RIGHT,
     }
 
     //~ Methods ----------------------------------------------------------------

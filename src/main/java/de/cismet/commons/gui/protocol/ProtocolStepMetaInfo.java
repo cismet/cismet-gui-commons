@@ -1,15 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.commons.gui.protocol;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Getter;
 
 /**
@@ -25,6 +24,7 @@ public class ProtocolStepMetaInfo {
 
     @JsonProperty(required = true)
     private final String key;
+
     @JsonProperty(required = true)
     private final String description;
 
@@ -37,8 +37,10 @@ public class ProtocolStepMetaInfo {
      * @param  description  DOCUMENT ME!
      */
     @JsonCreator
-    public ProtocolStepMetaInfo(@JsonProperty("key") final String key,
-            @JsonProperty("description") final String description) {
+    public ProtocolStepMetaInfo(
+        @JsonProperty("key") final String key,
+        @JsonProperty("description") final String description
+    ) {
         this.key = key;
         this.description = description;
     }

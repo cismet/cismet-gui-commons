@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * SingleDownloadPanel.java
  *
@@ -12,29 +12,21 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import org.apache.log4j.Logger;
-
-import org.openide.util.Cancellable;
-import org.openide.util.NbBundle;
-
+import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
+import de.cismet.tools.BrowserLauncher;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.SystemColor;
-
 import java.net.URL;
-
 import java.text.DateFormat;
-
 import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.ImageIcon;
-
-import de.cismet.commons.security.exceptions.BadHttpStatusCodeException;
-
-import de.cismet.tools.BrowserLauncher;
+import org.apache.log4j.Logger;
+import org.openide.util.Cancellable;
+import org.openide.util.NbBundle;
 
 /**
  * A panel which represents a download. In order to visualize the different states of a Download object, each
@@ -67,6 +59,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
     private javax.swing.JProgressBar prbProgress;
     private javax.swing.JPopupMenu.Separator sepContextMenuOpenRemove;
     private javax.swing.JSeparator sepDownloadPanels;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -98,9 +91,11 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         if (this.small) {
             setMaximumSize(new java.awt.Dimension(2147483647, 44));
             setMinimumSize(new java.awt.Dimension(135, 44));
-            lblIcon.setIcon(new javax.swing.ImageIcon(
-                    getClass().getResource(
-                        "/de/cismet/tools/gui/downloadmanager/documenttypes/fallback_single_16.png")));
+            lblIcon.setIcon(
+                new javax.swing.ImageIcon(
+                    getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/fallback_single_16.png")
+                )
+            );
 
             remove(lblTitle);
             remove(lblTime);
@@ -182,55 +177,62 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         jxlOpenFile = new org.jdesktop.swingx.JXHyperlink();
         btnCancel = new javax.swing.JButton();
 
-        mniOpenFile.setText(org.openide.util.NbBundle.getMessage(
-                DownloadPanel.class,
-                "DownloadPanel.mniOpenFile.text")); // NOI18N
-        mniOpenFile.addActionListener(new java.awt.event.ActionListener() {
-
+        mniOpenFile.setText(
+            org.openide.util.NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.mniOpenFile.text")
+        ); // NOI18N
+        mniOpenFile.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     mniOpenFileActionPerformed(evt);
                 }
-            });
+            }
+        );
         popContextMenu.add(mniOpenFile);
 
-        mniOpenDirectory.setText(org.openide.util.NbBundle.getMessage(
-                DownloadPanel.class,
-                "DownloadPanel.mniOpenDirectory.text")); // NOI18N
-        mniOpenDirectory.addActionListener(new java.awt.event.ActionListener() {
-
+        mniOpenDirectory.setText(
+            org.openide.util.NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.mniOpenDirectory.text")
+        ); // NOI18N
+        mniOpenDirectory.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     mniOpenDirectoryActionPerformed(evt);
                 }
-            });
+            }
+        );
         popContextMenu.add(mniOpenDirectory);
         popContextMenu.add(sepContextMenuOpenRemove);
 
         mniRemove.setText(org.openide.util.NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.mniRemove.text")); // NOI18N
-        mniRemove.addActionListener(new java.awt.event.ActionListener() {
-
+        mniRemove.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     mniRemoveActionPerformed(evt);
                 }
-            });
+            }
+        );
         popContextMenu.add(mniRemove);
 
         setComponentPopupMenu(popContextMenu);
         setMaximumSize(new java.awt.Dimension(2147483647, 54));
         setMinimumSize(new java.awt.Dimension(135, 54));
-        addMouseListener(new java.awt.event.MouseAdapter() {
-
+        addMouseListener(
+            new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(final java.awt.event.MouseEvent evt) {
                     formMouseClicked(evt);
                 }
-            });
+            }
+        );
         setLayout(new java.awt.GridBagLayout());
 
-        lblIcon.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/fallback_single_32.png"))); // NOI18N
+        lblIcon.setIcon(
+            new javax.swing.ImageIcon(
+                getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/fallback_single_32.png")
+            )
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -271,9 +273,9 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         prbProgress.setMaximumSize(new java.awt.Dimension(32767, 15));
         prbProgress.setMinimumSize(new java.awt.Dimension(10, 15));
         prbProgress.setPreferredSize(new java.awt.Dimension(146, 15));
-        prbProgress.setString(org.openide.util.NbBundle.getMessage(
-                DownloadPanel.class,
-                "DownloadPanel.prbProgress.string")); // NOI18N
+        prbProgress.setString(
+            org.openide.util.NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.prbProgress.string")
+        ); // NOI18N
         prbProgress.setStringPainted(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -294,13 +296,14 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         add(lblTime, gridBagConstraints);
 
-        jxlOpenFile.addActionListener(new java.awt.event.ActionListener() {
-
+        jxlOpenFile.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     jxlOpenFileActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -311,28 +314,34 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         add(jxlOpenFile, gridBagConstraints);
 
         if (download instanceof Cancellable) {
-            btnCancel.setIcon(new javax.swing.ImageIcon(
-                    getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/cross-circle.png_16x16.png"))); // NOI18N
-            btnCancel.setText(org.openide.util.NbBundle.getMessage(
-                    DownloadPanel.class,
-                    "DownloadPanel.btnCancel.text"));                                                                // NOI18N
-            btnCancel.setToolTipText(org.openide.util.NbBundle.getMessage(
-                    DownloadPanel.class,
-                    "DownloadPanel.btnCancel.toolTipText"));                                                         // NOI18N
+            btnCancel.setIcon(
+                new javax.swing.ImageIcon(
+                    getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/cross-circle.png_16x16.png")
+                )
+            ); // NOI18N
+            btnCancel.setText(
+                org.openide.util.NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.btnCancel.text")
+            ); // NOI18N
+            btnCancel.setToolTipText(
+                org.openide.util.NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.btnCancel.toolTipText")
+            ); // NOI18N
             btnCancel.setBorderPainted(false);
             btnCancel.setContentAreaFilled(false);
             btnCancel.setFocusPainted(false);
-            btnCancel.setRolloverIcon(new javax.swing.ImageIcon(
-                    getClass().getResource(
-                        "/de/cismet/tools/gui/downloadmanager/res/cross-circle-frame.png_16x16.png")));              // NOI18N
+            btnCancel.setRolloverIcon(
+                new javax.swing.ImageIcon(
+                    getClass().getResource("/de/cismet/tools/gui/downloadmanager/res/cross-circle-frame.png_16x16.png")
+                )
+            ); // NOI18N
         }
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-
+        btnCancel.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     btnCancelActionPerformed(evt);
                 }
-            });
+            }
+        );
         if (download instanceof Cancellable) {
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 3;
@@ -355,7 +364,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
                 BrowserLauncher.openURLorFile(download.getFileToSaveTo().getParentFile().getAbsolutePath());
             }
         }
-    }                                                                    //GEN-LAST:event_formMouseClicked
+    } //GEN-LAST:event_formMouseClicked
 
     /**
      * An action listener.
@@ -364,7 +373,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
      */
     private void jxlOpenFileActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_jxlOpenFileActionPerformed
         BrowserLauncher.openURLorFile(download.getFileToSaveTo().getAbsolutePath());
-    }                                                                               //GEN-LAST:event_jxlOpenFileActionPerformed
+    } //GEN-LAST:event_jxlOpenFileActionPerformed
 
     /**
      * An action listener.
@@ -373,7 +382,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
      */
     private void mniOpenFileActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniOpenFileActionPerformed
         BrowserLauncher.openURLorFile(download.getFileToSaveTo().getAbsolutePath());
-    }                                                                               //GEN-LAST:event_mniOpenFileActionPerformed
+    } //GEN-LAST:event_mniOpenFileActionPerformed
 
     /**
      * An action listener.
@@ -382,7 +391,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
      */
     private void mniOpenDirectoryActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniOpenDirectoryActionPerformed
         BrowserLauncher.openURLorFile(download.getFileToSaveTo().getParentFile().getAbsolutePath());
-    }                                                                                    //GEN-LAST:event_mniOpenDirectoryActionPerformed
+    } //GEN-LAST:event_mniOpenDirectoryActionPerformed
 
     /**
      * An action listener.
@@ -391,7 +400,7 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
      */
     private void mniRemoveActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_mniRemoveActionPerformed
         DownloadManager.instance().removeDownload(download);
-    }                                                                             //GEN-LAST:event_mniRemoveActionPerformed
+    } //GEN-LAST:event_mniRemoveActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -400,9 +409,9 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
      */
     private void btnCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_btnCancelActionPerformed
         if (download instanceof Cancellable) {
-            ((Cancellable)download).cancel();
+            ((Cancellable) download).cancel();
         }
-    }                                                                             //GEN-LAST:event_btnCancelActionPerformed
+    } //GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * Initiates the icon. According to the file extension of the download, an appropriate icon will be shown.
@@ -419,11 +428,12 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
             return;
         }
 
-        extensionOfDownload = extensionOfDownload.substring(extensionOfDownload.lastIndexOf('.') + 1,
-                    extensionOfDownload.length()).toLowerCase();
-        final URL iconURL = getClass().getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/"
-                        + extensionOfDownload
-                        + extensionOfIcon);
+        extensionOfDownload =
+            extensionOfDownload
+                .substring(extensionOfDownload.lastIndexOf('.') + 1, extensionOfDownload.length())
+                .toLowerCase();
+        final URL iconURL = getClass()
+            .getResource("/de/cismet/tools/gui/downloadmanager/documenttypes/" + extensionOfDownload + extensionOfIcon);
         if (iconURL != null) {
             lblIcon.setIcon(new ImageIcon(iconURL));
         }
@@ -448,109 +458,119 @@ public class DownloadPanel extends javax.swing.JPanel implements Observer {
         initIcon();
 
         switch (download.getStatus()) {
-            case WAITING: {
-                prbProgress.setVisible(false);
-                lblTitle.setText(download.getTitle());
-                lblMessage.setVisible(true);
-                jxlOpenFile.setVisible(false);
-                mniOpenFile.setEnabled(false);
-                mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
-                mniRemove.setEnabled(true);
+            case WAITING:
+                {
+                    prbProgress.setVisible(false);
+                    lblTitle.setText(download.getTitle());
+                    lblMessage.setVisible(true);
+                    jxlOpenFile.setVisible(false);
+                    mniOpenFile.setEnabled(false);
+                    mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
+                    mniRemove.setEnabled(true);
 
-                break;
-            }
-            case RUNNING: {
-                prbProgress.setVisible(true);
-                prbProgress.setIndeterminate(true);
-                lblTitle.setText(download.getTitle());
-                lblMessage.setVisible(false);
-                jxlOpenFile.setVisible(false);
-                mniOpenFile.setEnabled(false);
-                mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
-                mniRemove.setEnabled(false);
-                lblTitle.setForeground(SystemColor.textText);
-                break;
-            }
-            case RUNNING_WITH_PROGRESS: {
-                prbProgress.setVisible(true);
-                prbProgress.setIndeterminate(false);
-                prbProgress.setValue(download.getProgress());
-                lblTitle.setText(download.getTitle());
-                lblMessage.setVisible(false);
-                jxlOpenFile.setVisible(false);
-                mniOpenFile.setEnabled(false);
-                mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
-                mniRemove.setEnabled(false);
-                lblTitle.setForeground(SystemColor.textText);
-                break;
-            }
-            case COMPLETED: {
-                prbProgress.setVisible(false);
-                lblTitle.setText(download.getTitle());
-                lblMessage.setVisible(false);
-                btnCancel.setVisible(false);
-                jxlOpenFile.setText((download.getFileToSaveTo() != null) ? download.getFileToSaveTo()
-                                .getAbsolutePath() : "");
-                jxlOpenFile.setVisible(download.getFileToSaveTo() != null);
-                mniOpenFile.setEnabled(download.getFileToSaveTo() != null);
-                mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
-                mniRemove.setEnabled(true);
-                lblTitle.setForeground(SystemColor.textInactiveText);
-                download.deleteObserver(this);
-
-                break;
-            }
-            case COMPLETED_WITH_ERROR: {
-                prbProgress.setVisible(false);
-                lblTitle.setText(download.getTitle());
-                jxlOpenFile.setVisible(false);
-                mniOpenFile.setEnabled(false);
-                mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
-                mniRemove.setEnabled(true);
-                btnCancel.setVisible(false);
-                lblTitle.setForeground(SystemColor.textInactiveText);
-                setBackground(Color.pink);
-                download.deleteObserver(this);
-
-                lblMessage.setVisible(true);
-                lblMessage.setForeground(Color.red);
-                if (download.getCaughtException() instanceof BadHttpStatusCodeException) {
-                    final BadHttpStatusCodeException exception = (BadHttpStatusCodeException)
-                        download.getCaughtException();
-                    if (exception.getStatuscode() == 204) {
-                        lblMessage.setText(NbBundle.getMessage(
-                                DownloadPanel.class,
-                                "DownloadPanel.lblMessage.noData",
-                                download.getTitle()));
-                    } else {
-                        lblMessage.setText(NbBundle.getMessage(
-                                DownloadPanel.class,
-                                "DownloadPanel.lblMessage.error"));
-                    }
-                } else {
-                    lblMessage.setText(NbBundle.getMessage(
-                            DownloadPanel.class,
-                            "DownloadPanel.lblMessage.error"));
+                    break;
                 }
-                break;
-            }
-            case ABORTED: {
-                prbProgress.setVisible(false);
-                lblTitle.setText(download.getTitle());
-                jxlOpenFile.setVisible(false);
-                mniOpenFile.setEnabled(false);
-                mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
-                mniRemove.setEnabled(true);
-                btnCancel.setVisible(false);
-                lblTitle.setForeground(SystemColor.textInactiveText);
-                download.deleteObserver(this);
+            case RUNNING:
+                {
+                    prbProgress.setVisible(true);
+                    prbProgress.setIndeterminate(true);
+                    lblTitle.setText(download.getTitle());
+                    lblMessage.setVisible(false);
+                    jxlOpenFile.setVisible(false);
+                    mniOpenFile.setEnabled(false);
+                    mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
+                    mniRemove.setEnabled(false);
+                    lblTitle.setForeground(SystemColor.textText);
+                    break;
+                }
+            case RUNNING_WITH_PROGRESS:
+                {
+                    prbProgress.setVisible(true);
+                    prbProgress.setIndeterminate(false);
+                    prbProgress.setValue(download.getProgress());
+                    lblTitle.setText(download.getTitle());
+                    lblMessage.setVisible(false);
+                    jxlOpenFile.setVisible(false);
+                    mniOpenFile.setEnabled(false);
+                    mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
+                    mniRemove.setEnabled(false);
+                    lblTitle.setForeground(SystemColor.textText);
+                    break;
+                }
+            case COMPLETED:
+                {
+                    prbProgress.setVisible(false);
+                    lblTitle.setText(download.getTitle());
+                    lblMessage.setVisible(false);
+                    btnCancel.setVisible(false);
+                    jxlOpenFile.setText(
+                        (download.getFileToSaveTo() != null) ? download.getFileToSaveTo().getAbsolutePath() : ""
+                    );
+                    jxlOpenFile.setVisible(download.getFileToSaveTo() != null);
+                    mniOpenFile.setEnabled(download.getFileToSaveTo() != null);
+                    mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
+                    mniRemove.setEnabled(true);
+                    lblTitle.setForeground(SystemColor.textInactiveText);
+                    download.deleteObserver(this);
 
-                lblMessage.setVisible(true);
-                lblMessage.setText(NbBundle.getMessage(
-                        DownloadPanel.class,
-                        "DownloadPanel.lblMessage.aborted",
-                        download.getTitle()));
-            }
+                    break;
+                }
+            case COMPLETED_WITH_ERROR:
+                {
+                    prbProgress.setVisible(false);
+                    lblTitle.setText(download.getTitle());
+                    jxlOpenFile.setVisible(false);
+                    mniOpenFile.setEnabled(false);
+                    mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
+                    mniRemove.setEnabled(true);
+                    btnCancel.setVisible(false);
+                    lblTitle.setForeground(SystemColor.textInactiveText);
+                    setBackground(Color.pink);
+                    download.deleteObserver(this);
+
+                    lblMessage.setVisible(true);
+                    lblMessage.setForeground(Color.red);
+                    if (download.getCaughtException() instanceof BadHttpStatusCodeException) {
+                        final BadHttpStatusCodeException exception = (BadHttpStatusCodeException) download.getCaughtException();
+                        if (exception.getStatuscode() == 204) {
+                            lblMessage.setText(
+                                NbBundle.getMessage(
+                                    DownloadPanel.class,
+                                    "DownloadPanel.lblMessage.noData",
+                                    download.getTitle()
+                                )
+                            );
+                        } else {
+                            lblMessage.setText(
+                                NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.lblMessage.error")
+                            );
+                        }
+                    } else {
+                        lblMessage.setText(NbBundle.getMessage(DownloadPanel.class, "DownloadPanel.lblMessage.error"));
+                    }
+                    break;
+                }
+            case ABORTED:
+                {
+                    prbProgress.setVisible(false);
+                    lblTitle.setText(download.getTitle());
+                    jxlOpenFile.setVisible(false);
+                    mniOpenFile.setEnabled(false);
+                    mniOpenDirectory.setEnabled(download.getFileToSaveTo() != null);
+                    mniRemove.setEnabled(true);
+                    btnCancel.setVisible(false);
+                    lblTitle.setForeground(SystemColor.textInactiveText);
+                    download.deleteObserver(this);
+
+                    lblMessage.setVisible(true);
+                    lblMessage.setText(
+                        NbBundle.getMessage(
+                            DownloadPanel.class,
+                            "DownloadPanel.lblMessage.aborted",
+                            download.getTitle()
+                        )
+                    );
+                }
         }
     }
 }

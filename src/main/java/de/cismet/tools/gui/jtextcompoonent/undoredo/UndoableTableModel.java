@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -118,11 +118,12 @@ public class UndoableTableModel extends AbstractTableModel implements TableModel
     @Override
     public void tableChanged(final TableModelEvent e) {
         final TableModelEvent newEvent = new TableModelEvent(
-                this,
-                e.getFirstRow(),
-                e.getLastRow(),
-                e.getColumn(),
-                e.getType());
+            this,
+            e.getFirstRow(),
+            e.getLastRow(),
+            e.getColumn(),
+            e.getType()
+        );
         fireTableChanged(newEvent);
     }
 
@@ -167,10 +168,12 @@ public class UndoableTableModel extends AbstractTableModel implements TableModel
          * @param  oldValue     DOCUMENT ME!
          * @param  newValue     DOCUMENT ME!
          */
-        public TableChangeEdit(final int rowIndex,
-                final int columnIndex,
-                final Object oldValue,
-                final Object newValue) {
+        public TableChangeEdit(
+            final int rowIndex,
+            final int columnIndex,
+            final Object oldValue,
+            final Object newValue
+        ) {
             this.columnIndex = columnIndex;
             this.rowIndex = rowIndex;
             this.oldValue = oldValue;

@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  *  Copyright (C) 2011 jweintraut
  *
@@ -28,18 +28,15 @@
  */
 package de.cismet.tools.gui.downloadmanager;
 
-import org.apache.log4j.Logger;
-
 import java.awt.Component;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Observer;
-
 import javax.swing.Box;
 import javax.swing.JPanel;
+import org.apache.log4j.Logger;
 
 /**
  * Visualizes the download list of DownloadManager. New downloads are dynamically added, completed ones are removed.
@@ -97,7 +94,7 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
         final LinkedList<JPanel> oldPanels = new LinkedList<JPanel>();
         for (final Component component : getComponents()) {
             if ((component instanceof DownloadPanel) || (component instanceof MultipleDownloadPanel)) {
-                oldPanels.add((JPanel)component);
+                oldPanels.add((JPanel) component);
             }
         }
 
@@ -105,7 +102,7 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
 
         for (final Download download : downloads) {
             if (download instanceof MultipleDownload) {
-                final MultipleDownloadPanel pnlDownload = new MultipleDownloadPanel((MultipleDownload)download);
+                final MultipleDownloadPanel pnlDownload = new MultipleDownloadPanel((MultipleDownload) download);
 
                 download.addObserver(pnlDownload);
                 add(pnlDownload);
@@ -145,7 +142,7 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
             final JPanel pnlDownload = panels.get(download);
 
             if (pnlDownload instanceof Observer) {
-                download.deleteObserver((Observer)pnlDownload);
+                download.deleteObserver((Observer) pnlDownload);
             }
 
             remove(pnlDownload);
@@ -170,7 +167,7 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
         for (final Download download : downloads) {
             final JPanel pnlDownload = panels.get(download);
             if (pnlDownload instanceof MultipleDownloadPanel) {
-                final MultipleDownloadPanel mpnlDownload = (MultipleDownloadPanel)pnlDownload;
+                final MultipleDownloadPanel mpnlDownload = (MultipleDownloadPanel) pnlDownload;
                 mpnlDownload.redrawEncapsulatedDownloads();
             }
         }
@@ -181,18 +178,21 @@ public class DownloadManagerPanel extends javax.swing.JPanel implements Download
         final Collection<Download> downloads = event.getDownloads();
 
         switch (event.getAction()) {
-            case ADDED: {
-                add(downloads);
-                break;
-            }
-            case REMOVED: {
-                remove(downloads);
-                break;
-            }
-            case ADDED_DOWNLOADS_SUBSEQUENTLY: {
-                addSubsequentDownloads(downloads);
-                break;
-            }
+            case ADDED:
+                {
+                    add(downloads);
+                    break;
+                }
+            case REMOVED:
+                {
+                    remove(downloads);
+                    break;
+                }
+            case ADDED_DOWNLOADS_SUBSEQUENTLY:
+                {
+                    addSubsequentDownloads(downloads);
+                    break;
+                }
         }
     }
 }

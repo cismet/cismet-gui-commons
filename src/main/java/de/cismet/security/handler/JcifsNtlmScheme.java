@@ -1,23 +1,23 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.security.handler;
+
+import java.io.IOException;
 import jcifs.ntlmssp.NtlmMessage;
 import jcifs.ntlmssp.Type1Message;
 import jcifs.ntlmssp.Type2Message;
 import jcifs.ntlmssp.Type3Message;
-
 import jcifs.util.Base64;
-
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NTCredentials;
@@ -27,8 +27,6 @@ import org.apache.commons.httpclient.auth.AuthScheme;
 import org.apache.commons.httpclient.auth.AuthenticationException;
 import org.apache.commons.httpclient.auth.InvalidCredentialsException;
 import org.apache.commons.httpclient.auth.MalformedChallengeException;
-
-import java.io.IOException;
 
 /**
  * DOCUMENT ME!
@@ -45,10 +43,14 @@ public class JcifsNtlmScheme implements AuthScheme {
      * @version  $Revision$, $Date$
      */
     private enum State {
-
         //~ Enum constants -----------------------------------------------------
 
-        NOT_STARTED, STARTED, CHALLENGE_REQUESTED, CHALLENGE_RECEIVED, FINISHED, FAILED
+        NOT_STARTED,
+        STARTED,
+        CHALLENGE_REQUESTED,
+        CHALLENGE_RECEIVED,
+        FINISHED,
+        FAILED,
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -92,28 +94,32 @@ public class JcifsNtlmScheme implements AuthScheme {
 
         final NTCredentials ntcredentials;
         try {
-            ntcredentials = (NTCredentials)credentials;
+            ntcredentials = (NTCredentials) credentials;
         } catch (final ClassCastException ex) {
-            throw new InvalidCredentialsException(String.format(
+            throw new InvalidCredentialsException(
+                String.format(
                     "Credentials cannot be used for NTLM authentication: %s",
-                    credentials.getClass().getName()),
-                ex);
+                    credentials.getClass().getName()
+                ),
+                ex
+            );
         }
 
         final NtlmMessage response;
         if ((this.state == State.STARTED) || (this.state == State.FAILED)) {
-            response = new Type1Message(Type1Message.getDefaultFlags(),
-                    ntcredentials.getDomain(),
-                    ntcredentials.getHost());
+            response =
+                new Type1Message(Type1Message.getDefaultFlags(), ntcredentials.getDomain(), ntcredentials.getHost());
             this.state = State.CHALLENGE_REQUESTED;
         } else {
-            response = new Type3Message(
+            response =
+                new Type3Message(
                     this.ntlmChallenge,
                     ntcredentials.getPassword(),
                     ntcredentials.getDomain(),
                     ntcredentials.getUserName(),
                     ntcredentials.getHost(),
-                    0);
+                    0
+                );
             this.state = State.FINISHED;
         }
         return String.format("NTLM %s", toBase64String(response));
@@ -145,9 +151,8 @@ public class JcifsNtlmScheme implements AuthScheme {
 
     @Override
     public String authenticate(final Credentials credentials, final String method, final String uri)
-            throws AuthenticationException {
-        throw new RuntimeException(
-            "Not implemented as it is deprecated anyway in Httpclient 3.x");
+        throws AuthenticationException {
+        throw new RuntimeException("Not implemented as it is deprecated anyway in Httpclient 3.x");
     }
 
     @Override

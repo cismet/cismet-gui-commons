@@ -1,12 +1,19 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.log4jquickconfig;
 
+import de.cismet.tools.gui.StaticSwingTools;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.event.KeyEvent;
+import java.util.Properties;
+import javax.swing.JDialog;
+import javax.swing.KeyStroke;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,17 +27,6 @@ import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFact
 import org.apache.logging.log4j.core.config.builder.api.RootLoggerComponentBuilder;
 import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 import org.apache.logging.log4j.core.config.builder.impl.DefaultConfigurationBuilder;
-
-import java.awt.Color;
-import java.awt.Frame;
-import java.awt.event.KeyEvent;
-
-import java.util.Properties;
-
-import javax.swing.JDialog;
-import javax.swing.KeyStroke;
-
-import de.cismet.tools.gui.StaticSwingTools;
 
 /**
  * DOCUMENT ME!
@@ -75,6 +71,7 @@ public class Log4JQuickConfig extends JDialog {
     private javax.swing.JTextField txtFile;
     private javax.swing.JTextField txtHost;
     private javax.swing.JTextField txtPort;
+
     // End of variables declaration//GEN-END:variables
 
     //~ Constructors -----------------------------------------------------------
@@ -83,7 +80,7 @@ public class Log4JQuickConfig extends JDialog {
      * Creates new form Log4JQuickConfig.
      */
     public Log4JQuickConfig() {
-        super((Frame)null, true);
+        super((Frame) null, true);
         initComponents();
         gpnTitle.setLeftColor(new Color(49, 66, 122));
         gpnTitle.setRightColor(Color.white);
@@ -91,11 +88,13 @@ public class Log4JQuickConfig extends JDialog {
         StaticSwingTools.doClickButtonOnKeyStroke(
             cmdConfig,
             KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
-            getRootPane());
+            getRootPane()
+        );
         StaticSwingTools.doClickButtonOnKeyStroke(
             cmdCancel,
             KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-            getRootPane());
+            getRootPane()
+        );
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -142,19 +141,24 @@ public class Log4JQuickConfig extends JDialog {
         panConfig.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
         panConfig.setLayout(new java.awt.GridBagLayout());
 
-        panWhat.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+        panWhat.setBorder(
+            javax.swing.BorderFactory.createCompoundBorder(
                 javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3),
                 javax.swing.BorderFactory.createTitledBorder(
                     org.openide.util.NbBundle.getMessage(
                         Log4JQuickConfig.class,
-                        "Log4JQuickConfig.panWhat.border.insideBorder.title")))); // NOI18N
+                        "Log4JQuickConfig.panWhat.border.insideBorder.title"
+                    )
+                )
+            )
+        ); // NOI18N
         panWhat.setLayout(new java.awt.GridBagLayout());
 
         bgrWhat.add(rdbDebug);
         rdbDebug.setSelected(true);
-        rdbDebug.setText(org.openide.util.NbBundle.getMessage(
-                Log4JQuickConfig.class,
-                "Log4JQuickConfig.rdbDebug.text")); // NOI18N
+        rdbDebug.setText(
+            org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.rdbDebug.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
@@ -171,13 +175,14 @@ public class Log4JQuickConfig extends JDialog {
 
         bgrWhat.add(rdbWarn);
         rdbWarn.setText(org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.rdbWarn.text")); // NOI18N
-        rdbWarn.addActionListener(new java.awt.event.ActionListener() {
-
+        rdbWarn.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     rdbWarnActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -186,9 +191,9 @@ public class Log4JQuickConfig extends JDialog {
         panWhat.add(rdbWarn, gridBagConstraints);
 
         bgrWhat.add(rdbError);
-        rdbError.setText(org.openide.util.NbBundle.getMessage(
-                Log4JQuickConfig.class,
-                "Log4JQuickConfig.rdbError.text")); // NOI18N
+        rdbError.setText(
+            org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.rdbError.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -197,9 +202,9 @@ public class Log4JQuickConfig extends JDialog {
         panWhat.add(rdbError, gridBagConstraints);
 
         bgrWhat.add(rdbFatal);
-        rdbFatal.setText(org.openide.util.NbBundle.getMessage(
-                Log4JQuickConfig.class,
-                "Log4JQuickConfig.rdbFatal.text")); // NOI18N
+        rdbFatal.setText(
+            org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.rdbFatal.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -208,9 +213,9 @@ public class Log4JQuickConfig extends JDialog {
         panWhat.add(rdbFatal, gridBagConstraints);
 
         bgrWhat.add(rdbDisable);
-        rdbDisable.setText(org.openide.util.NbBundle.getMessage(
-                Log4JQuickConfig.class,
-                "Log4JQuickConfig.rdbDisable.text")); // NOI18N
+        rdbDisable.setText(
+            org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.rdbDisable.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -223,18 +228,23 @@ public class Log4JQuickConfig extends JDialog {
         gridBagConstraints.weighty = 1.0;
         panConfig.add(panWhat, gridBagConstraints);
 
-        panWhere.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+        panWhere.setBorder(
+            javax.swing.BorderFactory.createCompoundBorder(
                 javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3),
                 javax.swing.BorderFactory.createTitledBorder(
                     org.openide.util.NbBundle.getMessage(
                         Log4JQuickConfig.class,
-                        "Log4JQuickConfig.panWhere.border.insideBorder.title")))); // NOI18N
+                        "Log4JQuickConfig.panWhere.border.insideBorder.title"
+                    )
+                )
+            )
+        ); // NOI18N
         panWhere.setLayout(new java.awt.GridBagLayout());
 
         chkSockets.setSelected(true);
-        chkSockets.setText(org.openide.util.NbBundle.getMessage(
-                Log4JQuickConfig.class,
-                "Log4JQuickConfig.chkSockets.text")); // NOI18N
+        chkSockets.setText(
+            org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.chkSockets.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 3, 2, 0);
@@ -248,13 +258,14 @@ public class Log4JQuickConfig extends JDialog {
         panWhere.add(lblHost, gridBagConstraints);
 
         txtHost.setText(org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.txtHost.text")); // NOI18N
-        txtHost.addActionListener(new java.awt.event.ActionListener() {
-
+        txtHost.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     txtHostActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -280,13 +291,14 @@ public class Log4JQuickConfig extends JDialog {
         panWhere.add(txtPort, gridBagConstraints);
 
         chkFile.setText(org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.chkFile.text")); // NOI18N
-        chkFile.addActionListener(new java.awt.event.ActionListener() {
-
+        chkFile.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     chkFileActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -303,13 +315,14 @@ public class Log4JQuickConfig extends JDialog {
         panWhere.add(lblFile, gridBagConstraints);
 
         txtFile.setEnabled(false);
-        txtFile.addActionListener(new java.awt.event.ActionListener() {
-
+        txtFile.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     txtFileActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
@@ -326,9 +339,9 @@ public class Log4JQuickConfig extends JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 2, 3);
         panWhere.add(cmdFile, gridBagConstraints);
 
-        chkConsole.setText(org.openide.util.NbBundle.getMessage(
-                Log4JQuickConfig.class,
-                "Log4JQuickConfig.chkConsole.text")); // NOI18N
+        chkConsole.setText(
+            org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.chkConsole.text")
+        ); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -352,7 +365,7 @@ public class Log4JQuickConfig extends JDialog {
         gpnTitle.setRightColor(new java.awt.Color(255, 255, 255));
         gpnTitle.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Courier", 1, 24));                                                           // NOI18N
+        jLabel1.setFont(new java.awt.Font("Courier", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(236, 233, 216));
         jLabel1.setText(org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.jLabel1.text")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -369,8 +382,9 @@ public class Log4JQuickConfig extends JDialog {
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/de/cismet/tools/gui/log4jquickconfig/res/log4j.png"))); // NOI18N
+        jLabel2.setIcon(
+            new javax.swing.ImageIcon(getClass().getResource("/de/cismet/tools/gui/log4jquickconfig/res/log4j.png"))
+        ); // NOI18N
         jPanel3.add(jLabel2);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -391,16 +405,17 @@ public class Log4JQuickConfig extends JDialog {
 
         panButtons.setLayout(new java.awt.GridBagLayout());
 
-        cmdCancel.setText(org.openide.util.NbBundle.getMessage(
-                Log4JQuickConfig.class,
-                "Log4JQuickConfig.cmdCancel.text_1")); // NOI18N
-        cmdCancel.addActionListener(new java.awt.event.ActionListener() {
-
+        cmdCancel.setText(
+            org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.cmdCancel.text_1")
+        ); // NOI18N
+        cmdCancel.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     cmdCancelActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -408,16 +423,17 @@ public class Log4JQuickConfig extends JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 4, 4);
         panButtons.add(cmdCancel, gridBagConstraints);
 
-        cmdConfig.setText(org.openide.util.NbBundle.getMessage(
-                Log4JQuickConfig.class,
-                "Log4JQuickConfig.cmdConfig.text")); // NOI18N
-        cmdConfig.addActionListener(new java.awt.event.ActionListener() {
-
+        cmdConfig.setText(
+            org.openide.util.NbBundle.getMessage(Log4JQuickConfig.class, "Log4JQuickConfig.cmdConfig.text")
+        ); // NOI18N
+        cmdConfig.addActionListener(
+            new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(final java.awt.event.ActionEvent evt) {
                     cmdConfigActionPerformed(evt);
                 }
-            });
+            }
+        );
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -444,7 +460,7 @@ public class Log4JQuickConfig extends JDialog {
      */
     private void chkFileActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_chkFileActionPerformed
         txtFile.setEnabled(chkFile.isSelected());
-    }                                                                           //GEN-LAST:event_chkFileActionPerformed
+    } //GEN-LAST:event_chkFileActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -453,7 +469,7 @@ public class Log4JQuickConfig extends JDialog {
      */
     private void cmdConfigActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdConfigActionPerformed
         // remove all old appenders
-        LoggerContext ctx = (LoggerContext)LogManager.getContext(false);
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         final Configuration config = ctx.getConfiguration();
 
         // Remove all appenders
@@ -483,26 +499,30 @@ public class Log4JQuickConfig extends JDialog {
 
         // Define appenders
         if (chkSockets.isSelected()) {
-            final AppenderComponentBuilder socketAppender = builder.newAppender("Remote", "Socket")
-                        .addAttribute("host", txtHost.getText())
-                        .addAttribute("port", Integer.parseInt(txtPort.getText()));
+            final AppenderComponentBuilder socketAppender = builder
+                .newAppender("Remote", "Socket")
+                .addAttribute("host", txtHost.getText())
+                .addAttribute("port", Integer.parseInt(txtPort.getText()));
             socketAppender.add(builder.newLayout("JsonLayout"));
             builder.add(socketAppender);
         }
 
         if (chkFile.isSelected()) {
-            final AppenderComponentBuilder fileAppender = builder.newAppender("File", "File")
-                        .addAttribute("fileName", txtFile.getText())
-                        .addAttribute("append", true);
+            final AppenderComponentBuilder fileAppender = builder
+                .newAppender("File", "File")
+                .addAttribute("fileName", txtFile.getText())
+                .addAttribute("append", true);
             fileAppender.add(builder.newLayout("HtmlLayout"));
             builder.add(fileAppender);
         }
 
         if (chkConsole.isSelected()) {
             final AppenderComponentBuilder consoleAppender = builder.newAppender("Console", "Console");
-            consoleAppender.add(builder.newLayout("PatternLayout").addAttribute(
-                    "pattern",
-                    "[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5level %logger{36} - %msg%n"));
+            consoleAppender.add(
+                builder
+                    .newLayout("PatternLayout")
+                    .addAttribute("pattern", "[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5level %logger{36} - %msg%n")
+            );
             builder.add(consoleAppender);
         }
 
@@ -525,7 +545,7 @@ public class Log4JQuickConfig extends JDialog {
         builder.add(rootLogger);
 
         // Apply Configuration
-        ctx = (LoggerContext)LogManager.getContext(false);
+        ctx = (LoggerContext) LogManager.getContext(false);
         final Configuration conf = builder.build();
         ctx.start(conf);
 
@@ -539,7 +559,7 @@ public class Log4JQuickConfig extends JDialog {
      */
     private void cmdCancelActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_cmdCancelActionPerformed
         this.hide();
-    }                                                                             //GEN-LAST:event_cmdCancelActionPerformed
+    } //GEN-LAST:event_cmdCancelActionPerformed
 
     /**
      * DOCUMENT ME!
@@ -547,7 +567,7 @@ public class Log4JQuickConfig extends JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void txtFileActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtFileActionPerformed
-// TODO add your handling code here:
+        // TODO add your handling code here:
     } //GEN-LAST:event_txtFileActionPerformed
 
     /**
@@ -556,7 +576,7 @@ public class Log4JQuickConfig extends JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void txtHostActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_txtHostActionPerformed
-// TODO add your handling code here:
+        // TODO add your handling code here:
     } //GEN-LAST:event_txtHostActionPerformed
 
     /**
@@ -565,7 +585,7 @@ public class Log4JQuickConfig extends JDialog {
      * @param  evt  DOCUMENT ME!
      */
     private void rdbWarnActionPerformed(final java.awt.event.ActionEvent evt) { //GEN-FIRST:event_rdbWarnActionPerformed
-// TODO add your handling code here:
+        // TODO add your handling code here:
     } //GEN-LAST:event_rdbWarnActionPerformed
 
     /**
@@ -574,14 +594,16 @@ public class Log4JQuickConfig extends JDialog {
      * @param  args  the command line arguments
      */
     public static void main(final String[] args) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
+        java.awt.EventQueue.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     Log4JQuickConfig.getSingletonInstance().setVisible(true);
                 }
-            });
+            }
+        );
     }
+
     /**
      * DOCUMENT ME!
      *
@@ -634,9 +656,10 @@ public class Log4JQuickConfig extends JDialog {
         builder.setConfigurationName("DynamicConfig");
 
         // Define appenders
-        final AppenderComponentBuilder socketAppender = builder.newAppender("Remote", "Socket")
-                    .addAttribute("host", host)
-                    .addAttribute("port", port);
+        final AppenderComponentBuilder socketAppender = builder
+            .newAppender("Remote", "Socket")
+            .addAttribute("host", host)
+            .addAttribute("port", port);
         socketAppender.add(builder.newLayout("JsonLayout"));
         builder.add(socketAppender);
 
@@ -646,7 +669,7 @@ public class Log4JQuickConfig extends JDialog {
         builder.add(rootLogger);
 
         // Build and apply the configuration
-        final LoggerContext ctx = (LoggerContext)LogManager.getContext(false);
+        final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
         final Configuration conf = builder.build();
         ctx.start(conf);
     }

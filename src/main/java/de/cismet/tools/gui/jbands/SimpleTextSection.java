@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands;
 
 import javax.swing.JComponent;
@@ -44,11 +44,13 @@ public class SimpleTextSection extends SimpleSection {
      * @param  openLeft   DOCUMENT ME!
      * @param  openRight  DOCUMENT ME!
      */
-    public SimpleTextSection(final String title,
-            final double from,
-            final double to,
-            final boolean openLeft,
-            final boolean openRight) {
+    public SimpleTextSection(
+        final String title,
+        final double from,
+        final double to,
+        final boolean openLeft,
+        final boolean openRight
+    ) {
         super(from, to);
         this.title = title;
         comp = new TextSectionComponent(title, openLeft, openRight);

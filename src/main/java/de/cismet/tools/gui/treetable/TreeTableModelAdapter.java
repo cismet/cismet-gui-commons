@@ -1,11 +1,12 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.treetable;
+
 /*
  * @(#)TreeTableModelAdapter.java       1.2 98/10/27
  *
@@ -56,26 +57,28 @@ public class TreeTableModelAdapter extends AbstractTableModel {
         this.tree = tree;
         this.treeTableModel = treeTableModel;
 
-        tree.addTreeExpansionListener(new TreeExpansionListener() {
-
+        tree.addTreeExpansionListener(
+            new TreeExpansionListener() {
                 // Don't use fireTableRowsInserted() here; the selection model
                 // would get updated twice.
                 @Override
                 public void treeExpanded(final TreeExpansionEvent event) {
                     fireTableDataChanged();
                 }
+
                 @Override
                 public void treeCollapsed(final TreeExpansionEvent event) {
                     fireTableDataChanged();
                 }
-            });
+            }
+        );
 
         // Install a TreeModelListener that can update the table when
         // tree changes. We use delayedFireTableDataChanged as we can
         // not be guaranteed the tree will have finished processing
         // the event before us.
-        treeTableModel.addTreeModelListener(new TreeModelListener() {
-
+        treeTableModel.addTreeModelListener(
+            new TreeModelListener() {
                 @Override
                 public void treeNodesChanged(final TreeModelEvent e) {
                     delayedFireTableDataChanged();
@@ -95,58 +98,58 @@ public class TreeTableModelAdapter extends AbstractTableModel {
                 public void treeStructureChanged(final TreeModelEvent e) {
                     delayedFireTableDataChanged();
                 }
-            });
-
-//        final JTree tempTree = tree;
-//        treeTableModel.addTreeModelListener(new TreeModelListener()
-//        {
-//            //Diese \u00C4nderung wurde vorgenommen weil die Selection in der JTZreeTable manuell nicht zu setzen war
-//
-//            public void treeNodesChanged(TreeModelEvent e)
-//            {
-//                final int[] childIndices = e.getChildIndices();
-//
-//                if (childIndices!=null) {
-//                    final int[] rows = new int[childIndices.length];
-//                    TreePath parentPath = new TreePath(e.getPath());
-//                    for (int i=0; i<childIndices.length; i++)
-//                        rows[i] = tempTree.getRowForPath(parentPath.pathByAddingChild(e.getChildren()));
-//
-//                    SwingUtilities.invokeLater(new Runnable()
-//                    {
-//                        public void run()
-//                        {
-//                            for (int i=0; i<rows.length; i++)
-//                            {
-//                                if (rows[i] != -1)
-//                                {
-//                                    for (int col=0; col<getColumnCount(); col++)
-//                                        fireTableCellUpdated(rows[i], col);
-//                                }
-//                            }
-//                        }
-//                    });
-//                }
-//
-//            }
-//          public void treeNodesInserted(TreeModelEvent e) {
-//              delayedFireTableDataChanged();
-//          }
-//
-//          public void treeNodesRemoved(TreeModelEvent e) {
-//              delayedFireTableDataChanged();
-//          }
-//
-//          public void treeStructureChanged(TreeModelEvent e) {
-//              delayedFireTableDataChanged();
-//          }
-//
-//        });
+            }
+        );
+        //        final JTree tempTree = tree;
+        //        treeTableModel.addTreeModelListener(new TreeModelListener()
+        //        {
+        //            //Diese \u00C4nderung wurde vorgenommen weil die Selection in der JTZreeTable manuell nicht zu setzen war
+        //
+        //            public void treeNodesChanged(TreeModelEvent e)
+        //            {
+        //                final int[] childIndices = e.getChildIndices();
+        //
+        //                if (childIndices!=null) {
+        //                    final int[] rows = new int[childIndices.length];
+        //                    TreePath parentPath = new TreePath(e.getPath());
+        //                    for (int i=0; i<childIndices.length; i++)
+        //                        rows[i] = tempTree.getRowForPath(parentPath.pathByAddingChild(e.getChildren()));
+        //
+        //                    SwingUtilities.invokeLater(new Runnable()
+        //                    {
+        //                        public void run()
+        //                        {
+        //                            for (int i=0; i<rows.length; i++)
+        //                            {
+        //                                if (rows[i] != -1)
+        //                                {
+        //                                    for (int col=0; col<getColumnCount(); col++)
+        //                                        fireTableCellUpdated(rows[i], col);
+        //                                }
+        //                            }
+        //                        }
+        //                    });
+        //                }
+        //
+        //            }
+        //          public void treeNodesInserted(TreeModelEvent e) {
+        //              delayedFireTableDataChanged();
+        //          }
+        //
+        //          public void treeNodesRemoved(TreeModelEvent e) {
+        //              delayedFireTableDataChanged();
+        //          }
+        //
+        //          public void treeStructureChanged(TreeModelEvent e) {
+        //              delayedFireTableDataChanged();
+        //          }
+        //
+        //        });
     }
 
     //~ Methods ----------------------------------------------------------------
 
-// Wrappers, implementing TableModel interface.
+    // Wrappers, implementing TableModel interface.
 
     @Override
     public int getColumnCount() {
@@ -200,12 +203,13 @@ public class TreeTableModelAdapter extends AbstractTableModel {
      * to handle this.
      */
     protected void delayedFireTableDataChanged() {
-        SwingUtilities.invokeLater(new Runnable() {
-
+        SwingUtilities.invokeLater(
+            new Runnable() {
                 @Override
                 public void run() {
                     fireTableDataChanged();
                 }
-            });
+            }
+        );
     }
 }

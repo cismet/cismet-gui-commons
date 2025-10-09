@@ -1,23 +1,16 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package de.cismet.commons.gui.progress;
-
-import org.apache.log4j.Logger;
-
-import org.jdesktop.swingx.icon.PainterIcon;
-import org.jdesktop.swingx.painter.BusyPainter;
-
-import org.openide.util.Exceptions;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
@@ -27,9 +20,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.HashMap;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
@@ -39,6 +30,10 @@ import javax.swing.WindowConstants;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
+import org.apache.log4j.Logger;
+import org.jdesktop.swingx.icon.PainterIcon;
+import org.jdesktop.swingx.painter.BusyPainter;
+import org.openide.util.Exceptions;
 
 /**
  * Simple TextPane that displays an animated busy label as long as it is busy. There different predefined styles for
@@ -61,10 +56,15 @@ public class BusyLoggingTextPane extends JTextPane {
      * @version  $Revision$, $Date$
      */
     public enum Styles {
-
         //~ Enum constants -----------------------------------------------------
 
-        TIP, INFO, SUCCESS, EXPERT, WARN, ERROR, ERROR_REASON,
+        TIP,
+        INFO,
+        SUCCESS,
+        EXPERT,
+        WARN,
+        ERROR,
+        ERROR_REASON,
     }
 
     //~ Instance fields --------------------------------------------------------
@@ -150,19 +150,20 @@ public class BusyLoggingTextPane extends JTextPane {
      */
     public void addMessage(final String msg, final Styles reason) {
         if (!SwingUtilities.isEventDispatchThread()) {
-            SwingUtilities.invokeLater(new Runnable() {
-
+            SwingUtilities.invokeLater(
+                new Runnable() {
                     @Override
                     public void run() {
                         addMessage(msg, reason);
                     }
-                });
+                }
+            );
         } else {
             synchronized (this) {
                 try {
                     getStyledDocument().insertString(getStyledDocument().getLength(), msg + "\n", styles.get(reason)); // NOI18N
                 } catch (BadLocationException ble) {
-                    LOG.error("error during Insert", ble);                                                             // NOI18N
+                    LOG.error("error during Insert", ble); // NOI18N
                 }
             }
         }
@@ -185,8 +186,10 @@ public class BusyLoggingTextPane extends JTextPane {
      * DOCUMENT ME!
      */
     private void startWaitAnimation() {
-        busy = new Timer(100, new ActionListener() {
-
+        busy =
+            new Timer(
+                100,
+                new ActionListener() {
                     int frame = busyPainter.getPoints();
 
                     @Override
@@ -195,7 +198,8 @@ public class BusyLoggingTextPane extends JTextPane {
                         busyPainter.setFrame(frame);
                         repaint();
                     }
-                });
+                }
+            );
         showWaitAnimation = true;
         busy.start();
     }
@@ -216,16 +220,15 @@ public class BusyLoggingTextPane extends JTextPane {
     @Override
     public void paint(final Graphics g) {
         super.paint(g);
-        final Graphics2D g2 = (Graphics2D)g.create();
+        final Graphics2D g2 = (Graphics2D) g.create();
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
         if (showWaitAnimation) {
             icon.paintIcon(
                 this,
                 g2,
-                (this.getWidth() / 2)
-                        - (busyWidth / 2),
-                (this.getHeight() / 2)
-                        - (busyHeight / 2));
+                (this.getWidth() / 2) - (busyWidth / 2),
+                (this.getHeight() / 2) - (busyHeight / 2)
+            );
         }
         g2.dispose();
     }
@@ -236,9 +239,7 @@ public class BusyLoggingTextPane extends JTextPane {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-    } // </editor-fold>//GEN-END:initComponents
-
+    private void initComponents() {} // </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

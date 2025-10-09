@@ -1,15 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.breadcrumb;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -54,14 +53,15 @@ public class DefaultBreadCrumbModel implements BreadCrumbModel {
      */
     private void appendCrumbSilently(final BreadCrumb bc) {
         data.add(bc);
-        bc.addActionListener(new ActionListener() {
-
+        bc.addActionListener(
+            new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     final BreadCrumbEvent bce = new BreadCrumbEvent(DefaultBreadCrumbModel.this, bc);
                     fireBreadCrumbActionPerformed(bce);
                 }
-            });
+            }
+        );
     }
 
     @Override

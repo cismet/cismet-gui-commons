@@ -1,15 +1,14 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.lookupoptions;
 
-import javax.swing.JPanel;
-
 import de.cismet.tools.configuration.Configurable;
+import javax.swing.JPanel;
 
 /**
  * This class represents one panel in Options Dialog.
@@ -18,7 +17,6 @@ import de.cismet.tools.configuration.Configurable;
  * @version  $Revision$, $Date$
  */
 public interface OptionsPanelController extends Comparable<OptionsPanelController>, Configurable {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

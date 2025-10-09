@@ -1,14 +1,13 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui.jbands.interfaces;
 
 import java.awt.event.ActionListener;
-
 import javax.swing.Action;
 
 /**
@@ -18,7 +17,6 @@ import javax.swing.Action;
  * @version  $Revision$, $Date$
  */
 public interface BandMemberActionProvider {
-
     //~ Methods ----------------------------------------------------------------
 
     /**

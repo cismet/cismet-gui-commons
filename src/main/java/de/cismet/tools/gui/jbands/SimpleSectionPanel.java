@@ -1,10 +1,10 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 /*
  * SimpleSectionPanel.java
  *
@@ -12,11 +12,9 @@
  */
 package de.cismet.tools.gui.jbands;
 
-import java.awt.Color;
-
-import javax.swing.JPanel;
-
 import de.cismet.tools.gui.jbands.interfaces.BandMemberProvider;
+import java.awt.Color;
+import javax.swing.JPanel;
 
 /**
  * DOCUMENT ME!
@@ -32,7 +30,7 @@ public class SimpleSectionPanel extends JPanel {
      * Creates new form SimpleSectionPanel.
      */
     public SimpleSectionPanel() {
-        this(Color.getHSBColor((float)Math.random(), 0.85f, 1.0f));
+        this(Color.getHSBColor((float) Math.random(), 0.85f, 1.0f));
     }
 
     /**
@@ -61,9 +59,11 @@ public class SimpleSectionPanel extends JPanel {
         final org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(0, 1, Short.MAX_VALUE));
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(0, 1, Short.MAX_VALUE)
+        );
         layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(0, 1, Short.MAX_VALUE));
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(0, 1, Short.MAX_VALUE)
+        );
     } // </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

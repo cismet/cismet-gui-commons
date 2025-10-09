@@ -1,26 +1,23 @@
 /***************************************************
-*
-* cismet GmbH, Saarbruecken, Germany
-*
-*              ... and it just works.
-*
-****************************************************/
+ *
+ * cismet GmbH, Saarbruecken, Germany
+ *
+ *              ... and it just works.
+ *
+ ****************************************************/
 package de.cismet.tools.gui;
 
-import org.openide.util.NbBundle;
-
+import de.cismet.tools.gui.treetable.AbstractCellEditor;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
-
-import de.cismet.tools.gui.treetable.AbstractCellEditor;
+import org.openide.util.NbBundle;
 
 /**
  * A table cell editor allowing to edit a color values.
@@ -55,13 +52,15 @@ public class ColorEditor extends AbstractCellEditor implements TableCellEditor, 
 
         // Set up the dialog that the button brings up.
         colorChooser = new JColorChooser();
-        dialog = JColorChooser.createDialog(
+        dialog =
+            JColorChooser.createDialog(
                 button,
                 NbBundle.getMessage(ColorEditor.class, "ColorEditor.dialog.title"),
-                true,               // modal
+                true, // modal
                 colorChooser,
-                this,               // OK button handler
-                null);              // no CANCEL button handler
+                this, // OK button handler
+                null
+            ); // no CANCEL button handler
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -76,7 +75,7 @@ public class ColorEditor extends AbstractCellEditor implements TableCellEditor, 
             dialog.setVisible(true);
 
             fireEditingStopped(); // Make the renderer reappear.
-        } else {                  // User pressed dialog's "OK" button.
+        } else { // User pressed dialog's "OK" button.
             color = colorChooser.getColor();
         }
     }
@@ -89,12 +88,14 @@ public class ColorEditor extends AbstractCellEditor implements TableCellEditor, 
 
     // Implement the one method defined by TableCellEditor.
     @Override
-    public Component getTableCellEditorComponent(final JTable table,
-            final Object value,
-            final boolean isSelected,
-            final int row,
-            final int column) {
-        color = (Color)value;
+    public Component getTableCellEditorComponent(
+        final JTable table,
+        final Object value,
+        final boolean isSelected,
+        final int row,
+        final int column
+    ) {
+        color = (Color) value;
         return button;
     }
 }

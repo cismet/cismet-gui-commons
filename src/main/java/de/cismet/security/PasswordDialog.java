@@ -11,8 +11,7 @@
  */
 package de.cismet.security;
 
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.CredentialsNotAvailableException;
+import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
 
 import org.jdesktop.swingx.JXLoginPane;
 import org.jdesktop.swingx.JXPanel;
@@ -26,6 +25,8 @@ import java.net.URL;
 import java.util.prefs.Preferences;
 
 import javax.swing.JFrame;
+
+import de.cismet.commons.security.exceptions.CredentialsNotAvailableException;
 
 import de.cismet.tools.gui.DialogOpenedEvent;
 import de.cismet.tools.gui.DialogSupport;

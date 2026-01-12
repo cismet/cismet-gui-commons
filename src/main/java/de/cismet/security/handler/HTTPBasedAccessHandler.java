@@ -11,20 +11,37 @@
  */
 package de.cismet.security.handler;
 
-import org.apache.commons.httpclient.Credentials;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.NTCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.auth.CredentialsProvider;
+//import org.apache.commons.httpclient.Credentials;
+//import org.apache.commons.httpclient.HttpClient;
+//import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+//import org.apache.commons.httpclient.NTCredentials;
+//import org.apache.commons.httpclient.auth.AuthScope;
+//import org.apache.commons.httpclient.auth.CredentialsProvider;
+import org.apache.hc.client5.http.auth.AuthScope;
+import org.apache.hc.client5.http.auth.Credentials;
+import org.apache.hc.client5.http.auth.CredentialsProvider;
+import org.apache.hc.client5.http.auth.NTCredentials;
+import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.auth.BasicCredentialsProvider;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.routing.DefaultProxyRoutePlanner;
+import org.apache.hc.client5.http.routing.HttpRoutePlanner;
+import org.apache.hc.core5.http.HttpHost;
 import org.apache.log4j.Logger;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.cismet.commons.security.handler.AbstractAccessHandler;
+import de.cismet.commons.security.handler.ChainedCredentialsProvider;
 import de.cismet.commons.security.handler.ProxyCabaple;
 
 import de.cismet.netutil.Proxy;
@@ -75,28 +92,90 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler imple
      *
      * @return  configured HttpClient
      */
-    protected HttpClient getConfiguredHttpClientForUrl(final URL url) {
+    protected HttpClientBuilder getConfiguredHttpClientBuilderForUrl(final URL url) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("getConfiguredHttpClient"); // NOI18N
         }
 
-        final HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
-        if (((proxy != null) && (proxy.getHost() != null) && (proxy.getPort() > 0)
-                        && proxy.isValid() && proxy.isEnabledFor((url != null) ? url.getHost() : null))) {
-            client.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
+        // Replacement for MultiThreadedHttpConnectionManager
+        final PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager();
+        connManager.setMaxTotal(200);
+        connManager.setDefaultMaxPerRoute(20);
 
-            // proxy needs authentication
-            if ((proxy.getUsername() != null) && (proxy.getPassword() != null)) {
-                final AuthScope authscope = new AuthScope(proxy.getHost(), proxy.getPort());
-                final Credentials credentials = new NTCredentials(proxy.getUsername(),
-                        proxy.getPassword(),
-                        "", // NOI18N
-                        (proxy.getDomain() == null) ? "" : proxy.getDomain());
-                client.getState().setProxyCredentials(authscope, credentials);
+        final HttpClientBuilder clientBuilder = HttpClients.custom();
+        clientBuilder.setConnectionManager(connManager);
+
+        if ((proxy != null)
+                    && (proxy.getHost() != null)
+                    && (proxy.getPort() > 0)
+                    && proxy.isValid()
+                    && proxy.isEnabledFor((url != null) ? url.getHost() : null)) {
+            // Proxy setzen
+            final HttpHost proxyHost = new HttpHost(proxy.getHost(), proxy.getPort());
+            final HttpRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxyHost);
+            clientBuilder.setRoutePlanner(routePlanner);
+
+            final BasicCredentialsProvider credentialsProvider = getProxyCredentialsProvider(url);
+
+            if (credentialsProvider != null) {
+                clientBuilder.setDefaultCredentialsProvider(credentialsProvider);
             }
         }
 
-        return client;
+        return clientBuilder;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param   url  DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    private BasicCredentialsProvider getProxyCredentialsProvider(final URL url) {
+        if ((proxy != null)
+                    && (proxy.getHost() != null)
+                    && (proxy.getPort() > 0)
+                    && proxy.isValid()
+                    && proxy.isEnabledFor((url != null) ? url.getHost() : null)) {
+            // Proxy-Authentifizierung
+            if ((proxy.getUsername() != null) && (proxy.getPassword() != null)) {
+                final BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+
+                Credentials credentials;
+
+                if ((proxy.getDomain() != null) && (proxy.getDomain().length() > 0)) {
+                    // NTLM
+                    credentials = new NTCredentials(
+                            proxy.getUsername(),
+                            proxy.getPassword().toCharArray(),
+                            "", // Workstation
+                            proxy.getDomain());
+                } else {
+                    // Basic / Digest
+                    credentials = new UsernamePasswordCredentials(
+                            proxy.getUsername(),
+                            proxy.getPassword().toCharArray());
+                }
+
+                credentialsProvider.setCredentials(
+                    new AuthScope(proxy.getHost(), proxy.getPort()),
+                    credentials);
+
+                return credentialsProvider;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param  url  DOCUMENT ME!
+     */
+    private void askForCredentials(final URL url) {
+        getProxyCredentialsProvider(url);
     }
 
     /**
@@ -125,14 +204,16 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler imple
      *
      * @return  DOCUMENT ME!
      */
-    protected HttpClient getSecurityEnabledHttpClient(final URL url) {
+    protected CloseableHttpClient getSecurityEnabledHttpClient(final URL url) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("getSecurityEnabledHttpClient"); // NOI18N
         }
-        final HttpClient client = getConfiguredHttpClientForUrl(url);
-        client.getParams().setParameter(CredentialsProvider.PROVIDER, getCredentialProvider(url));
 
-        return client;
+        final HttpClientBuilder builder = getConfiguredHttpClientBuilderForUrl(url);
+
+        builder.setDefaultCredentialsProvider(getCredentialProvider(url));
+
+        return builder.build();
     }
 
     /**
@@ -142,12 +223,13 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler imple
      *
      * @return  DOCUMENT ME!
      */
-    protected CredentialsProvider getCredentialProvider(final URL url) {
+    protected ChainedCredentialsProvider getCredentialProvider(final URL url) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Retrieving Credential Provider for url: " + url); // NOI18N
         }
 
-        GUICredentialsProvider cp = getHttpCredentialProviderURL(url);
+        CredentialsProvider cp = getHttpCredentialProviderURL(url);
+
         if (cp == null) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("no Credential Provider available for url: " + url);
@@ -159,7 +241,15 @@ public abstract class HTTPBasedAccessHandler extends AbstractAccessHandler imple
             }
         }
 
-        return cp;
+        final List<CredentialsProvider> credentialProviders = new ArrayList<CredentialsProvider>();
+        final BasicCredentialsProvider proxyCredentials = getProxyCredentialsProvider(url);
+
+        if (proxyCredentials != null) {
+            credentialProviders.add(proxyCredentials);
+        }
+        credentialProviders.add(cp);
+
+        return new ChainedCredentialsProvider(credentialProviders);
     }
 
     /**

@@ -11,12 +11,17 @@
  */
 package de.cismet.security;
 
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.commons.io.IOUtils;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.ssl.SSLContexts;
 
 import java.awt.Component;
 
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -25,11 +30,17 @@ import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.nio.charset.StandardCharsets;
+
+import java.security.KeyStore;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import javax.net.ssl.SSLContext;
 
 import de.cismet.commons.security.AccessHandler;
 import de.cismet.commons.security.AccessHandler.ACCESS_HANDLER_TYPES;
@@ -50,7 +61,6 @@ import de.cismet.security.exceptions.RequestFailedException;
 import de.cismet.security.handler.DefaultHTTPAccessHandler;
 import de.cismet.security.handler.FTPAccessHandler;
 import de.cismet.security.handler.HTTPBasedAccessHandler;
-import de.cismet.security.handler.SecondaryJksSSLSocketFactory;
 import de.cismet.security.handler.WSSAccessHandler;
 
 /**
@@ -98,23 +108,52 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
         setProxy(proxy);
         ProxyHandler.getInstance().addListener(this);
 
+        SSLContext sslContext = null;
+
         try(final InputStream jksInputStream = getClass().getClassLoader().getResourceAsStream(
                             "de/cismet/security/secondary.jks");
                     final InputStream pwInputStream = getClass().getClassLoader().getResourceAsStream(
-                            "de/cismet/security/secondary.pw");
-            ) {
+                            "de/cismet/security/secondary.pw")) {
             if ((jksInputStream != null) && (pwInputStream != null)) {
-                final String pw = IOUtils.toString(pwInputStream, "UTF-8");
-                Protocol.registerProtocol(
-                    "https",
-                    new Protocol(
-                        "https",
-                        (ProtocolSocketFactory)new SecondaryJksSSLSocketFactory(jksInputStream, pw),
-                        443));
+                final String pw = IOUtils.toString(pwInputStream, StandardCharsets.UTF_8).trim();
+
+                final KeyStore trustStore = KeyStore.getInstance("JKS");
+                trustStore.load(jksInputStream, pw.toCharArray());
+
+                sslContext = SSLContexts.custom().loadTrustMaterial(trustStore, null).build();
             }
-        } catch (final Exception ex) {
+        } catch (Exception ex) {
             LOG.error(ex, ex);
         }
+
+        PoolingHttpClientConnectionManager connManager;
+
+        if (sslContext != null) {
+            final SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext);
+
+            connManager = PoolingHttpClientConnectionManagerBuilder.create().setSSLSocketFactory(sslSocketFactory)
+                        .build();
+        } else {
+            connManager = new PoolingHttpClientConnectionManager();
+        }
+
+//        try(final InputStream jksInputStream = getClass().getClassLoader().getResourceAsStream(
+//                            "de/cismet/security/secondary.jks");
+//                    final InputStream pwInputStream = getClass().getClassLoader().getResourceAsStream(
+//                            "de/cismet/security/secondary.pw");
+//            ) {
+//            if ((jksInputStream != null) && (pwInputStream != null)) {
+//                final String pw = IOUtils.toString(pwInputStream, "UTF-8");
+//                Protocol.registerProtocol(
+//                    "https",
+//                    new Protocol(
+//                        "https",
+//                        (ProtocolSocketFactory)new SecondaryJksSSLSocketFactory(jksInputStream, pw),
+//                        443));
+//            }
+//        } catch (final Exception ex) {
+//            LOG.error(ex, ex);
+//        }
     }
 
     //~ Methods ----------------------------------------------------------------
@@ -267,6 +306,15 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
      */
     public static void setJwsToken(final String jws) {
         WebAccessManager.jws = jws;
+    }
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return  DOCUMENT ME!
+     */
+    public static String getJwsToken() {
+        return WebAccessManager.jws;
     }
 
     /**

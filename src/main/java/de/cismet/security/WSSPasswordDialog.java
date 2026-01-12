@@ -16,12 +16,9 @@ import net.environmatics.acs.accessor.interfaces.AuthenticationMethod;
 import net.environmatics.acs.accessor.methods.PasswordAuthenticationMethod;
 import net.environmatics.acs.exceptions.AuthenticationFailedException;
 
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
 
 import java.awt.Component;
-
-import java.io.BufferedReader;
-import java.io.StringReader;
 
 import java.net.URL;
 
@@ -80,7 +77,7 @@ public class WSSPasswordDialog extends PasswordDialog {
             usernames.addUserName(name);
             usernames.saveUserNames();
             isAuthenticationDone = true;
-            setUsernamePassword(new UsernamePasswordCredentials(name, new String(password)));
+            setUsernamePassword(new UsernamePasswordCredentials(name, new String(password).toCharArray()));
             return true;
         } catch (AuthenticationFailedException ex) {
             log.error("Authentication failed for WSS: " + url.toString(), ex);                               // NOI18N

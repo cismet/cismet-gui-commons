@@ -13,7 +13,10 @@ import net.environmatics.acs.accessor.interfaces.SessionInformation;
 import net.environmatics.acs.accessor.methods.PasswordAuthenticationMethod;
 import net.environmatics.acs.exceptions.AuthenticationFailedException;
 
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
+
+
+//import org.apache.commons.httpclient.UsernamePasswordCredentials;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -143,85 +146,70 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
      *
      * @return  DOCUMENT ME!
      *
-     * @throws  Exception  DOCUMENT ME!
+     * @throws  Exception                      DOCUMENT ME!
+     * @throws  UnsupportedOperationException  DOCUMENT ME!
      */
     @Override
     public InputStream doRequest(final URL url,
             final Reader requestParameter,
             final ACCESS_METHODS method,
             final HashMap<String, String> options) throws Exception {
-        if (log.isDebugEnabled()) {
-            log.debug("doRequest: " + url);                  // NOI18N
-        }
-        WSSAccessorDeegree accessor;
-        accessor = wssAccessorMapping.get(url);
-        if (accessor == null) {
-            if (log.isDebugEnabled()) {
-                log.debug("no WSSAccessor for URL: " + url); // NOI18N
-            }
-//            lock.lock();
-//            log.debug("sperre bekommen");
-//            try {
-//                if (wssAccessorMapping.get(url) == null) {
-//                    log.debug("immer noch kein WSSAccessor für URL: " + url + " --> wird angelegt");
-//                    accessor = createNewWSSAccessor(url);
-//                } else {
-//                    log.debug("WSSAccessor ist jetzt vorhanden und wird benutzt");
-//                    accessor = wssAccessorMapping.get(url);
-//                }
-//                if (!accessor.isSessionAvailable()) {
-//                    if (accessor.isSessionAvailable()) {
-//                        authenticate(accessor);
-//                    }
-//                }
-//            } finally {
-//                lock.unlock();
+        throw new UnsupportedOperationException("Not supported yet.");
+
+//        if (log.isDebugEnabled()) {
+//            log.debug("doRequest: " + url);                  // NOI18N
+//        }
+//        WSSAccessorDeegree accessor;
+//        accessor = wssAccessorMapping.get(url);
+//        if (accessor == null) {
+//            if (log.isDebugEnabled()) {
+//                log.debug("no WSSAccessor for URL: " + url); // NOI18N
 //            }
-            accessor = createNewWSSAccessor(url);
-        }
-
-        final Proxy proxy = getProxy();
-        if (proxy != null) {
-            accessor.setProxy(proxy.getHost(), proxy.getPort());
-        } else {
-            accessor.setProxy(null, -1);
-        }
-
-        String accessMethod = null;
-        switch (method) {
-            case POST_REQUEST: {
-                if (log.isDebugEnabled()) {
-                    log.debug("wss accessmethod ist post");                                          // NOI18N
-                }
-                accessMethod = WSSAccessorDeegree.DCP_HTTP_POST;
-                break;
-            }
-            case GET_REQUEST: {
-                if (log.isDebugEnabled()) {
-                    log.debug("wss accessmethod ist get");                                           // NOI18N
-                }
-                accessMethod = WSSAccessorDeegree.DCP_HTTP_GET;
-                break;
-            }
-            default: {
-                if (log.isDebugEnabled()) {
-                    log.debug("Keine Methode spezifiziert default: " + ACCESS_METHODS.POST_REQUEST); // NOI18N
-                }
-                accessMethod = WSSAccessorDeegree.DCP_HTTP_POST;
-            }
-        }
-        final StringBuffer parameter = new StringBuffer();
-        final BufferedReader reader = new BufferedReader(requestParameter);
-        String currentLine = null;
-        while ((currentLine = reader.readLine()) != null) {
-            parameter.append(currentLine);
-        }
-        if (log.isDebugEnabled()) {
-            log.debug("WSSRequestParameter: " + parameter.toString());                               // NOI18N
-            log.debug("using facade URL: " + url.toString());                                        // NOI18N
-        }
-        return new ByteArrayInputStream(accessor.doService(accessMethod, parameter.toString(), url.toString())
-                        .asBytes());
+//            accessor = createNewWSSAccessor(url);
+//        }
+//
+//        final Proxy proxy = getProxy();
+//        if (proxy != null) {
+//            accessor.setProxy(proxy.getHost(), proxy.getPort());
+//        } else {
+//            accessor.setProxy(null, -1);
+//        }
+//
+//        String accessMethod = null;
+//        switch (method) {
+//            case POST_REQUEST: {
+//                if (log.isDebugEnabled()) {
+//                    log.debug("wss accessmethod ist post");                                          // NOI18N
+//                }
+//                accessMethod = WSSAccessorDeegree.DCP_HTTP_POST;
+//                break;
+//            }
+//            case GET_REQUEST: {
+//                if (log.isDebugEnabled()) {
+//                    log.debug("wss accessmethod ist get");                                           // NOI18N
+//                }
+//                accessMethod = WSSAccessorDeegree.DCP_HTTP_GET;
+//                break;
+//            }
+//            default: {
+//                if (log.isDebugEnabled()) {
+//                    log.debug("Keine Methode spezifiziert default: " + ACCESS_METHODS.POST_REQUEST); // NOI18N
+//                }
+//                accessMethod = WSSAccessorDeegree.DCP_HTTP_POST;
+//            }
+//        }
+//        final StringBuffer parameter = new StringBuffer();
+//        final BufferedReader reader = new BufferedReader(requestParameter);
+//        String currentLine = null;
+//        while ((currentLine = reader.readLine()) != null) {
+//            parameter.append(currentLine);
+//        }
+//        if (log.isDebugEnabled()) {
+//            log.debug("WSSRequestParameter: " + parameter.toString());                               // NOI18N
+//            log.debug("using facade URL: " + url.toString());                                        // NOI18N
+//        }
+//        return new ByteArrayInputStream(accessor.doService(accessMethod, parameter.toString(), url.toString())
+//                        .asBytes());
     }
 
     /**
@@ -231,30 +219,34 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
      *
      * @return  DOCUMENT ME!
      *
-     * @throws  Exception  DOCUMENT ME!
+     * @throws  Exception                      DOCUMENT ME!
+     * @throws  UnsupportedOperationException  DOCUMENT ME!
      */
     private synchronized WSSAccessorDeegree createNewWSSAccessor(
             final URL url) throws Exception {
         if (log.isDebugEnabled()) {
-            log.debug("createNewWSSAccessor");                     // NOI18N
+            log.debug("createNewWSSAccessor"); // NOI18N
         }
-        final WSSAccessorDeegree testAccessor = wssAccessorMapping.get(url);
-        if (testAccessor == null) {
-            if (log.isDebugEnabled()) {
-                log.debug("accessor für URL wird angelegt");       // NOI18N
-            }
-            final WSSAccessorDeegree accessor = new WSSAccessorDeegree();
-            accessor.setWSS(url.toString());
-            authenticate(accessor);
-            wssAccessorMapping.put(url, accessor);
-            accessor.setCredentialProvider(getCredentialProvider(url));
-            return accessor;
-        } else {
-            if (log.isDebugEnabled()) {
-                log.debug("accessor für URL ist schon vorhanden"); // NOI18N
-            }
-            return testAccessor;
-        }
+
+        throw new UnsupportedOperationException("Not supported yet.");
+
+//        final WSSAccessorDeegree testAccessor = wssAccessorMapping.get(url);
+//        if (testAccessor == null) {
+//            if (log.isDebugEnabled()) {
+//                log.debug("accessor für URL wird angelegt");       // NOI18N
+//            }
+//            final WSSAccessorDeegree accessor = new WSSAccessorDeegree();
+//            accessor.setWSS(url.toString());
+//            authenticate(accessor);
+//            wssAccessorMapping.put(url, accessor);
+//            accessor.setCredentialProvider(getCredentialProvider(url));
+//            return accessor;
+//        } else {
+//            if (log.isDebugEnabled()) {
+//                log.debug("accessor für URL ist schon vorhanden"); // NOI18N
+//            }
+//            return testAccessor;
+//        }
     }
 
     /**
@@ -425,7 +417,7 @@ public class WSSAccessHandler extends HTTPBasedAccessHandler {
                 usernames.addUserName(name);
                 usernames.saveUserNames();
                 isAuthenticationDone = true;
-                setUsernamePassword(new UsernamePasswordCredentials(name, new String(password)));
+                setUsernamePassword(new UsernamePasswordCredentials(name, new String(password).toCharArray()));
                 return true;
             } catch (AuthenticationFailedException ex) {
                 log.error("Authentication failed for WSS: " + url.toString(), ex);                               // NOI18N

@@ -590,7 +590,7 @@ public class WebAccessManager implements AccessHandler, TunnelStore, ExtendedAcc
      *
      * @return  DOCUMENT ME!
      */
-    private URL getUrlWithCredentials(final URL url) {
+    public static URL getUrlWithCredentials(final URL url) {
         if (jws != null) {
             try {
                 return new URL(url.toString().replace("$(user-jwt)", jws));

@@ -13,6 +13,7 @@ package de.cismet.tools.gui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.awt.Color;
 
@@ -20,7 +21,6 @@ import java.util.HashMap;
 
 import javax.swing.UIManager;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * DOCUMENT ME!

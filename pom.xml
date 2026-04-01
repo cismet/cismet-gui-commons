@@ -47,7 +47,7 @@
             <dependency>
                 <groupId>de.cismet</groupId>
                 <artifactId>cismet-ext-bom</artifactId>
-                <version>10.0</version>
+                <version>10.1.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -135,7 +135,6 @@
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
-            <version>5.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents.core5</groupId>
@@ -279,8 +278,6 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>2.3.2</version>
-            <scope>test</scope>
         </dependency>
         <!--
             ATTENTION: we need to include also all test dependencies required by downstream 
@@ -299,7 +296,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey</groupId>
+            <groupId>org.eclipse.jetty.toolchain</groupId>
+            <artifactId>jetty-jakarta-servlet-api</artifactId>
+            <version>5.0.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
             <scope>test</scope>
         </dependency>
@@ -393,16 +396,8 @@
             <dependencies>
                 <!--start dependencies which are already contained in Java 1.8, but not in newer versions-->
                 <dependency>
-                    <groupId>jakarta.xml.bind</groupId>
-                    <artifactId>jakarta.xml.bind-api</artifactId>
-                    <version>2.3.2</version>
-                    <scope>compile</scope>
-                    <type>jar</type>
-                </dependency>      
-                <dependency>
                     <groupId>org.glassfish.jaxb</groupId>
                     <artifactId>jaxb-runtime</artifactId>
-                    <version>2.3.2</version>
                     <scope>test</scope>
                 </dependency>
                 <!--end dependencies which are already contained in Java 1.8, but not in newer versions-->

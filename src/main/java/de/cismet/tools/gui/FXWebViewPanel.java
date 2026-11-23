@@ -56,6 +56,8 @@ public class FXWebViewPanel extends JFXPanel {
     protected WebEngine webEng = null;
     protected WebView webView;
     protected Scene scene;
+    /** root of {@link #scene}; the WebView is swapped in and out of this, the scene itself is never replaced. */
+    private BorderPane pane;
     private String lastUrl = null;
     private String lastContent = null;
 
@@ -70,8 +72,11 @@ public class FXWebViewPanel extends JFXPanel {
 
                 @Override
                 public void run() {
-                    scene = createBrowserScene();
+                    pane = new BorderPane();
+                    pane.setPadding(new Insets(5));
+                    scene = new Scene(pane);
                     FXWebViewPanel.this.setScene(scene);
+                    recreateWebView();
                 }
             });
     }
@@ -79,11 +84,18 @@ public class FXWebViewPanel extends JFXPanel {
     //~ Methods ----------------------------------------------------------------
 
     /**
-     * DOCUMENT ME!
+     * Replaces the {@link WebView} (and with it the {@link WebEngine}) by a pristine one, reusing the existing
+     * {@link Scene}.
      *
-     * @return  DOCUMENT ME!
+     * <p>The scene must not be replaced: {@code JFXPanel.setScene()} disposes the previous {@code EmbeddedScene}, and
+     * {@code JFXPanel.setEmbeddedScene()} has meanwhile queued a deferred {@code updateSceneState()} against it via
+     * {@code Platform.runLater}. When that lambda runs after the disposal it fails with a NullPointerException in
+     * {@code GlassScene.updateSceneState()}. Recreating only the WebView keeps a pristine WebEngine per load, which is
+     * what this class actually needs, without disposing anything.</p>
+     *
+     * <p>Must be called on the JavaFX Application Thread.</p>
      */
-    private Scene createBrowserScene() {
+    private void recreateWebView() {
         webView = new WebView();
 //         disabling the context menue
         webView.setContextMenuEnabled(false);
@@ -97,7 +109,7 @@ public class FXWebViewPanel extends JFXPanel {
                 public void changed(final ObservableValue<? extends Throwable> ov,
                         final Throwable t,
                         final Throwable t1) {
-                    LOG.error("Error in WebEngine Load Worker", t);
+                    LOG.error("Error in WebEngine Load Worker", t1);
                 }
             });
         // every time a new document was loaded, we need to add listeners to the a elements in that document, that check
@@ -115,12 +127,7 @@ public class FXWebViewPanel extends JFXPanel {
                 }
             });
 
-        final BorderPane pane = new BorderPane();
-        pane.setPadding(new Insets(5));
         pane.setCenter(webView);
-
-        final Scene s = new Scene(pane);
-        return s;
     }
 
     /**
@@ -222,8 +229,7 @@ public class FXWebViewPanel extends JFXPanel {
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("FXWebViewPanel: load url in runLater: " + String.valueOf(url));
                     }
-                    scene = createBrowserScene();
-                    FXWebViewPanel.this.setScene(scene);
+                    recreateWebView();
                     lastContent = null;
                     lastUrl = url;
                     webEng.load(url);
@@ -242,8 +248,7 @@ public class FXWebViewPanel extends JFXPanel {
                     if (LOG.isDebugEnabled()) {
                         LOG.warn("FXWebViewPanel: reload url in runLater");
                     }
-                    scene = createBrowserScene();
-                    FXWebViewPanel.this.setScene(scene);
+                    recreateWebView();
 
                     if (lastUrl != null) {
                         webEng.load(lastUrl);
@@ -266,8 +271,7 @@ public class FXWebViewPanel extends JFXPanel {
                 @Override
                 public void run() {
                     try {
-                        scene = createBrowserScene();
-                        FXWebViewPanel.this.setScene(scene);
+                        recreateWebView();
                         lastContent = htmlContent;
                         lastUrl = null;
                         webEng.loadContent(htmlContent);
